@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alemán — RapScore MX</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS (same as index) ─────────────────────────── */
+:root {
+  --bg:       #0a0a0a;
+  --surface:  #111111;
+  --surface2: #1a1a1a;
+  --border:   #2a2a2a;
+  --accent:   #ff3c00;
+  --accent2:  #ffcc00;
+  --text:     #f0ede6;
+  --muted:    #666;
+  --green:    #00e676;
+  --purple:   #b388ff;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* noise grain */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0;
+}
+
+/* ── HEADER (identical to index) ───────────────────── */
+header {
+  position:sticky; top:0; z-index:100;
+  background:rgba(10,10,10,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  height:60px;
+}
+.logo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px; letter-spacing:3px; color:var(--text);
+  text-decoration:none;
+}
+.logo span { color:var(--accent); }
+nav { display:flex; gap:0; }
+nav a {
+  color:var(--muted); text-decoration:none;
+  font-size:11px; letter-spacing:1px;
+  padding:8px 14px; transition:color .2s; text-transform:uppercase;
+}
+nav a:hover, nav a.active { color:var(--text); }
+nav a.active { border-bottom:2px solid var(--accent); }
+.header-actions { display:flex; gap:10px; align-items:center; }
+.btn-sm {
+  font-family:'Space Mono',monospace; font-size:11px;
+  padding:7px 14px; border:1px solid var(--border);
+  background:transparent; color:var(--muted);
+  cursor:pointer; letter-spacing:1px; text-transform:uppercase;
+  transition:all .2s;
+}
+.btn-sm:hover { border-color:var(--accent); color:var(--accent); }
+.btn-primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+.btn-primary:hover { background:#ff5a2a; color:#fff; }
+.hamburger {
+  display:none; flex-direction:column; gap:5px;
+  background:none; border:none; cursor:pointer; padding:6px; margin-left:8px;
+}
+.hamburger span { display:block; width:22px; height:2px; background:var(--text); transition:all .2s; }
+
+/* ── TICKER ─────────────────────────────────────────── */
+.ticker {
+  background:var(--accent); overflow:hidden; height:30px;
+  display:flex; align-items:center;
+}
+.ticker-inner {
+  display:flex; gap:48px;
+  animation:ticker 28s linear infinite;
+  white-space:nowrap; padding-right:48px;
+}
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ticker-item { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#fff; font-weight:700; }
+.ticker-sep { color:rgba(255,255,255,.4); }
+
+/* ── BREADCRUMB ─────────────────────────────────────── */
+.breadcrumb {
+  max-width:1400px; margin:0 auto;
+  padding:16px 24px 0;
+  display:flex; align-items:center; gap:8px;
+  font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted);
+}
+.breadcrumb a { color:var(--muted); text-decoration:none; transition:color .2s; }
+.breadcrumb a:hover { color:var(--accent); }
+.breadcrumb-sep { color:var(--border); }
+.breadcrumb-cur { color:var(--text); }
+
+/* ══════════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════════ */
+.artist-hero {
+  position:relative;
+  max-width:1400px; margin:0 auto;
+  padding:32px 24px 0;
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:48px;
+  align-items:start;
+}
+
+/* Left: identity */
+.hero-left { position:relative; }
+
+.artist-meta-top {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:16px;
+}
+.tier-badge {
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  padding:4px 10px; border:1px solid; font-weight:700;
+}
+.tier-activo  { border-color:var(--green);  color:var(--green);  background:rgba(0,230,118,.06); }
+.tier-leyenda { border-color:var(--accent2); color:var(--accent2); background:rgba(255,204,0,.06); }
+.tier-emergente { border-color:var(--purple); color:var(--purple); background:rgba(179,136,255,.06); }
+
+.rank-pos {
+  font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted);
+}
+.rank-pos strong { color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:16px; }
+
+.artist-name-big {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(64px,10vw,120px);
+  line-height:.88;
+  letter-spacing:2px;
+  margin-bottom:8px;
+}
+
+.artist-real-name {
+  font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:20px;
+}
+.artist-real-name span { color:var(--text); }
+
+.artist-tags {
+  display:flex; gap:6px; flex-wrap:wrap; margin-bottom:24px;
+}
+.tag {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  padding:4px 10px; background:var(--surface2); border:1px solid var(--border);
+  color:var(--muted); transition:all .2s; cursor:default;
+}
+.tag:hover { border-color:var(--accent); color:var(--accent); }
+
+.artist-bio {
+  font-size:13px; line-height:1.9; color:#aaa;
+  max-width:580px; margin-bottom:28px;
+  border-left:2px solid var(--accent); padding-left:16px;
+}
+
+/* Quick stats row */
+.quick-stats {
+  display:flex; gap:0;
+  border:1px solid var(--border);
+  margin-bottom:28px;
+  overflow:hidden;
+}
+.qs-item {
+  flex:1; padding:16px 12px; text-align:center;
+  border-right:1px solid var(--border);
+  transition:background .15s;
+}
+.qs-item:last-child { border-right:none; }
+.qs-item:hover { background:var(--surface); }
+.qs-num {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:30px; color:var(--accent2);
+  display:block; line-height:1;
+}
+.qs-lbl {
+  font-size:8px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--muted); margin-top:4px; display:block;
+}
+
+/* Social links */
+.social-row {
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.social-btn {
+  display:flex; align-items:center; gap:7px;
+  font-family:'Space Mono',monospace;
+  font-size:10px; letter-spacing:1px; text-transform:uppercase;
+  padding:8px 14px; border:1px solid var(--border);
+  background:transparent; color:var(--muted);
+  text-decoration:none; transition:all .2s; cursor:pointer;
+}
+.social-btn:hover { border-color:var(--accent); color:var(--accent); }
+.social-btn svg { width:14px; height:14px; flex-shrink:0; }
+.social-btn.spotify:hover { border-color:#1db954; color:#1db954; }
+.social-btn.youtube:hover { border-color:#ff0000; color:#ff0000; }
+.social-btn.instagram:hover { border-color:#e1306c; color:#e1306c; }
+.social-btn.tiktok:hover { border-color:#69c9d0; color:#69c9d0; }
+
+/* Right: score panel */
+.hero-right { position:sticky; top:80px; }
+
+.score-panel {
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.score-panel-header {
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.score-panel-title {
+  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+}
+.score-total-big {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:52px; color:var(--accent2); line-height:1;
+}
+.score-total-lbl {
+  font-size:8px; letter-spacing:1px; text-transform:uppercase; color:var(--muted);
+}
+
+/* Radar */
+.radar-container {
+  padding:20px;
+  display:flex; justify-content:center;
+  border-bottom:1px solid var(--border);
+}
+
+/* Score bars */
+.score-bars { padding:16px 20px; }
+.score-bar-row {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:10px;
+}
+.sbar-label {
+  font-size:9px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--muted); width:80px; flex-shrink:0;
+}
+.sbar-track {
+  flex:1; height:3px; background:var(--border); position:relative; overflow:hidden;
+}
+.sbar-fill {
+  height:100%; position:absolute; left:0; top:0;
+  background:var(--accent); transition:width .8s ease;
+}
+.sbar-val {
+  font-family:'Bebas Neue',sans-serif; font-size:18px;
+  color:var(--text); width:30px; text-align:right; flex-shrink:0;
+}
+
+/* Vote buttons */
+.vote-row {
+  padding:16px 20px;
+  border-top:1px solid var(--border);
+  display:flex; gap:8px;
+}
+.vote-btn {
+  flex:1; font-family:'Space Mono',monospace;
+  font-size:9px; letter-spacing:1px; text-transform:uppercase;
+  padding:9px 6px; border:1px solid var(--border);
+  background:transparent; color:var(--muted); cursor:pointer;
+  transition:all .15s; text-align:center;
+}
+.vote-btn:hover { border-color:var(--accent); color:var(--accent); }
+.vote-btn.voted { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+/* ══════════════════════════════════════════════════════
+   MAIN CONTENT SECTIONS
+══════════════════════════════════════════════════════ */
+.artist-body {
+  max-width:1400px; margin:0 auto;
+  padding:48px 24px 80px;
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:48px;
+  align-items:start;
+}
+
+/* Section label */
+.sec-label {
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:16px;
+  display:flex; align-items:center; gap:10px;
+}
+.sec-label::before { content:''; width:20px; height:1px; background:var(--accent); }
+
+.sec-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:36px; letter-spacing:2px;
+  margin-bottom:24px;
+}
+
+/* ── DISCOGRAFÍA ─────────────────────────────────────── */
+.disco-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+  gap:12px;
+  margin-bottom:40px;
+}
+.album-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden; cursor:pointer;
+  transition:border-color .15s, transform .15s;
+  position:relative;
+}
+.album-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+.album-card.selected { border-color:var(--accent2); }
+
+.album-cover {
+  width:100%; aspect-ratio:1;
+  background:var(--surface2);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+.album-cover-placeholder {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:32px; color:var(--border); letter-spacing:2px;
+  text-align:center; padding:8px;
+  line-height:1.1;
+}
+.album-year-overlay {
+  position:absolute; top:8px; right:8px;
+  font-size:9px; letter-spacing:1px;
+  background:rgba(0,0,0,.7); color:var(--muted);
+  padding:2px 6px;
+}
+.album-type-overlay {
+  position:absolute; bottom:8px; left:8px;
+  font-size:8px; letter-spacing:1px; text-transform:uppercase;
+  padding:2px 6px;
+}
+.type-album  { background:rgba(255,60,0,.8);  color:#fff; }
+.type-ep     { background:rgba(179,136,255,.8); color:#fff; }
+.type-single { background:rgba(0,230,118,.8);  color:#000; }
+.type-mixtape{ background:rgba(255,204,0,.8);  color:#000; }
+
+.album-info { padding:10px 12px; }
+.album-title {
+  font-family:'Syne',sans-serif;
+  font-size:12px; font-weight:700;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  margin-bottom:2px;
+}
+.album-meta {
+  font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted);
+}
+.album-rating {
+  display:flex; align-items:center; gap:4px; margin-top:6px;
+}
+.album-rating-num {
+  font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--accent2);
+}
+.album-stars { font-size:9px; color:var(--muted); letter-spacing:1px; }
+
+/* ── TIMELINE ────────────────────────────────────────── */
+.timeline { position:relative; padding-left:24px; margin-bottom:40px; }
+.timeline::before {
+  content:''; position:absolute; left:5px; top:8px; bottom:0;
+  width:1px; background:var(--border);
+}
+.tl-item { position:relative; margin-bottom:28px; }
+.tl-dot {
+  position:absolute; left:-24px; top:4px;
+  width:11px; height:11px; border-radius:50%;
+  border:1px solid var(--accent); background:var(--bg);
+  transition:background .2s;
+}
+.tl-item:hover .tl-dot { background:var(--accent); }
+.tl-year {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px; color:var(--accent); line-height:1;
+  margin-bottom:2px;
+}
+.tl-event {
+  font-family:'Syne',sans-serif;
+  font-size:14px; font-weight:700; margin-bottom:4px;
+}
+.tl-desc {
+  font-size:11px; line-height:1.7; color:var(--muted);
+}
+.tl-milestone {
+  display:inline-block; font-size:8px; letter-spacing:1.5px;
+  text-transform:uppercase; padding:2px 8px;
+  background:rgba(255,60,0,.1); color:var(--accent);
+  border:1px solid rgba(255,60,0,.3); margin-top:6px;
+}
+
+/* ── SPOTIFY EMBED ──────────────────────────────────── */
+.spotify-section { margin-bottom:40px; }
+.spotify-embed-wrap {
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.spotify-embed-wrap iframe {
+  display:block; border:none; width:100%;
+}
+
+/* ── CURIOSIDADES / FAN DATA ────────────────────────── */
+.trivia-grid {
+  display:grid; grid-template-columns:repeat(2,1fr); gap:10px;
+  margin-bottom:40px;
+}
+.trivia-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:16px;
+  transition:border-color .15s;
+}
+.trivia-card:hover { border-color:var(--accent2); }
+.trivia-icon { font-size:20px; margin-bottom:8px; opacity:.7; }
+.trivia-title {
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent2); margin-bottom:6px;
+}
+.trivia-text {
+  font-size:12px; line-height:1.7; color:var(--muted);
+}
+.trivia-text strong { color:var(--text); }
+
+/* ── COMPARAR BUTTON ─────────────────────────────────── */
+.cta-compare {
+  display:flex; align-items:center; gap:12px;
+  padding:20px; background:var(--surface); border:1px solid var(--border);
+  margin-bottom:32px; cursor:pointer; transition:border-color .15s;
+  text-decoration:none;
+}
+.cta-compare:hover { border-color:var(--accent); }
+.cta-compare-text { flex:1; }
+.cta-compare-title {
+  font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:1px;
+}
+.cta-compare-sub { font-size:10px; color:var(--muted); letter-spacing:1px; margin-top:2px; }
+.cta-arrow {
+  font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--accent);
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────── */
+.sidebar { display:flex; flex-direction:column; gap:16px; }
+
+/* Similar artists */
+.similar-list { }
+.similar-row {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 0; border-bottom:1px solid var(--border);
+  cursor:pointer; transition:background .15s; text-decoration:none;
+}
+.similar-row:last-child { border-bottom:none; }
+.similar-row:hover .similar-name { color:var(--accent); }
+.sim-rank {
+  font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--muted);
+  width:24px; flex-shrink:0;
+}
+.sim-avatar {
+  width:36px; height:36px; background:var(--surface2);
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:13px; color:var(--muted);
+  flex-shrink:0;
+}
+.sim-info { flex:1; min-width:0; }
+.similar-name {
+  font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+  transition:color .15s;
+}
+.similar-tag { font-size:9px; color:var(--muted); letter-spacing:1px; margin-top:1px; }
+.sim-score {
+  font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--muted);
+  flex-shrink:0;
+}
+
+/* Community card */
+.community-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.community-header {
+  padding:14px 16px; border-bottom:1px solid var(--border);
+  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);
+}
+.poll-option {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 16px; border-bottom:1px solid var(--border);
+  cursor:pointer; transition:background .15s; position:relative;
+}
+.poll-option:last-of-type { border-bottom:none; }
+.poll-option:hover { background:var(--surface2); }
+.poll-bar-bg {
+  position:absolute; left:0; top:0; bottom:0;
+  background:rgba(255,60,0,.06); transition:width .6s ease;
+}
+.poll-label { font-size:12px; flex:1; position:relative; z-index:1; }
+.poll-pct {
+  font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--accent);
+  position:relative; z-index:1;
+}
+.poll-voted .poll-bar-bg { background:rgba(255,60,0,.12); }
+
+/* Stat card */
+.stat-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:16px;
+}
+.stat-card-title {
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); margin-bottom:12px;
+}
+.stat-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 0; border-bottom:1px solid var(--border);
+}
+.stat-row:last-child { border-bottom:none; }
+.stat-name { font-size:11px; color:var(--muted); }
+.stat-value {
+  font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--accent2);
+}
+.stat-value.red { color:var(--accent); }
+.stat-value.green { color:var(--green); }
+
+/* ── DEBATE / COMMENTS ──────────────────────────────── */
+.debate-section { margin-top:0; }
+.comment-input-wrap {
+  border:1px solid var(--border);
+  margin-bottom:16px;
+  background:var(--surface);
+}
+.comment-textarea {
+  width:100%; background:transparent; border:none;
+  color:var(--text); font-family:'Space Mono',monospace;
+  font-size:12px; padding:14px 16px; resize:none; outline:none;
+  min-height:80px;
+}
+.comment-footer {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 12px; border-top:1px solid var(--border);
+}
+.comment-hint { font-size:9px; color:var(--muted); letter-spacing:1px; }
+.comment-submit {
+  font-family:'Space Mono',monospace; font-size:10px; letter-spacing:1px;
+  text-transform:uppercase; padding:7px 16px;
+  background:var(--accent); border:none; color:#fff; cursor:pointer;
+  transition:background .2s;
+}
+.comment-submit:hover { background:#ff5a2a; }
+
+.comment-item {
+  padding:16px 0; border-bottom:1px solid var(--border);
+  animation:fadeInUp .3s ease;
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.comment-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:8px;
+}
+.comment-avatar {
+  width:28px; height:28px; background:var(--surface2);
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; color:var(--muted); flex-shrink:0;
+}
+.comment-user { font-size:11px; font-weight:700; }
+.comment-time { font-size:9px; color:var(--muted); letter-spacing:1px; margin-left:auto; }
+.comment-text { font-size:12px; line-height:1.7; color:#aaa; }
+.comment-actions {
+  display:flex; gap:12px; margin-top:8px;
+}
+.comment-action-btn {
+  font-size:9px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--muted); background:none; border:none; cursor:pointer;
+  transition:color .15s; padding:0;
+}
+.comment-action-btn:hover { color:var(--accent); }
+
+/* ── TOAST ──────────────────────────────────────────── */
+.toast {
+  position:fixed; bottom:30px; left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--accent); color:#fff;
+  font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px;
+  padding:10px 20px; z-index:400;
+  opacity:0; transition:all .3s; pointer-events:none;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .artist-hero  { grid-template-columns:1fr; gap:32px; }
+  .hero-right   { position:static; }
+  .artist-body  { grid-template-columns:1fr; gap:32px; }
+  .disco-grid   { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); }
+}
+@media (max-width: 600px) {
+  body { padding-top:0; }
+  .hamburger { display:flex; }
+  nav {
+    position:fixed; top:60px; left:0; right:0;
+    background:var(--surface); border-bottom:1px solid var(--border);
+    flex-direction:column; display:none; z-index:199;
+  }
+  nav.open { display:flex; }
+  nav a { padding:16px 20px; font-size:13px; border-bottom:1px solid var(--border); }
+  nav a.active { border-left:3px solid var(--accent); border-bottom:1px solid var(--border); }
+  .header-actions { display:none; }
+  .logo { font-size:22px; }
+
+  .artist-hero  { padding:20px 14px 0; gap:24px; }
+  .artist-name-big { font-size:52px; }
+  .quick-stats  { flex-wrap:wrap; }
+  .qs-item      { min-width:50%; }
+  .artist-body  { padding:32px 14px 80px; }
+  .disco-grid   { grid-template-columns:repeat(2,1fr); }
+  .trivia-grid  { grid-template-columns:1fr; }
+  .breadcrumb   { padding:12px 14px 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Alemán <span class="ticker-sep">—</span> #1 LÍRICA</span>
+    <span class="ticker-item">RapScore MX <span class="ticker-sep">—</span> El ranking que sí importa</span>
+    <span class="ticker-item">Alemán <span class="ticker-sep">—</span> Score: 89 / 100</span>
+    <span class="ticker-item">#2 Ranking General <span class="ticker-sep">—</span> Detrás de Santa Fe Klan</span>
+    <span class="ticker-item">Alemán <span class="ticker-sep">—</span> #1 LÍRICA</span>
+    <span class="ticker-item">RapScore MX <span class="ticker-sep">—</span> El ranking que sí importa</span>
+    <span class="ticker-item">Alemán <span class="ticker-sep">—</span> Score: 89 / 100</span>
+    <span class="ticker-item">#2 Ranking General <span class="ticker-sep">—</span> Detrás de Santa Fe Klan</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">RAP<span>SCORE</span></a>
+  <nav id="mainNav">
+    <a href="index.html" onclick="closeNav()">Rankings</a>
+    <a href="index.html#estados" onclick="closeNav()">Por Estado</a>
+    <a href="index.html#emergentes" onclick="closeNav()">Emergentes</a>
+    <a href="index.html#comparar" onclick="closeNav()">Comparar</a>
+    <a href="index.html#editorial" onclick="closeNav()">Editorial</a>
+  </nav>
+  <div class="header-actions">
+    <button class="btn-sm">Iniciar sesión</button>
+    <button class="btn-sm btn-primary">Registrarse</button>
+  </div>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleNav()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Rankings</a>
+  <span class="breadcrumb-sep">›</span>
+  <a href="#">Ciudad de México</a>
+  <span class="breadcrumb-sep">›</span>
+  <span class="breadcrumb-cur">Alemán</span>
+</div>
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section class="artist-hero">
+
+  <!-- LEFT: Identity -->
+  <div class="hero-left">
+    <div class="artist-meta-top">
+      <div class="tier-badge tier-activo">Activo</div>
+      <div class="rank-pos">Ranking general <strong>#2</strong></div>
+      <div class="rank-pos" style="margin-left:8px">#1 en Lírica</div>
+    </div>
+
+    <h1 class="artist-name-big">ALEMÁN</h1>
+    <div class="artist-real-name">Nombre real: <span>Javier Alejandro Cruz Moreno</span> &nbsp;·&nbsp; CDMX, 1990</div>
+
+    <div class="artist-tags">
+      <span class="tag">Rap Técnico</span>
+      <span class="tag">Lírica</span>
+      <span class="tag">Underground</span>
+      <span class="tag">CDMX</span>
+      <span class="tag">Hip Hop</span>
+    </div>
+
+    <p class="artist-bio">
+      Considerado por la comunidad de RapScore como el mejor letrista del rap mexicano en actividad.
+      Técnica impecable, vocabulario denso, referencias culturales profundas y una capacidad narrativa
+      que pocos igualaron en la historia del género en México. Surgió del underground capitalino y
+      escaló sin comprometer nunca su propuesta artística.
+    </p>
+
+    <!-- Quick stats -->
+    <div class="quick-stats">
+      <div class="qs-item">
+        <span class="qs-num">2014</span>
+        <span class="qs-lbl">Salto a la fama</span>
+      </div>
+      <div class="qs-item">
+        <span class="qs-num">12</span>
+        <span class="qs-lbl">Proyectos</span>
+      </div>
+      <div class="qs-item">
+        <span class="qs-num">97</span>
+        <span class="qs-lbl">Score lírica</span>
+      </div>
+      <div class="qs-item">
+        <span class="qs-num">4.2K</span>
+        <span class="qs-lbl">Votos comunidad</span>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="social-row">
+      <a class="social-btn spotify" href="https://open.spotify.com/artist/6cExDupJO5BNzCLuBrFHqO" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Spotify
+      </a>
+      <a class="social-btn youtube" href="https://youtube.com/@aleman" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        YouTube
+      </a>
+      <a class="social-btn instagram" href="https://instagram.com/aleman" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram
+      </a>
+      <a class="social-btn tiktok" href="https://tiktok.com/@aleman" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.83a8.18 8.18 0 0 0 4.78 1.52V6.9a4.85 4.85 0 0 1-1.01-.21z"/></svg>
+        TikTok
+      </a>
+    </div>
+  </div>
+
+  <!-- RIGHT: Score panel -->
+  <div class="hero-right">
+    <div class="score-panel">
+      <div class="score-panel-header">
+        <div>
+          <div class="score-panel-title">RapScore promedio</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:1px">4,218 calificaciones</div>
+        </div>
+        <div style="text-align:right">
+          <div class="score-total-big">89</div>
+          <div class="score-total-lbl">/ 100</div>
+        </div>
+      </div>
+
+      <!-- Radar -->
+      <div class="radar-container">
+        <canvas id="artistRadar" width="280" height="280"></canvas>
+      </div>
+
+      <!-- Score bars -->
+      <div class="score-bars">
+        <div class="score-bar-row">
+          <span class="sbar-label">Flow</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-flow" style="width:0%"></div></div>
+          <span class="sbar-val">91</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="sbar-label">Lírica</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-lirica" style="width:0%;background:var(--accent2)"></div></div>
+          <span class="sbar-val" style="color:var(--accent2)">97</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="sbar-label">Contenido</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-cont" style="width:0%"></div></div>
+          <span class="sbar-val">93</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="sbar-label">Versatilidad</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-vers" style="width:0%"></div></div>
+          <span class="sbar-val">85</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="sbar-label">Hooks</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-hooks" style="width:0%"></div></div>
+          <span class="sbar-val">78</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="sbar-label">Impacto</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-imp" style="width:0%"></div></div>
+          <span class="sbar-val">88</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="sbar-label">Delivery</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-del" style="width:0%"></div></div>
+          <span class="sbar-val">92</span>
+        </div>
+        <div class="score-bar-row">
+          <span class="sbar-label">Originalidad</span>
+          <div class="sbar-track"><div class="sbar-fill" id="bar-orig" style="width:0%"></div></div>
+          <span class="sbar-val">90</span>
+        </div>
+      </div>
+
+      <!-- Vote -->
+      <div class="vote-row">
+        <button class="vote-btn" onclick="castVote(this,'overrated')">Sobrevalorado</button>
+        <button class="vote-btn" onclick="castVote(this,'fair')">Justo</button>
+        <button class="vote-btn" onclick="castVote(this,'underrated')">Infravalorado</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     BODY
+═══════════════════════════════════════ -->
+<div class="artist-body">
+
+  <!-- ── MAIN COLUMN ── -->
+  <div>
+
+    <!-- DISCOGRAFÍA -->
+    <div class="sec-label">Discografía</div>
+    <h2 class="sec-title">Proyectos</h2>
+    <div class="disco-grid" id="discoGrid">
+
+      <div class="album-card selected" onclick="selectAlbum(this,'aleman-II','B37kXQGKQ4BfFMkAHMIucL')">
+        <div class="album-cover">
+          <div class="album-cover-placeholder">ALEMÁN<br>II</div>
+          <span class="album-year-overlay">2019</span>
+          <span class="album-type-overlay type-album">Álbum</span>
+        </div>
+        <div class="album-info">
+          <div class="album-title">Alemán II</div>
+          <div class="album-meta">2019 · 16 tracks</div>
+          <div class="album-rating">
+            <span class="album-rating-num">94</span>
+            <span class="album-stars">★★★★★</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="album-card" onclick="selectAlbum(this,'azteca','spotify_id_here')">
+        <div class="album-cover">
+          <div class="album-cover-placeholder">AZTECA</div>
+          <span class="album-year-overlay">2021</span>
+          <span class="album-type-overlay type-album">Álbum</span>
+        </div>
+        <div class="album-info">
+          <div class="album-title">Azteca</div>
+          <div class="album-meta">2021 · 14 tracks</div>
+          <div class="album-rating">
+            <span class="album-rating-num">91</span>
+            <span class="album-stars">★★★★★</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="album-card" onclick="selectAlbum(this,'aleman-i','spotify_id_here')">
+        <div class="album-cover">
+          <div class="album-cover-placeholder">ALEMÁN<br>I</div>
+          <span class="album-year-overlay">2017</span>
+          <span class="album-type-overlay type-album">Álbum</span>
+        </div>
+        <div class="album-info">
+          <div class="album-title">Alemán I</div>
+          <div class="album-meta">2017 · 13 tracks</div>
+          <div class="album-rating">
+            <span class="album-rating-num">90</span>
+            <span class="album-stars">★★★★★</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="album-card" onclick="selectAlbum(this,'1993','spotify_id_here')">
+        <div class="album-cover">
+          <div class="album-cover-placeholder">1993</div>
+          <span class="album-year-overlay">2016</span>
+          <span class="album-type-overlay type-mixtape">Mixtape</span>
+        </div>
+        <div class="album-info">
+          <div class="album-title">1993</div>
+          <div class="album-meta">2016 · 10 tracks</div>
+          <div class="album-rating">
+            <span class="album-rating-num">87</span>
+            <span class="album-stars">★★★★☆</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="album-card" onclick="selectAlbum(this,'ep-2014','spotify_id_here')">
+        <div class="album-cover">
+          <div class="album-cover-placeholder">INICIO</div>
+          <span class="album-year-overlay">2014</span>
+          <span class="album-type-overlay type-ep">EP</span>
+        </div>
+        <div class="album-info">
+          <div class="album-title">El Inicio</div>
+          <div class="album-meta">2014 · 6 tracks</div>
+          <div class="album-rating">
+            <span class="album-rating-num">82</span>
+            <span class="album-stars">★★★★☆</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SPOTIFY EMBED -->
+    <div class="spotify-section">
+      <div class="sec-label">Escúchalo</div>
+      <div class="spotify-embed-wrap" id="spotifyWrap">
+        <!-- Default: Alemán II playlist/album -->
+        <iframe
+          id="spotifyEmbed"
+          src="https://open.spotify.com/embed/artist/6cExDupJO5BNzCLuBrFHqO?utm_source=generator&theme=0"
+          width="100%" height="352"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="sec-label">Trayectoria</div>
+    <h2 class="sec-title">Historia</h2>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2010</div>
+        <div class="tl-event">Primeros pasos en el underground de CDMX</div>
+        <div class="tl-desc">Comienza a rapear en círculos del underground capitalino. Desarrolla su técnica en sesiones privadas y eventos pequeños del barrio.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2014</div>
+        <div class="tl-event">EP debut y primer reconocimiento nacional</div>
+        <div class="tl-desc">Lanza su primer EP y empieza a circular en foros y comunidades de rap online. Los fans más técnicos empiezan a citarlo como una referencia de lírica.</div>
+        <div class="tl-milestone">Salto a la fama</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2016</div>
+        <div class="tl-event">Mixtape "1993" — confirma el talento</div>
+        <div class="tl-desc">El proyecto consolida su posición en el underground. Wordplay denso, referencias literarias y un flow impredecible que se volvió su firma.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2017</div>
+        <div class="tl-event">Álbum debut "Alemán I"</div>
+        <div class="tl-desc">Primer álbum completo que lleva su nombre. La comunidad lo recibe como uno de los mejores debuts del rap mexicano de la década.</div>
+        <div class="tl-milestone">Peak artístico</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2019</div>
+        <div class="tl-event">"Alemán II" — obra maestra según RapScore</div>
+        <div class="tl-desc">Su proyecto mejor calificado por la comunidad. 94 puntos en el ranking de álbumes. Considerado el mejor álbum de rap mexicano de 2019.</div>
+        <div class="tl-milestone">Mejor calificado</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2021</div>
+        <div class="tl-event">"Azteca" — expansión sonora</div>
+        <div class="tl-desc">Experimenta con nuevas temáticas y producción. Sigue siendo técnicamente impecable pero muestra una faceta más ambiciosa y cinematográfica.</div>
+      </div>
+
+    </div>
+
+    <!-- COMPARAR CTA -->
+    <a class="cta-compare" href="index.html#comparar">
+      <div class="cta-compare-text">
+        <div class="cta-compare-title">¿Mejor que Dharius?</div>
+        <div class="cta-compare-sub">Compara sus gráficas radar lado a lado en el comparador</div>
+      </div>
+      <div class="cta-arrow">→</div>
+    </a>
+
+    <!-- CURIOSIDADES -->
+    <div class="sec-label">Para los fans</div>
+    <h2 class="sec-title">Lo que quizás no sabías</h2>
+    <div class="trivia-grid">
+      <div class="trivia-card">
+        <div class="trivia-icon">📖</div>
+        <div class="trivia-title">Nombre artístico</div>
+        <div class="trivia-text">Su nombre <strong>"Alemán"</strong> hace referencia a su apellido materno. No tiene nada que ver con el país — es un guiño a sus raíces familiares que siempre ha llevado con orgullo.</div>
+      </div>
+      <div class="trivia-card">
+        <div class="trivia-icon">🎤</div>
+        <div class="trivia-title">Referencia literaria</div>
+        <div class="trivia-text">Es conocido por incluir referencias a <strong>García Márquez, Neruda y Bukowski</strong> en sus letras. Lo que parece rima random tiene capas de significado para quien conoce la literatura.</div>
+      </div>
+      <div class="trivia-card">
+        <div class="trivia-icon">🏙️</div>
+        <div class="trivia-title">El barrio que lo formó</div>
+        <div class="trivia-text">Creció en <strong>Tepito, CDMX</strong>. El barrio aparece en sus letras no como pose sino como contexto real. Dice que sin Tepito no existiría su música.</div>
+      </div>
+      <div class="trivia-card">
+        <div class="trivia-icon">🤝</div>
+        <div class="trivia-title">Colaboraciones clave</div>
+        <div class="trivia-text">Ha trabajado con <strong>Gera MX, MC Davo y Dharius</strong> en proyectos que marcaron la escena. Cada feature suyo sube el nivel del track de manera notoria.</div>
+      </div>
+      <div class="trivia-card">
+        <div class="trivia-icon">🎯</div>
+        <div class="trivia-title">Récord en RapScore</div>
+        <div class="trivia-text">Tiene el <strong>mayor score de Lírica</strong> en toda la plataforma: 97/100. Ningún artista calificado hasta ahora ha superado esa marca en esa categoría.</div>
+      </div>
+      <div class="trivia-card">
+        <div class="trivia-icon">🔥</div>
+        <div class="trivia-title">El debate eterno</div>
+        <div class="trivia-text">La pregunta más debatida de RapScore: <strong>¿Alemán o Dharius?</strong> 12,000 votos en el hilo de debate. Alemán gana en Lírica, Dharius en Flow. Sin consenso hasta hoy.</div>
+      </div>
+    </div>
+
+    <!-- DEBATE / COMMENTS -->
+    <div class="debate-section">
+      <div class="sec-label">Comunidad</div>
+      <h2 class="sec-title">Debate</h2>
+
+      <div class="comment-input-wrap">
+        <textarea class="comment-textarea" id="commentInput"
+          placeholder="¿Qué opinas de Alemán? ¿Está bien calificado, sobrevalorado, infravalorado?"></textarea>
+        <div class="comment-footer">
+          <span class="comment-hint">Sé específico — menciona canciones, álbumes o comparativas</span>
+          <button class="comment-submit" onclick="submitComment()">Publicar →</button>
+        </div>
+      </div>
+
+      <div id="commentsList">
+
+        <div class="comment-item">
+          <div class="comment-header">
+            <div class="comment-avatar">RV</div>
+            <span class="comment-user">rap_verdad</span>
+            <span class="comment-time">hace 2h</span>
+          </div>
+          <div class="comment-text">El 97 en lírica está completamente justificado. Escuchen "Azteca" de principio a fin y díganme si hay alguien en México que construya rimas así. El doble sentido en el tercer verso de "Cronos" es una clase magistral.</div>
+          <div class="comment-actions">
+            <button class="comment-action-btn" onclick="likeComment(this)">▲ 42</button>
+            <button class="comment-action-btn">Responder</button>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-header">
+            <div class="comment-avatar">MC</div>
+            <span class="comment-user">mc_critico</span>
+            <span class="comment-time">hace 5h</span>
+          </div>
+          <div class="comment-text">El 78 en hooks lo baja demasiado del ranking general. Sus estribillos no son pegajosos pero eso es intencional — este wey no hace música de radio, hace arte. Deberíamos tener categorías separadas para rap mainstream vs underground.</div>
+          <div class="comment-actions">
+            <button class="comment-action-btn" onclick="likeComment(this)">▲ 28</button>
+            <button class="comment-action-btn">Responder</button>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-header">
+            <div class="comment-avatar">FG</div>
+            <span class="comment-user">flow_guadalajara</span>
+            <span class="comment-time">hace 1d</span>
+          </div>
+          <div class="comment-text">Dharius lo supera en flow, punto. Pero en todo lo demás Alemán es otro nivel. El problema es que la gente confunde rapidez con técnica. Santa Fe tiene más impacto cultural porque llega a más gente, no porque sea mejor técnicamente.</div>
+          <div class="comment-actions">
+            <button class="comment-action-btn" onclick="likeComment(this)">▲ 61</button>
+            <button class="comment-action-btn">Responder</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SIDEBAR ── -->
+  <div class="sidebar">
+
+    <!-- Community poll -->
+    <div class="community-card">
+      <div class="community-header">Pregunta de la semana</div>
+      <div style="padding:14px 16px 10px;font-size:12px;line-height:1.6;border-bottom:1px solid var(--border)">
+        ¿Cuál es el mejor álbum de Alemán?
+      </div>
+      <div class="poll-option" onclick="votePoll(this,62)">
+        <div class="poll-bar-bg" style="width:62%"></div>
+        <span class="poll-label">Alemán II (2019)</span>
+        <span class="poll-pct">62%</span>
+      </div>
+      <div class="poll-option" onclick="votePoll(this,21)">
+        <div class="poll-bar-bg" style="width:21%"></div>
+        <span class="poll-label">Azteca (2021)</span>
+        <span class="poll-pct">21%</span>
+      </div>
+      <div class="poll-option" onclick="votePoll(this,17)">
+        <div class="poll-bar-bg" style="width:17%"></div>
+        <span class="poll-label">Alemán I (2017)</span>
+        <span class="poll-pct">17%</span>
+      </div>
+      <div style="padding:10px 16px;font-size:9px;color:var(--muted);letter-spacing:1px">
+        1,847 votos
+      </div>
+    </div>
+
+    <!-- Stats card -->
+    <div class="stat-card">
+      <div class="stat-card-title">Estadísticas en RapScore</div>
+      <div class="stat-row">
+        <span class="stat-name">Posición general</span>
+        <span class="stat-value red">#2</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Top categoría</span>
+        <span class="stat-value">#1 Lírica</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Calificaciones recibidas</span>
+        <span class="stat-value green">4.2K</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Mejor álbum calificado</span>
+        <span class="stat-value">94 pts</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Tendencia (7 días)</span>
+        <span class="stat-value green">▲ +0.4</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Estado</span>
+        <span class="stat-value" style="color:var(--green);font-size:14px">● Activo</span>
+      </div>
+    </div>
+
+    <!-- Similar artists -->
+    <div class="score-panel">
+      <div class="score-panel-header">
+        <div class="score-panel-title">Artistas similares</div>
+      </div>
+      <div style="padding:0 16px 8px">
+        <a class="similar-row" href="artist.html">
+          <div class="sim-rank">1</div>
+          <div class="sim-avatar">DH</div>
+          <div class="sim-info">
+            <div class="similar-name">Dharius</div>
+            <div class="similar-tag">Rap Técnico · CDMX</div>
+          </div>
+          <div class="sim-score">84</div>
+        </a>
+        <a class="similar-row" href="artist.html">
+          <div class="sim-rank">2</div>
+          <div class="sim-avatar">CA</div>
+          <div class="sim-info">
+            <div class="similar-name">Charles Ans</div>
+            <div class="similar-tag">Underground · CDMX</div>
+          </div>
+          <div class="sim-score">83</div>
+        </a>
+        <a class="similar-row" href="artist.html">
+          <div class="sim-rank">3</div>
+          <div class="sim-avatar">LG</div>
+          <div class="sim-info">
+            <div class="similar-name">LNG/SHT</div>
+            <div class="similar-tag">Hip Hop Puro · CDMX</div>
+          </div>
+          <div class="sim-score">82</div>
+        </a>
+        <a class="similar-row" href="artist.html">
+          <div class="sim-rank">4</div>
+          <div class="sim-avatar">MG</div>
+          <div class="sim-info">
+            <div class="similar-name">Muelas de Gallo</div>
+            <div class="similar-tag">Rap Técnico · Jalisco</div>
+          </div>
+          <div class="sim-score">80</div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── NAV ─────────────────────────────────────────────────────
+function toggleNav() {
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('hamburgerBtn');
+  nav.classList.toggle('open');
+  const spans = btn.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.cssText = 'transform:rotate(45deg) translate(5px,5px)';
+    spans[1].style.cssText = 'opacity:0';
+    spans[2].style.cssText = 'transform:rotate(-45deg) translate(5px,-5px)';
+  } else { spans.forEach(s => s.style.cssText = ''); }
+}
+function closeNav() {
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('hamburgerBtn');
+  if (nav) nav.classList.remove('open');
+  if (btn) btn.querySelectorAll('span').forEach(s => s.style.cssText = '');
+}
+document.addEventListener('click', e => {
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('hamburgerBtn');
+  if (nav && btn && !nav.contains(e.target) && !btn.contains(e.target))
+    closeNav();
+});
+
+// ── TOAST ────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── RADAR ────────────────────────────────────────────────────
+function drawRadar(canvasId, scores, color='#ff3c00') {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=280, H=280, cx=W/2, cy=H/2, R=100;
+  const cats=['Flow','Lírica','Contenido','Versatilidad','Hooks','Impacto','Delivery','Orig.'];
+  const n=cats.length, a0=-Math.PI/2;
+  ctx.clearRect(0,0,W,H);
+
+  // grid rings
+  [.25,.5,.75,1].forEach(f => {
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const a=a0+2*Math.PI*i/n;
+      i===0?ctx.moveTo(cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)):ctx.lineTo(cx+R*f*Math.cos(a),cy+R*f*Math.sin(a));
+    }
+    ctx.closePath();
+    ctx.strokeStyle=f===1?'rgba(255,255,255,0.12)':'rgba(255,255,255,0.05)';
+    ctx.lineWidth=.5; ctx.stroke();
+  });
+
+  // spokes + labels
+  cats.forEach((c,i) => {
+    const a=a0+2*Math.PI*i/n;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=.5; ctx.stroke();
+    const lx=cx+(R+16)*Math.cos(a), ly=cy+(R+16)*Math.sin(a);
+    ctx.fillStyle='rgba(255,255,255,0.35)';
+    ctx.font='9px Space Mono,monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(c.toUpperCase(),lx,ly);
+  });
+
+  // data shape
+  ctx.beginPath();
+  scores.forEach((v,i) => {
+    const a=a0+2*Math.PI*i/n, r=R*v/100;
+    i===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+  });
+  ctx.closePath();
+  ctx.fillStyle=color+'22'; ctx.fill();
+  ctx.strokeStyle=color; ctx.lineWidth=1.5; ctx.stroke();
+
+  // dots
+  scores.forEach((v,i) => {
+    const a=a0+2*Math.PI*i/n, r=R*v/100;
+    ctx.beginPath(); ctx.arc(cx+r*Math.cos(a),cy+r*Math.sin(a),3,0,Math.PI*2);
+    ctx.fillStyle=color; ctx.fill();
+  });
+}
+
+// ── ANIMATE BARS ─────────────────────────────────────────────
+function animateBars() {
+  const bars = [
+    ['bar-flow',91],['bar-lirica',97],['bar-cont',93],
+    ['bar-vers',85],['bar-hooks',78],['bar-imp',88],
+    ['bar-del',92],['bar-orig',90]
+  ];
+  bars.forEach(([id,val],i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if(el) el.style.width = val+'%';
+    }, 100 + i*80);
+  });
+}
+
+// ── ALBUM SELECT ─────────────────────────────────────────────
+function selectAlbum(card, albumId, spotifyId) {
+  document.querySelectorAll('.album-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  // Update Spotify embed
+  if(spotifyId && spotifyId !== 'spotify_id_here') {
+    document.getElementById('spotifyEmbed').src =
+      `https://open.spotify.com/embed/album/${spotifyId}?utm_source=generator&theme=0`;
+  }
+  showToast('Cargando ' + albumId + '...');
+}
+
+// ── VOTES ────────────────────────────────────────────────────
+function castVote(btn, type) {
+  document.querySelectorAll('.vote-btn').forEach(b => b.classList.remove('voted'));
+  btn.classList.add('voted');
+  const msgs = {
+    overrated:'Voto "Sobrevalorado" registrado',
+    fair:'Voto "Justo" registrado ✓',
+    underrated:'Voto "Infravalorado" registrado'
+  };
+  showToast(msgs[type]);
+}
+
+function votePoll(option, pct) {
+  if(option.classList.contains('poll-voted')) return;
+  document.querySelectorAll('.poll-option').forEach(o => o.classList.remove('poll-voted'));
+  option.classList.add('poll-voted');
+  showToast('Voto registrado ✓');
+}
+
+function likeComment(btn) {
+  const num = parseInt(btn.textContent.replace('▲ ',''));
+  btn.textContent = '▲ ' + (num+1);
+  btn.style.color = 'var(--accent)';
+}
+
+// ── COMMENTS ─────────────────────────────────────────────────
+function submitComment() {
+  const input = document.getElementById('commentInput');
+  const text = input.value.trim();
+  if(!text) { showToast('Escribe algo primero'); return; }
+  const list = document.getElementById('commentsList');
+  const item = document.createElement('div');
+  item.className = 'comment-item';
+  item.innerHTML = `
+    <div class="comment-header">
+      <div class="comment-avatar" style="border-color:var(--accent);color:var(--accent)">TÚ</div>
+      <span class="comment-user">Tú</span>
+      <span class="comment-time">ahora</span>
+    </div>
+    <div class="comment-text">${text}</div>
+    <div class="comment-actions">
+      <button class="comment-action-btn" onclick="likeComment(this)">▲ 0</button>
+      <button class="comment-action-btn">Responder</button>
+    </div>
+  `;
+  list.insertBefore(item, list.firstChild);
+  input.value = '';
+  showToast('Comentario publicado ✓');
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  drawRadar('artistRadar', [91,97,93,85,78,88,92,90]);
+  animateBars();
+});
+</script>
+</body>
+</html>
