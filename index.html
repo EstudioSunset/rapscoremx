@@ -2987,17 +2987,16 @@ ${svgPaths}
 }
 </script>
 <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
-  import {
+// ── IMPORTS (must be at top of module) ──────────────────────
+import { initializeApp }                        from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAnalytics }                         from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+import {
   getAuth,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
 import {
   getFirestore,
   doc,
@@ -3005,11 +3004,27 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-const auth = getAuth(app);
-const db = getFirestore(app);
+// ── FIREBASE CONFIG + INIT ───────────────────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyBhw4QNmzVnto-0nJ4Hm9C2dNy6l_IdtBI",
+  authDomain:        "rapscoremx.firebaseapp.com",
+  projectId:         "rapscoremx",
+  storageBucket:     "rapscoremx.firebasestorage.app",
+  messagingSenderId: "971301585434",
+  appId:             "1:971301585434:web:db4e6b2c2f651087ac87a3",
+  measurementId:     "G-D6QMGC5N67"
+};
 
+const app       = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth      = getAuth(app);
+const db        = getFirestore(app);
+
+// ── STATE ────────────────────────────────────────────────────
 let currentUser = null;
+let authMode    = "login";
 
+// ── HELPERS ─────────────────────────────────────────────────
 function slugify(text) {
   return text
     .toLowerCase()
@@ -3019,145 +3034,22 @@ function slugify(text) {
     .replace(/^-+|-+$/g, "");
 }
 
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-
-  const loginBtn = document.querySelector(".header-actions .btn-sm");
-  const registerBtn = document.querySelector(".header-actions .btn-primary");
-
-  if (!loginBtn || !registerBtn) return;
-
-  if (user) {
-    loginBtn.textContent = "Cerrar sesión";
-    registerBtn.textContent = user.email || "Mi cuenta";
-
-    loginBtn.onclick = () => signOut(auth);
-    registerBtn.onclick = null;
-  } else {
-    loginBtn.textContent = "Iniciar sesión";
-    registerBtn.textContent = "Registrarse";
-
-    loginBtn.onclick = () => openAuthPrompt("login");
-    registerBtn.onclick = () => openAuthPrompt("register");
-  }
-});
-
-window.openAuthPrompt = async function(mode = "login") {
-  const email = prompt(mode === "register" ? "Correo para registrarte:" : "Correo:");
-  if (!email) return;
-
-  const password = prompt("Contraseña mínimo 6 caracteres:");
-  if (!password) return;
-
-  try {
-    if (mode === "register") {
-      await createUserWithEmailAndPassword(auth, email, password);
-      showToast("Cuenta creada ✓");
-    } else {
-      await signInWithEmailAndPassword(auth, email, password);
-      showToast("Sesión iniciada ✓");
-    }
-  } catch (error) {
-    showToast(error.message);
-  }
-};
-
-window.castVote = async function(btn, type) {
-  if (!currentUser) {
-    showToast("Primero inicia sesión para votar");
-    openAuthPrompt("login");
-    return;
-  }
-
-  const panel = btn.closest(".expanded-panel");
-  const artistName = panel?.querySelector("h3")?.textContent;
-
-  if (!artistName) {
-    showToast("No se detectó el artista");
-    return;
-  }
-
-  const artistSlug = slugify(artistName);
-  const voteId = `${currentUser.uid}_${artistSlug}`;
-
-  try {
-    await setDoc(doc(db, "votes", voteId), {
-      userId: currentUser.uid,
-      artist: artistName,
-      artistSlug: artistSlug,
-      voteType: type,
-      updatedAt: serverTimestamp()
-    });
-
-    btn.parentElement.querySelectorAll(".vote-btn").forEach(b => b.classList.remove("voted"));
-    btn.classList.add("voted");
-
-    showToast("Voto guardado ✓");
-  } catch (error) {
-    showToast("Error al guardar voto");
-    console.error(error);
-  }
-};
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBhw4QNmzVnto-0nJ4Hm9C2dNy6l_IdtBI",
-    authDomain: "rapscoremx.firebaseapp.com",
-    projectId: "rapscoremx",
-    storageBucket: "rapscoremx.firebasestorage.app",
-    messagingSenderId: "971301585434",
-    appId: "1:971301585434:web:db4e6b2c2f651087ac87a3",
-    measurementId: "G-D6QMGC5N67"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-const db = getFirestore(app);
-
-let currentUser = null;
-let authMode = "login";
-  const analytics = getAnalytics(app);
-
-  import {
-  getAuth,
-  onAuthStateChanged,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-
+// ── AUTH MODAL ───────────────────────────────────────────────
 function setAuthMode(mode) {
   authMode = mode;
-
-  const title = document.getElementById("authTitle");
-  const submitBtn = document.getElementById("authSubmitBtn");
+  const title      = document.getElementById("authTitle");
+  const submitBtn  = document.getElementById("authSubmitBtn");
   const switchText = document.getElementById("authSwitchText");
+  if (!title) return;
 
   if (mode === "register") {
-    title.textContent = "Crear cuenta";
+    title.textContent     = "Crear cuenta";
     submitBtn.textContent = "Registrarse";
-    switchText.innerHTML = `
-      ¿Ya tienes cuenta?
-      <button type="button" onclick="setAuthMode('login')">Iniciar sesión</button>
-    `;
+    switchText.innerHTML  = `¿Ya tienes cuenta? <button type="button" onclick="setAuthMode('login')">Iniciar sesión</button>`;
   } else {
-    title.textContent = "Iniciar sesión";
+    title.textContent     = "Iniciar sesión";
     submitBtn.textContent = "Entrar";
-    switchText.innerHTML = `
-      ¿No tienes cuenta?
-      <button type="button" onclick="setAuthMode('register')">Crear cuenta</button>
-    `;
+    switchText.innerHTML  = `¿No tienes cuenta? <button type="button" onclick="setAuthMode('register')">Crear cuenta</button>`;
   }
 }
 
@@ -3171,25 +3063,24 @@ function closeAuthModal() {
 }
 
 function closeAuthModalOutside(event) {
-  if (event.target.id === "authModal") {
-    closeAuthModal();
-  }
+  if (event.target.id === "authModal") closeAuthModal();
 }
 
-window.setAuthMode = setAuthMode;
-window.openAuthModal = openAuthModal;
-window.closeAuthModal = closeAuthModal;
+// expose to inline onclick="" handlers
+window.setAuthMode          = setAuthMode;
+window.openAuthModal        = openAuthModal;
+window.closeAuthModal       = closeAuthModal;
 window.closeAuthModalOutside = closeAuthModalOutside;
 
+// ── AUTH SUBMIT ──────────────────────────────────────────────
 document.getElementById("authSubmitBtn").addEventListener("click", async () => {
-  const email = document.getElementById("authEmail").value.trim();
+  const email    = document.getElementById("authEmail").value.trim();
   const password = document.getElementById("authPassword").value.trim();
 
   if (!email || !password) {
     showToast("Ingresa correo y contraseña");
     return;
   }
-
   if (password.length < 6) {
     showToast("La contraseña debe tener mínimo 6 caracteres");
     return;
@@ -3197,66 +3088,53 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
 
   try {
     if (authMode === "register") {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-      await setDoc(doc(db, "users", userCredential.user.uid), {
-        email: email,
-        role: "user",
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await setDoc(doc(db, "users", cred.user.uid), {
+        email,
+        role:      "user",
         createdAt: serverTimestamp()
       });
-
       showToast("Cuenta creada ✓");
     } else {
       await signInWithEmailAndPassword(auth, email, password);
       showToast("Sesión iniciada ✓");
     }
-
     closeAuthModal();
   } catch (error) {
     console.error(error);
-
-    if (error.code === "auth/email-already-in-use") {
-      showToast("Ese correo ya está registrado");
-    } else if (error.code === "auth/invalid-credential") {
-      showToast("Correo o contraseña incorrectos");
-    } else {
-      showToast("Error de autenticación");
-    }
+    const msgs = {
+      "auth/email-already-in-use": "Ese correo ya está registrado",
+      "auth/invalid-credential":   "Correo o contraseña incorrectos",
+      "auth/user-not-found":       "Correo o contraseña incorrectos",
+      "auth/wrong-password":       "Correo o contraseña incorrectos",
+      "auth/too-many-requests":    "Demasiados intentos. Espera un momento.",
+    };
+    showToast(msgs[error.code] || "Error de autenticación");
   }
 });
 
+// ── AUTH STATE OBSERVER ──────────────────────────────────────
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
 
-  const loginBtn = document.querySelector(".header-actions .btn-sm");
+  const loginBtn    = document.querySelector(".header-actions .btn-sm");
   const registerBtn = document.querySelector(".header-actions .btn-primary");
-
   if (!loginBtn || !registerBtn) return;
 
   if (user) {
-    loginBtn.textContent = "Cerrar sesión";
+    loginBtn.textContent    = "Cerrar sesión";
     registerBtn.textContent = user.email || "Mi cuenta";
-
-    loginBtn.onclick = () => signOut(auth);
-    registerBtn.onclick = null;
+    loginBtn.onclick        = () => signOut(auth);
+    registerBtn.onclick     = null;
   } else {
-    loginBtn.textContent = "Iniciar sesión";
+    loginBtn.textContent    = "Iniciar sesión";
     registerBtn.textContent = "Registrarse";
-
-    loginBtn.onclick = () => openAuthModal("login");
-    registerBtn.onclick = () => openAuthModal("register");
+    loginBtn.onclick        = () => openAuthModal("login");
+    registerBtn.onclick     = () => openAuthModal("register");
   }
 });
 
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
+// ── SAVE VOTE TO FIRESTORE ───────────────────────────────────
 window.castVote = async function(btn, type) {
   if (!currentUser) {
     showToast("Primero inicia sesión para votar");
@@ -3264,29 +3142,23 @@ window.castVote = async function(btn, type) {
     return;
   }
 
-  const panel = btn.closest(".expanded-panel");
-  const artistName = panel?.querySelector("h3")?.textContent;
-
-  if (!artistName) {
-    showToast("No se detectó el artista");
-    return;
-  }
+  const panel      = btn.closest(".expanded-panel");
+  const artistName = panel?.querySelector("h3")?.textContent?.trim();
+  if (!artistName) { showToast("No se detectó el artista"); return; }
 
   const artistSlug = slugify(artistName);
-  const voteId = `${currentUser.uid}_${artistSlug}`;
+  const voteId     = `${currentUser.uid}_${artistSlug}`;
 
   try {
     await setDoc(doc(db, "votes", voteId), {
-      userId: currentUser.uid,
-      artist: artistName,
-      artistSlug: artistSlug,
-      voteType: type,
-      updatedAt: serverTimestamp()
+      userId:      currentUser.uid,
+      artist:      artistName,
+      artistSlug,
+      voteType:    type,
+      updatedAt:   serverTimestamp()
     });
-
     btn.parentElement.querySelectorAll(".vote-btn").forEach(b => b.classList.remove("voted"));
     btn.classList.add("voted");
-
     showToast("Voto guardado ✓");
   } catch (error) {
     console.error(error);
