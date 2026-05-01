@@ -1087,13 +1087,13 @@ h1 em { color: var(--accent); font-style: normal; }
 
 <!-- HEADER -->
 <header>
-  <a href="index.html" class="logo">RAP<span>SCORE</span></a>
+  <div class="logo">RAP<span>SCORE</span></div>
   <nav id="mainNav">
-    <a href="index.html" onclick="closeNav()">Rankings</a>
-    <a href="index.html#estados" onclick="closeNav()">Por Estado</a>
-    <a href="index.html#emergentes" onclick="closeNav()">Emergentes</a>
-    <a href="index.html#comparar" onclick="closeNav()">Comparar</a>
-    <a href="index.html#editorial" onclick="closeNav()">Editorial</a>
+    <a href="#" class="active" id="nav-rankings" onclick="showSection('rankings',this);closeNav()">Rankings</a>
+    <a href="#" id="nav-estados" onclick="showSection('estados',this);closeNav()">Por Estado</a>
+    <a href="#" onclick="closeNav()">Emergentes</a>
+    <a href="#" onclick="closeNav()">Comparar</a>
+    <a href="#" onclick="closeNav()">Editorial</a>
   </nav>
   <div class="header-actions">
     <button class="btn-sm">Iniciar sesión</button>
@@ -2987,9 +2987,9 @@ ${svgPaths}
 }
 </script>
 <script type="module">
-// ── IMPORTS (must be at top of module) ──────────────────────
-import { initializeApp }                        from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getAnalytics }                         from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+// ── IMPORTS ─────────────────────────────────────────────────
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAnalytics }    from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
 import {
   getAuth,
   onAuthStateChanged,
@@ -3004,7 +3004,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-// ── FIREBASE CONFIG + INIT ───────────────────────────────────
+// ── INIT ────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey:            "AIzaSyBhw4QNmzVnto-0nJ4Hm9C2dNy6l_IdtBI",
   authDomain:        "rapscoremx.firebaseapp.com",
@@ -3014,7 +3014,6 @@ const firebaseConfig = {
   appId:             "1:971301585434:web:db4e6b2c2f651087ac87a3",
   measurementId:     "G-D6QMGC5N67"
 };
-
 const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth      = getAuth(app);
@@ -3026,12 +3025,9 @@ let authMode    = "login";
 
 // ── HELPERS ─────────────────────────────────────────────────
 function slugify(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return text.toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
 // ── AUTH MODAL ───────────────────────────────────────────────
@@ -3041,7 +3037,6 @@ function setAuthMode(mode) {
   const submitBtn  = document.getElementById("authSubmitBtn");
   const switchText = document.getElementById("authSwitchText");
   if (!title) return;
-
   if (mode === "register") {
     title.textContent     = "Crear cuenta";
     submitBtn.textContent = "Registrarse";
@@ -3057,42 +3052,29 @@ function openAuthModal(mode = "login") {
   setAuthMode(mode);
   document.getElementById("authModal").classList.add("open");
 }
-
 function closeAuthModal() {
   document.getElementById("authModal").classList.remove("open");
 }
-
-function closeAuthModalOutside(event) {
-  if (event.target.id === "authModal") closeAuthModal();
+function closeAuthModalOutside(e) {
+  if (e.target.id === "authModal") closeAuthModal();
 }
 
-// expose to inline onclick="" handlers
-window.setAuthMode          = setAuthMode;
-window.openAuthModal        = openAuthModal;
-window.closeAuthModal       = closeAuthModal;
+window.setAuthMode           = setAuthMode;
+window.openAuthModal         = openAuthModal;
+window.closeAuthModal        = closeAuthModal;
 window.closeAuthModalOutside = closeAuthModalOutside;
 
 // ── AUTH SUBMIT ──────────────────────────────────────────────
 document.getElementById("authSubmitBtn").addEventListener("click", async () => {
   const email    = document.getElementById("authEmail").value.trim();
   const password = document.getElementById("authPassword").value.trim();
-
-  if (!email || !password) {
-    showToast("Ingresa correo y contraseña");
-    return;
-  }
-  if (password.length < 6) {
-    showToast("La contraseña debe tener mínimo 6 caracteres");
-    return;
-  }
-
+  if (!email || !password) { showToast("Ingresa correo y contraseña"); return; }
+  if (password.length < 6) { showToast("La contraseña debe tener mínimo 6 caracteres"); return; }
   try {
     if (authMode === "register") {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", cred.user.uid), {
-        email,
-        role:      "user",
-        createdAt: serverTimestamp()
+        email, role: "user", createdAt: serverTimestamp()
       });
       showToast("Cuenta creada ✓");
     } else {
@@ -3100,8 +3082,8 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
       showToast("Sesión iniciada ✓");
     }
     closeAuthModal();
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     const msgs = {
       "auth/email-already-in-use": "Ese correo ya está registrado",
       "auth/invalid-credential":   "Correo o contraseña incorrectos",
@@ -3109,18 +3091,16 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
       "auth/wrong-password":       "Correo o contraseña incorrectos",
       "auth/too-many-requests":    "Demasiados intentos. Espera un momento.",
     };
-    showToast(msgs[error.code] || "Error de autenticación");
+    showToast(msgs[err.code] || "Error de autenticación");
   }
 });
 
-// ── AUTH STATE OBSERVER ──────────────────────────────────────
+// ── AUTH STATE ───────────────────────────────────────────────
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
-
   const loginBtn    = document.querySelector(".header-actions .btn-sm");
   const registerBtn = document.querySelector(".header-actions .btn-primary");
   if (!loginBtn || !registerBtn) return;
-
   if (user) {
     loginBtn.textContent    = "Cerrar sesión";
     registerBtn.textContent = user.email || "Mi cuenta";
@@ -3134,34 +3114,29 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// ── SAVE VOTE TO FIRESTORE ───────────────────────────────────
+// ── SAVE VOTE ────────────────────────────────────────────────
 window.castVote = async function(btn, type) {
   if (!currentUser) {
     showToast("Primero inicia sesión para votar");
     openAuthModal("login");
     return;
   }
-
   const panel      = btn.closest(".expanded-panel");
   const artistName = panel?.querySelector("h3")?.textContent?.trim();
   if (!artistName) { showToast("No se detectó el artista"); return; }
-
   const artistSlug = slugify(artistName);
   const voteId     = `${currentUser.uid}_${artistSlug}`;
-
   try {
     await setDoc(doc(db, "votes", voteId), {
-      userId:      currentUser.uid,
-      artist:      artistName,
-      artistSlug,
-      voteType:    type,
-      updatedAt:   serverTimestamp()
+      userId: currentUser.uid, artist: artistName,
+      artistSlug, voteType: type, updatedAt: serverTimestamp()
     });
-    btn.parentElement.querySelectorAll(".vote-btn").forEach(b => b.classList.remove("voted"));
+    btn.parentElement.querySelectorAll(".vote-btn")
+       .forEach(b => b.classList.remove("voted"));
     btn.classList.add("voted");
     showToast("Voto guardado ✓");
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     showToast("Error al guardar voto");
   }
 };
