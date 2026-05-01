@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparar Artistas — RapScore MX</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────── */
+:root {
+  --bg:      #0a0a0a;
+  --surface: #111111;
+  --surface2:#1a1a1a;
+  --border:  #2a2a2a;
+  --accent:  #ff3c00;
+  --accent2: #ffcc00;
+  --text:    #f0ede6;
+  --muted:   #666;
+  --green:   #00e676;
+  --purple:  #b388ff;
+  --a-color: #ff3c00;
+  --b-color: #b388ff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+
+/* ── HEADER ─────────────────────────────────────── */
+header{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--text);text-decoration:none}
+.logo span{color:var(--accent)}
+nav{display:flex}
+nav a{color:var(--muted);text-decoration:none;font-size:11px;letter-spacing:1px;padding:8px 14px;transition:color .2s;text-transform:uppercase}
+nav a:hover{color:var(--text)}
+nav a.active{color:var(--text);border-bottom:2px solid var(--accent)}
+.header-actions{display:flex;gap:10px;align-items:center}
+.btn-sm{font-family:'Space Mono',monospace;font-size:11px;padding:7px 14px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:#ff5a2a;color:#fff}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;margin-left:8px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);transition:all .2s}
+
+/* ── TICKER ──────────────────────────────────────── */
+.ticker{background:var(--accent);overflow:hidden;height:30px;display:flex;align-items:center}
+.ticker-inner{display:flex;gap:48px;animation:ticker 30s linear infinite;white-space:nowrap;padding-right:48px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff;font-weight:700}
+.ticker-sep{color:rgba(255,255,255,.4)}
+
+/* ── PAGE SHELL ──────────────────────────────────── */
+.page{max-width:1400px;margin:0 auto;padding:40px 24px 80px}
+
+.page-header{margin-bottom:40px}
+.page-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.page-label::before{content:'';width:20px;height:1px;background:var(--accent)}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7vw,88px);line-height:.9;letter-spacing:2px;margin-bottom:12px}
+.page-title em{color:var(--accent);font-style:normal}
+.page-sub{font-size:12px;color:var(--muted);line-height:1.8;max-width:500px}
+
+/* ── SELECTOR GRID ───────────────────────────────── */
+.selector-grid{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:48px;align-items:start}
+
+.selector-card{background:var(--surface);border:1px solid var(--border);overflow:hidden}
+.selector-card.side-a{border-color:var(--a-color)}
+.selector-card.side-b{border-color:var(--b-color)}
+
+.selector-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.side-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.side-a .side-label,.side-label-a{color:var(--a-color)}
+.side-b .side-label,.side-label-b{color:var(--b-color)}
+
+/* Artist photo upload area */
+.photo-zone{position:relative;width:100%;aspect-ratio:1;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:background .2s}
+.photo-zone:hover{background:#222}
+.photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.photo-zone img.loaded{display:block}
+.photo-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+.photo-icon{width:40px;height:40px;border:1px dashed var(--muted);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--muted)}
+.photo-hint{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
+
+.selector-body{padding:16px 20px}
+.artist-search-wrap{position:relative;margin-bottom:12px}
+.artist-search{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:12px;padding:10px 14px;outline:none;transition:border-color .2s}
+.artist-search:focus{border-color:var(--accent)}
+.artist-search::placeholder{color:var(--muted)}
+.search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-top:none;z-index:50;display:none;max-height:200px;overflow-y:auto}
+.search-results.open{display:block}
+.search-result-item{padding:10px 14px;font-size:11px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;transition:background .15s}
+.search-result-item:last-child{border-bottom:none}
+.search-result-item:hover{background:var(--surface2)}
+.sri-name{font-weight:700}
+.sri-score{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent2)}
+
+.selected-artist-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;margin-bottom:4px;min-height:34px}
+.selected-artist-meta{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;min-height:14px}
+.selected-score-big{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;color:var(--accent2)}
+.selected-score-lbl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+
+/* mini bars in selector */
+.mini-bars{display:flex;flex-direction:column;gap:7px}
+.mini-bar-row{display:flex;align-items:center;gap:8px}
+.mini-bar-lbl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);width:72px;flex-shrink:0}
+.mini-bar-track{flex:1;height:2px;background:var(--border);position:relative;overflow:hidden}
+.mini-bar-fill{height:100%;position:absolute;left:0;top:0;transition:width .7s ease}
+.mini-bar-val{font-family:'Bebas Neue',sans-serif;font-size:14px;width:24px;text-align:right;flex-shrink:0}
+
+.clear-btn{display:none;width:100%;margin-top:12px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s}
+.clear-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* VS divider */
+.vs-col{display:flex;align-items:center;justify-content:center;padding-top:60px}
+.vs-badge{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);border:1px solid var(--accent);width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+
+/* ── COMPARISON RESULTS ───────────────────────────── */
+.results{display:none}
+.results.show{display:block}
+
+/* Radar comparison */
+.radar-section{margin-bottom:40px}
+.sec-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';width:20px;height:1px;background:var(--accent)}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:24px}
+
+.radar-wrap{background:var(--surface);border:1px solid var(--border);padding:24px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.radar-legend{display:flex;gap:24px}
+.radar-legend-item{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+
+/* Category bars comparison */
+.cat-compare-grid{display:flex;flex-direction:column;gap:0}
+.cat-row{display:grid;grid-template-columns:1fr 100px 1fr;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.cat-row:last-child{border-bottom:none}
+
+.cat-bar-a{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.cat-bar-b{display:flex;align-items:center;gap:8px}
+.cat-name-center{text-align:center;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+
+.bar-a-track{width:100%;height:4px;background:var(--border);position:relative;overflow:hidden;flex:1}
+.bar-a-fill{height:100%;position:absolute;right:0;top:0;background:var(--a-color);transition:width .8s ease}
+.bar-b-track{width:100%;height:4px;background:var(--border);position:relative;overflow:hidden;flex:1}
+.bar-b-fill{height:100%;position:absolute;left:0;top:0;background:var(--b-color);transition:width .8s ease}
+
+.val-a{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--a-color);flex-shrink:0}
+.val-b{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--b-color);flex-shrink:0}
+.win-a .val-a,.win-a .bar-a-fill{opacity:1}
+.win-b .val-b,.win-b .bar-b-fill{opacity:1}
+.win-a .val-b,.win-a .bar-b-fill,.win-b .val-a,.win-b .bar-a-fill{opacity:.4}
+
+/* Summary cards */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;margin-bottom:40px}
+.summary-card{background:var(--surface);border:1px solid var(--border);padding:20px;text-align:center}
+.summary-card.winner{border-color:var(--accent2);background:rgba(255,204,0,.04)}
+.summary-card-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:4px}
+.summary-card-score{font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:1;color:var(--accent2)}
+.summary-card-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.summary-wins{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.summary-wins strong{color:var(--text)}
+.winner-badge{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;background:rgba(255,204,0,.12);border:1px solid rgba(255,204,0,.4);color:var(--accent2);margin-top:8px}
+
+/* Category wins breakdown */
+.wins-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.win-pill{font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);color:var(--muted)}
+
+/* Verdict */
+.verdict-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:20px 24px;margin-bottom:40px}
+.verdict-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.verdict-text{font-size:13px;line-height:1.9;color:#aaa}
+.verdict-text strong{color:var(--text)}
+
+/* Share card */
+.share-section{background:var(--surface);border:1px solid var(--border);padding:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:40px}
+.share-text{font-size:12px;color:var(--muted);line-height:1.7}
+.share-text strong{color:var(--text);display:block;font-size:14px;margin-bottom:4px}
+.share-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px 20px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.share-btn:hover{background:var(--accent);color:#fff}
+
+/* Toast */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#fff;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;padding:10px 20px;z-index:400;opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media (max-width:900px){
+  .selector-grid{grid-template-columns:1fr;gap:16px}
+  .vs-col{padding-top:0;padding-bottom:0}
+  .cat-row{grid-template-columns:1fr 80px 1fr}
+  .summary-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:600px){
+  .hamburger{display:flex}
+  nav{position:fixed;top:60px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);flex-direction:column;display:none;z-index:199}
+  nav.open{display:flex}
+  nav a{padding:16px 20px;font-size:13px;border-bottom:1px solid var(--border)}
+  nav a.active{border-left:3px solid var(--accent);border-bottom:1px solid var(--border)}
+  .header-actions{display:none}
+  .logo{font-size:22px}
+  .page{padding:24px 14px 80px}
+  .page-title{font-size:48px}
+  .cat-row{grid-template-columns:1fr 70px 1fr;gap:4px}
+  .val-a,.val-b{font-size:18px}
+  .cat-name-center{font-size:8px}
+  .summary-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .summary-card-score{font-size:42px}
+  .share-section{flex-direction:column;align-items:flex-start}
+  .share-btn{width:100%}
+  .radar-legend{flex-wrap:wrap;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">¿Quién es mejor? <span class="ticker-sep">—</span> Compara aquí</span>
+    <span class="ticker-item">Alemán vs Dharius <span class="ticker-sep">—</span> El debate eterno</span>
+    <span class="ticker-item">Santa Fe Klan vs C-Kan <span class="ticker-sep">—</span> Guadalajara decide</span>
+    <span class="ticker-item">Bocafloja vs Adán Cruz <span class="ticker-sep">—</span> Rap consciente</span>
+    <span class="ticker-item">¿Quién es mejor? <span class="ticker-sep">—</span> Compara aquí</span>
+    <span class="ticker-item">Alemán vs Dharius <span class="ticker-sep">—</span> El debate eterno</span>
+    <span class="ticker-item">Santa Fe Klan vs C-Kan <span class="ticker-sep">—</span> Guadalajara decide</span>
+    <span class="ticker-item">Bocafloja vs Adán Cruz <span class="ticker-sep">—</span> Rap consciente</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">RAP<span>SCORE</span></a>
+  <nav id="mainNav">
+    <a href="index.html" onclick="closeNav()">Rankings</a>
+    <a href="index.html#estados" onclick="closeNav()">Por Estado</a>
+    <a href="index.html#emergentes" onclick="closeNav()">Emergentes</a>
+    <a href="comparar.html" class="active" onclick="closeNav()">Comparar</a>
+    <a href="index.html#editorial" onclick="closeNav()">Editorial</a>
+  </nav>
+  <div class="header-actions">
+    <button class="btn-sm">Iniciar sesión</button>
+    <button class="btn-sm btn-primary">Registrarse</button>
+  </div>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleNav()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- PAGE -->
+<div class="page">
+
+  <div class="page-header">
+    <div class="page-label">Comparativa</div>
+    <h1 class="page-title">COMPARA<br><em>ARTISTAS</em></h1>
+    <p class="page-sub">Selecciona dos artistas, sube su foto si quieres, y ve quién gana categoría por categoría según los datos de la comunidad.</p>
+  </div>
+
+  <!-- ── SELECTOR GRID ── -->
+  <div class="selector-grid">
+
+    <!-- ARTISTA A -->
+    <div class="selector-card side-a">
+      <div class="selector-header side-a">
+        <span class="side-label side-label-a">Artista A</span>
+      </div>
+
+      <!-- Photo upload -->
+      <div class="photo-zone" id="photoZoneA" onclick="document.getElementById('fileA').click()">
+        <input type="file" id="fileA" accept="image/*" onchange="loadPhoto(event,'imgA','photoZoneA','placeholderA')">
+        <img id="imgA" alt="Foto artista A">
+        <div class="photo-placeholder" id="placeholderA">
+          <div class="photo-icon">+</div>
+          <span class="photo-hint">Subir foto</span>
+        </div>
+      </div>
+
+      <div class="selector-body">
+        <!-- Search -->
+        <div class="artist-search-wrap">
+          <input class="artist-search" id="searchA" type="text"
+            placeholder="Buscar artista..."
+            oninput="searchArtist(this.value,'A')"
+            onfocus="openDropdown('A')"
+            autocomplete="off">
+          <div class="search-results" id="resultsA"></div>
+        </div>
+
+        <!-- Selected artist info -->
+        <div id="infoA">
+          <div class="selected-artist-name" id="nameA">—</div>
+          <div class="selected-artist-meta" id="metaA">Selecciona un artista</div>
+          <div class="selected-score-big" id="scoreA">—</div>
+          <div class="selected-score-lbl">Promedio RapScore</div>
+          <div class="mini-bars" id="barsA"></div>
+        </div>
+
+        <button class="clear-btn" id="clearA" onclick="clearArtist('A')">✕ Quitar artista</button>
+      </div>
+    </div>
+
+    <!-- VS -->
+    <div class="vs-col">
+      <div class="vs-badge">VS</div>
+    </div>
+
+    <!-- ARTISTA B -->
+    <div class="selector-card side-b">
+      <div class="selector-header side-b">
+        <span class="side-label side-label-b">Artista B</span>
+      </div>
+
+      <div class="photo-zone" id="photoZoneB" onclick="document.getElementById('fileB').click()">
+        <input type="file" id="fileB" accept="image/*" onchange="loadPhoto(event,'imgB','photoZoneB','placeholderB')">
+        <img id="imgB" alt="Foto artista B">
+        <div class="photo-placeholder" id="placeholderB">
+          <div class="photo-icon">+</div>
+          <span class="photo-hint">Subir foto</span>
+        </div>
+      </div>
+
+      <div class="selector-body">
+        <div class="artist-search-wrap">
+          <input class="artist-search" id="searchB" type="text"
+            placeholder="Buscar artista..."
+            oninput="searchArtist(this.value,'B')"
+            onfocus="openDropdown('B')"
+            autocomplete="off">
+          <div class="search-results" id="resultsB"></div>
+        </div>
+
+        <div id="infoB">
+          <div class="selected-artist-name" id="nameB">—</div>
+          <div class="selected-artist-meta" id="metaB">Selecciona un artista</div>
+          <div class="selected-score-big" id="scoreB">—</div>
+          <div class="selected-score-lbl">Promedio RapScore</div>
+          <div class="mini-bars" id="barsB"></div>
+        </div>
+
+        <button class="clear-btn" id="clearB" onclick="clearArtist('B')">✕ Quitar artista</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESULTS ── -->
+  <div class="results" id="results">
+
+    <!-- Radar overlay -->
+    <div class="radar-section">
+      <div class="sec-label">Gráfica</div>
+      <h2 class="sec-title">Radar comparativo</h2>
+      <div class="radar-wrap">
+        <canvas id="radarCompare" width="340" height="340"></canvas>
+        <div class="radar-legend">
+          <div class="radar-legend-item">
+            <div class="legend-dot" style="background:var(--a-color)"></div>
+            <span id="legendA">Artista A</span>
+          </div>
+          <div class="radar-legend-item">
+            <div class="legend-dot" style="background:var(--b-color)"></div>
+            <span id="legendB">Artista B</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category breakdown -->
+    <div class="sec-label">Desglose</div>
+    <h2 class="sec-title">Categoría por categoría</h2>
+
+    <!-- Column headers -->
+    <div class="cat-row" style="padding-bottom:6px;border-bottom:2px solid var(--border)">
+      <div style="text-align:right;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--a-color)" id="headerA">A</div>
+      <div></div>
+      <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--b-color)" id="headerB">B</div>
+    </div>
+
+    <div class="cat-compare-grid" id="catGrid"></div>
+
+    <!-- Summary -->
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <!-- Verdict -->
+    <div class="verdict-box">
+      <div class="verdict-title">Veredicto de la comunidad</div>
+      <div class="verdict-text" id="verdictText">—</div>
+    </div>
+
+    <!-- Share -->
+    <div class="share-section">
+      <div class="share-text">
+        <strong>¿Tu comparativa favorita?</strong>
+        Comparte el resultado en redes y genera el debate entre tus amigos
+      </div>
+      <button class="share-btn" onclick="shareResult()">Compartir resultado ↗</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+const CATS = [
+  {key:'flow',        label:'Flow'},
+  {key:'lirica',      label:'Lírica'},
+  {key:'contenido',   label:'Contenido'},
+  {key:'versatilidad',label:'Versatilidad'},
+  {key:'hooks',       label:'Hooks'},
+  {key:'impacto',     label:'Impacto'},
+  {key:'delivery',    label:'Delivery'},
+  {key:'originalidad',label:'Originalidad'},
+];
+
+const ARTISTS = [
+  {name:'Santa Fe Klan',   estado:'Jalisco',        tier:'Activo',   scores:{flow:88,lirica:78,contenido:82,versatilidad:90,hooks:92,impacto:94,delivery:85,originalidad:82}},
+  {name:'Alemán',          estado:'Ciudad de México',tier:'Activo',   scores:{flow:91,lirica:97,contenido:93,versatilidad:85,hooks:78,impacto:88,delivery:92,originalidad:90}},
+  {name:'Gera MX',         estado:'Nuevo León',     tier:'Activo',   scores:{flow:82,lirica:72,contenido:68,versatilidad:85,hooks:95,impacto:88,delivery:80,originalidad:75}},
+  {name:'C-Kan',           estado:'Jalisco',        tier:'Activo',   scores:{flow:85,lirica:80,contenido:86,versatilidad:72,hooks:80,impacto:85,delivery:84,originalidad:78}},
+  {name:'Dharius',         estado:'Ciudad de México',tier:'Activo',   scores:{flow:90,lirica:92,contenido:90,versatilidad:80,hooks:74,impacto:78,delivery:88,originalidad:86}},
+  {name:'Babo',            estado:'Nuevo León',     tier:'Activo',   scores:{flow:87,lirica:82,contenido:78,versatilidad:70,hooks:85,impacto:92,delivery:88,originalidad:80}},
+  {name:'Millonario',      estado:'Nuevo León',     tier:'Activo',   scores:{flow:83,lirica:80,contenido:75,versatilidad:68,hooks:82,impacto:88,delivery:82,originalidad:76}},
+  {name:'MC Davo',         estado:'Ciudad de México',tier:'Activo',   scores:{flow:80,lirica:68,contenido:65,versatilidad:78,hooks:91,impacto:82,delivery:78,originalidad:72}},
+  {name:'Lefty SM',        estado:'Sinaloa',        tier:'Leyenda',  scores:{flow:90,lirica:88,contenido:92,versatilidad:82,hooks:90,impacto:95,delivery:88,originalidad:86}},
+  {name:'Toser One',       estado:'Jalisco',        tier:'Activo',   scores:{flow:93,lirica:90,contenido:82,versatilidad:88,hooks:70,impacto:78,delivery:92,originalidad:85}},
+  {name:'Neto Peña',       estado:'Nuevo León',     tier:'Activo',   scores:{flow:78,lirica:70,contenido:65,versatilidad:80,hooks:93,impacto:78,delivery:76,originalidad:70}},
+  {name:'Charles Ans',     estado:'Ciudad de México',tier:'Activo',   scores:{flow:88,lirica:94,contenido:91,versatilidad:80,hooks:68,impacto:72,delivery:86,originalidad:88}},
+  {name:'Simpson Ahuevo',  estado:'Ciudad de México',tier:'Activo',   scores:{flow:85,lirica:88,contenido:86,versatilidad:92,hooks:74,impacto:76,delivery:84,originalidad:90}},
+  {name:'Eptos Uno',       estado:'Baja California',tier:'Activo',   scores:{flow:87,lirica:85,contenido:80,versatilidad:75,hooks:70,impacto:82,delivery:86,originalidad:80}},
+  {name:'Yoga Fire',       estado:'Jalisco',        tier:'Activo',   scores:{flow:90,lirica:88,contenido:80,versatilidad:82,hooks:68,impacto:70,delivery:88,originalidad:84}},
+  {name:'Tren Lokote',     estado:'Baja California',tier:'Activo',   scores:{flow:86,lirica:82,contenido:84,versatilidad:74,hooks:78,impacto:84,delivery:84,originalidad:80}},
+  {name:'Bocafloja',       estado:'Ciudad de México',tier:'Leyenda',  scores:{flow:82,lirica:95,contenido:98,versatilidad:75,hooks:65,impacto:93,delivery:84,originalidad:92}},
+  {name:'Fermín IV',       estado:'Ciudad de México',tier:'Activo',   scores:{flow:94,lirica:88,contenido:82,versatilidad:86,hooks:68,impacto:80,delivery:92,originalidad:84}},
+  {name:'Control Machete', estado:'Nuevo León',     tier:'Leyenda',  scores:{flow:85,lirica:88,contenido:90,versatilidad:80,hooks:88,impacto:97,delivery:84,originalidad:86}},
+  {name:'Niña Dioz',       estado:'Nuevo León',     tier:'Activo',   scores:{flow:82,lirica:86,contenido:92,versatilidad:80,hooks:76,impacto:88,delivery:82,originalidad:84}},
+  {name:'Hispana',         estado:'Ciudad de México',tier:'Activo',   scores:{flow:85,lirica:88,contenido:84,versatilidad:78,hooks:72,impacto:76,delivery:84,originalidad:82}},
+  {name:'Mare Advertencia Lirika',estado:'Oaxaca', tier:'Activo',   scores:{flow:80,lirica:86,contenido:94,versatilidad:78,hooks:70,impacto:85,delivery:80,originalidad:88}},
+  {name:'Muelas de Gallo', estado:'Jalisco',        tier:'Activo',   scores:{flow:87,lirica:92,contenido:88,versatilidad:78,hooks:68,impacto:72,delivery:86,originalidad:88}},
+  {name:'Tino El Pingüino',estado:'Ciudad de México',tier:'Activo',  scores:{flow:82,lirica:86,contenido:87,versatilidad:92,hooks:74,impacto:76,delivery:82,originalidad:84}},
+  {name:'Adán Cruz',       estado:'Ciudad de México',tier:'Activo',   scores:{flow:80,lirica:90,contenido:95,versatilidad:72,hooks:65,impacto:80,delivery:78,originalidad:88}},
+  {name:'LNG/SHT',         estado:'Ciudad de México',tier:'Activo',   scores:{flow:87,lirica:91,contenido:88,versatilidad:78,hooks:72,impacto:75,delivery:86,originalidad:84}},
+  {name:'Akil Ammar',      estado:'Ciudad de México',tier:'Activo',   scores:{flow:82,lirica:87,contenido:90,versatilidad:88,hooks:72,impacto:76,delivery:84,originalidad:86}},
+  {name:'Pato Machete',    estado:'Ciudad de México',tier:'Leyenda',  scores:{flow:84,lirica:86,contenido:88,versatilidad:82,hooks:84,impacto:94,delivery:82,originalidad:84}},
+  {name:'Proof',           estado:'Nuevo León',     tier:'Activo',   scores:{flow:86,lirica:86,contenido:82,versatilidad:78,hooks:68,impacto:70,delivery:84,originalidad:82}},
+  {name:'Zimple',          estado:'Ciudad de México',tier:'Activo',   scores:{flow:80,lirica:82,contenido:88,versatilidad:72,hooks:66,impacto:76,delivery:78,originalidad:80}},
+  {name:'Sabino',          estado:'Ciudad de México',tier:'Activo',   scores:{flow:76,lirica:84,contenido:88,versatilidad:86,hooks:78,impacto:72,delivery:78,originalidad:82}},
+  {name:'Audry Funk',      estado:'Ciudad de México',tier:'Activo',   scores:{flow:78,lirica:82,contenido:90,versatilidad:74,hooks:68,impacto:80,delivery:76,originalidad:80}},
+  {name:'Maniako',         estado:'Jalisco',        tier:'Activo',   scores:{flow:82,lirica:76,contenido:80,versatilidad:68,hooks:74,impacto:76,delivery:80,originalidad:76}},
+  {name:'Don Aero',        estado:'Ciudad de México',tier:'Leyenda',  scores:{flow:78,lirica:80,contenido:82,versatilidad:72,hooks:68,impacto:88,delivery:76,originalidad:76}},
+];
+
+ARTISTS.forEach(a => {
+  const vals = Object.values(a.scores);
+  a.total = Math.round(vals.reduce((s,v)=>s+v,0)/vals.length);
+});
+
+// ── STATE ─────────────────────────────────────────────────────
+let selected = { A: null, B: null };
+
+// ── NAV ──────────────────────────────────────────────────────
+function toggleNav() {
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('hamburgerBtn');
+  nav.classList.toggle('open');
+  const spans = btn.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.cssText='transform:rotate(45deg) translate(5px,5px)';
+    spans[1].style.cssText='opacity:0';
+    spans[2].style.cssText='transform:rotate(-45deg) translate(5px,-5px)';
+  } else spans.forEach(s=>s.style.cssText='');
+}
+function closeNav() {
+  const nav=document.getElementById('mainNav');
+  const btn=document.getElementById('hamburgerBtn');
+  if(nav)nav.classList.remove('open');
+  if(btn)btn.querySelectorAll('span').forEach(s=>s.style.cssText='');
+}
+document.addEventListener('click',e=>{
+  const nav=document.getElementById('mainNav');
+  const btn=document.getElementById('hamburgerBtn');
+  if(nav&&btn&&!nav.contains(e.target)&&!btn.contains(e.target))closeNav();
+  // Close search dropdowns
+  if(!e.target.closest('.artist-search-wrap')) {
+    document.querySelectorAll('.search-results').forEach(r=>r.classList.remove('open'));
+  }
+});
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── PHOTO UPLOAD ──────────────────────────────────────────────
+function loadPhoto(e, imgId, zoneId, placeholderId) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = document.getElementById(imgId);
+    img.src = ev.target.result;
+    img.classList.add('loaded');
+    document.getElementById(placeholderId).style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+function searchArtist(q, side) {
+  const res = document.getElementById('results'+side);
+  const term = q.toLowerCase().trim();
+  if (!term) { res.classList.remove('open'); return; }
+  const matches = ARTISTS
+    .filter(a => a.name.toLowerCase().includes(term))
+    .sort((a,b) => b.total - a.total)
+    .slice(0,8);
+  if (!matches.length) { res.classList.remove('open'); return; }
+  res.innerHTML = matches.map(a =>
+    `<div class="search-result-item" onclick="selectArtist('${a.name}','${side}')">
+      <div>
+        <div class="sri-name">${a.name}</div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px">${a.estado} · ${a.tier}</div>
+      </div>
+      <span class="sri-score">${a.total}</span>
+    </div>`
+  ).join('');
+  res.classList.add('open');
+}
+
+function openDropdown(side) {
+  const q = document.getElementById('search'+side).value;
+  if(q.trim()) searchArtist(q, side);
+}
+
+function selectArtist(name, side) {
+  const artist = ARTISTS.find(a => a.name === name);
+  if (!artist) return;
+  selected[side] = artist;
+
+  // Update search input
+  document.getElementById('search'+side).value = name;
+  document.getElementById('results'+side).classList.remove('open');
+
+  // Update info panel
+  document.getElementById('name'+side).textContent = artist.name;
+  document.getElementById('meta'+side).textContent = artist.estado + ' · ' + artist.tier;
+  document.getElementById('score'+side).textContent = artist.total;
+  document.getElementById('clear'+side).style.display = 'block';
+
+  // Mini bars
+  const color = side==='A' ? 'var(--a-color)' : 'var(--b-color)';
+  const barsEl = document.getElementById('bars'+side);
+  barsEl.innerHTML = CATS.map(c =>
+    `<div class="mini-bar-row">
+      <span class="mini-bar-lbl">${c.label}</span>
+      <div class="mini-bar-track">
+        <div class="mini-bar-fill" style="width:0%;background:${color}" data-val="${artist.scores[c.key]}"></div>
+      </div>
+      <span class="mini-bar-val" style="color:${color}">${artist.scores[c.key]}</span>
+    </div>`
+  ).join('');
+
+  // Animate mini bars
+  setTimeout(() => {
+    barsEl.querySelectorAll('.mini-bar-fill').forEach(el => {
+      el.style.width = el.dataset.val + '%';
+    });
+  }, 50);
+
+  showToast(name + ' seleccionado');
+  tryShowResults();
+}
+
+function clearArtist(side) {
+  selected[side] = null;
+  document.getElementById('search'+side).value = '';
+  document.getElementById('name'+side).textContent = '—';
+  document.getElementById('meta'+side).textContent = 'Selecciona un artista';
+  document.getElementById('score'+side).textContent = '—';
+  document.getElementById('bars'+side).innerHTML = '';
+  document.getElementById('clear'+side).style.display = 'none';
+  document.getElementById('results').classList.remove('show');
+}
+
+// ── RESULTS ───────────────────────────────────────────────────
+function tryShowResults() {
+  if (!selected.A || !selected.B) return;
+  renderResults(selected.A, selected.B);
+  const el = document.getElementById('results');
+  el.classList.add('show');
+  setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+function renderResults(a, b) {
+  const nameA = a.name, nameB = b.name;
+
+  // Update headers
+  document.getElementById('legendA').textContent = nameA;
+  document.getElementById('legendB').textContent = nameB;
+  document.getElementById('headerA').textContent = nameA;
+  document.getElementById('headerB').textContent = nameB;
+
+  // Draw dual radar
+  setTimeout(() => drawDualRadar(a, b), 50);
+
+  // Category grid
+  let winsA = 0, winsB = 0, ties = 0;
+  const catWinsA = [], catWinsB = [];
+
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = CATS.map(c => {
+    const va = a.scores[c.key], vb = b.scores[c.key];
+    const winA = va > vb, winB = vb > va;
+    if (winA) { winsA++; catWinsA.push(c.label); }
+    else if (winB) { winsB++; catWinsB.push(c.label); }
+    else ties++;
+    const winClass = winA ? 'win-a' : winB ? 'win-b' : '';
+    return `<div class="cat-row ${winClass}">
+      <div class="cat-bar-a">
+        <span class="val-a">${va}</span>
+        <div class="bar-a-track"><div class="bar-a-fill" style="width:0%" data-val="${va}"></div></div>
+      </div>
+      <div class="cat-name-center">${c.label}</div>
+      <div class="cat-bar-b">
+        <div class="bar-b-track"><div class="bar-b-fill" style="width:0%" data-val="${vb}"></div></div>
+        <span class="val-b">${vb}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Animate category bars
+  setTimeout(() => {
+    grid.querySelectorAll('.bar-a-fill').forEach(el => el.style.width = el.dataset.val + '%');
+    grid.querySelectorAll('.bar-b-fill').forEach(el => el.style.width = el.dataset.val + '%');
+  }, 100);
+
+  // Summary cards
+  const overallWinner = a.total > b.total ? 'A' : b.total > a.total ? 'B' : null;
+  const summaryGrid = document.getElementById('summaryGrid');
+  summaryGrid.innerHTML = ['A','B'].map(side => {
+    const artist = side==='A' ? a : b;
+    const wins = side==='A' ? winsA : winsB;
+    const catWins = side==='A' ? catWinsA : catWinsB;
+    const isWinner = overallWinner === side;
+    const color = side==='A' ? 'var(--a-color)' : 'var(--b-color)';
+    return `<div class="summary-card ${isWinner?'winner':''}">
+      <div class="summary-card-name" style="color:${color}">${artist.name}</div>
+      <div class="summary-card-score">${artist.total}</div>
+      <div class="summary-card-lbl">promedio total</div>
+      <div class="summary-wins">Gana <strong>${wins}</strong> de ${CATS.length} categorías</div>
+      ${isWinner ? '<div class="winner-badge">★ Ganador general</div>' : ''}
+      <div class="wins-row">
+        ${catWins.map(c=>`<span class="win-pill">${c}</span>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Verdict
+  generateVerdict(a, b, winsA, winsB, ties, catWinsA, catWinsB, overallWinner);
+}
+
+function generateVerdict(a, b, wA, wB, ties, catA, catB, winner) {
+  const diff = Math.abs(a.total - b.total);
+  let text = '';
+
+  if (!winner) {
+    text = `<strong>${a.name}</strong> y <strong>${b.name}</strong> empatan en promedio general (${a.total} puntos cada uno). 
+    Es un enfrentamiento extremadamente parejo — la comunidad los considera al mismo nivel. 
+    ${catA.length ? `<strong>${a.name}</strong> lleva ventaja en ${catA.join(', ')}.` : ''}
+    ${catB.length ? `<strong>${b.name}</strong> domina en ${catB.join(', ')}.` : ''}`;
+  } else if (diff <= 3) {
+    const w = winner==='A' ? a : b;
+    const l = winner==='A' ? b : a;
+    const wCats = winner==='A' ? catA : catB;
+    const lCats = winner==='A' ? catB : catA;
+    text = `Diferencia mínima de <strong>${diff} puntos</strong> entre dos artistas de nivel muy similar. 
+    <strong>${w.name}</strong> se lleva el duelo por la mínima, con ventaja en ${wCats.slice(0,3).join(', ')}. 
+    <strong>${l.name}</strong> no se queda atrás — domina en ${lCats.slice(0,2).join(', ')} y cualquier fan puede argumentar que el resultado podría ser al revés.`;
+  } else if (diff <= 8) {
+    const w = winner==='A' ? a : b;
+    const l = winner==='A' ? b : a;
+    const wCats = winner==='A' ? catA : catB;
+    text = `<strong>${w.name}</strong> gana con claridad — ${diff} puntos de ventaja y ${winner==='A'?wA:wB} categorías dominadas. 
+    Su fortaleza más marcada: ${wCats[0]} y ${wCats[1]||wCats[0]}. 
+    <strong>${l.name}</strong> sigue siendo un artista de primer nivel, pero en esta comparativa queda un escalón por debajo.`;
+  } else {
+    const w = winner==='A' ? a : b;
+    const l = winner==='A' ? b : a;
+    text = `Diferencia contundente. <strong>${w.name}</strong> supera a <strong>${l.name}</strong> por ${diff} puntos en el promedio general y gana ${winner==='A'?wA:wB} de ${CATS.length} categorías. 
+    No es una competencia pareja — según los datos de la comunidad de RapScore, estos artistas están en niveles distintos dentro del ranking.`;
+  }
+
+  document.getElementById('verdictText').innerHTML = text;
+}
+
+// ── DUAL RADAR ────────────────────────────────────────────────
+function drawDualRadar(artA, artB) {
+  const canvas = document.getElementById('radarCompare');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=340, H=340, cx=W/2, cy=H/2, R=120;
+  const n = CATS.length, a0 = -Math.PI/2;
+
+  ctx.clearRect(0,0,W,H);
+
+  // grid rings
+  [.25,.5,.75,1].forEach(f => {
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const a=a0+2*Math.PI*i/n;
+      const x=cx+R*f*Math.cos(a), y=cy+R*f*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = f===1 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.05)';
+    ctx.lineWidth=.5; ctx.stroke();
+  });
+
+  // spokes + labels
+  CATS.forEach((c,i) => {
+    const a=a0+2*Math.PI*i/n;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+    ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=.5;ctx.stroke();
+    const lx=cx+(R+18)*Math.cos(a), ly=cy+(R+18)*Math.sin(a);
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.font='9px Space Mono,monospace';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(c.label.toUpperCase(),lx,ly);
+  });
+
+  // Draw shape for each artist
+  function drawShape(artist, color) {
+    ctx.beginPath();
+    CATS.forEach((c,i) => {
+      const a=a0+2*Math.PI*i/n;
+      const v=artist.scores[c.key]/100;
+      const x=cx+R*v*Math.cos(a), y=cy+R*v*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.fillStyle=color+'18';ctx.fill();
+    ctx.strokeStyle=color;ctx.lineWidth=1.8;ctx.stroke();
+    // dots
+    CATS.forEach((c,i) => {
+      const a=a0+2*Math.PI*i/n, v=artist.scores[c.key]/100;
+      ctx.beginPath();
+      ctx.arc(cx+R*v*Math.cos(a),cy+R*v*Math.sin(a),3.5,0,Math.PI*2);
+      ctx.fillStyle=color;ctx.fill();
+    });
+  }
+
+  drawShape(artB, '#b388ff');
+  drawShape(artA, '#ff3c00');
+}
+
+// ── SHARE ─────────────────────────────────────────────────────
+function shareResult() {
+  if (!selected.A || !selected.B) return;
+  const text = `${selected.A.name} (${selected.A.total}) vs ${selected.B.name} (${selected.B.total}) — Comparativa en RapScore MX`;
+  if (navigator.share) {
+    navigator.share({ title:'RapScore MX — Comparativa', text });
+  } else {
+    navigator.clipboard.writeText(text).then(() => showToast('Copiado al portapapeles ✓'));
+  }
+}
+
+// ── KEYBOARD SHORTCUT — close dropdowns on Escape ─────────────
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape')
+    document.querySelectorAll('.search-results').forEach(r=>r.classList.remove('open'));
+});
+
+// ── PRELOAD from URL params (e.g. ?a=Alemán&b=Dharius) ────────
+(function() {
+  const params = new URLSearchParams(location.search);
+  const pa = params.get('a'), pb = params.get('b');
+  if (pa) {
+    const found = ARTISTS.find(a=>a.name.toLowerCase()===pa.toLowerCase());
+    if (found) { document.getElementById('searchA').value=found.name; selectArtist(found.name,'A'); }
+  }
+  if (pb) {
+    const found = ARTISTS.find(a=>a.name.toLowerCase()===pb.toLowerCase());
+    if (found) { document.getElementById('searchB').value=found.name; selectArtist(found.name,'B'); }
+  }
+})();
+</script>
+</body>
+</html>
