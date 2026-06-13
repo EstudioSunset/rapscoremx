@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Noticiero del Sureste | Lo último en Smartphones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- Header / Navbar -->
+    <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <span class="font-extrabold text-xl tracking-tighter italic">EL NOTICIERO DEL SURESTE</span>
+                <button id="menuToggle" type="button" class="md:hidden inline-flex items-center justify-center rounded-md border border-white/20 bg-white/10 p-2 text-white hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white" aria-controls="mobileMenu" aria-expanded="false">
+                    <span class="sr-only">Abrir menú</span>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+
+            <form class="hidden md:flex flex-1 justify-center" action="#" method="GET">
+                <label for="desktopSearch" class="sr-only">Buscar noticia</label>
+                <div class="relative w-full max-w-xl">
+                    <input id="desktopSearch" name="q" type="search" placeholder="Buscar noticias..." class="w-full rounded-full border border-white/20 bg-white/95 px-4 py-2 text-gray-900 placeholder-gray-500 shadow-sm focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300" />
+                </div>
+            </form>
+
+            <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="#" class="hover:text-blue-300 transition">Móviles</a>
+                <a href="#" class="hover:text-blue-300 transition">Reviews</a>
+                <a href="#" class="hover:text-blue-300 transition">Ofertas</a>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="md:hidden mt-4 hidden rounded-2xl border border-white/10 bg-blue-950/95 p-4 shadow-lg backdrop-blur-sm">
+            <form class="mb-4" action="#" method="GET">
+                <label for="mobileSearch" class="sr-only">Buscar noticia</label>
+                <input id="mobileSearch" name="q" type="search" placeholder="Buscar noticias..." class="w-full rounded-full border border-white/20 bg-white/95 px-4 py-2 text-gray-900 placeholder-gray-500 shadow-sm focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300" />
+            </form>
+            <div class="space-y-3 text-sm font-medium">
+                <a href="#" class="block rounded-full px-4 py-3 hover:bg-blue-800 transition">Móviles</a>
+                <a href="#" class="block rounded-full px-4 py-3 hover:bg-blue-800 transition">Reviews</a>
+                <a href="#" class="block rounded-full px-4 py-3 hover:bg-blue-800 transition">Ofertas</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white py-16 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <span class="bg-yellow-400 text-black px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block">
+                Primicia Mundial
+            </span>
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+                El nuevo procesador que promete duplicar la batería de tu celular en 2026
+            </h1>
+            <p class="text-xl text-blue-100 italic">Por: Redacción Noticiero del Sureste | 11 de Mayo, 2026</p>
+        </div>
+    </header>
+
+    <!-- CONTENIDO DE LA NOTICIA -->
+    <main class="container mx-auto max-w-4xl px-4 py-12 bg-white -mt-8 shadow-xl rounded-t-lg">
+        <h2 class="text-2xl md:text-3xl font-bold mb-6 text-blue-900">
+            Una revolución tecnológica que cambiará cómo usamos el smartphone.
+        </h2>
+        
+        <div class="prose lg:prose-xl text-gray-700 leading-relaxed space-y-6">
+            <p>
+                Hoy se ha revelado finalmente el secreto mejor guardado de la industria móvil. Tras meses de rumores, los laboratorios de desarrollo han confirmado la llegada de la arquitectura <strong>Nano-Efficiency</strong>, un sistema que gestiona el consumo de energía de forma inteligente...
+            </p>
+            <p>
+                A diferencia de los modelos anteriores, esta tecnología permite que el dispositivo aprenda tus hábitos en tiempo real, cerrando procesos en segundo plano antes de que el usuario note el consumo de recursos.
+            </p>
+            <!-- Imagen de la noticia -->
+            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1200" alt="Smartphone" class="rounded-xl my-8 shadow-lg w-full">
+            
+            <p>
+                Los expertos aseguran que esta mejora no solo beneficiará a la gama alta, sino que los teléfonos económicos del sureste del país podrán disfrutar de hasta 3 días de autonomía sin sacrificar rendimiento.
+            </p>
+        </div>
+
+        <hr class="my-12">
+
+        <!-- CONTENIDO RELACIONADO -->
+        <section>
+            <h3 class="text-xl font-bold mb-6 flex items-center">
+                <span class="w-2 h-8 bg-blue-600 mr-3"></span>Te puede interesar
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1556656793-062ff9878273?w=200" class="w-20 h-20 object-cover rounded" alt="relacionada">
+                    <h4 class="font-bold text-sm">Cómo cuidar la salud de tu batería este verano</h4>
+                </div>
+                <div class="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 transition cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1592890288564-76628a30a657?w=200" class="w-20 h-20 object-cover rounded" alt="relacionada">
+                    <h4 class="font-bold text-sm">Top 5 mejores celulares por menos de $5,000 pesos</h4>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ÚLTIMAS NOTICIAS (GRID) -->
+    <section class="bg-gray-100 py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex justify-between items-end mb-8">
+                <h3 class="text-3xl font-extrabold text-gray-800 italic uppercase">Últimas Noticias</h3>
+                <div class="flex space-x-2 text-sm font-semibold">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded">Recientes</button>
+                    <button class="bg-white text-gray-600 px-4 py-2 rounded shadow hover:bg-gray-200">Populares</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <article class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                    <img src="https://images.unsplash.com/photo-1567581935884-3349723552ca?w=600" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-blue-600 text-xs font-bold uppercase">Lanzamientos</span>
+                        <h4 class="text-xl font-bold mt-2 hover:text-blue-700 cursor-pointer">Xiaomi anuncia su nuevo flagship para el sureste</h4>
+                        <p class="text-gray-600 text-sm mt-3">Llegará a tiendas locales a finales de este mes con un precio competitivo...</p>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                    <img src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?w=600" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-blue-600 text-xs font-bold uppercase">Apple</span>
+                        <h4 class="text-xl font-bold mt-2 hover:text-blue-700 cursor-pointer">iOS 19: Las funciones filtradas que nos sorprendieron</h4>
+                        <p class="text-gray-600 text-sm mt-3">La inteligencia artificial será el eje central de esta actualización...</p>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
+                    <img src="https://images.unsplash.com/photo-1546054454-aa26e2b734c7?w=600" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-blue-600 text-xs font-bold uppercase">Seguridad</span>
+                        <h4 class="text-xl font-bold mt-2 hover:text-blue-700 cursor-pointer">Alerta por nueva estafa vía WhatsApp</h4>
+                        <p class="text-gray-600 text-sm mt-3">Expertos recomiendan activar la verificación en dos pasos inmediatamente...</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white py-12 px-4 border-t border-blue-500">
+        <div class="container mx-auto max-w-6xl text-center md:text-left grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <h5 class="font-extrabold text-lg italic mb-4">EL NOTICIERO DEL SURESTE</h5>
+                <p class="text-gray-400 text-sm">Tu fuente confiable de tecnología y smartphones en toda la región.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Secciones</h5>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li><a href="#" class="hover:text-white">Política de Privacidad</a></li>
+                    <li><a href="#" class="hover:text-white">Términos de Uso</a></li>
+                    <li><a href="#" class="hover:text-white">Contacto Publicitario</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-4">Síguenos</h5>
+                <div class="flex justify-center md:justify-start space-x-4">
+                    <a href="#" class="bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition">FB</a>
+                    <a href="#" class="bg-blue-400 p-2 rounded-full hover:bg-blue-500 transition">TW</a>
+                    <a href="#" class="bg-pink-600 p-2 rounded-full hover:bg-pink-700 transition">IG</a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-500 text-xs mt-12 border-t border-gray-800 pt-6">
+            &copy; 2026 El Noticiero del Sureste. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                menuToggle.setAttribute('aria-expanded', String(!isHidden));
+            });
+        }
+    </script>
+</body>
+</html>

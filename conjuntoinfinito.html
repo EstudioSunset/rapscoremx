@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Conjunto Infinito: música regional/pop atemporal, conciertos, lanzamientos, tienda oficial y comunidad exclusiva." />
+  <meta name="keywords" content="Conjunto Infinito música, Conciertos de Conjunto Infinito, Nueva música regional, música pop regional, grupo musical Conjunto Infinito" />
+  <meta name="author" content="Conjunto Infinito" />
+
+  <meta property="og:title" content="Conjunto Infinito | La música no tiene fin" />
+  <meta property="og:description" content="Descubre el sonido que está definiendo una nueva era. Música, tour, merch oficial y comunidad exclusiva." />
+  <meta property="og:image" content="assets/images/conjunto-infinito-og.webp" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.conjuntoinfinito.com" />
+
+  <title>Conjunto Infinito | La música no tiene fin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --bg-soft: #0b1020;
+      --bg-card: rgba(255, 255, 255, 0.055);
+      --gold: #d8b76a;
+      --gold-light: #ffe3a1;
+      --midnight: #08152d;
+      --blue: #122a52;
+      --text: #f8f3e7;
+      --muted: #b9b3a6;
+      --line: rgba(255, 255, 255, 0.14);
+      --danger: #9f2f2f;
+      --success: #4fa66a;
+      --radius-xl: 28px;
+      --radius-md: 16px;
+      --shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+      --container: 1180px;
+      --coral: #C84B1A;
+      --amber: #E8960A;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 5%, rgba(216, 183, 106, 0.12), transparent 35%),
+        radial-gradient(circle at 90% 15%, rgba(18, 42, 82, 0.8), transparent 35%),
+        linear-gradient(180deg, #04050a 0%, #081225 42%, #05070d 100%);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img, video, iframe { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .container {
+      width: min(100% - 32px, var(--container));
+      margin-inline: auto;
+    }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .eyebrow::before {
+      content: '';
+      width: 36px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+    }
+    h1 { font-size: clamp(3.4rem, 9vw, 8.8rem); max-width: 1050px; }
+    h2 { font-size: clamp(2.7rem, 6vw, 5.8rem); max-width: 850px; }
+    h3 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+    p { color: var(--muted); }
+
+    /* ── SECTION ── */
+    .section {
+      padding: 110px 0;
+      position: relative;
+    }
+
+    /* ── GOLD ACCENT LINE ── */
+    .gold-accent {
+      width: 56px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 999px;
+      margin-top: 18px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 999px;
+      padding: 0 24px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      color: #140f05;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      box-shadow: 0 0 28px rgba(216, 183, 106, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: -60% auto -60% -30%;
+      width: 42px;
+      background: rgba(255, 255, 255, 0.45);
+      transform: rotate(22deg);
+      animation: shine 4s ease-in-out infinite;
+    }
+    @keyframes shine {
+      0%, 55% { left: -35%; }
+      75%, 100% { left: 135%; }
+    }
+
+    .btn-outline {
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      backdrop-filter: blur(14px);
+    }
+    .btn-outline:hover {
+      border-color: rgba(216, 183, 106, 0.7);
+      background: rgba(216, 183, 106, 0.08);
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      padding: 20px 0;
+      background: linear-gradient(180deg, rgba(5, 7, 13, 0.84), rgba(5, 7, 13, 0.25), transparent);
+      backdrop-filter: blur(12px);
+      transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+    }
+    .site-header.scrolled {
+      background: rgba(5, 7, 13, 0.96);
+      box-shadow: 0 1px 0 rgba(216, 183, 106, 0.15), 0 8px 32px rgba(0,0,0,0.4);
+      padding: 14px 0;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(216, 183, 106, 0.5);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold-light);
+      background: radial-gradient(circle, rgba(216, 183, 106, 0.18), transparent 65%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      transition: box-shadow 0.3s ease;
+    }
+    .brand:hover .brand-mark {
+      box-shadow: 0 0 20px rgba(216, 183, 106, 0.35);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: rgba(248, 243, 231, 0.78);
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+    .nav-links a { transition: color 0.2s ease; position: relative; }
+    .nav-links a:not(.btn)::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:not(.btn):hover::after,
+    .nav-links a.active::after { width: 100%; }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a.active { color: var(--gold-light); }
+
+    .menu-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── BACKGROUND ORBS ── */
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -10;
+      filter: blur(120px);
+      animation: orb-float ease-in-out infinite;
+    }
+    .bg-orb-1 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(216, 183, 106, 0.14), transparent 70%);
+      top: -250px; left: -250px;
+      animation-duration: 22s;
+    }
+    .bg-orb-2 {
+      width: 550px; height: 550px;
+      background: radial-gradient(circle, rgba(18, 42, 82, 0.55), transparent 70%);
+      top: 35%; right: -180px;
+      animation-duration: 28s;
+      animation-delay: -9s;
+    }
+    .bg-orb-3 {
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, rgba(200, 75, 26, 0.09), transparent 70%);
+      bottom: 25%; left: 15%;
+      animation-duration: 34s;
+      animation-delay: -17s;
+    }
+    @keyframes orb-float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      33%       { transform: translateY(-45px) scale(1.06); }
+      66%       { transform: translateY(22px) scale(0.96); }
+    }
+
+    /* ── SECTION PATTERN (subtle geometric) ── */
+    .section-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg width='44' height='44' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M22 2L42 22L22 42L2 22Z' fill='none' stroke='%23d8b76a' stroke-width='1'/%3E%3C/svg%3E");
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      align-items: end;
+      position: relative;
+      padding: 150px 0 80px;
+      overflow: hidden;
+    }
+    .hero video,
+    .hero .fallback-visual {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -3;
+      opacity: 0.52;
+      filter: saturate(0.78) contrast(1.1);
+    }
+    .fallback-visual {
+      background:
+        linear-gradient(115deg, rgba(5, 7, 13, 0.92), rgba(8, 21, 45, 0.48), rgba(216, 183, 106, 0.18)),
+        url('assets/images/hero-conjunto-infinito.webp') center/cover no-repeat;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(5, 7, 13, 0.3) 0%, rgba(5, 7, 13, 0.64) 58%, var(--bg) 100%),
+        linear-gradient(90deg, rgba(5, 7, 13, 0.88), rgba(5, 7, 13, 0.24));
+      z-index: -2;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -180px;
+      width: 900px;
+      height: 320px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(216, 183, 106, 0.16), transparent 65%);
+      z-index: -1;
+    }
+
+    /* Hero big watermark */
+    .hero-watermark {
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(14rem, 28vw, 28rem);
+      color: rgba(216, 183, 106, 0.06);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      z-index: -1;
+      animation: watermark-float 8s ease-in-out infinite;
+    }
+    @keyframes watermark-float {
+      0%, 100% { transform: translateY(-50%) rotate(-5deg); }
+      50%       { transform: translateY(-52%) rotate(-5deg) scale(1.03); }
+    }
+
+    .hero-content { display: grid; gap: 28px; }
+
+    /* Hero entrance animation */
+    .hero-enter {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    body.loaded .hero-enter { opacity: 1; transform: none; }
+    body.loaded .hero-enter:nth-child(1) { transition-delay: 0.1s; }
+    body.loaded .hero-enter:nth-child(2) { transition-delay: 0.3s; }
+    body.loaded .hero-enter:nth-child(3) { transition-delay: 0.5s; }
+    body.loaded .hero-enter:nth-child(4) { transition-delay: 0.65s; }
+    body.loaded .hero-enter:nth-child(5) { transition-delay: 0.85s; }
+
+    .hero-title { max-width: 1050px; }
+    .hero-title-main {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.4rem, 9vw, 8.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+    }
+    .hero-title-italic {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.4rem, 9vw, 8.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-subtitle {
+      max-width: 640px;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: rgba(248, 243, 231, 0.82);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 720px;
+      margin-top: 36px;
+    }
+    .stat-card {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      backdrop-filter: blur(16px);
+      transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+      cursor: default;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(216, 183, 106, 0.4);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(216,183,106,0.15);
+    }
+    .stat-card strong {
+      display: block;
+      color: var(--gold-light);
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+    .stat-card span {
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      overflow: hidden;
+      padding: 15px 0;
+      border-top: 1px solid rgba(216, 183, 106, 0.2);
+      border-bottom: 1px solid rgba(216, 183, 106, 0.2);
+      background: linear-gradient(90deg, var(--bg) 0%, rgba(216,183,106,0.05) 30%, rgba(216,183,106,0.05) 70%, var(--bg) 100%);
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker-move 36s linear infinite;
+    }
+    .ticker-group { display: flex; align-items: center; }
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 0 28px;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 0.76rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .ticker-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold-light);
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+    @keyframes ticker-move {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SPLIT LAYOUT ── */
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 58px;
+      align-items: center;
+    }
+    .legacy-copy {
+      font-size: clamp(1.18rem, 2vw, 1.55rem);
+      color: rgba(248, 243, 231, 0.78);
+      max-width: 720px;
+    }
+    .legacy-card {
+      min-height: 520px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025)),
+        url('assets/images/press-band-wide.webp') center/cover no-repeat;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+    .legacy-card:hover {
+      transform: scale(1.012);
+      box-shadow: 0 50px 120px rgba(0,0,0,0.55);
+    }
+    .legacy-card::after {
+      content: '∞';
+      position: absolute;
+      right: 28px;
+      bottom: -40px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13rem;
+      color: rgba(216, 183, 106, 0.18);
+      line-height: 1;
+    }
+
+    /* ── SECTION HEAD ── */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 44px;
+    }
+    .section-head p { max-width: 440px; }
+
+    /* ── MEDIA GRID ── */
+    .media-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+    }
+    .music-card, .video-card, .tour-card, .newsletter-card, .product-card {
+      border: 1px solid var(--line);
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .music-card { padding: 22px; }
+
+    .platform-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    .tab:hover { border-color: rgba(216,183,106,0.4); color: var(--text); }
+    .tab.active { color: #120d04; background: var(--gold); border-color: var(--gold); }
+
+    .spotify-embed { border-radius: 18px; overflow: hidden; background: #111; }
+
+    /* ── MASONRY ── */
+    .masonry {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .masonry figure {
+      min-height: 190px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--blue);
+    }
+    .masonry figure:nth-child(2) { min-height: 285px; }
+    .masonry figure:nth-child(3) { min-height: 250px; margin-top: -95px; }
+    .masonry img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.86;
+      transition: transform 0.55s ease, opacity 0.55s ease;
+    }
+    .masonry figure:hover img { transform: scale(1.06); opacity: 1; }
+
+    /* ── VIDEO ── */
+    .video-wrapper {
+      aspect-ratio: 16 / 9;
+      background: #111;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .video-card { margin-top: 22px; }
+    .video-card iframe { width: 100%; height: 100%; }
+
+    /* ── TOUR ── */
+    .tour-progress {
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), rgba(216,183,106,0.2));
+      border-radius: 999px;
+      margin: 28px 0 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tour-progress::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -60%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent);
+      animation: progress-shine 3s ease-in-out infinite;
+    }
+    @keyframes progress-shine {
+      from { left: -60%; }
+      to   { left: 110%; }
+    }
+
+    .tour-list { display: grid; gap: 14px; }
+    .tour-row {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.045);
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+    .tour-row:has(a):hover {
+      background: rgba(216,183,106,0.07);
+      border-color: rgba(216,183,106,0.3);
+      transform: translateX(5px);
+    }
+    .tour-date {
+      color: var(--gold-light);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .tour-place strong { display: block; font-size: 1.05rem; }
+    .tour-place span { color: var(--muted); font-size: 0.9rem; }
+    .sold-out {
+      color: rgba(248,243,231,0.62);
+      border-color: rgba(159,47,47,0.7);
+      background: rgba(159,47,47,0.13);
+      cursor: not-allowed;
+    }
+
+    .map-placeholder {
+      margin-top: 22px;
+      min-height: 310px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(rgba(8,21,45,0.64), rgba(5,7,13,0.88)),
+        url('assets/images/tour-map-placeholder.webp') center/cover no-repeat;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 26px;
+    }
+    .map-placeholder strong { color: var(--gold-light); font-size: 1.2rem; }
+
+    /* ── CONVERSION ── */
+    .conversion-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .newsletter-card {
+      padding: 38px;
+      background:
+        radial-gradient(circle at top right, rgba(216,183,106,0.18), transparent 40%),
+        rgba(255,255,255,0.055);
+      box-shadow: 0 0 80px rgba(216,183,106,0.07);
+    }
+    .newsletter-card h3 { margin: 12px 0 14px; }
+
+    .form { display: grid; gap: 12px; margin-top: 24px; }
+    .form input {
+      width: 100%;
+      min-height: 54px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(5,7,13,0.72);
+      color: var(--text);
+      padding: 0 18px;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .form input:focus {
+      border-color: rgba(216,183,106,0.75);
+      box-shadow: 0 0 0 4px rgba(216,183,106,0.12);
+    }
+
+    /* ── STORE ── */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .product-card {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(216,183,106,0.25);
+    }
+    .product-card img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      background: var(--blue);
+      transition: transform 0.5s ease;
+    }
+    .product-card:hover img { transform: scale(1.04); }
+    .product-info { padding: 18px; }
+    .product-info small {
+      display: block;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    .product-info strong { display: block; font-size: 1.05rem; margin-bottom: 12px; }
+    .product-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .quick-buy {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .quick-buy:hover {
+      background: rgba(216,183,106,0.15);
+      border-color: rgba(216,183,106,0.5);
+    }
+
+    /* ── HISTORIA / EPK ── */
+    .story-epk {
+      display: grid;
+      grid-template-columns: 1fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .story-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 38px;
+      background: rgba(255,255,255,0.045);
+    }
+    .story-panel p + p { margin-top: 16px; }
+    .story-panel .gold-accent { margin-bottom: 24px; }
+
+    .epk-panel {
+      border: 1px solid rgba(216,183,106,0.36);
+      border-radius: var(--radius-xl);
+      padding: 38px;
+      background:
+        linear-gradient(160deg, rgba(216,183,106,0.16), rgba(255,255,255,0.04)),
+        rgba(255,255,255,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      padding: 54px 0 34px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,0.22);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .footer h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .footer p { margin-top: 6px; }
+    .footer p a { transition: color 0.2s ease; }
+    .footer p a:hover { color: var(--gold-light); }
+
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .socials a {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.05);
+      color: var(--gold-light);
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+    .socials a:hover {
+      background: rgba(216,183,106,0.15);
+      border-color: rgba(216,183,106,0.55);
+      transform: translateY(-3px);
+    }
+
+    .sponsors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .sponsors span {
+      border-radius: 999px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .footer small {
+      display: block;
+      color: rgba(248,243,231,0.38);
+      margin-top: 34px;
+      font-size: 0.8rem;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    [data-reveal] {
+      opacity: 0;
+      transition: opacity 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    [data-reveal=""],[data-reveal="up"] { transform: translateY(52px); }
+    [data-reveal="left"]  { transform: translateX(-52px); }
+    [data-reveal="right"] { transform: translateX(52px); }
+    [data-reveal="scale"] { transform: scale(0.88) translateY(24px); }
+    [data-reveal].revealed { opacity: 1; transform: none; }
+
+    [data-delay="1"] { transition-delay: 0.1s; }
+    [data-delay="2"] { transition-delay: 0.22s; }
+    [data-delay="3"] { transition-delay: 0.34s; }
+    [data-delay="4"] { transition-delay: 0.46s; }
+    [data-delay="5"] { transition-delay: 0.58s; }
+    [data-delay="6"] { transition-delay: 0.7s; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .site-header { padding: 14px 0; }
+      .menu-toggle { display: flex; }
+      .nav-links {
+        position: fixed;
+        top: 74px;
+        right: 16px;
+        left: 16px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: rgba(5,7,13,0.97);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(24px);
+      }
+      .nav-links.active { display: flex; }
+      .nav-links a, .nav-links .btn { width: 100%; justify-content: center; padding: 14px; }
+      .hero { padding-top: 130px; }
+      .hero-stats, .split, .media-grid, .conversion-grid, .story-epk, .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .section { padding: 78px 0; }
+      .section-head { display: grid; }
+      .legacy-card { min-height: 420px; }
+      .tour-row { grid-template-columns: 1fr; gap: 10px; }
+      .tour-row .btn { width: 100%; }
+      .products { grid-template-columns: 1fr; }
+      .hero-watermark { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: min(100% - 24px, var(--container)); }
+      .hero-actions .btn { width: 100%; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .masonry { grid-template-columns: 1fr; }
+      .masonry figure:nth-child(3) { margin-top: 0; }
+      .newsletter-card, .story-panel, .epk-panel { padding: 26px; }
+    }
+
+    /* ── REDUCED MOTION ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      [data-reveal], .hero-enter {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "Conjunto Infinito",
+    "url": "https://www.conjuntoinfinito.com",
+    "image": "https://www.conjuntoinfinito.com/assets/images/conjunto-infinito-og.webp",
+    "genre": ["Regional", "Pop Regional", "Latin"],
+    "sameAs": [
+      "https://www.instagram.com/conjuntoinfinito",
+      "https://www.tiktok.com/@conjuntoinfinito",
+      "https://www.youtube.com/@conjuntoinfinito",
+      "https://open.spotify.com/artist/REEMPLAZA_ID_ARTISTA"
+    ],
+    "event": [
+      {
+        "@type": "MusicEvent",
+        "name": "Conjunto Infinito en Vivo - Los Angeles",
+        "startDate": "2026-07-18T20:00:00-07:00",
+        "location": {
+          "@type": "Place",
+          "name": "The Novo",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Los Angeles",
+            "addressRegion": "CA",
+            "addressCountry": "US"
+          }
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://tickets.example.com/conjunto-infinito-la",
+          "availability": "https://schema.org/InStock"
+        }
+      },
+      {
+        "@type": "MusicEvent",
+        "name": "Conjunto Infinito en Vivo - Dallas",
+        "startDate": "2026-08-02T20:00:00-05:00",
+        "location": {
+          "@type": "Place",
+          "name": "House of Blues Dallas",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dallas",
+            "addressRegion": "TX",
+            "addressCountry": "US"
+          }
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://tickets.example.com/conjunto-infinito-dallas",
+          "availability": "https://schema.org/SoldOut"
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Floating ambient orbs -->
+  <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-2" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
+
+  <header class="site-header" aria-label="Navegación principal">
+    <div class="container nav">
+      <a href="#home" class="brand" aria-label="Conjunto Infinito inicio">
+        <span class="brand-mark">∞</span>
+        <span>Conjunto Infinito</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#musica">Música</a>
+        <a href="#tour">Tour</a>
+        <a href="#historia">La Historia</a>
+        <a href="#tienda">Tienda</a>
+        <a href="#comunidad">Comunidad</a>
+        <a href="#musica" class="btn btn-primary">Escuchar</a>
+      </nav>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" aria-hidden="true">
+          <rect width="20" height="2" rx="1" fill="currentColor"/>
+          <rect y="6" width="14" height="2" rx="1" fill="currentColor"/>
+          <rect y="12" width="20" height="2" rx="1" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="home">
+
+    <!-- ── HERO ── -->
+    <section class="hero" aria-label="Presentación de Conjunto Infinito">
+      <div class="fallback-visual" aria-hidden="true"></div>
+      <video autoplay muted loop playsinline preload="metadata"
+             poster="assets/images/hero-conjunto-infinito.webp" aria-hidden="true">
+        <source src="assets/video/conjunto-infinito-live.av1.mp4" type="video/mp4" />
+        <source src="assets/video/conjunto-infinito-live.webm" type="video/webm" />
+      </video>
+
+      <div class="hero-watermark" aria-hidden="true">∞</div>
+
+      <div class="container hero-content">
+        <span class="eyebrow hero-enter">Nueva era · Legado sonoro</span>
+
+        <div class="hero-title hero-enter">
+          <span class="hero-title-main">La música no tiene fin.</span>
+          <span class="hero-title-italic">La experiencia es eterna.</span>
+        </div>
+
+        <p class="hero-subtitle hero-enter">Descubre el sonido que está definiendo una nueva era. Conjunto Infinito.</p>
+
+        <div class="hero-actions hero-enter">
+          <a href="#musica" class="btn btn-primary">Escuchar último sencillo</a>
+          <a href="#tour" class="btn btn-outline">Ver próximas fechas</a>
+        </div>
+
+        <div class="hero-stats hero-enter" aria-label="Datos destacados del grupo">
+          <div class="stat-card">
+            <strong>Top 5</strong>
+            <span>Canciones esenciales</span>
+          </div>
+          <div class="stat-card">
+            <strong>2026</strong>
+            <span>Gira en expansión</span>
+          </div>
+          <div class="stat-card">
+            <strong>∞</strong>
+            <span>Legado infinito</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MARQUEE TICKER ── -->
+    <div class="ticker-wrap" aria-hidden="true">
+      <div class="ticker-track">
+        <div class="ticker-group">
+          <div class="ticker-item"><span class="ticker-dot"></span>Nueva era musical</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Tour 2026</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Los Angeles · Dallas · Chicago</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Música regional · Pop</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>El Círculo Infinito</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Último sencillo disponible</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>La música no tiene fin</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>∞ Conjunto Infinito ∞</div>
+        </div>
+        <div class="ticker-group" aria-hidden="true">
+          <div class="ticker-item"><span class="ticker-dot"></span>Nueva era musical</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Tour 2026</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Los Angeles · Dallas · Chicago</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Música regional · Pop</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>El Círculo Infinito</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>Último sencillo disponible</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>La música no tiene fin</div>
+          <div class="ticker-item"><span class="ticker-dot"></span>∞ Conjunto Infinito ∞</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LEGADO ── -->
+    <section class="section" id="legado" style="overflow:hidden;">
+      <div class="section-pattern" aria-hidden="true"></div>
+      <div class="container split">
+        <div data-reveal="left">
+          <span class="eyebrow">El Legado Infinito</span>
+          <h2>Raíces profundas. Una historia que sigue sonando.</h2>
+          <div class="gold-accent"></div>
+        </div>
+        <div data-reveal="right">
+          <p class="legacy-copy">No nacimos para seguir tendencias, sino para honrar las raíces que nos conectan a todos. Conjunto Infinito es el resultado de años de búsqueda, de noches de bohemia y de la promesa de que una canción puede durar para siempre. Somos más que un grupo; somos el eco de tu propia historia.</p>
+        </div>
+      </div>
+      <div class="container" style="margin-top: 42px;" data-reveal="">
+        <div class="legacy-card" role="img" aria-label="Conjunto Infinito en sesión fotográfica cinematográfica"></div>
+      </div>
+    </section>
+
+    <!-- ── MÚSICA ── -->
+    <section class="section" id="musica">
+      <div class="container">
+        <div class="section-head" data-reveal="">
+          <div>
+            <span class="eyebrow">Música</span>
+            <h2>El sonido de una nueva era.</h2>
+            <div class="gold-accent"></div>
+          </div>
+          <p>Integra aquí el Top 5 de Spotify o Apple Music para que los fans escuchen sin salir de la página. Reemplaza el ID del artista o playlist en el iframe.</p>
+        </div>
+
+        <div class="media-grid">
+          <article class="music-card" data-reveal="left">
+            <div class="platform-tabs" aria-label="Plataformas de música">
+              <span class="tab active">Spotify</span>
+              <span class="tab">Apple Music</span>
+              <span class="tab">YouTube Music</span>
+            </div>
+            <div class="spotify-embed">
+              <iframe
+                title="Top canciones de Conjunto Infinito en Spotify"
+                style="border-radius:18px"
+                src="https://open.spotify.com/embed/playlist/37i9dQZF1DX10zKzsJ2jva?utm_source=generator&theme=0"
+                width="100%"
+                height="380"
+                frameborder="0"
+                allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+              </iframe>
+            </div>
+          </article>
+
+          <aside class="masonry" aria-label="Fotos de prensa de Conjunto Infinito" data-reveal="right">
+            <figure><img src="assets/images/press-01.webp" alt="Conjunto Infinito en escenario con luces doradas" loading="lazy" /></figure>
+            <figure><img src="assets/images/press-02.webp" alt="Retrato editorial de Conjunto Infinito con estética elegante" loading="lazy" /></figure>
+            <figure><img src="assets/images/press-03.webp" alt="Integrantes de Conjunto Infinito en locación urbana nocturna" loading="lazy" /></figure>
+            <figure><img src="assets/images/press-04.webp" alt="Conjunto Infinito durante ensayo musical" loading="lazy" /></figure>
+          </aside>
+        </div>
+
+        <article class="video-card" aria-label="Video musical reciente" data-reveal="">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/REEMPLAZA_VIDEO_ID"
+              title="Video musical más reciente de Conjunto Infinito"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── TOUR ── -->
+    <section class="section" id="tour" style="overflow:hidden;">
+      <div class="section-pattern" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-head" data-reveal="">
+          <div>
+            <span class="eyebrow">En Vivo</span>
+            <h2>Próximas fechas.</h2>
+            <div class="gold-accent"></div>
+          </div>
+          <p>Para actualización automática, conecta Bandsintown o Songkick. Mientras tanto, esta lista está optimizada para SEO, claridad y venta directa.</p>
+        </div>
+
+        <div class="tour-progress"></div>
+
+        <div class="tour-list">
+          <article class="tour-row" data-reveal="" data-delay="1">
+            <div class="tour-date">Jul 18</div>
+            <div class="tour-place">
+              <strong>Los Angeles, CA</strong>
+              <span>The Novo · 8:00 PM</span>
+            </div>
+            <a href="https://tickets.example.com/conjunto-infinito-la" class="btn btn-primary">Comprar boletos</a>
+          </article>
+
+          <article class="tour-row" data-reveal="" data-delay="2">
+            <div class="tour-date">Ago 02</div>
+            <div class="tour-place">
+              <strong>Dallas, TX</strong>
+              <span>House of Blues · 8:00 PM</span>
+            </div>
+            <button class="btn btn-outline sold-out" disabled>Sold out</button>
+          </article>
+
+          <article class="tour-row" data-reveal="" data-delay="3">
+            <div class="tour-date">Sep 14</div>
+            <div class="tour-place">
+              <strong>Chicago, IL</strong>
+              <span>Radius Chicago · 7:30 PM</span>
+            </div>
+            <a href="https://tickets.example.com/conjunto-infinito-chicago" class="btn btn-primary">Comprar boletos</a>
+          </article>
+        </div>
+
+        <div class="map-placeholder" aria-label="Mapa de próximas fechas de Conjunto Infinito" data-reveal="">
+          <div>
+            <strong>Mapa interactivo de la gira</strong>
+            <p>Reemplaza este bloque por un embed de Songkick, Bandsintown o Google Maps con las ciudades de la gira.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── COMUNIDAD ── -->
+    <section class="section" id="comunidad">
+      <div class="container conversion-grid">
+        <article class="newsletter-card" data-reveal="left">
+          <span class="eyebrow">El Círculo Infinito</span>
+          <h3>Recibe un demo exclusivo nunca antes escuchado.</h3>
+          <p>Únete al Círculo Infinito y recibe acceso prioritario a preventas, contenido privado y lanzamientos antes que todos.</p>
+
+          <form class="form" name="circulo-infinito" method="post" data-netlify="true">
+            <input type="hidden" name="form-name" value="circulo-infinito" />
+            <label>
+              <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Nombre</span>
+              <input type="text" name="nombre" placeholder="Tu nombre" autocomplete="name" required />
+            </label>
+            <label>
+              <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Email</span>
+              <input type="email" name="email" placeholder="Tu email" autocomplete="email" required />
+            </label>
+            <button type="submit" class="btn btn-primary">Entrar al círculo</button>
+          </form>
+        </article>
+
+        <article class="story-panel" data-reveal="right">
+          <span class="eyebrow">Conversión de fans</span>
+          <h3>De oyente casual a comunidad real.</h3>
+          <p>La página está diseñada para mover al fan desde el descubrimiento hacia tres acciones clave: escuchar música, comprar boletos y dejar su email.</p>
+          <p>La debilidad común en páginas de artistas es saturar con biografía y esconder los CTAs. Aquí cada sección empuja una acción concreta sin romper la narrativa visual.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── TIENDA ── -->
+    <section class="section" id="tienda">
+      <div class="container">
+        <div class="section-head" data-reveal="">
+          <div>
+            <span class="eyebrow">Tienda oficial</span>
+            <h2>Lo más vendido.</h2>
+            <div class="gold-accent"></div>
+          </div>
+          <p>Usa fotos lifestyle: modelos usando la mercancía en entornos urbanos, backstage o naturales. Eso vende más identidad que una foto aislada de producto.</p>
+        </div>
+
+        <div class="products" aria-label="Productos destacados de Conjunto Infinito">
+          <article class="product-card" data-reveal="" data-delay="1">
+            <img src="assets/images/merch-jacket.webp" alt="Chamarra oficial de Conjunto Infinito usada en entorno urbano nocturno" loading="lazy" />
+            <div class="product-info">
+              <small>Best seller</small>
+              <strong>Chamarra Infinito Tour</strong>
+              <div class="product-bottom">
+                <span>$79</span>
+                <button class="quick-buy">Quick Buy</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal="" data-delay="2">
+            <img src="assets/images/merch-cap.webp" alt="Gorra oficial de Conjunto Infinito con bordado dorado" loading="lazy" />
+            <div class="product-info">
+              <small>Nuevo</small>
+              <strong>Gorra Legado Dorado</strong>
+              <div class="product-bottom">
+                <span>$32</span>
+                <button class="quick-buy">Quick Buy</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-reveal="" data-delay="3">
+            <img src="assets/images/merch-shirt.webp" alt="Playera oficial de Conjunto Infinito usada por fan en concierto" loading="lazy" />
+            <div class="product-info">
+              <small>Edición limitada</small>
+              <strong>Playera La Música No Tiene Fin</strong>
+              <div class="product-bottom">
+                <span>$38</span>
+                <button class="quick-buy">Quick Buy</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HISTORIA ── -->
+    <section class="section" id="historia" style="overflow:hidden;">
+      <div class="section-pattern" aria-hidden="true"></div>
+      <div class="container story-epk">
+        <article class="story-panel" data-reveal="left">
+          <span class="eyebrow">La Historia</span>
+          <h2>Una biografía que suena a permanencia.</h2>
+          <div class="gold-accent"></div>
+          <p>Conjunto Infinito nace del deseo de crear canciones que no dependan de una temporada, sino de una emoción reconocible: la nostalgia, el amor, la celebración y la memoria familiar.</p>
+          <p>Su propuesta une raíz y modernidad con una dirección visual elegante, pensada para escenarios, plataformas digitales y audiencias que buscan una experiencia musical más profunda.</p>
+        </article>
+
+        <aside class="epk-panel" data-reveal="right">
+          <div>
+            <span class="eyebrow">Prensa y promotores</span>
+            <h3>Descarga el EPK oficial.</h3>
+            <p>Incluye biografía corta y larga, fotos de prensa, logotipo, ficha técnica, enlaces oficiales y contacto para contrataciones.</p>
+          </div>
+          <a href="assets/epk/conjunto-infinito-epk.pdf" class="btn btn-primary" download>Descargar EPK</a>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div data-reveal="">
+        <a href="#home" class="brand">
+          <span class="brand-mark">∞</span>
+          <span>Conjunto Infinito</span>
+        </a>
+        <p style="margin-top: 16px; max-width: 440px;">La música no tiene fin. La experiencia es eterna.</p>
+        <div class="socials" aria-label="Redes sociales">
+          <a href="https://instagram.com/conjuntoinfinito" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+            </svg>
+          </a>
+          <a href="https://tiktok.com/@conjuntoinfinito" aria-label="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.16 8.16 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/>
+            </svg>
+          </a>
+          <a href="https://youtube.com/@conjuntoinfinito" aria-label="YouTube">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </a>
+          <a href="https://open.spotify.com/artist/REEMPLAZA_ID_ARTISTA" aria-label="Spotify">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div data-reveal="" data-delay="2">
+        <h3>Enlaces</h3>
+        <p><a href="#musica">Música</a></p>
+        <p><a href="#tour">Tour</a></p>
+        <p><a href="#tienda">Tienda</a></p>
+        <p><a href="assets/epk/conjunto-infinito-epk.pdf" download>EPK para prensa</a></p>
+      </div>
+
+      <div data-reveal="" data-delay="4">
+        <h3>Socios</h3>
+        <div class="sponsors" aria-label="Patrocinadores y socios">
+          <span>Partner 01</span>
+          <span>Radio</span>
+          <span>Promoter</span>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <small>© 2026 Conjunto Infinito. Todos los derechos reservados.</small>
+    </div>
+  </footer>
+
+  <script>
+    // ── Menu toggle ──
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks   = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('active');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // ── Hero entrance ──
+    const heroLoad = () => document.body.classList.add('loaded');
+    if (document.readyState === 'complete') heroLoad();
+    else { window.addEventListener('load', heroLoad); setTimeout(heroLoad, 120); }
+
+    // ── Header scroll state ──
+    const header = document.querySelector('.site-header');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Scroll reveal ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('revealed');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+
+    document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+
+    // ── Active nav on scroll ──
+    const sections = document.querySelectorAll('section[id]');
+    const navAs    = document.querySelectorAll('.nav-links a[href^="#"]');
+    const activeObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navAs.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.45 });
+    sections.forEach(s => activeObs.observe(s));
+
+    // ── Platform tab switching ──
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        tab.closest('.platform-tabs').querySelectorAll('.tab')
+           .forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    // ── Parallax on hero watermark ──
+    const watermark = document.querySelector('.hero-watermark');
+    if (watermark && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY * 0.18;
+        watermark.style.transform = `translateY(calc(-50% + ${y}px)) rotate(-5deg)`;
+      }, { passive: true });
+    }
+  </script>
+</body>
+</html>
