@@ -1,0 +1,103 @@
+rules_version = '2';
+
+// Reglas de seguridad de RapScore MX
+// Pégalas en Firebase Console → Firestore Database → Reglas → Publicar.
+//
+// Colecciones:
+//   users/{uid}                 perfil básico (solo el dueño)
+//   ratings/{uid}_{slug}        calificación de un usuario a un artista (6 categorías, 1–100)
+//   artistStats/{slug}          suma y conteo de calificaciones por artista (lectura pública)
+//   proposals/{id}              artistas propuestos por estado (lectura pública)
+//
+// Para votar o proponer se requiere cuenta con correo verificado.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function verified() { return signedIn() && request.auth.token.email_verified == true; }
+
+    function cats() { return ['flow', 'lirica', 'contenido', 'versatilidad', 'hooks', 'impacto']; }
+    function validScore(v) { return v is int && v >= 1 && v <= 100; }
+    function validScores(s) {
+      return s is map && s.keys().hasAll(cats()) && s.keys().hasOnly(cats())
+        && validScore(s.flow) && validScore(s.lirica) && validScore(s.contenido)
+        && validScore(s.versatilidad) && validScore(s.hooks) && validScore(s.impacto);
+    }
+    function validSlug(slug) { return slug is string && slug.matches('^[a-z0-9][a-z0-9-]{0,79}$'); }
+
+    function statsDoc(slug) { return /databases/$(database)/documents/artistStats/$(slug); }
+    function ratingDoc(uid, slug) { return /databases/$(database)/documents/ratings/$(uid + '_' + slug); }
+
+    // La suma de cada categoría en artistStats debe cambiar exactamente por (nuevo − anterior)
+    function sumOk(after, before, s, old, c) {
+      return after[c] is int && after[c] == before.get(c, 0) + s[c] - (old == null ? 0 : old[c]);
+    }
+    function statsConsistent(slug, s, old) {
+      let after = getAfter(statsDoc(slug)).data;
+      let before = exists(statsDoc(slug)) ? get(statsDoc(slug)).data : {'count': 0, 'sum': {}};
+      return after.count == before.count + (old == null ? 1 : 0)
+        && after.sum.keys().hasOnly(cats())
+        && sumOk(after.sum, before.sum, s, old, 'flow')
+        && sumOk(after.sum, before.sum, s, old, 'lirica')
+        && sumOk(after.sum, before.sum, s, old, 'contenido')
+        && sumOk(after.sum, before.sum, s, old, 'versatilidad')
+        && sumOk(after.sum, before.sum, s, old, 'hooks')
+        && sumOk(after.sum, before.sum, s, old, 'impacto');
+    }
+
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /ratings/{rid} {
+      allow get: if signedIn() && rid.matches(request.auth.uid + '_.+');
+      allow list: if signedIn() && resource.data.uid == request.auth.uid;
+      allow create, update: if verified()
+        && validSlug(request.resource.data.artistSlug)
+        && rid == request.auth.uid + '_' + request.resource.data.artistSlug
+        && request.resource.data.keys().hasOnly(['uid', 'artistSlug', 'artist', 'scores', 'updatedAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.artist is string
+        && request.resource.data.artist.size() > 0 && request.resource.data.artist.size() <= 80
+        && request.resource.data.updatedAt == request.time
+        && validScores(request.resource.data.scores)
+        && statsConsistent(request.resource.data.artistSlug, request.resource.data.scores,
+                           resource == null ? null : resource.data.scores);
+      allow delete: if false;
+    }
+
+    match /artistStats/{slug} {
+      allow read: if true;
+      // Solo se puede escribir junto con la calificación del propio usuario (misma transacción);
+      // la regla de ratings valida que la suma y el conteo cuadren.
+      allow create, update: if verified()
+        && validSlug(slug)
+        && request.resource.data.keys().hasOnly(['count', 'sum', 'updatedAt'])
+        && request.resource.data.count is int && request.resource.data.count >= 1
+        && request.resource.data.updatedAt == request.time
+        && getAfter(ratingDoc(request.auth.uid, slug)).data.updatedAt == request.time;
+      allow delete: if false;
+    }
+
+    match /proposals/{id} {
+      allow read: if true;
+      allow create: if verified()
+        && request.resource.data.keys().hasOnly(['name', 'estado', 'genre', 'link', 'bio', 'createdBy', 'createdAt'])
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
+        && request.resource.data.estado is string && request.resource.data.estado.matches('^[A-Z]{3}$')
+        && request.resource.data.genre is string && request.resource.data.genre.size() <= 60
+        && request.resource.data.link is string && request.resource.data.link.size() <= 300
+        && request.resource.data.link.matches('^https://[^\\s]+$')
+        && request.resource.data.bio is string && request.resource.data.bio.size() <= 280;
+      allow update, delete: if false;
+    }
+
+    // El sistema anterior (votos "sobrevalorado/justo/infravalorado") queda cerrado.
+    match /votes/{id} {
+      allow read, write: if false;
+    }
+  }
+}
