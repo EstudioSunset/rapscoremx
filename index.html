@@ -1089,21 +1089,7 @@ h1 em { color: var(--accent); font-style: normal; }
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner" id="ticker">
-    <span class="ticker-item">Santa Fe Klan <span class="ticker-sep">—</span> #1 OVERALL</span>
-    <span class="ticker-item">Alemán <span class="ticker-sep">—</span> #1 LÍRICA</span>
-    <span class="ticker-item">Bocafloja <span class="ticker-sep">—</span> #1 CONTENIDO</span>
-    <span class="ticker-item">Gera MX <span class="ticker-sep">—</span> #1 HOOKS</span>
-    <span class="ticker-item">Niña Dioz <span class="ticker-sep">—</span> TOP 5 IDENTIDAD</span>
-    <span class="ticker-item">Fermín IV <span class="ticker-sep">—</span> #1 FREESTYLE</span>
-    <span class="ticker-item">Control Machete <span class="ticker-sep">—</span> #1 IMPACTO CULTURAL</span>
-    <!-- duplicate for seamless loop -->
-    <span class="ticker-item">Santa Fe Klan <span class="ticker-sep">—</span> #1 OVERALL</span>
-    <span class="ticker-item">Alemán <span class="ticker-sep">—</span> #1 LÍRICA</span>
-    <span class="ticker-item">Bocafloja <span class="ticker-sep">—</span> #1 CONTENIDO</span>
-    <span class="ticker-item">Gera MX <span class="ticker-sep">—</span> #1 HOOKS</span>
-    <span class="ticker-item">Niña Dioz <span class="ticker-sep">—</span> TOP 5 IDENTIDAD</span>
-    <span class="ticker-item">Fermín IV <span class="ticker-sep">—</span> #1 FREESTYLE</span>
-    <span class="ticker-item">Control Machete <span class="ticker-sep">—</span> #1 IMPACTO CULTURAL</span>
+    <span class="ticker-item">RapScore MX <span class="ticker-sep">—</span> Rankings de rap mexicano</span>
   </div>
 </div>
 
@@ -1236,157 +1222,178 @@ const CAT_LABELS = { flow:'Flow', lirica:'Lírica', contenido:'Contenido', versa
 
 function r(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
+// Datos verificados el 6 de octubre de 2026 (origen, estado, trayectoria).
+// estado: nombre exacto del estado (coincide con ESTADOS) o '' si no está verificado.
+// female: true para el filtro "Artistas femeninas".
+// Las puntuaciones son editoriales. Las marcadas como provisional: true son nuevas y están pendientes de revisión.
 const RAW_ARTISTS = [
-  { name: 'Santa Fe Klan', tier: 'active', tags: ['Guadalajara','Trap','Rap Melódico'],
-    bio: 'Ángel Quezada, originario de Guadalajara. Uno de los exponentes más influyentes del rap mexicano contemporáneo. Mezcla rap con sierreño y trap creando un sonido único.',
+  { name: 'Santa Fe Klan', tier: 'active', estado: 'Guanajuato', tags: ['Guanajuato','Rap Melódico','Cumbia Rap'],
+    bio: 'Ángel Quezada, originario de la ciudad de Guanajuato. Uno de los exponentes más influyentes del rap mexicano contemporáneo. Mezcla rap con cumbia, regional mexicano y trap.',
     scores: { flow: 88, lirica: 78, contenido: 82, versatilidad: 90, hooks: 92, impacto: 94 } },
-  { name: 'Alemán', tier: 'active', tags: ['CDMX','Rap Técnico','Lírica'],
-    bio: 'Considerado por muchos el mejor letrista del rap mexicano actual. Técnica impecable, vocabulario extenso y capacidad narrativa que pocos igualan.',
+  { name: 'Alemán', tier: 'active', estado: 'Baja California Sur', tags: ['Los Cabos','Rap Técnico','Homegrown Mafia'],
+    bio: 'Erick Alemán, originario de Cabo San Lucas, Baja California Sur, y radicado en la Ciudad de México. Técnica impecable y una narrativa que mezcla boom bap con trap.',
     scores: { flow: 91, lirica: 97, contenido: 93, versatilidad: 85, hooks: 78, impacto: 88 } },
-  { name: 'Gera MX', tier: 'active', tags: ['Monterrey','Trap','Pop Rap'],
-    bio: 'Artista de Monterrey que mezcla trap, pop y rap comercial. Conocido por sus colaboraciones con grandes nombres y su capacidad para crear hits masivos.',
+  { name: 'Gera MX', tier: 'active', estado: 'Nuevo León', tags: ['San Nicolás, NL','Trap','Pop Rap'],
+    bio: 'Gerardo Torres, de San Nicolás de los Garza, Nuevo León. Mezcla trap, pop y rap comercial; conocido por sus colaboraciones y su capacidad para crear hits masivos.',
     scores: { flow: 82, lirica: 72, contenido: 68, versatilidad: 85, hooks: 95, impacto: 88 } },
-  { name: 'C-Kan', tier: 'active', tags: ['Guadalajara','Old School','Gangsta'],
+  { name: 'C-Kan', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap de Calle','Gangsta'],
     bio: 'Pionero del rap de Guadalajara. Ha mantenido una carrera prolífica representando las calles con una propuesta directa y auténtica.',
     scores: { flow: 85, lirica: 80, contenido: 86, versatilidad: 72, hooks: 80, impacto: 85 } },
-  { name: 'Dharius', tier: 'active', tags: ['CDMX','Rap Técnico','Storytelling'],
-    bio: 'Rapero técnico de Ciudad de México con habilidad para el storytelling. Letras densas, flujo preciso y proyectos conceptualmente sólidos.',
+  { name: 'Dharius', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Rap','Ex Cartel de Santa'],
+    bio: 'Alan Maldonado, de Monterrey. Integrante de Cartel de Santa hasta 2013; como solista lanzó Directo hasta arriba y Mala fama, buena vidha, con éxitos como "La Durango".',
     scores: { flow: 90, lirica: 92, contenido: 90, versatilidad: 80, hooks: 74, impacto: 78 } },
-  { name: 'Babo', tier: 'active', tags: ['Monterrey','Corridos Tumbados','Cartel de Santa'],
-    bio: 'Líder de Cartel de Santa, grupo pionero del narco-rap en México. Presencia escénica brutal y una autenticidad que pocos discuten.',
+  { name: 'Babo', tier: 'active', estado: 'Nuevo León', tags: ['Santa Catarina, NL','Narco-Rap','Cartel de Santa'],
+    bio: 'Eduardo Dávalos, líder y voz de Cartel de Santa desde 1999. Presencia escénica brutal y una autenticidad que pocos discuten.',
     scores: { flow: 87, lirica: 82, contenido: 78, versatilidad: 70, hooks: 85, impacto: 92 } },
-  { name: 'Millonario', tier: 'active', tags: ['Monterrey','Narco-Rap','Cartel de Santa'],
-    bio: 'Co-fundador de Cartel de Santa. Estilo crudo y directo que define un subgénero. Su influencia en el rap norteño es difícil de cuantificar.',
+  { name: 'Millonario', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Narco-Rap','Rap de Calle'],
+    bio: 'Rapero regiomontano ligado al entorno de Cartel de Santa. Estilo crudo y letras callejeras; debutó como solista con Millonario sin Corona (2016).',
     scores: { flow: 83, lirica: 80, contenido: 75, versatilidad: 68, hooks: 82, impacto: 88 } },
-  { name: 'MC Davo', tier: 'active', tags: ['CDMX','Trap','Comercial'],
-    bio: 'Uno de los traperos más exitosos comercialmente de México. Flow suave, hooks pegajosos y una facilidad natural para conectar con el público masivo.',
+  { name: 'MC Davo', tier: 'active', estado: 'Nuevo León', tags: ['Guadalupe, NL','Rap','Comercial'],
+    bio: 'David Sierra, de Guadalupe, Nuevo León. Creció en redes sociales hasta convertirse en uno de los raperos más exitosos comercialmente de México, con un toque regiomontano.',
     scores: { flow: 80, lirica: 68, contenido: 65, versatilidad: 78, hooks: 91, impacto: 82 } },
-  { name: 'Lefty SM', tier: 'legend', tags: ['Culiacán','Rap Melódico','Legado'],
-    bio: 'Desaparecido en 2021. Dejó un legado inmenso como pionero del rap melódico sinaloense. Su influencia en la generación actual es enorme e indiscutible.',
+  { name: 'Lefty SM', tier: 'legend', estado: 'Sonora', tags: ['Sonora','Rap','Legado'],
+    bio: 'Juan Carlos Sauceda, originario de Sonora. Autor de "Por mi México", convertido en himno. Falleció el 3 de septiembre de 2023 en Zapopan, Jalisco, tras un ataque armado.',
     scores: { flow: 90, lirica: 88, contenido: 92, versatilidad: 82, hooks: 90, impacto: 95 } },
-  { name: 'Toser One', tier: 'active', tags: ['Guadalajara','Freestyle','Técnico'],
-    bio: 'Uno de los freestylers más respetados de México. Técnica impresionante, improvisación afilada y una presencia que domina cualquier batalla.',
+  { name: 'Toser One', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap','Graffiti'],
+    bio: 'Ricardo Regalado, de Guadalajara. Formado en el hip hop y el graffiti; activo desde 2011, despegó en 2014 con un sencillo de millones de reproducciones y varios discos de estudio.',
     scores: { flow: 93, lirica: 90, contenido: 82, versatilidad: 88, hooks: 70, impacto: 78 } },
-  { name: 'Neto Peña', tier: 'active', tags: ['Monterrey','Trap','Hooks'],
-    bio: 'Artista de Monterrey con talento natural para los hooks. Sus canciones son instantáneamente reconocibles por su facilidad para crear melodías pegajosas.',
+  { name: 'Neto Peña', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Rap','Hooks'],
+    bio: 'Ernesto Peña, nacido en Guadalajara y criado en Monterrey y Nuevo Laredo. Mezcla rap con secciones melódicas y elementos de regional mexicano.',
     scores: { flow: 78, lirica: 70, contenido: 65, versatilidad: 80, hooks: 93, impacto: 78 } },
-  { name: 'Charles Ans', tier: 'active', tags: ['CDMX','Rap Técnico','Underground'],
-    bio: 'Una de las mejores plumas del underground mexicano. Letras complejas, referencias densas y una visión artística coherente a lo largo de su carrera.',
+  { name: 'Charles Ans', tier: 'active', estado: 'Sonora', tags: ['Hermosillo','Rap','Jazz Rap'],
+    bio: 'Carlos Segura, de Hermosillo, Sonora. Una de las mejores plumas del rap mexicano: letras bohemias y románticas sobre bases con jazz y funk. Llenó el Palacio de los Deportes en 2025.',
     scores: { flow: 88, lirica: 94, contenido: 91, versatilidad: 80, hooks: 68, impacto: 72 } },
-  { name: 'Simpson Ahuevo', tier: 'active', tags: ['CDMX','Rap Alternativo','Experimental'],
-    bio: 'Artista experimental que rompe moldes en el rap mexicano. Sus proyectos son difíciles de categorizar: rap, jazz, electrónica y mucho más.',
+  { name: 'Simpson Ahuevo', tier: 'active', estado: 'Sonora', tags: ['Hermosillo','Rap Alternativo','Experimental'],
+    bio: 'Originario de Hermosillo, Sonora. Artista que rompe moldes en el rap mexicano con proyectos difíciles de categorizar.',
     scores: { flow: 85, lirica: 88, contenido: 86, versatilidad: 92, hooks: 74, impacto: 76 } },
-  { name: 'Eptos Uno', tier: 'active', tags: ['Mexicali','Old School','Freestyle'],
-    bio: 'Veterano del freestyle con décadas de trayectoria. Considerado uno de los padres del rap mexicano en la frontera norte.',
+  { name: 'Eptos Uno', tier: 'active', estado: 'Sonora', tags: ['Sonora','Rap','Batallas Escritas'],
+    bio: 'Rapero sonorense, figura clave del rap mexicano y fundador del colectivo Never Die. Veterano de incontables batallas escritas.',
     scores: { flow: 87, lirica: 85, contenido: 80, versatilidad: 75, hooks: 70, impacto: 82 } },
-  { name: 'Robot95', tier: 'emerging', tags: ['CDMX','Trap','Nueva Escuela'],
-    bio: 'Representante de la nueva generación del trap mexicano. Producción propia y un sonido muy definido que lo distingue de sus contemporáneos.',
+  { name: 'Robot95', tier: 'emerging', estado: 'Baja California', tags: ['Mexicali','Trap','Rap Melódico'],
+    bio: 'Originario de Mexicali y radicado en Guadalajara. Debutó en 2016 con el disco 1995; rap melódico y honesto, alejado del trap agresivo.',
     scores: { flow: 82, lirica: 76, contenido: 72, versatilidad: 84, hooks: 86, impacto: 68 } },
-  { name: 'Fntxy', tier: 'emerging', tags: ['CDMX','Trap','Cloud Rap'],
-    bio: 'Artista joven con una estética muy definida que mezcla cloud rap y trap. Uno de los nombres más interesantes de la escena emergente.',
+  { name: 'Fntxy', tier: 'emerging', estado: 'Baja California', tags: ['Tijuana','Trap','Trap Corrido'],
+    bio: 'Elihú Gándara, nacido en Los Mochis, Sinaloa, y criado en Tijuana. Mezcla trap con influencias norteñas, R&B y regional mexicano.',
     scores: { flow: 80, lirica: 74, contenido: 70, versatilidad: 82, hooks: 84, impacto: 62 } },
-  { name: 'Sabino', tier: 'active', tags: ['CDMX','Rap Alternativo','Indie'],
-    bio: 'Mezcla rap con sonidos de cantautor. Letras personales e introspectivas que conectan con una audiencia que busca algo más allá del trap convencional.',
+  { name: 'Sabino', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap Alternativo','Sab-Hop'],
+    bio: 'Pablo Castañeda, de Guadalajara. Rap ligero, con humor y toque pop; activo desde 2012 con cinco discos de estudio.',
     scores: { flow: 76, lirica: 84, contenido: 88, versatilidad: 86, hooks: 78, impacto: 72 } },
-  { name: 'LNG/SHT', tier: 'active', tags: ['CDMX','Rap Técnico','Hip Hop Puro'],
-    bio: 'Dúo de Ciudad de México con una propuesta de hip hop puro. Líricamente son de los más sólidos de la escena, con proyectos conceptualmente ambiciosos.',
+  { name: 'LNG/SHT', tier: 'active', estado: 'Quintana Roo', tags: ['Cancún','Hip Hop','Punk Rap'],
+    bio: 'Proyecto solista de Gastón Espinosa, originario de Cancún. "Hip hop para punk rockers": historias de juventud, desamor y crisis existencial con mucho humor.',
     scores: { flow: 87, lirica: 91, contenido: 88, versatilidad: 78, hooks: 72, impacto: 75 } },
-  { name: 'Adán Cruz', tier: 'active', tags: ['CDMX','Rap Consciente','Spoken Word'],
-    bio: 'Rapero con raíces en el spoken word y el activismo. Sus letras tienen profundidad social y política que va más allá del entretenimiento.',
+  { name: 'Adán Cruz', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Rap','Trap'],
+    bio: 'Originario de Monterrey. Debutó como Adeene en 2008; mezcla rap de vieja escuela con trap y R&B.',
     scores: { flow: 80, lirica: 90, contenido: 95, versatilidad: 72, hooks: 65, impacto: 80 } },
-  { name: 'Yoga Fire', tier: 'active', tags: ['Guadalajara','Rap Técnico','Batallas'],
-    bio: 'Figura importante de la escena de batallas y el rap técnico en Guadalajara. Wordplay afilado y una capacidad de construcción lítrica notable.',
+  { name: 'Yoga Fire', tier: 'active', estado: 'Estado de México', tags: ['Ecatepec','Rap','Batallas'],
+    bio: 'Hugo Canchola, de Ecatepec. Más de una década en las batallas de freestyle desde el año 2000 antes de discos como Ciudad del diablo y Lázaro.',
     scores: { flow: 90, lirica: 88, contenido: 80, versatilidad: 82, hooks: 68, impacto: 70 } },
-  { name: 'Tren Lokote', tier: 'active', tags: ['Tijuana','Chicano Rap','Frontera'],
-    bio: 'Puente entre el chicano rap de EE.UU. y México. Representa la frontera con autenticidad y tiene un estilo muy reconocible construido durante dos décadas.',
-    scores: { flow: 86, lirica: 82, contenido: 84, versatilidad: 74, hooks: 78, impacto: 84 } },
-  { name: 'Proof', tier: 'active', tags: ['Monterrey','Rap Técnico','Underground'],
-    bio: 'Nombre sólido del underground regiomontano. Conocido por su técnica y consistencia, ha construido una base de fans fiel sin depender del mainstream.',
-    scores: { flow: 86, lirica: 86, contenido: 82, versatilidad: 78, hooks: 68, impacto: 70 } },
-  { name: 'Serko Fu', tier: 'active', tags: ['Monterrey','Old School','Cartel de Santa'],
-    bio: 'Miembro de Cartel de Santa. Ha desarrollado también una carrera solista con un estilo que equilibra el rap de calle con la lírica más elaborada.',
+  { name: 'Serko Fu', tier: 'legend', estado: 'Durango', tags: ['Gómez Palacio','Pionero','Freestyle'],
+    bio: 'Sergio Fuentes, de Gómez Palacio, Durango. Pionero desde inicios de los 90 y fundador de Caballeros del Plan G. Embajador del freestyle mexicano y juez de Red Bull Batalla.',
     scores: { flow: 83, lirica: 80, contenido: 78, versatilidad: 74, hooks: 80, impacto: 82 } },
-  { name: 'Bocafloja', tier: 'legend', tags: ['CDMX','Rap Consciente','Activismo'],
-    bio: 'Una de las voces más importantes del rap político y social en México y Latinoamérica. Sus letras tienen un peso intelectual que pocos pueden igualar.',
+  { name: 'Bocafloja', tier: 'legend', estado: 'Ciudad de México', tags: ['CDMX','Rap Consciente','Activismo'],
+    bio: 'Aldo Villegas, de la Ciudad de México. Activo desde 1995; una de las voces más importantes del rap político y social en México y Latinoamérica.',
     scores: { flow: 82, lirica: 95, contenido: 98, versatilidad: 75, hooks: 65, impacto: 93 } },
-  { name: 'Akil Ammar', tier: 'active', tags: ['CDMX','Hip Hop Consciente','Jazz Rap'],
-    bio: 'Fusiona hip hop con jazz, soul y música afrolatina. Propuesta artística muy completa que va más allá del rap convencional.',
+  { name: 'Akil Ammar', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Rap Consciente','Jazz Rap'],
+    bio: 'Jonathan Rojas, de la Ciudad de México. Activo desde 1996, cofundador de IndieGente; fusiona hip hop con salsa, reggae, funk y jazz.',
     scores: { flow: 82, lirica: 87, contenido: 90, versatilidad: 88, hooks: 72, impacto: 76 } },
-  { name: 'Fermín IV', tier: 'active', tags: ['CDMX','Freestyle','Batallas'],
-    bio: 'Campeón de freestyle y figura central del formato de batallas en México. Su improvisación es legendaria entre los conocedores.',
+  { name: 'Fermín IV', tier: 'legend', estado: 'Nuevo León', tags: ['Monterrey','Hip Hop','Control Machete'],
+    bio: 'Fermín Caballero, de Monterrey. Voz de Control Machete en Mucho Barato (1996), el disco que llevó el rap mexicano a todo el continente.',
     scores: { flow: 94, lirica: 88, contenido: 82, versatilidad: 86, hooks: 68, impacto: 80 } },
-  { name: 'Pato Machete', tier: 'legend', tags: ['CDMX','Hip Hop Alternativo','Control Machete'],
-    bio: 'Miembro de Control Machete, uno de los grupos más influyentes en la historia del rap mexicano. Su legado define cómo el hip hop se integró en el mainstream mexicano.',
+  { name: 'Pato Machete', tier: 'legend', estado: 'Nuevo León', tags: ['Monterrey','Hip Hop Alternativo','Control Machete'],
+    bio: 'Raúl Chapa, de Monterrey. Integrante de Control Machete y solista activo desde los 90, con discos como Contrabanda y Rifa!',
     scores: { flow: 84, lirica: 86, contenido: 88, versatilidad: 82, hooks: 84, impacto: 94 } },
-  { name: 'Control Machete', tier: 'legend', tags: ['Monterrey','Hip Hop Alternativo','Pioneros'],
+  { name: 'Control Machete', tier: 'legend', estado: 'Nuevo León', tags: ['Monterrey','Hip Hop Alternativo','Pioneros'],
     bio: 'El grupo que llevó el rap mexicano al mainstream en los 90s. Sin su influencia, la escena actual sería incomprensible. Legado absoluto.',
     scores: { flow: 85, lirica: 88, contenido: 90, versatilidad: 80, hooks: 88, impacto: 97 } },
-  { name: 'Niña Dioz', tier: 'active', tags: ['Monterrey','Rap Feminista','LGBTQ+'],
-    bio: 'Una de las voces más importantes del rap feminista y queer en México y América Latina. Activismo y arte en un package coherente e irrefutable.',
+  { name: 'Niña Dioz', tier: 'active', estado: 'Nuevo León', female: true, tags: ['Monterrey','Rap Feminista','LGBTQ+'],
+    bio: 'Una de las voces más importantes del rap feminista y queer en México y América Latina. Activismo y arte en un paquete coherente.',
     scores: { flow: 82, lirica: 86, contenido: 92, versatilidad: 80, hooks: 76, impacto: 88 } },
-  { name: 'Hispana', tier: 'active', tags: ['CDMX','Rap Femenino','Técnico'],
-    bio: 'Una de las raperas con mayor técnica en México. Sus letras son densas y complejas, demostrando que el rap femenino tiene tanta profundidad como el masculino.',
+  { name: 'Hispana', tier: 'active', estado: 'Coahuila', female: true, tags: ['Monclova','Rap Femenino','Técnico'],
+    bio: 'Patricia González, originaria de Monclova, Coahuila; empezó a rapear a los 13 años en Puerto Vallarta. Una de las voces femeninas más importantes del rap mexicano.',
     scores: { flow: 85, lirica: 88, contenido: 84, versatilidad: 78, hooks: 72, impacto: 76 } },
-  { name: 'Yoss Bones', tier: 'active', tags: ['CDMX','Trap','Rap Alternativo'],
-    bio: 'Artista con una estética oscura y una propuesta que mezcla trap con elementos de rock y metal. Visión artística muy coherente y fanbase dedicado.',
+  { name: 'Yoss Bones', tier: 'active', estado: 'Guanajuato', female: true, tags: ['Salamanca','Rap','Rap Alternativo'],
+    bio: 'Jesica Martínez, de Salamanca, Guanajuato. Rapera, cantante y compositora que mezcla hip hop, R&B y pop rock; referente de la escena actual.',
     scores: { flow: 82, lirica: 80, contenido: 78, versatilidad: 85, hooks: 82, impacto: 74 } },
-  { name: 'Mare Advertencia Lirika', tier: 'active', tags: ['Oaxaca','Rap Feminista','Indígena'],
+  { name: 'Mare Advertencia Lirika', tier: 'active', estado: 'Oaxaca', female: true, tags: ['Oaxaca','Rap Feminista','Indígena'],
     bio: 'Rapera oaxaqueña que incorpora lenguas indígenas en su música. Una propuesta única que combina activismo social, identidad cultural y rap de calidad.',
     scores: { flow: 80, lirica: 86, contenido: 94, versatilidad: 78, hooks: 70, impacto: 85 } },
-  { name: 'Audry Funk', tier: 'active', tags: ['CDMX','Rap Consciente','Feminismo'],
-    bio: 'Veterana del rap consciente y el activismo. Ha construido una carrera coherente basada en el mensaje y la autenticidad sin concesiones comerciales.',
+  { name: 'Audry Funk', tier: 'active', estado: 'Puebla', female: true, tags: ['Puebla','Rap Consciente','Feminismo'],
+    bio: 'Audry Bustos, nacida en Puebla y radicada en el Bronx, Nueva York. Mezcla rap, reggae y funk con un mensaje feminista, antirracista y sobre migración.',
     scores: { flow: 78, lirica: 82, contenido: 90, versatilidad: 74, hooks: 68, impacto: 80 } },
-  { name: 'Ximbo', tier: 'active', tags: ['CDMX','Underground','Experimental'],
-    bio: 'Figura del underground capitalino con una propuesta experimental. Sus proyectos son desafiantes pero muy recompensantes para quien los escucha con atención.',
+  { name: 'Ximbo', tier: 'active', estado: '', female: true, tags: ['México','Underground','Rap Femenino'],
+    bio: 'Una de las raperas más importantes del rap mexicano. Defiende un hip hop que se vive en los barrios y ha colaborado con artistas como Vivir Quintana.',
     scores: { flow: 84, lirica: 86, contenido: 84, versatilidad: 88, hooks: 68, impacto: 70 } },
-  { name: 'Muelas de Gallo', tier: 'active', tags: ['Guadalajara','Rap Técnico','Lírica'],
-    bio: 'Uno de los letristas más respetados de la escena tapatía. Wordplay elaborado, referencias culturales y una propuesta que prioriza la sustancia sobre la forma.',
+  { name: 'Muelas de Gallo', tier: 'active', estado: 'Baja California Sur', tags: ['BCS','Rap','La Banda Bastön'],
+    bio: 'MC de La Banda Bastön, dúo originario del Valle de Santo Domingo, Baja California Sur, que se mudó a la Ciudad de México en 1999. Wordplay elaborado y sustancia sobre forma.',
     scores: { flow: 87, lirica: 92, contenido: 88, versatilidad: 78, hooks: 68, impacto: 72 } },
-  { name: 'Tino El Pingüino', tier: 'active', tags: ['CDMX','Jazz Rap','Neo Soul'],
-    bio: 'Fusiona rap con jazz, bossa nova y neo soul. Una de las propuestas más sofisticadas musicalmente del rap mexicano. Escucha obligatoria.',
+  { name: 'Tino El Pingüino', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Rap Alternativo','Jazz Rap'],
+    bio: 'El rapero de la ciudad: rap alternativo y muy autobiográfico, con raíces puristas pero sin encasillarse.',
     scores: { flow: 82, lirica: 86, contenido: 87, versatilidad: 92, hooks: 74, impacto: 76 } },
-  { name: 'Coko Yamasaki', tier: 'active', tags: ['CDMX','Rap Femenino','Alternativo'],
-    bio: 'Rapera con un estilo propio que mezcla humor, crítica social y una personalidad única en el escenario. Figura importante del rap femenino en México.',
-    scores: { flow: 80, lirica: 78, contenido: 82, versatilidad: 80, hooks: 76, impacto: 74 } },
-  { name: 'Erick Hervé', tier: 'active', tags: ['CDMX','Hip Hop Puro','Líricas'],
-    bio: 'Rapero de la vieja guardia capitalina con una propuesta de hip hop clásico. Técnica sólida y letras que construyen con cuidado cada verso.',
-    scores: { flow: 84, lirica: 86, contenido: 82, versatilidad: 74, hooks: 68, impacto: 70 } },
-  { name: 'Hadrian', tier: 'active', tags: ['Monterrey','Hip Hop Alternativo','Producción'],
-    bio: 'Artista y productor con una visión completa del hip hop. Sus proyectos tienen una coherencia sonora y temática que demuestra madurez artística.',
+  { name: 'Hadrian', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Freestyle','Campeón Red Bull 2008'],
+    bio: 'Adrián Salguero, de la Ciudad de México. Primer mexicano campeón internacional de Red Bull Batalla de los Gallos (2008); hoy fusiona rap, trap y corridos.',
     scores: { flow: 82, lirica: 82, contenido: 84, versatilidad: 86, hooks: 74, impacto: 72 } },
-  { name: 'Danger AK', tier: 'active', tags: ['CDMX','Rap Técnico','Underground'],
-    bio: 'Nombre respetado en el underground por su técnica y consistencia. Décadas en la escena sin comprometer su visión artística.',
+  { name: 'Danger AK', tier: 'active', estado: 'Baja California', tags: ['Tijuana','Rap','Rap Consciente'],
+    bio: 'Alfredo Martínez, de la colonia Mariano Matamoros en Tijuana. Wordplay, referencias literarias y temas sociales nacidos de su barrio.',
     scores: { flow: 85, lirica: 84, contenido: 80, versatilidad: 76, hooks: 68, impacto: 70 } },
-  { name: 'T-Killa', tier: 'active', tags: ['CDMX','Old School','Pionero'],
-    bio: 'Veterano del hip hop mexicano con presencia desde los primeros días de la escena. Su contribución a establecer el rap en México es invaluable.',
+  { name: 'T-Killa', tier: 'active', estado: '', tags: ['Los Ángeles / México','Freestyle','Batallas'],
+    bio: 'Nacido en Los Ángeles y criado en México. Figura de la escena de freestyle desde principios de los 2000; dio el salto a los discos en 2012.',
     scores: { flow: 82, lirica: 80, contenido: 78, versatilidad: 72, hooks: 70, impacto: 82 } },
-  { name: 'Achepe', tier: 'active', tags: ['CDMX','Rap Técnico','Batallas'],
-    bio: 'Figura del rap de batalla con una técnica afilada. Ha demostrado que puede trasladar su habilidad para el freestyle a proyectos de estudio sólidos.',
-    scores: { flow: 88, lirica: 84, contenido: 78, versatilidad: 80, hooks: 66, impacto: 68 } },
-  { name: 'Sipo One', tier: 'active', tags: ['Monterrey','Hip Hop','Underground'],
-    bio: 'Parte del ecosistema del hip hop regiomontano. Conocido por su consistencia y su respeto dentro de la comunidad de rap del norte.',
-    scores: { flow: 80, lirica: 78, contenido: 76, versatilidad: 74, hooks: 68, impacto: 68 } },
-  { name: 'Bipo Montana', tier: 'emerging', tags: ['CDMX','Trap','Nueva Escuela'],
-    bio: 'Representante de la nueva guardia del trap capitalino. Sonido moderno, buena energía y un potencial que la escena está observando de cerca.',
+  { name: 'Bipo Montana', tier: 'emerging', estado: 'Veracruz', tags: ['Xalapa','Hip Hop','Nueva Escuela'],
+    bio: 'Exponente de la nueva generación del hip hop desde Xalapa, Veracruz.',
     scores: { flow: 78, lirica: 70, contenido: 66, versatilidad: 78, hooks: 82, impacto: 62 } },
-  { name: 'Sick Morrison', tier: 'emerging', tags: ['CDMX','Drill','Experimental'],
-    bio: 'Trae el drill y sonidos del rap americano más oscuro a la escena mexicana. Propuesta fresca que está ganando atención en la escena underground.',
+  { name: 'Sick Morrison', tier: 'emerging', estado: 'Nuevo León', tags: ['Monterrey','Rap Alternativo','Underground'],
+    bio: 'Jorge Gallardo, MC de Monterrey. Rap alternativo con influencias que van de Black Sabbath a Aesop Rock; se presentó en SXSW.',
     scores: { flow: 82, lirica: 76, contenido: 70, versatilidad: 80, hooks: 76, impacto: 62 } },
-  { name: 'Mike Díaz', tier: 'active', tags: ['Guadalajara','Rap Técnico','Tapatío'],
-    bio: 'Sólido representante del rap técnico de Guadalajara. Constante en producción y con una lírica que se trabaja con esmero en cada lanzamiento.',
+  { name: 'Mike Díaz', tier: 'active', estado: '', tags: ['México','Rap Técnico','Doble Dragón'],
+    bio: 'Rapero mexicano activo desde mediados de los 2000, con discos como Renace y Doble Dragón (2023).',
     scores: { flow: 82, lirica: 82, contenido: 78, versatilidad: 76, hooks: 68, impacto: 66 } },
-  { name: 'Smoky', tier: 'active', tags: ['Monterrey','Old School','Norte'],
-    bio: 'Veterano del norte con un estilo inconfundible. Ha mantenido una presencia activa durante décadas siendo fiel a sus raíces.',
+  { name: 'Smoky', tier: 'active', estado: 'Sinaloa', tags: ['Mazatlán','Rap Romántico','ADP'],
+    bio: 'Jesús Morfín, de Mazatlán, Sinaloa. Formó Los Ei Di Pi (ADP) con Santa RM en 2010 y fue pionero en mezclar rap con balada y regional.',
     scores: { flow: 80, lirica: 78, contenido: 76, versatilidad: 70, hooks: 72, impacto: 74 } },
-  { name: 'Don Aero', tier: 'legend', tags: ['CDMX','Pionero','Hip Hop Clásico'],
-    bio: 'Pionero del hip hop en Ciudad de México. Figura de respeto absoluto que ayudó a construir los cimientos de lo que hoy es la escena rap en México.',
-    scores: { flow: 78, lirica: 80, contenido: 82, versatilidad: 72, hooks: 68, impacto: 88 } },
-  { name: 'Zimple', tier: 'active', tags: ['CDMX','Rap Consciente','Político'],
-    bio: 'Rapero comprometido con el mensaje social y político. Sus letras son un reflejo honesto de la realidad urbana de México desde una perspectiva crítica.',
+  { name: 'Zimple', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap','Rap Romántico'],
+    bio: 'Rapero de Guadalajara. Debutó con Sin Corte (2015) y Zigo Soñando (2016); conocido por "Alguien Más" y "Por Toda Mi Gente".',
     scores: { flow: 80, lirica: 82, contenido: 88, versatilidad: 72, hooks: 66, impacto: 76 } },
-  { name: 'Maniako', tier: 'active', tags: ['Guadalajara','Gangsta Rap','Calle'],
-    bio: 'Figura del rap de calle de Guadalajara. Letras crudas, autenticidad sin filtros y una carrera construida desde la base de la escena local.',
+  { name: 'Maniako', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Gangsta Rap','Calle'],
+    bio: 'Daniel Martínez, de Guadalajara. Salió del underground tapatío con su mixtape debut en 2010; letras crudas sobre la realidad urbana.',
     scores: { flow: 82, lirica: 76, contenido: 80, versatilidad: 68, hooks: 74, impacto: 76 } },
+
+  // ── NUEVOS (octubre 2026) · puntuaciones provisionales ──
+  { name: 'Cartel de Santa', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['Santa Catarina, NL','Narco-Rap','Pioneros'],
+    bio: 'Grupo fundado en 1999 en Santa Catarina, Nuevo León, liderado por Babo. Siete discos de estudio, de Vol. I a Viejo marihuano, y una influencia enorme en el rap norteño.',
+    scores: { flow: 86, lirica: 80, contenido: 80, versatilidad: 76, hooks: 88, impacto: 96 } },
+  { name: 'La Santa Grifa', tier: 'active', estado: 'Tamaulipas', provisional: true, tags: ['Tampico','Rap Hardcore','Gangsta Rap'],
+    bio: 'Grupo de Tampico, Tamaulipas. Rap hardcore sobre bases lentas y oscuras; construyeron su base de fans en YouTube con discos independientes como Fuera de Órbita.',
+    scores: { flow: 82, lirica: 76, contenido: 76, versatilidad: 72, hooks: 84, impacto: 86 } },
+  { name: 'Aczino', tier: 'active', estado: 'Estado de México', provisional: true, tags: ['Neza','Freestyle','Bicampeón Red Bull'],
+    bio: 'Mauricio Hernández, de Ciudad Nezahualcóyotl. Primer bicampeón internacional de Red Bull Batalla (2017 y 2021) y artista con discos desde 2009.',
+    scores: { flow: 95, lirica: 90, contenido: 82, versatilidad: 88, hooks: 70, impacto: 90 } },
+  { name: 'Rapder', tier: 'active', estado: 'Jalisco', provisional: true, tags: ['Jalisco','Freestyle','Campeón Red Bull 2020'],
+    bio: 'MC jalisciense, campeón internacional de Red Bull Batalla 2020 en República Dominicana. Tercer mexicano en lograrlo, tras Hadrian y Aczino.',
+    scores: { flow: 93, lirica: 88, contenido: 80, versatilidad: 86, hooks: 68, impacto: 82 } },
+  { name: 'Santa RM', tier: 'active', estado: 'Sonora', provisional: true, tags: ['Nogales','Rap Consciente','ADP'],
+    bio: 'Christian Morales, de Nogales, Sonora. Pasó por GMC y Los Ei Di Pi (con Smoky); rap de calle, político y poético con millones de reproducciones.',
+    scores: { flow: 85, lirica: 84, contenido: 84, versatilidad: 76, hooks: 78, impacto: 82 } },
+  { name: 'Remik González', tier: 'active', estado: 'Baja California', provisional: true, tags: ['Tijuana','Rap de Calle','Batallas'],
+    bio: 'De Tijuana. Empezó en batallas locales; ritmos duros con letras introspectivas y realistas.',
+    scores: { flow: 82, lirica: 78, contenido: 78, versatilidad: 76, hooks: 80, impacto: 78 } },
+  { name: 'Under Side 821', tier: 'active', estado: 'Nuevo León', provisional: true, tags: ['Nuevo León','Rap de Calle','Grupo'],
+    bio: 'Grupo de hip hop de Nuevo León que publica música desde 2012. Uno de los canales de rap mexicano más grandes de YouTube.',
+    scores: { flow: 80, lirica: 74, contenido: 76, versatilidad: 70, hooks: 82, impacto: 78 } },
+  { name: 'Neto Reyno', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['Monterrey','Hip Hop','Sociedad Café'],
+    bio: 'Ernesto Arizpe, de Monterrey. Fundó Sociedad Café en 1998 ("Barrios bajos") y lanzó siete discos solistas. Falleció en diciembre de 2022.',
+    scores: { flow: 82, lirica: 80, contenido: 82, versatilidad: 74, hooks: 80, impacto: 86 } },
+  { name: 'Adán Zapata', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['San Nicolás, NL','Rap','Mente en Blanco'],
+    bio: 'Adán Zapata Mireles, de San Nicolás de los Garza. Voz principal de Mente en Blanco desde 2006. Fue asesinado en 2012, a los 21 años.',
+    scores: { flow: 84, lirica: 80, contenido: 82, versatilidad: 72, hooks: 82, impacto: 88 } },
+  { name: 'Kodigo 36', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['San Nicolás, NL','Underground','Grupo'],
+    bio: 'Trío underground de San Nicolás de los Garza (Cruel, Reke y Went). Su disco Crónicas de un demente (2010) marcó a una generación antes de la tragedia que frenó al grupo.',
+    scores: { flow: 80, lirica: 78, contenido: 78, versatilidad: 70, hooks: 76, impacto: 80 } },
+  { name: 'Go Golden Junk', tier: 'active', estado: 'Ciudad de México', provisional: true, tags: ['CDMX','Trap','Productor'],
+    bio: 'Rapero, cantante y productor de la Ciudad de México, activo desde 2017. Mezcla hip hop, trap y dancehall.',
+    scores: { flow: 80, lirica: 76, contenido: 74, versatilidad: 86, hooks: 82, impacto: 70 } },
+  { name: 'Chato 473', tier: 'emerging', estado: 'Guanajuato', provisional: true, tags: ['Guanajuato','Rap','Nueva Escuela'],
+    bio: 'Rapero guanajuatense nacido en 2003, debutó en 2017 con "Buenas y Malas". Parte de la nueva generación de la escena de Guanajuato.',
+    scores: { flow: 78, lirica: 72, contenido: 72, versatilidad: 74, hooks: 82, impacto: 66 } },
 ];
 
 // compute total
@@ -1723,7 +1730,7 @@ function sortBy(key, btn) {
 function filterTier(tier, btn) {
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  currentData = tier==='all' ? [...ARTISTS] : ARTISTS.filter(a=>a.tier===tier || (tier==='female' && ['Niña Dioz','Hispana','Mare Advertencia Lirika','Audry Funk','Coko Yamasaki'].includes(a.name)));
+  currentData = tier==='all' ? [...ARTISTS] : ARTISTS.filter(a=> tier==='female' ? a.female===true : a.tier===tier);
   const sortBtn = document.querySelector('.sort-btn.active');
   const key = sortBtn?.textContent.toLowerCase().includes('total')||sortBtn?.textContent.includes('▼') ? 'total' : null;
   if(key) currentData.sort((a,b)=>b.total-a.total);
@@ -1859,6 +1866,7 @@ function applyGoogleSheetsData(artists) {
   // Re-render everything
   currentData = [...ARTISTS].sort((a,b) => b.total - a.total);
   renderTable(currentData);
+  buildTicker();
   if (_estadosRendered) {
     _estadosRendered = false;
     renderEstados();
@@ -1909,8 +1917,27 @@ async function loadFromGoogleSheets(url) {
   }
 })();
 
+// ─── TICKER (generado desde los datos) ─────────────────────
+function buildTicker() {
+  const el = document.getElementById('ticker');
+  if (!el || !ARTISTS.length) return;
+  const top = (fn) => [...ARTISTS].sort((a,b)=>fn(b)-fn(a))[0];
+  const items = [];
+  items.push([top(a=>a.total).name, '#1 OVERALL']);
+  [['flow','#1 FLOW'],['lirica','#1 LÍRICA'],['contenido','#1 CONTENIDO'],
+   ['versatilidad','#1 VERSATILIDAD'],['hooks','#1 HOOKS'],['impacto','#1 IMPACTO CULTURAL']]
+    .forEach(([k,label]) => items.push([top(a=>a.scores[k]||0).name, label]));
+  const fem = ARTISTS.filter(a=>a.female);
+  if (fem.length) items.push([[...fem].sort((a,b)=>b.total-a.total)[0].name, '#1 ARTISTAS FEMENINAS']);
+  const emer = ARTISTS.filter(a=>a.tier==='emerging');
+  if (emer.length) items.push([[...emer].sort((a,b)=>b.total-a.total)[0].name, '#1 EMERGENTES']);
+  const html = items.map(([n,l]) => `<span class="ticker-item">${n} <span class="ticker-sep">—</span> ${l}</span>`).join('');
+  el.innerHTML = html + html; // duplicado para el loop continuo
+}
+
 // ─── INIT ───────────────────────────────────────────────────
 renderTable(currentData);
+buildTicker();
 </script>
 <!-- ═══ ESTADOS STYLES ═══ -->
 <style>
@@ -2394,10 +2421,7 @@ renderTable(currentData);
 // ── ESTADOS DATA ─────────────────────────────────────────────
 const ESTADOS = [
   { id:'AGU', name:'Aguascalientes', artists:[], proposed:[] },
-  { id:'BCN', name:'Baja California', artists:[
-    { name:'Eptos Uno', genre:'Old School', score:80, national:true },
-    { name:'Tren Lokote', genre:'Chicano Rap', score:82, national:true }
-  ], proposed:[] },
+  { id:'BCN', name:'Baja California', artists:[], proposed:[] },
   { id:'BCS', name:'Baja California Sur', artists:[], proposed:[
     { name:'El Cabrón del Desierto', genre:'Trap', link:'https://youtube.com/example', votes:14, bio:'Rapero de La Paz con flow propio y letras de la vida costera.', scores:{flow:70,lirica:65,contenido:68,versatilidad:62,hooks:74,impacto:55} }
   ]},
@@ -2408,21 +2432,7 @@ const ESTADOS = [
   { id:'CHH', name:'Chihuahua', artists:[], proposed:[
     { name:'Norte Duro', genre:'Gangsta Rap', link:'https://youtube.com/example', votes:22, bio:'De Juárez, rima sobre la frontera sin censura.', scores:{flow:72,lirica:68,contenido:74,versatilidad:64,hooks:70,impacto:66} }
   ]},
-  { id:'CMX', name:'Ciudad de México', artists:[
-    { name:'Alemán', genre:'Rap Técnico', score:89, national:true },
-    { name:'Dharius', genre:'Storytelling', score:84, national:true },
-    { name:'Charles Ans', genre:'Underground', score:83, national:true },
-    { name:'Simpson Ahuevo', genre:'Experimental', score:84, national:true },
-    { name:'MC Davo', genre:'Trap', score:75, national:true },
-    { name:'Bocafloja', genre:'Rap Consciente', score:85, national:true },
-    { name:'Niña Dioz', genre:'Rap Feminista', score:84, national:true },
-    { name:'Audry Funk', genre:'Rap Consciente', score:78, national:true },
-    { name:'Fermín IV', genre:'Freestyle', score:83, national:true },
-    { name:'LNG/SHT', genre:'Hip Hop Puro', score:82, national:true },
-    { name:'Adán Cruz', genre:'Spoken Word', score:80, national:true },
-    { name:'Zimple', genre:'Rap Político', score:77, national:true },
-    { name:'Akil Ammar', genre:'Jazz Rap', score:83, national:true }
-  ], proposed:[
+  { id:'CMX', name:'Ciudad de México', artists:[], proposed:[
     { name:'Jairo Raps', genre:'Trap CDMX', link:'https://youtube.com/example', votes:47, bio:'Del Tepito. Trap cargado de realidad chilanga.', scores:{flow:75,lirica:70,contenido:74,versatilidad:68,hooks:80,impacto:65} }
   ]},
   { id:'COA', name:'Coahuila', artists:[], proposed:[] },
@@ -2435,15 +2445,7 @@ const ESTADOS = [
     { name:'Costa Rima', genre:'Rap Tropical', link:'https://soundcloud.com/example', votes:9, bio:'De Acapulco, rima sobre el turismo, la violencia y el mar.', scores:{flow:65,lirica:70,contenido:76,versatilidad:60,hooks:64,impacto:58} }
   ]},
   { id:'HID', name:'Hidalgo', artists:[], proposed:[] },
-  { id:'JAL', name:'Jalisco', artists:[
-    { name:'Santa Fe Klan', genre:'Trap / Melódico', score:87, national:true },
-    { name:'C-Kan', genre:'Old School', score:81, national:true },
-    { name:'Toser One', genre:'Freestyle', score:82, national:true },
-    { name:'Yoga Fire', genre:'Rap Técnico', score:80, national:true },
-    { name:'Mike Díaz', genre:'Rap Técnico', score:77, national:true },
-    { name:'Maniako', genre:'Gangsta Rap', score:76, national:true },
-    { name:'Muelas de Gallo', genre:'Rap Técnico', score:80, national:true }
-  ], proposed:[
+  { id:'JAL', name:'Jalisco', artists:[], proposed:[
     { name:'El Loko Tapatio', genre:'Trap GDL', link:'https://youtube.com/example', votes:38, bio:'De Guadalajara, mezcla corrido tumbado con trap. 19 años.', scores:{flow:74,lirica:68,contenido:66,versatilidad:72,hooks:82,impacto:62} }
   ]},
   { id:'MEX', name:'Estado de México', artists:[], proposed:[
@@ -2454,21 +2456,10 @@ const ESTADOS = [
   ]},
   { id:'MOR', name:'Morelos', artists:[], proposed:[] },
   { id:'NAY', name:'Nayarit', artists:[], proposed:[] },
-  { id:'NLE', name:'Nuevo León', artists:[
-    { name:'Babo', genre:'Narco-Rap', score:82, national:true },
-    { name:'Millonario', genre:'Narco-Rap', score:79, national:true },
-    { name:'Gera MX', genre:'Trap', score:82, national:true },
-    { name:'Neto Peña', genre:'Trap', score:77, national:true },
-    { name:'Serko Fu', genre:'Old School', score:80, national:true },
-    { name:'Niña Dioz', genre:'Rap Feminista', score:84, national:true },
-    { name:'Proof', genre:'Underground', score:79, national:true },
-    { name:'Hadrian', genre:'Alternativo', score:80, national:true }
-  ], proposed:[
+  { id:'NLE', name:'Nuevo León', artists:[], proposed:[
     { name:'Rgio Profundo', genre:'Trap Regio', link:'https://youtube.com/example', votes:52, bio:'Nueva sangre del rap regiomontano. Influencia de Cartel pero con sonido propio.', scores:{flow:76,lirica:72,contenido:70,versatilidad:74,hooks:82,impacto:68} }
   ]},
-  { id:'OAX', name:'Oaxaca', artists:[
-    { name:'Mare Advertencia Lirika', genre:'Rap Feminista', score:82, national:true }
-  ], proposed:[
+  { id:'OAX', name:'Oaxaca', artists:[], proposed:[
     { name:'Zapoteco Rima', genre:'Rap Indígena', link:'https://soundcloud.com/example', votes:41, bio:'Rapea en zapoteco. Letras sobre la diáspora oaxaqueña y resistencia cultural.', scores:{flow:64,lirica:78,contenido:90,versatilidad:58,hooks:60,impacto:80} }
   ]},
   { id:'PUE', name:'Puebla', artists:[], proposed:[
@@ -2477,9 +2468,7 @@ const ESTADOS = [
   { id:'QUE', name:'Querétaro', artists:[], proposed:[] },
   { id:'ROO', name:'Quintana Roo', artists:[], proposed:[] },
   { id:'SLP', name:'San Luis Potosí', artists:[], proposed:[] },
-  { id:'SIN', name:'Sinaloa', artists:[
-    { name:'Lefty SM', genre:'Rap Melódico', score:89, national:true }
-  ], proposed:[
+  { id:'SIN', name:'Sinaloa', artists:[], proposed:[
     { name:'Los Álamos MC', genre:'Rap Sinaloense', link:'https://youtube.com/example', votes:29, bio:'De Culiacán, crudos y honestos. Continúan el legado de Lefty.', scores:{flow:74,lirica:70,contenido:72,versatilidad:66,hooks:76,impacto:64} }
   ]},
   { id:'SON', name:'Sonora', artists:[], proposed:[
@@ -2498,6 +2487,12 @@ const ESTADOS = [
   ]},
   { id:'ZAC', name:'Zacatecas', artists:[], proposed:[] }
 ];
+
+// artistas nacionales por estado: se generan desde ARTISTS (campo estado)
+ESTADOS.forEach(e => {
+  e.artists = ARTISTS.filter(a => a.estado === e.name)
+    .map(a => ({ name: a.name, genre: a.tags[1] || '', score: a.total, national: true }));
+});
 
 // add computed totals to proposed
 ESTADOS.forEach(e => {
