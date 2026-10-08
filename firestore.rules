@@ -9,6 +9,10 @@ rules_version = '2';
 //   artistStats/{slug}          suma y conteo de calificaciones por artista (lectura pública)
 //   proposals/{id}              artistas propuestos por estado (lectura pública)
 //   contributors/{uid}          puntos y nombre público de cada contribuyente (lectura pública)
+//   limits/{uid}                control anti-spam de propuestas (1 cada 10 min)
+//   admins/{uid}                administradores (se crean a mano en la consola; nadie puede escribirlos desde el sitio)
+//
+// Las propuestas quedan en "pending" y solo se publican cuando un admin las aprueba.
 //
 // IMPORTANTE: al agregar artistas nuevos al ranking, agrega su slug a knownArtists().
 //
@@ -19,6 +23,8 @@ service cloud.firestore {
 
     function signedIn() { return request.auth != null; }
     function verified() { return signedIn() && request.auth.token.email_verified == true; }
+    function isAdmin() { return verified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function limitDoc(uid) { return /databases/$(database)/documents/limits/$(uid); }
 
     function cats() { return ['flow', 'lirica', 'contenido', 'versatilidad', 'hooks', 'impacto']; }
     function validScore(v) { return v is int && v >= 1 && v <= 100; }
@@ -47,7 +53,7 @@ service cloud.firestore {
     function contribDoc(uid) { return /databases/$(database)/documents/contributors/$(uid); }
     function knownSlug(slug) {
       return slug in knownArtists()
-        || (slug.matches('^prop-[a-z0-9-]+$') && exists(proposalDoc(slug.replace('^prop-', ''))));
+        || (slug.matches('^prop-[a-z0-9-]+$') && get(proposalDoc(slug.replace('^prop-', ''))).data.status == 'approved');
     }
 
     function statsDoc(slug) { return /databases/$(database)/documents/artistStats/$(slug); }
@@ -105,24 +111,57 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    function proposalFieldsOk(d) {
+      return d.name is string && d.name.size() > 0 && d.name.size() <= 60
+        && d.genre is string && d.genre.size() <= 60
+        && d.link is string && d.link.size() <= 300 && d.link.matches('^https://[^\\s]+$')
+        && d.bio is string && d.bio.size() <= 280;
+    }
+
     match /proposals/{id} {
-      allow read: if true;
+      // Públicas solo las aprobadas; quien la propuso ve las suyas; el admin ve todas.
+      allow get, list: if resource.data.status == 'approved'
+        || (signedIn() && resource.data.createdBy == request.auth.uid)
+        || isAdmin();
       allow create: if verified()
         && id.matches('^[a-z]{3}-[a-z0-9][a-z0-9-]{0,66}$')
         && id.split('-')[0] == request.resource.data.estado.lower()
-        && request.resource.data.keys().hasOnly(['name', 'estado', 'genre', 'link', 'bio', 'createdBy', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['name', 'estado', 'genre', 'link', 'bio', 'status', 'createdBy', 'createdAt'])
+        && request.resource.data.status == 'pending'
         && request.resource.data.createdBy == request.auth.uid
         && request.resource.data.createdAt == request.time
-        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 60
         && request.resource.data.estado is string && request.resource.data.estado.matches('^[A-Z]{3}$')
-        && request.resource.data.genre is string && request.resource.data.genre.size() <= 60
-        && request.resource.data.link is string && request.resource.data.link.size() <= 300
-        && request.resource.data.link.matches('^https://[^\\s]+$')
-        && request.resource.data.bio is string && request.resource.data.bio.size() <= 280;
-      allow update, delete: if false;
+        && proposalFieldsOk(request.resource.data)
+        // anti-spam: 1 propuesta cada 10 minutos por cuenta
+        && getAfter(limitDoc(request.auth.uid)).data.lastProposalAt == request.time
+        && (!exists(limitDoc(request.auth.uid))
+            || request.time > get(limitDoc(request.auth.uid)).data.lastProposalAt + duration.value(10, 'm'));
+      // Solo el admin aprueba, rechaza o corrige datos
+      allow update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['name', 'estado', 'genre', 'link', 'bio', 'status', 'createdBy', 'createdAt', 'reviewedBy', 'reviewedAt'])
+        && request.resource.data.status in ['pending', 'approved', 'rejected']
+        && request.resource.data.estado == resource.data.estado
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.reviewedBy == request.auth.uid
+        && request.resource.data.reviewedAt == request.time
+        && (request.resource.data.status != 'approved' || proposalFieldsOk(request.resource.data));
+      allow delete: if isAdmin();
     }
 
-    // ── Contribuyentes: puntos = calificaciones × 10 + propuestas × 20 ──
+    match /limits/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create, update: if verified() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['lastProposalAt'])
+        && request.resource.data.lastProposalAt == request.time;
+      allow delete: if false;
+    }
+
+    match /admins/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // ── Contribuyentes: puntos = calificaciones × 10 + propuestas aprobadas × 20 ──
     function validName(n) { return n is string && n.matches('^[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ ._-]{3,24}$'); }
     function sameOpt(after, before, k) { return after.get(k, null) == before.get(k, null); }
     function contribOk(uid, before, after) {
@@ -132,33 +171,35 @@ service cloud.firestore {
         && after.points == after.ratings * 10 + after.proposals * 20
         && after.updatedAt == request.time
         && (
-          // solo cambia el nombre
-          (after.ratings == before.ratings && after.proposals == before.proposals
+          // el usuario solo cambia su nombre
+          (request.auth.uid == uid
+            && after.ratings == before.ratings && after.proposals == before.proposals
             && sameOpt(after, before, 'lastSlug') && sameOpt(after, before, 'lastProposal')
             && sameOpt(after, before, 'lastProposalAt'))
-          // primera calificación a un artista (creada en esta misma escritura)
-          || (after.ratings == before.ratings + 1 && after.proposals == before.proposals
+          // el usuario califica a un artista por primera vez (en esta misma escritura)
+          || (request.auth.uid == uid
+            && after.ratings == before.ratings + 1 && after.proposals == before.proposals
             && sameOpt(after, before, 'lastProposal') && sameOpt(after, before, 'lastProposalAt')
             && validSlug(after.lastSlug)
             && !exists(ratingDoc(uid, after.lastSlug))
             && getAfter(ratingDoc(uid, after.lastSlug)).data.updatedAt == request.time)
-          // propuesta nueva creada en esta escritura, máximo una con puntos cada 24 h
-          || (after.proposals == before.proposals + 1 && after.ratings == before.ratings
-            && sameOpt(after, before, 'lastSlug')
+          // el admin aprueba una propuesta de este usuario: +20 pts una sola vez
+          || (isAdmin()
+            && after.proposals == before.proposals + 1 && after.ratings == before.ratings
+            && after.name == before.get('name', after.name)
+            && sameOpt(after, before, 'lastSlug') && sameOpt(after, before, 'lastProposalAt')
             && after.lastProposal is string
-            && !exists(proposalDoc(after.lastProposal))
-            && getAfter(proposalDoc(after.lastProposal)).data.createdBy == uid
-            && after.lastProposalAt == request.time
-            && (before.get('lastProposalAt', null) == null
-                || request.time > before.lastProposalAt + duration.value(24, 'h')))
+            && get(proposalDoc(after.lastProposal)).data.get('status', 'pending') != 'approved'
+            && getAfter(proposalDoc(after.lastProposal)).data.status == 'approved'
+            && getAfter(proposalDoc(after.lastProposal)).data.createdBy == uid)
         );
     }
 
     match /contributors/{uid} {
       allow read: if true;
-      allow create: if verified() && request.auth.uid == uid
+      allow create: if verified() && (request.auth.uid == uid || isAdmin())
         && contribOk(uid, {'ratings': 0, 'proposals': 0, 'points': 0}, request.resource.data);
-      allow update: if verified() && request.auth.uid == uid
+      allow update: if verified() && (request.auth.uid == uid || isAdmin())
         && contribOk(uid, resource.data, request.resource.data);
       allow delete: if false;
     }

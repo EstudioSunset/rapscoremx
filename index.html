@@ -828,6 +828,21 @@ h1 em { color: var(--accent); font-style: normal; }
   .pop-modal { padding: 24px 20px; }
 }
 
+/* PROPUESTAS / ADMIN */
+.my-props { margin-top: 4px; }
+.mp-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border); font-size: 12px; }
+.mp-row small { color: var(--muted); font-size: 10px; margin-left: 6px; }
+.mp-st { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; align-self: center; }
+.mp-st.pending { color: var(--accent2); border-color: rgba(255,204,0,.4); }
+.mp-st.approved { color: #39d98a; border-color: rgba(57,217,138,.4); }
+.mp-st.rejected { color: var(--accent); border-color: rgba(255,60,0,.4); }
+.adm-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; margin: 8px 0; }
+.adm-card { border: 1px solid var(--border); background: var(--surface); padding: 18px; margin-bottom: 12px; }
+.adm-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; }
+.adm-name { font-size: 20px; font-weight: 700; }
+.adm-del:hover { border-color: var(--accent); color: var(--accent); }
+.adm-badge { display: inline-block; min-width: 16px; padding: 0 5px; background: var(--accent); color: #fff; font-size: 9px; line-height: 16px; text-align: center; margin-left: 4px; }
+
 /* VOTAR */
 nav a.nav-votar { color: var(--accent2); }
 nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bottom-color: var(--accent2); }
@@ -1277,6 +1292,7 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
   <nav id="mainNav">
     <a href="#" class="active" id="nav-rankings" onclick="goTo('rankings');closeNav();return false">Rankings</a>
     <a href="#votar" id="nav-votar" class="nav-votar" onclick="goTo('votar');closeNav();return false">Votar</a>
+    <a href="#admin" id="nav-admin" style="display:none" onclick="goTo('admin');closeNav();return false">Admin</a>
     <a href="#estados" id="nav-estados" onclick="goTo('estados');closeNav();return false">Por Estado</a>
     <a href="#emergentes" id="nav-emergentes" onclick="goTo('emergentes');closeNav();return false">Emergentes</a>
     <a href="#comparar" id="nav-comparar" onclick="goTo('comparar');closeNav();return false">Comparar</a>
@@ -1350,6 +1366,7 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 
 <!-- ═══ SECTION: POR ESTADO ═══ -->
 <div id="section-votar" style="display:none"></div>
+<div id="section-admin" style="display:none"></div>
 
 <div id="section-estados" style="display:none">
 </div>
@@ -1408,7 +1425,7 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
     <ul class="pop-list">
       <li>Califica a tus raperos en 6 categorías</li>
       <li>Gana puntos y sube en el ranking de contribuyentes</li>
-      <li>¿Falta alguien? Agrégalo y que la comunidad lo califique</li>
+      <li>¿Falta alguien? Propónlo y, tras revisarlo, la comunidad lo califica</li>
     </ul>
     <div class="pop-actions">
       <button class="rate-submit" onclick="closeWelcome();goTo('votar')">Votar ahora →</button>
@@ -1495,7 +1512,7 @@ const COMMUNITY_WEIGHT_K = 5;
 
 // Puntos de contribuyente (deben coincidir con firestore.rules)
 const POINTS_RATING = 10;     // por cada artista que calificas por primera vez
-const POINTS_PROPOSAL = 20;   // por proponer un artista (máximo 1 con puntos cada 24 h)
+const POINTS_PROPOSAL = 20;   // cuando se aprueba un rapero que propusiste
 const LEVELS = [
   { min: 0,   name: 'Oyente' },
   { min: 50,  name: 'Fan' },
@@ -2238,6 +2255,8 @@ const SOCIAL = {
   tiktok:    '',
 };
 const SITE_URL = 'https://www.rapscoremx.com/';
+// Aviso por correo de propuestas nuevas (Formspree). Pega aquí tu endpoint, ej: 'https://formspree.io/f/abcdwxyz'
+const NOTIFY_URL = '';
 const VOTE_URL = 'https://www.rapscoremx.com/votar';
 const SOCIAL_ICONS = {
   facebook: ['Facebook', '<path fill="currentColor" d="M14 8V6.5c0-.7.2-1.2 1.2-1.2H17V2.1A22 22 0 0 0 14.6 2C12.2 2 10.6 3.4 10.6 6v2H8v3.6h2.6V22H14V11.6h2.7L17 8z"/>'],
@@ -2267,6 +2286,7 @@ function maybeWelcome() {
   if (lsGet('rs_welcome_seen')) return;
   const h = location.hash.replace('#','');
   if (h === 'votar') { lsSet('rs_welcome_seen', '1'); return; }
+  if (h === 'admin') return;
   setTimeout(() => {
     if (document.querySelector('.modal-overlay.open')) return;
     document.getElementById('welcomeModal').classList.add('open');
@@ -2334,9 +2354,87 @@ async function submitSuggestion() {
   if (ok) {
     ['sugName','sugGenre','sugLink','sugBio'].forEach(id => document.getElementById(id).value = '');
     const est = ESTADOS.find(e => e.id === estadoId);
-    showToast(`¡Gracias! Ya aparece en Por Estado → ${est ? est.name : ''} para que la comunidad lo califique`);
+    showToast(`¡Gracias! Lo revisaremos y, si se aprueba, aparecerá en Por Estado → ${est ? est.name : ''}`);
   }
 }
+
+// ─── MIS PROPUESTAS ─────────────────────────────────────────
+const PROP_STATUS = { pending: 'En revisión', approved: 'Aprobada', rejected: 'No aprobada' };
+function renderMyProps() {
+  const el = document.getElementById('myProps');
+  if (!el) return;
+  const list = window.RS_MYPROPS || [];
+  el.innerHTML = list.length ? `<div class="vcard-title" style="margin:16px 0 8px">Tus propuestas</div>` + list.map(p => {
+    const est = ESTADOS.find(e => e.id === p.estado);
+    return `<div class="mp-row"><span>${esc(p.name)} <small>${est ? est.name : ''}</small></span><span class="mp-st ${p.status}">${PROP_STATUS[p.status] || 'En revisión'}</span></div>`;
+  }).join('') : '';
+}
+window.renderMyProps = renderMyProps;
+
+// ─── PANEL DE ADMINISTRACIÓN (#admin) ───────────────────────
+let adminTab = 'pending';
+function renderAdmin() {
+  const sec = document.getElementById('section-admin');
+  if (!sec) return;
+  if (!window.RS_IS_ADMIN) {
+    sec.innerHTML = `<div class="votar-wrap"><div class="vcard"><div class="vcard-title">Administración</div><p class="vcard-text">Esta sección es solo para administradores. Inicia sesión con la cuenta de administrador.</p><button class="rate-submit" onclick="openAuthModal('login')">Iniciar sesión</button></div></div>`;
+    return;
+  }
+  const all = window.RS_ADMIN_PROPS;
+  if (!all) { sec.innerHTML = `<div class="votar-wrap"><p class="vcard-text">Cargando propuestas…</p></div>`; window.adminLoad && window.adminLoad(); return; }
+  const count = (st) => all.filter(p => p.status === st).length;
+  const list = all.filter(p => p.status === adminTab);
+  sec.innerHTML = `
+    <div class="votar-wrap">
+      <div class="hero-label">Administración</div>
+      <h2 class="adm-title">Propuestas de raperos</h2>
+      <p class="vcard-text">Revisa el link antes de aprobar. Puedes corregir nombre, estilo, link o descripción. Al aprobar, el rapero aparece en Por Estado y quien lo propuso gana +${POINTS_PROPOSAL} pts.</p>
+      <div class="vp-chips" style="margin-bottom:16px">
+        ${['pending','approved','rejected'].map(t => `<button class="vp-chip ${adminTab===t?'active':''}" onclick="adminTab='${t}';renderAdmin()">${PROP_STATUS[t]} (${count(t)})</button>`).join('')}
+        <button class="vp-chip" onclick="window.RS_ADMIN_PROPS=null;renderAdmin()">↻ Actualizar</button>
+      </div>
+      ${list.length ? list.map(p => {
+        const est = ESTADOS.find(e => e.id === p.estado);
+        const when = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+        const safeLink = /^https:\/\//i.test(p.link) ? esc(p.link) : '';
+        return `<div class="adm-card" id="adm-${esc(p.id)}">
+          <div class="adm-head">
+            <div><div class="adm-name">${esc(p.name)}</div><div class="vs-sub">${est ? est.name : p.estado} · propuesto por ${esc(p.proposer || 'usuario')}${when ? ' · ' + when : ''}</div></div>
+            ${safeLink ? `<a class="btn-sm" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">Abrir link ↗</a>` : '<span class="mp-st rejected">Link inválido</span>'}
+          </div>
+          <div class="sug-grid">
+            <input class="auth-input" data-f="name" maxlength="60" value="${esc(p.name)}" placeholder="Nombre">
+            <input class="auth-input" data-f="genre" maxlength="60" value="${esc(p.genre)}" placeholder="Estilo">
+            <input class="auth-input sug-wide" data-f="link" maxlength="300" value="${esc(p.link)}" placeholder="Link https://">
+            <input class="auth-input sug-wide" data-f="bio" maxlength="280" value="${esc(p.bio)}" placeholder="Descripción">
+          </div>
+          <div class="pop-actions" style="margin-top:4px">
+            ${p.status !== 'approved' ? `<button class="rate-submit" onclick="adminAct('${esc(p.id)}','approve')">Aprobar y publicar</button>` : `<button class="rate-submit" onclick="adminAct('${esc(p.id)}','save')">Guardar cambios</button>`}
+            ${p.status !== 'rejected' ? `<button class="btn-sm" onclick="adminAct('${esc(p.id)}','reject')">${p.status === 'approved' ? 'Despublicar' : 'Rechazar'}</button>` : ''}
+            <button class="btn-sm adm-del" onclick="adminAct('${esc(p.id)}','delete')">Borrar</button>
+          </div>
+        </div>`;
+      }).join('') : `<div class="vp-empty">No hay propuestas ${PROP_STATUS[adminTab].toLowerCase()}.</div>`}
+    </div>`;
+}
+function adminAct(id, action) {
+  const card = document.getElementById('adm-' + id);
+  const fields = {};
+  card?.querySelectorAll('[data-f]').forEach(i => fields[i.dataset.f] = i.value.trim());
+  if (action !== 'delete' && action !== 'reject') {
+    if (!fields.name || fields.name.length > 60) { showToast('Revisa el nombre'); return; }
+    if (!/^https:\/\/\S+$/i.test(fields.link)) { showToast('El link debe empezar con https://'); return; }
+  }
+  if (action === 'delete' && !confirm('¿Borrar esta propuesta para siempre?')) return;
+  window.adminReview && window.adminReview(id, action, fields);
+}
+window.renderAdmin = renderAdmin;
+window.setAdminBadge = function(n) {
+  const nav = document.getElementById('nav-admin');
+  if (!nav) return;
+  nav.style.display = window.RS_IS_ADMIN ? '' : 'none';
+  nav.innerHTML = 'Admin' + (n ? ` <span class="adm-badge">${n}</span>` : '');
+};
 
 // ─── SECCIÓN VOTAR ──────────────────────────────────────────
 let votarSel = null, votarFilter = 'pending', votarSearch = '', votarRendered = false;
@@ -2380,7 +2478,7 @@ function renderVotar() {
             </div>
             <div class="votar-picker suggest-card" id="suggestCard">
               <div class="vp-title">¿Falta algún rapero?</div>
-              <p class="vcard-text">Agrégalo y la comunidad podrá calificarlo en su estado. Los que junten buenos votos pasan al ranking nacional. +${POINTS_PROPOSAL} pts para ti.</p>
+              <p class="vcard-text">Mándanoslo: lo revisamos antes de publicarlo para evitar perfiles o datos falsos. Si se aprueba, aparece en su estado para que la comunidad lo califique y ganas +${POINTS_PROPOSAL} pts.</p>
               <div class="sug-grid">
                 <input class="auth-input" id="sugName" maxlength="60" autocomplete="off" placeholder="Nombre del rapero o grupo *">
                 <select class="auth-input" id="sugEstado"><option value="">Estado *</option>${ESTADOS.map(e => `<option value="${e.id}">${e.name}</option>`).join('')}</select>
@@ -2388,7 +2486,8 @@ function renderVotar() {
                 <input class="auth-input" id="sugGenre" maxlength="60" autocomplete="off" placeholder="Estilo (ej: boom bap, trap, consciente)">
                 <input class="auth-input sug-wide" id="sugBio" maxlength="280" autocomplete="off" placeholder="¿Por qué debería estar? (opcional)">
               </div>
-              <button class="rate-submit" onclick="submitSuggestion()">Agregar rapero ↗</button>
+              <button class="rate-submit" onclick="submitSuggestion()">Enviar a revisión ↗</button>
+              <div id="myProps" class="my-props"></div>
             </div>
           </div>
           <aside class="votar-side">
@@ -2397,7 +2496,7 @@ function renderVotar() {
             <div class="vcard">
               <div class="vcard-title">Niveles</div>
               ${LEVELS.map(l => `<div class="lvl-row"><span>${l.name}</span><span>${l.min}+ pts</span></div>`).join('')}
-              <div class="vcard-note">+${POINTS_RATING} pts por cada artista que calificas por primera vez · +${POINTS_PROPOSAL} pts por proponer un artista en "Por Estado" (1 cada 24 h). Cambiar una calificación no suma puntos.</div>
+              <div class="vcard-note">+${POINTS_RATING} pts por cada artista que calificas por primera vez · +${POINTS_PROPOSAL} pts cuando aprobamos un rapero que propusiste. Cambiar una calificación no suma puntos.</div>
             </div>
           </aside>
         </div>
@@ -2412,6 +2511,10 @@ function renderVotar() {
 function setVotarFilter(f) { votarFilter = f; renderVotar(); }
 
 function votarCandidates() {
+  if (votarQueue && votarQueue.length === ARTISTS.length) {
+    const pos = new Map(votarQueue.map((s, i) => [s, i]));
+    return [...ARTISTS].sort((a,b) => pos.get(a.slug) - pos.get(b.slug));
+  }
   return [...ARTISTS].sort((a,b) => a.votes - b.votes || a.name.localeCompare(b.name,'es'));
 }
 
@@ -2432,12 +2535,13 @@ function renderVotarList() {
   el.innerHTML = list.map(a => `
     <button class="vp-card ${votarSel === a.slug ? 'sel' : ''} ${myRated(a.slug) ? 'done' : ''}" onclick="selectVotar('${a.slug}')">
       <span class="vp-av">${esc(getInitials(a.name))}</span>
-      <span class="vp-info"><span class="vp-name">${esc(a.name)}</span><span class="vp-sub">${esc(a.tags[0])} · ${a.votes} voto${a.votes===1?'':'s'}</span></span>
+      <span class="vp-info"><span class="vp-name">${esc(a.name)}</span><span class="vp-sub">${votarSkipped.has(a.slug) && !myRated(a.slug) ? 'Saltado · ' : ''}${esc(a.tags[0])} · ${a.votes} voto${a.votes===1?'':'s'}</span></span>
       <span class="vp-check">${myRated(a.slug) ? '✓' : ''}</span>
     </button>`).join('');
 }
 
 function selectVotar(slug) {
+  getVotarQueue();
   votarSel = slug;
   renderVotarStage();
   renderVotarList();
@@ -2468,12 +2572,34 @@ function renderVotarStage() {
     <div class="vs-nav"><button class="btn-sm" onclick="votarNext(true)">Saltar →</button></div>`;
 }
 
+// Cola fija para la sesión: el orden no cambia cuando cambian los votos,
+// y los artistas que saltas no regresan hasta que termines la vuelta.
+let votarQueue = null;
+const votarSkipped = new Set();
+function getVotarQueue() {
+  if (!votarQueue || votarQueue.length !== ARTISTS.length) votarQueue = votarCandidates().map(a => a.slug);
+  return votarQueue;
+}
 function votarNext(skip) {
-  const pending = votarCandidates().filter(a => !myRated(a.slug));
-  const list = pending.length ? pending : votarCandidates();
-  const i = list.findIndex(a => a.slug === votarSel);
-  const next = list[(i + 1) % list.length] || list[0];
-  if (next) selectVotar(next.slug);
+  if (skip && votarSel) votarSkipped.add(votarSel);
+  const q = getVotarQueue();
+  const start = q.indexOf(votarSel);
+  const ordered = start < 0 ? q : q.slice(start + 1).concat(q.slice(0, start + 1));   // sigue desde el actual
+  const pending = ordered.filter(slug => !myRated(slug) && slug !== votarSel);
+  let next = pending.find(slug => !votarSkipped.has(slug));
+  if (!next && pending.length) {
+    // ya pasaste por todos: ahora sí vuelven los que saltaste
+    votarSkipped.clear();
+    next = pending[0];
+    showToast('Terminaste la vuelta. Ahora siguen los que saltaste.');
+  }
+  if (!next) {
+    if (!myRated(votarSel)) return;
+    votarSel = null; renderVotarStage(); renderVotarList();
+    showToast('¡Calificaste a todos los raperos! 🔥');
+    return;
+  }
+  selectVotar(next);
 }
 
 function renderVotarSide() {
@@ -3149,7 +3275,7 @@ function renderEstados() {
       </div>
       <div class="upgrade-rules">
         <div class="upgrade-rules-title">¿Cómo sube un artista local al nacional?</div>
-        <div class="rule-item"><span class="rule-num">1</span><span>Cualquier usuario propone un artista de su estado con link de YouTube o Spotify.</span></div>
+        <div class="rule-item"><span class="rule-num">1</span><span>Cualquier usuario propone un artista de su estado con link de YouTube o Spotify. El equipo lo revisa antes de publicarlo.</span></div>
         <div class="rule-item"><span class="rule-num">2</span><span>La comunidad lo escucha y lo califica en las 6 categorías (1–100 cada una).</span></div>
         <div class="rule-item"><span class="rule-num">3</span><span>Si su puntuación promedio supera la del artista más bajo en el ranking nacional, puede ser promovido.</span></div>
         <div class="rule-item"><span class="rule-num">4</span><span>Se necesitan mínimo 50 calificaciones de cuentas con correo verificado para que el equipo revise su promoción.</span></div>
@@ -3377,7 +3503,8 @@ async function proposeArtist(estadoId, f) {
   if (name.length > 60) { showToast('El nombre es demasiado largo'); return null; }
   if (!/^https:\/\/\S+$/i.test(link) || link.length > 300) { showToast('Agrega un link válido de YouTube, Spotify o SoundCloud (https://...)'); return null; }
   if (ARTISTS.some(a => slugify(a.name) === slugify(name))) { showToast(name + ' ya está en el ranking nacional'); return null; }
-  if (PROPOSALS.some(p => p.estado === estadoId && slugify(p.name) === slugify(name))) { showToast('Ese artista ya fue propuesto en ese estado'); return null; }
+  if (PROPOSALS.some(p => p.estado === estadoId && slugify(p.name) === slugify(name))) { showToast('Ese artista ya está publicado en ese estado'); return null; }
+  if ((window.RS_MYPROPS || []).some(p => p.estado === estadoId && slugify(p.name) === slugify(name))) { showToast('Ya lo propusiste; está en revisión'); return null; }
   if (typeof window.saveProposal !== 'function') { showToast('Las propuestas no están disponibles en este momento'); return null; }
   const data = {
     name, estado: estadoId,
@@ -3388,9 +3515,28 @@ async function proposeArtist(estadoId, f) {
   const propId = (estadoId.toLowerCase() + '-' + slugify(name)).slice(0, 70).replace(/-+$/,'');
   const id = await window.saveProposal(data, propId);
   if (!id) return null;
-  PROPOSALS.push({ ...data, id, slug: 'prop-' + id });
-  refreshEstados();
+  notifyNewProposal(data, id);
   return id;
+}
+
+// Te avisa por correo (si NOTIFY_URL está configurado)
+function notifyNewProposal(data, id) {
+  if (!NOTIFY_URL) return;
+  const est = ESTADOS.find(e => e.id === data.estado);
+  fetch(NOTIFY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      _subject: `Nueva propuesta en RapScore MX: ${data.name} (${est ? est.name : data.estado})`,
+      artista: data.name,
+      estado: est ? est.name : data.estado,
+      estilo: data.genre,
+      link: data.link,
+      por_que: data.bio,
+      propuesto_por: window.RS_ME?.name || window.RS_ALIAS || '',
+      revisar_en: SITE_URL + '#admin'
+    })
+  }).catch(() => {});
 }
 
 async function submitProposal(estadoId) {
@@ -3403,7 +3549,7 @@ async function submitProposal(estadoId) {
   if (!id) return;
   const estado = ESTADOS.find(e => e.id === estadoId);
   if (estado) renderStatePanel(estado);
-  showToast('¡Propuesto! Ahora la comunidad puede calificarlo.');
+  showToast('¡Gracias! Lo revisaremos y, si se aprueba, aparecerá aquí para que la comunidad lo califique.');
 }
 
 function openLocalArtist(estadoId, propId) {
@@ -3540,6 +3686,7 @@ function goTo(target) {
   const navR = document.getElementById('nav-rankings');
   if (target === 'estados') { showSection('estados', document.getElementById('nav-estados')); history.replaceState(null,'','#estados'); return; }
   if (target === 'votar') { showSection('votar', document.getElementById('nav-votar')); history.replaceState(null,'','#votar'); window.scrollTo({ top: 0 }); return; }
+  if (target === 'admin') { showSection('admin', document.getElementById('nav-admin')); history.replaceState(null,'','#admin'); window.scrollTo({ top: 0 }); return; }
   showSection('rankings', navR);
   if (target === 'emergentes') {
     filterTier('emerging');
@@ -3560,7 +3707,7 @@ function goTo(target) {
 }
 window.addEventListener('load', () => {
   const h = location.hash.replace('#','');
-  if (['votar','estados','emergentes','comparar','editorial'].includes(h)) goTo(h);
+  if (['votar','admin','estados','emergentes','comparar','editorial'].includes(h)) goTo(h);
 });
 
 function showSection(id, btn) {
@@ -3583,7 +3730,12 @@ function showSection(id, btn) {
   const votSec = document.getElementById('section-votar');
   if (votSec) {
     votSec.style.display = id === 'votar' ? '' : 'none';
-    if (id === 'votar' && typeof renderVotar === 'function') renderVotar();
+    if (id === 'votar' && typeof renderVotar === 'function') { renderVotar(); renderMyProps(); }
+  }
+  const admSec = document.getElementById('section-admin');
+  if (admSec) {
+    admSec.style.display = id === 'admin' ? '' : 'none';
+    if (id === 'admin') renderAdmin();
   }
   document.querySelector('.controls').style.display = id==='rankings' ? '' : 'none';
 }
@@ -3662,7 +3814,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, addDoc, serverTimestamp,
-  collection, getDocs, query, where, runTransaction, orderBy, limit
+  collection, getDocs, query, where, runTransaction, orderBy, limit, writeBatch, deleteDoc
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 // ── INIT ─────────────────────────────────────────────────────
@@ -3863,6 +4015,12 @@ onAuthStateChanged(auth, async (user) => {
       snap.forEach(d => { const r = d.data(); myRatings[r.artistSlug] = r.scores; });
     } catch (err) { console.warn("RapScore ratings:", err.code || err.message); }
     await loadMe(user);
+    loadMyProposals(user);
+    checkAdmin(user);
+  } else {
+    window.RS_MYPROPS = []; window.RS_IS_ADMIN = false; window.RS_ADMIN_PROPS = null;
+    if (window.setAdminBadge) window.setAdminBadge(0);
+    if (window.renderMyProps) window.renderMyProps();
   }
   refreshOpenRateBoxes();
   if (window.refreshVotar) window.refreshVotar();
@@ -3889,7 +4047,7 @@ async function loadCommunity() {
   try {
     const [statsSnap, propSnap] = await Promise.all([
       getDocs(collection(db, "artistStats")),
-      getDocs(collection(db, "proposals"))
+      getDocs(query(collection(db, "proposals"), where("status", "==", "approved")))
     ]);
     const stats = {};
     statsSnap.forEach(d => { stats[d.id] = d.data(); });
@@ -3991,39 +4149,125 @@ window.submitRating = async function(btn) {
   }
 };
 
-// ── GUARDAR PROPUESTA ─────────────────────────────────────────
+// ── GUARDAR PROPUESTA (queda en revisión) ─────────────────────
 // proposals/{id}: el id se arma con estado + nombre, así no se repiten.
-// Da puntos si pasaron 24 h desde la última propuesta con puntos.
+// limits/{uid}: evita spam (1 propuesta cada 10 minutos por cuenta).
 window.saveProposal = async function(data, propId) {
   if (!(await ensureVerified())) return null;
-  const user = auth.currentUser, uid = user.uid;
-  const pRef = doc(db, "proposals", propId);
-  const cRef = doc(db, "contributors", uid);
+  const uid = auth.currentUser.uid;
+  const lRef = doc(db, "limits", uid);
   try {
-    const res = await runTransaction(db, async (tx) => {
-      const pSnap = await tx.get(pRef);
-      if (pSnap.exists()) return { dup: true };
-      const cSnap = await tx.get(cRef);
-      tx.set(pRef, { ...data, createdBy: uid, createdAt: serverTimestamp() });
-      const contrib = contribBase(cSnap, user);
-      const last = contrib.lastProposalAt && contrib.lastProposalAt.toMillis ? contrib.lastProposalAt.toMillis() : 0;
-      if (Date.now() - last > 24 * 3600 * 1000) {
-        contrib.proposals += 1;
-        contrib.points = contrib.ratings * P_RATING + contrib.proposals * P_PROPOSAL;
-        contrib.lastProposal = propId;
-        tx.set(cRef, { ...contrib, lastProposalAt: serverTimestamp(), updatedAt: serverTimestamp() });
-        return { points: true, contrib };
-      }
-      return { points: false };
-    });
-    if (res.dup) { showToast("Ese artista ya fue propuesto en este estado"); return null; }
-    if (res.points) { window.RS_ME = res.contrib; showToast(`+${P_PROPOSAL} pts por tu propuesta`); loadBoard(); }
-    else showToast("Propuesta guardada. Los puntos por propuesta se dan 1 vez cada 24 h.");
+    const l = await getDoc(lRef);
+    const last = l.exists() && l.data().lastProposalAt?.toMillis ? l.data().lastProposalAt.toMillis() : 0;
+    const wait = Math.ceil((last + 10 * 60 * 1000 - Date.now()) / 60000);
+    if (wait > 0) { showToast(`Espera ${wait} min para proponer otro rapero`); return null; }
+  } catch (e) {}
+  try {
+    const batch = writeBatch(db);
+    batch.set(doc(db, "proposals", propId), { ...data, status: "pending", createdBy: uid, createdAt: serverTimestamp() });
+    batch.set(lRef, { lastProposalAt: serverTimestamp() });
+    await batch.commit();
+    window.RS_MYPROPS = [{ id: propId, name: data.name, estado: data.estado, status: "pending" }, ...(window.RS_MYPROPS || [])];
+    if (window.renderMyProps) window.renderMyProps();
     return propId;
   } catch (err) {
     console.error(err);
-    showToast(err.code === "permission-denied" ? "No se pudo guardar la propuesta (permisos)" : "Error al guardar la propuesta");
+    showToast(err.code === "permission-denied"
+      ? "No se pudo enviar: puede que ese rapero ya esté propuesto en ese estado."
+      : "Error al enviar la propuesta");
     return null;
+  }
+};
+
+async function loadMyProposals(user) {
+  try {
+    const snap = await getDocs(query(collection(db, "proposals"), where("createdBy", "==", user.uid)));
+    window.RS_MYPROPS = snap.docs.map(d => ({ id: d.id, name: d.data().name, estado: d.data().estado, status: d.data().status || "pending" }));
+  } catch (err) { console.warn("RapScore mis propuestas:", err.code || err.message); window.RS_MYPROPS = []; }
+  if (window.renderMyProps) window.renderMyProps();
+}
+
+// ── ADMINISTRACIÓN ────────────────────────────────────────────
+// Eres admin si existe el documento admins/{tu uid} (se crea a mano en la consola de Firebase).
+async function checkAdmin(user) {
+  try {
+    const a = await getDoc(doc(db, "admins", user.uid));
+    window.RS_IS_ADMIN = a.exists() && user.emailVerified;
+  } catch (e) { window.RS_IS_ADMIN = false; }
+  if (window.RS_IS_ADMIN) await window.adminLoad();
+  else if (window.setAdminBadge) window.setAdminBadge(0);
+  if (location.hash === "#admin" && window.renderAdmin) window.renderAdmin();
+}
+
+window.adminLoad = async function() {
+  if (!window.RS_IS_ADMIN) return;
+  try {
+    const snap = await getDocs(collection(db, "proposals"));
+    const list = snap.docs.map(d => ({ id: d.id, ...d.data(), status: d.data().status || "pending" }));
+    const names = {};
+    await Promise.all([...new Set(list.map(p => p.createdBy).filter(Boolean))].map(async u => {
+      try { const c = await getDoc(doc(db, "contributors", u)); names[u] = c.exists() ? c.data().name : ""; } catch (e) {}
+    }));
+    list.forEach(p => { p.proposer = names[p.createdBy] || ""; });
+    list.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+    window.RS_ADMIN_PROPS = list;
+    if (window.setAdminBadge) window.setAdminBadge(list.filter(p => p.status === "pending").length);
+  } catch (err) {
+    console.error(err);
+    showToast("No se pudieron cargar las propuestas");
+    window.RS_ADMIN_PROPS = [];
+  }
+  if (document.getElementById("section-admin")?.style.display !== "none" && window.renderAdmin) window.renderAdmin();
+};
+
+window.adminReview = async function(id, action, fields) {
+  if (!window.RS_IS_ADMIN) return;
+  const me = auth.currentUser.uid;
+  const pRef = doc(db, "proposals", id);
+  try {
+    if (action === "delete") {
+      await deleteDoc(pRef);
+    } else {
+      await runTransaction(db, async (tx) => {
+        const pSnap = await tx.get(pRef);
+        if (!pSnap.exists()) throw new Error("La propuesta ya no existe");
+        const p = pSnap.data();
+        const prev = p.status || "pending";
+        const status = action === "approve" ? "approved" : action === "reject" ? "rejected" : prev;
+        const upd = {
+          name: p.name || "", estado: p.estado, genre: p.genre || "Sin clasificar", link: p.link || "", bio: p.bio || "",
+          createdBy: p.createdBy, createdAt: p.createdAt,
+          status, reviewedBy: me, reviewedAt: serverTimestamp()
+        };
+        if (action !== "reject") {
+          upd.name = fields.name || p.name;
+          upd.genre = (fields.genre || "Sin clasificar").slice(0, 60);
+          upd.link = fields.link || p.link;
+          upd.bio = (fields.bio || "").slice(0, 280);
+        }
+        // Puntos para quien lo propuso, solo la primera vez que se aprueba
+        let cRef = null, contrib = null;
+        if (status === "approved" && prev !== "approved" && p.createdBy) {
+          cRef = doc(db, "contributors", p.createdBy);
+          const cSnap = await tx.get(cRef);
+          contrib = cSnap.exists() ? { ...cSnap.data() }
+            : { name: "Fan " + p.createdBy.slice(0, 5).toUpperCase(), points: 0, ratings: 0, proposals: 0 };
+          delete contrib.updatedAt;
+          contrib.proposals += 1;
+          contrib.points = contrib.ratings * P_RATING + contrib.proposals * P_PROPOSAL;
+          contrib.lastProposal = id;
+        }
+        tx.set(pRef, upd);
+        if (cRef) tx.set(cRef, { ...contrib, updatedAt: serverTimestamp() });
+      });
+    }
+    showToast({ approve: "Aprobado y publicado ✓", reject: "Propuesta rechazada", save: "Cambios guardados ✓", delete: "Propuesta borrada" }[action]);
+    await window.adminLoad();
+    loadCommunity();
+    loadBoard();
+  } catch (err) {
+    console.error(err);
+    showToast(err.code === "permission-denied" ? "Sin permiso: revisa que las reglas estén publicadas" : (err.message || "Error"));
   }
 };
 
