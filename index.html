@@ -776,6 +776,92 @@ h1 em { color: var(--accent); font-style: normal; }
 }
 .ticker-sep { color: rgba(255,255,255,0.4); }
 
+/* VOTAR */
+nav a.nav-votar { color: var(--accent2); }
+nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bottom-color: var(--accent2); }
+.votar-wrap { max-width: 1400px; margin: 0 auto; padding: 48px 24px 80px; }
+.votar-hero { margin-bottom: 36px; max-width: 760px; }
+.votar-hero h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 9vw, 96px); line-height: .9; letter-spacing: 1px; margin: 12px 0 18px; }
+.votar-hero h2 em { color: var(--accent); font-style: normal; }
+.votar-desc { color: #aaa; font-size: 13px; line-height: 1.8; max-width: 620px; }
+.votar-desc strong { color: var(--accent2); }
+.votar-steps { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.votar-steps div { border: 1px solid var(--border); padding: 10px 14px; font-size: 11px; color: var(--text); display: flex; gap: 10px; align-items: center; }
+.votar-steps span { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); }
+.votar-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+.votar-main { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.votar-stage { border: 1px solid var(--border); background: var(--surface); padding: 24px; scroll-margin-top: 90px; }
+.vs-empty { text-align: center; padding: 24px 8px; }
+.vs-empty-icon { font-size: 28px; color: var(--accent2); }
+.vs-empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; margin: 8px 0; }
+.vs-empty-sub { color: var(--muted); font-size: 12px; margin-bottom: 18px; }
+.vs-head { display: flex; align-items: center; gap: 16px; }
+.vs-av { width: 56px; height: 56px; flex: none; border: 1px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 22px; }
+.vs-info { flex: 1; min-width: 0; }
+.vs-name { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.vs-sub { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.vs-score { text-align: right; }
+.vs-score span { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--accent2); line-height: 1; }
+.vs-score small { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.vs-bio { font-size: 12px; color: #999; line-height: 1.8; margin: 14px 0 0; }
+.vs-nav { display: flex; justify-content: flex-end; margin-top: 12px; }
+.votar-picker { border: 1px solid var(--border); background: var(--surface); padding: 20px; }
+.vp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+.vp-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; }
+.vp-progress { font-size: 11px; color: var(--muted); min-width: 200px; }
+.vp-progress strong { color: var(--text); }
+.vp-bar { height: 4px; background: var(--border); margin-top: 6px; }
+.vp-bar div { height: 100%; background: var(--accent); transition: width .3s; }
+.vp-tools { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.vp-search { flex: 1; min-width: 200px; width: auto; }
+.vp-chips { display: flex; gap: 6px; }
+.vp-chip { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; }
+.vp-chip.active { border-color: var(--accent); color: var(--accent); }
+.votar-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; max-height: 560px; overflow-y: auto; }
+.vp-card { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; text-align: left; font-family: inherit; }
+.vp-card:hover { border-color: #555; }
+.vp-card.sel { border-color: var(--accent); background: rgba(255,60,0,.06); }
+.vp-card.done .vp-av { border-color: var(--accent2); color: var(--accent2); }
+.vp-av { width: 36px; height: 36px; flex: none; border: 1px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.vp-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.vp-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vp-sub { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vp-check { color: var(--accent2); font-size: 14px; width: 14px; }
+.vp-empty { grid-column: 1 / -1; padding: 24px; text-align: center; color: var(--muted); font-size: 12px; }
+.votar-side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 96px; }
+.vcard { border: 1px solid var(--border); background: var(--surface); padding: 18px; }
+.vcard-title { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.vcard-text { font-size: 12px; color: #aaa; line-height: 1.7; margin-bottom: 14px; }
+.vcard-note { font-size: 10px; color: var(--muted); line-height: 1.7; margin-top: 10px; }
+.vcard-note strong { color: var(--text); }
+.me-name { font-size: 20px; font-weight: 700; }
+.me-level { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--accent2); line-height: 1.1; }
+.me-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0 6px; }
+.me-stats div { display: flex; flex-direction: column; }
+.me-stats strong { font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 1; }
+.me-stats span { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.alias-row { display: flex; gap: 8px; margin-top: 14px; }
+.alias-row .auth-input { padding: 9px 10px; font-size: 11px; }
+.lb-row { display: grid; grid-template-columns: 24px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--border); }
+.lb-row.me { background: rgba(255,204,0,.06); }
+.lb-rank { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); text-align: center; }
+.lb-name { font-size: 12px; display: flex; flex-direction: column; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-name small { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.lb-pts { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent2); }
+.lvl-row { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; border-top: 1px solid var(--border); }
+.lvl-row span:last-child { color: var(--muted); }
+.ss-note { font-size: 10px; color: var(--muted); margin: -10px 0 14px; }
+@media (max-width: 900px) {
+  .votar-grid { grid-template-columns: 1fr; }
+  .votar-side { position: static; }
+  .votar-wrap { padding: 28px 16px 64px; }
+  .votar-stage { padding: 16px; }
+  .vs-name { font-size: 18px; }
+  .votar-list { grid-template-columns: 1fr; max-height: 55vh; }
+  .votar-side { order: -1; }
+  .votar-grid { display: flex; flex-direction: column; }
+}
+
 /* VOTACIÓN */
 .total-votes { display:block; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-top:2px; }
 .score-split { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:4px 0 20px; }
@@ -1138,6 +1224,7 @@ h1 em { color: var(--accent); font-style: normal; }
   <div class="logo">RAP<span>SCORE</span></div>
   <nav id="mainNav">
     <a href="#" class="active" id="nav-rankings" onclick="goTo('rankings');closeNav();return false">Rankings</a>
+    <a href="#votar" id="nav-votar" class="nav-votar" onclick="goTo('votar');closeNav();return false">Votar</a>
     <a href="#estados" id="nav-estados" onclick="goTo('estados');closeNav();return false">Por Estado</a>
     <a href="#emergentes" id="nav-emergentes" onclick="goTo('emergentes');closeNav();return false">Emergentes</a>
     <a href="#comparar" id="nav-comparar" onclick="goTo('comparar');closeNav();return false">Comparar</a>
@@ -1210,6 +1297,8 @@ h1 em { color: var(--accent); font-style: normal; }
 </div><!-- /section-rankings -->
 
 <!-- ═══ SECTION: POR ESTADO ═══ -->
+<div id="section-votar" style="display:none"></div>
+
 <div id="section-estados" style="display:none">
 </div>
 
@@ -1280,214 +1369,185 @@ function avgScores(scores) {
   return Math.round(CATEGORIES.reduce((s,c)=>s+(scores[c]||0),0)/CATEGORIES.length);
 }
 
-// ─── VOTACIÓN: cómo se combina la crítica con la comunidad ──
-// Cada categoría final = (K × crítica + n × promedio comunidad) / (K + n)
-// K = cuántos votos "vale" la puntuación editorial. Con pocos votos manda la crítica;
-// con muchos, manda la comunidad. Cambia este número para ajustar el peso.
-const COMMUNITY_WEIGHT_K = 20;
+// ─── VOTACIÓN ───────────────────────────────────────────────
+// Todos los artistas arrancan en BASE_SCORE (nivel medio) en cada categoría.
+// Score por categoría = (K × BASE + n × promedio de usuarios) / (K + n)
+// K = cuántos "votos neutrales" tiene cada artista de inicio. Evita que 1 o 2 votos
+// manden a alguien al #1; con muchos votos manda el promedio de la comunidad.
+const BASE_SCORE = 50;
+const COMMUNITY_WEIGHT_K = 5;
+
+// Puntos de contribuyente (deben coincidir con firestore.rules)
+const POINTS_RATING = 10;     // por cada artista que calificas por primera vez
+const POINTS_PROPOSAL = 20;   // por proponer un artista (máximo 1 con puntos cada 24 h)
+const LEVELS = [
+  { min: 0,   name: 'Oyente' },
+  { min: 50,  name: 'Fan' },
+  { min: 150, name: 'Conocedor' },
+  { min: 300, name: 'Crítico' },
+  { min: 500, name: 'Jurado' },
+  { min: 800, name: 'Leyenda' },
+];
+function levelFor(points) {
+  let i = 0;
+  LEVELS.forEach((l, k) => { if (points >= l.min) i = k; });
+  return { ...LEVELS[i], index: i, next: LEVELS[i + 1] || null };
+}
+function fmtTotal(t) { return Number(t).toFixed(1); }
+window.LEVELS = LEVELS; window.levelFor = levelFor;
+window.POINTS_RATING = POINTS_RATING; window.POINTS_PROPOSAL = POINTS_PROPOSAL;
 window._communityStats = window._communityStats || {};
 
 // Datos verificados el 6 de octubre de 2026 (origen, estado, trayectoria).
 // estado: nombre exacto del estado (coincide con ESTADOS) o '' si no está verificado.
 // female: true para el filtro "Artistas femeninas".
-// Las puntuaciones son editoriales. Las marcadas como provisional: true son nuevas y están pendientes de revisión.
+// Sin puntuación editorial: todos arrancan en BASE_SCORE y la comunidad decide.
 const RAW_ARTISTS = [
   { name: 'Santa Fe Klan', tier: 'active', estado: 'Guanajuato', tags: ['Guanajuato','Rap Melódico','Cumbia Rap'],
-    bio: 'Ángel Quezada, originario de la ciudad de Guanajuato. Uno de los exponentes más influyentes del rap mexicano contemporáneo. Mezcla rap con cumbia, regional mexicano y trap.',
-    scores: { flow: 88, lirica: 78, contenido: 82, versatilidad: 90, hooks: 92, impacto: 94 } },
+    bio: 'Ángel Quezada, originario de la ciudad de Guanajuato. Uno de los exponentes más influyentes del rap mexicano contemporáneo. Mezcla rap con cumbia, regional mexicano y trap.' },
   { name: 'Alemán', tier: 'active', estado: 'Baja California Sur', tags: ['Los Cabos','Rap Técnico','Homegrown Mafia'],
-    bio: 'Erick Alemán, originario de Cabo San Lucas, Baja California Sur, y radicado en la Ciudad de México. Técnica impecable y una narrativa que mezcla boom bap con trap.',
-    scores: { flow: 91, lirica: 97, contenido: 93, versatilidad: 85, hooks: 78, impacto: 88 } },
+    bio: 'Erick Alemán, originario de Cabo San Lucas, Baja California Sur, y radicado en la Ciudad de México. Técnica impecable y una narrativa que mezcla boom bap con trap.' },
   { name: 'Gera MX', tier: 'active', estado: 'Nuevo León', tags: ['San Nicolás, NL','Trap','Pop Rap'],
-    bio: 'Gerardo Torres, de San Nicolás de los Garza, Nuevo León. Mezcla trap, pop y rap comercial; conocido por sus colaboraciones y su capacidad para crear hits masivos.',
-    scores: { flow: 82, lirica: 72, contenido: 68, versatilidad: 85, hooks: 95, impacto: 88 } },
+    bio: 'Gerardo Torres, de San Nicolás de los Garza, Nuevo León. Mezcla trap, pop y rap comercial; conocido por sus colaboraciones y su capacidad para crear hits masivos.' },
   { name: 'C-Kan', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap de Calle','Gangsta'],
-    bio: 'Pionero del rap de Guadalajara. Ha mantenido una carrera prolífica representando las calles con una propuesta directa y auténtica.',
-    scores: { flow: 85, lirica: 80, contenido: 86, versatilidad: 72, hooks: 80, impacto: 85 } },
+    bio: 'Pionero del rap de Guadalajara. Ha mantenido una carrera prolífica representando las calles con una propuesta directa y auténtica.' },
   { name: 'Dharius', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Rap','Ex Cartel de Santa'],
-    bio: 'Alan Maldonado, de Monterrey. Integrante de Cartel de Santa hasta 2013; como solista lanzó Directo hasta arriba y Mala fama, buena vidha, con éxitos como "La Durango".',
-    scores: { flow: 90, lirica: 92, contenido: 90, versatilidad: 80, hooks: 74, impacto: 78 } },
+    bio: 'Alan Maldonado, de Monterrey. Integrante de Cartel de Santa hasta 2013; como solista lanzó Directo hasta arriba y Mala fama, buena vidha, con éxitos como "La Durango".' },
   { name: 'Babo', tier: 'active', estado: 'Nuevo León', tags: ['Santa Catarina, NL','Narco-Rap','Cartel de Santa'],
-    bio: 'Eduardo Dávalos, líder y voz de Cartel de Santa desde 1999. Presencia escénica brutal y una autenticidad que pocos discuten.',
-    scores: { flow: 87, lirica: 82, contenido: 78, versatilidad: 70, hooks: 85, impacto: 92 } },
+    bio: 'Eduardo Dávalos, líder y voz de Cartel de Santa desde 1999. Presencia escénica brutal y una autenticidad que pocos discuten.' },
   { name: 'Millonario', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Narco-Rap','Rap de Calle'],
-    bio: 'Rapero regiomontano ligado al entorno de Cartel de Santa. Estilo crudo y letras callejeras; debutó como solista con Millonario sin Corona (2016).',
-    scores: { flow: 83, lirica: 80, contenido: 75, versatilidad: 68, hooks: 82, impacto: 88 } },
+    bio: 'Rapero regiomontano ligado al entorno de Cartel de Santa. Estilo crudo y letras callejeras; debutó como solista con Millonario sin Corona (2016).' },
   { name: 'MC Davo', tier: 'active', estado: 'Nuevo León', tags: ['Guadalupe, NL','Rap','Comercial'],
-    bio: 'David Sierra, de Guadalupe, Nuevo León. Creció en redes sociales hasta convertirse en uno de los raperos más exitosos comercialmente de México, con un toque regiomontano.',
-    scores: { flow: 80, lirica: 68, contenido: 65, versatilidad: 78, hooks: 91, impacto: 82 } },
+    bio: 'David Sierra, de Guadalupe, Nuevo León. Creció en redes sociales hasta convertirse en uno de los raperos más exitosos comercialmente de México, con un toque regiomontano.' },
   { name: 'Lefty SM', tier: 'legend', estado: 'Sonora', tags: ['Sonora','Rap','Legado'],
-    bio: 'Juan Carlos Sauceda, originario de Sonora. Autor de "Por mi México", convertido en himno. Falleció el 3 de septiembre de 2023 en Zapopan, Jalisco, tras un ataque armado.',
-    scores: { flow: 90, lirica: 88, contenido: 92, versatilidad: 82, hooks: 90, impacto: 95 } },
+    bio: 'Juan Carlos Sauceda, originario de Sonora. Autor de "Por mi México", convertido en himno. Falleció el 3 de septiembre de 2023 en Zapopan, Jalisco, tras un ataque armado.' },
   { name: 'Toser One', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap','Graffiti'],
-    bio: 'Ricardo Regalado, de Guadalajara. Formado en el hip hop y el graffiti; activo desde 2011, despegó en 2014 con un sencillo de millones de reproducciones y varios discos de estudio.',
-    scores: { flow: 93, lirica: 90, contenido: 82, versatilidad: 88, hooks: 70, impacto: 78 } },
+    bio: 'Ricardo Regalado, de Guadalajara. Formado en el hip hop y el graffiti; activo desde 2011, despegó en 2014 con un sencillo de millones de reproducciones y varios discos de estudio.' },
   { name: 'Neto Peña', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Rap','Hooks'],
-    bio: 'Ernesto Peña, nacido en Guadalajara y criado en Monterrey y Nuevo Laredo. Mezcla rap con secciones melódicas y elementos de regional mexicano.',
-    scores: { flow: 78, lirica: 70, contenido: 65, versatilidad: 80, hooks: 93, impacto: 78 } },
+    bio: 'Ernesto Peña, nacido en Guadalajara y criado en Monterrey y Nuevo Laredo. Mezcla rap con secciones melódicas y elementos de regional mexicano.' },
   { name: 'Charles Ans', tier: 'active', estado: 'Sonora', tags: ['Hermosillo','Rap','Jazz Rap'],
-    bio: 'Carlos Segura, de Hermosillo, Sonora. Una de las mejores plumas del rap mexicano: letras bohemias y románticas sobre bases con jazz y funk. Llenó el Palacio de los Deportes en 2025.',
-    scores: { flow: 88, lirica: 94, contenido: 91, versatilidad: 80, hooks: 68, impacto: 72 } },
+    bio: 'Carlos Segura, de Hermosillo, Sonora. Una de las mejores plumas del rap mexicano: letras bohemias y románticas sobre bases con jazz y funk. Llenó el Palacio de los Deportes en 2025.' },
   { name: 'Simpson Ahuevo', tier: 'active', estado: 'Sonora', tags: ['Hermosillo','Rap Alternativo','Experimental'],
-    bio: 'Originario de Hermosillo, Sonora. Artista que rompe moldes en el rap mexicano con proyectos difíciles de categorizar.',
-    scores: { flow: 85, lirica: 88, contenido: 86, versatilidad: 92, hooks: 74, impacto: 76 } },
+    bio: 'Originario de Hermosillo, Sonora. Artista que rompe moldes en el rap mexicano con proyectos difíciles de categorizar.' },
   { name: 'Eptos Uno', tier: 'active', estado: 'Sonora', tags: ['Sonora','Rap','Batallas Escritas'],
-    bio: 'Rapero sonorense, figura clave del rap mexicano y fundador del colectivo Never Die. Veterano de incontables batallas escritas.',
-    scores: { flow: 87, lirica: 85, contenido: 80, versatilidad: 75, hooks: 70, impacto: 82 } },
+    bio: 'Rapero sonorense, figura clave del rap mexicano y fundador del colectivo Never Die. Veterano de incontables batallas escritas.' },
   { name: 'Robot95', tier: 'emerging', estado: 'Baja California', tags: ['Mexicali','Trap','Rap Melódico'],
-    bio: 'Originario de Mexicali y radicado en Guadalajara. Debutó en 2016 con el disco 1995; rap melódico y honesto, alejado del trap agresivo.',
-    scores: { flow: 82, lirica: 76, contenido: 72, versatilidad: 84, hooks: 86, impacto: 68 } },
+    bio: 'Originario de Mexicali y radicado en Guadalajara. Debutó en 2016 con el disco 1995; rap melódico y honesto, alejado del trap agresivo.' },
   { name: 'Fntxy', tier: 'emerging', estado: 'Baja California', tags: ['Tijuana','Trap','Trap Corrido'],
-    bio: 'Elihú Gándara, nacido en Los Mochis, Sinaloa, y criado en Tijuana. Mezcla trap con influencias norteñas, R&B y regional mexicano.',
-    scores: { flow: 80, lirica: 74, contenido: 70, versatilidad: 82, hooks: 84, impacto: 62 } },
+    bio: 'Elihú Gándara, nacido en Los Mochis, Sinaloa, y criado en Tijuana. Mezcla trap con influencias norteñas, R&B y regional mexicano.' },
   { name: 'Sabino', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap Alternativo','Sab-Hop'],
-    bio: 'Pablo Castañeda, de Guadalajara. Rap ligero, con humor y toque pop; activo desde 2012 con cinco discos de estudio.',
-    scores: { flow: 76, lirica: 84, contenido: 88, versatilidad: 86, hooks: 78, impacto: 72 } },
+    bio: 'Pablo Castañeda, de Guadalajara. Rap ligero, con humor y toque pop; activo desde 2012 con cinco discos de estudio.' },
   { name: 'LNG/SHT', tier: 'active', estado: 'Quintana Roo', tags: ['Cancún','Hip Hop','Punk Rap'],
-    bio: 'Proyecto solista de Gastón Espinosa, originario de Cancún. "Hip hop para punk rockers": historias de juventud, desamor y crisis existencial con mucho humor.',
-    scores: { flow: 87, lirica: 91, contenido: 88, versatilidad: 78, hooks: 72, impacto: 75 } },
+    bio: 'Proyecto solista de Gastón Espinosa, originario de Cancún. "Hip hop para punk rockers": historias de juventud, desamor y crisis existencial con mucho humor.' },
   { name: 'Adán Cruz', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Rap','Trap'],
-    bio: 'Originario de Monterrey. Debutó como Adeene en 2008; mezcla rap de vieja escuela con trap y R&B.',
-    scores: { flow: 80, lirica: 90, contenido: 95, versatilidad: 72, hooks: 65, impacto: 80 } },
+    bio: 'Originario de Monterrey. Debutó como Adeene en 2008; mezcla rap de vieja escuela con trap y R&B.' },
   { name: 'Yoga Fire', tier: 'active', estado: 'Estado de México', tags: ['Ecatepec','Rap','Batallas'],
-    bio: 'Hugo Canchola, de Ecatepec. Más de una década en las batallas de freestyle desde el año 2000 antes de discos como Ciudad del diablo y Lázaro.',
-    scores: { flow: 90, lirica: 88, contenido: 80, versatilidad: 82, hooks: 68, impacto: 70 } },
+    bio: 'Hugo Canchola, de Ecatepec. Más de una década en las batallas de freestyle desde el año 2000 antes de discos como Ciudad del diablo y Lázaro.' },
   { name: 'Serko Fu', tier: 'legend', estado: 'Durango', tags: ['Gómez Palacio','Pionero','Freestyle'],
-    bio: 'Sergio Fuentes, de Gómez Palacio, Durango. Pionero desde inicios de los 90 y fundador de Caballeros del Plan G. Embajador del freestyle mexicano y juez de Red Bull Batalla.',
-    scores: { flow: 83, lirica: 80, contenido: 78, versatilidad: 74, hooks: 80, impacto: 82 } },
+    bio: 'Sergio Fuentes, de Gómez Palacio, Durango. Pionero desde inicios de los 90 y fundador de Caballeros del Plan G. Embajador del freestyle mexicano y juez de Red Bull Batalla.' },
   { name: 'Bocafloja', tier: 'legend', estado: 'Ciudad de México', tags: ['CDMX','Rap Consciente','Activismo'],
-    bio: 'Aldo Villegas, de la Ciudad de México. Activo desde 1995; una de las voces más importantes del rap político y social en México y Latinoamérica.',
-    scores: { flow: 82, lirica: 95, contenido: 98, versatilidad: 75, hooks: 65, impacto: 93 } },
+    bio: 'Aldo Villegas, de la Ciudad de México. Activo desde 1995; una de las voces más importantes del rap político y social en México y Latinoamérica.' },
   { name: 'Akil Ammar', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Rap Consciente','Jazz Rap'],
-    bio: 'Jonathan Rojas, de la Ciudad de México. Activo desde 1996, cofundador de IndieGente; fusiona hip hop con salsa, reggae, funk y jazz.',
-    scores: { flow: 82, lirica: 87, contenido: 90, versatilidad: 88, hooks: 72, impacto: 76 } },
+    bio: 'Jonathan Rojas, de la Ciudad de México. Activo desde 1996, cofundador de IndieGente; fusiona hip hop con salsa, reggae, funk y jazz.' },
   { name: 'Fermín IV', tier: 'legend', estado: 'Nuevo León', tags: ['Monterrey','Hip Hop','Control Machete'],
-    bio: 'Fermín Caballero, de Monterrey. Voz de Control Machete en Mucho Barato (1996), el disco que llevó el rap mexicano a todo el continente.',
-    scores: { flow: 94, lirica: 88, contenido: 82, versatilidad: 86, hooks: 68, impacto: 80 } },
+    bio: 'Fermín Caballero, de Monterrey. Voz de Control Machete en Mucho Barato (1996), el disco que llevó el rap mexicano a todo el continente.' },
   { name: 'Pato Machete', tier: 'legend', estado: 'Nuevo León', tags: ['Monterrey','Hip Hop Alternativo','Control Machete'],
-    bio: 'Raúl Chapa, de Monterrey. Integrante de Control Machete y solista activo desde los 90, con discos como Contrabanda y Rifa!',
-    scores: { flow: 84, lirica: 86, contenido: 88, versatilidad: 82, hooks: 84, impacto: 94 } },
+    bio: 'Raúl Chapa, de Monterrey. Integrante de Control Machete y solista activo desde los 90, con discos como Contrabanda y Rifa!' },
   { name: 'Control Machete', tier: 'legend', estado: 'Nuevo León', tags: ['Monterrey','Hip Hop Alternativo','Pioneros'],
-    bio: 'El grupo que llevó el rap mexicano al mainstream en los 90s. Sin su influencia, la escena actual sería incomprensible. Legado absoluto.',
-    scores: { flow: 85, lirica: 88, contenido: 90, versatilidad: 80, hooks: 88, impacto: 97 } },
+    bio: 'El grupo que llevó el rap mexicano al mainstream en los 90s. Sin su influencia, la escena actual sería incomprensible. Legado absoluto.' },
   { name: 'Niña Dioz', tier: 'active', estado: 'Nuevo León', female: true, tags: ['Monterrey','Rap Feminista','LGBTQ+'],
-    bio: 'Una de las voces más importantes del rap feminista y queer en México y América Latina. Activismo y arte en un paquete coherente.',
-    scores: { flow: 82, lirica: 86, contenido: 92, versatilidad: 80, hooks: 76, impacto: 88 } },
+    bio: 'Una de las voces más importantes del rap feminista y queer en México y América Latina. Activismo y arte en un paquete coherente.' },
   { name: 'Hispana', tier: 'active', estado: 'Coahuila', female: true, tags: ['Monclova','Rap Femenino','Técnico'],
-    bio: 'Patricia González, originaria de Monclova, Coahuila; empezó a rapear a los 13 años en Puerto Vallarta. Una de las voces femeninas más importantes del rap mexicano.',
-    scores: { flow: 85, lirica: 88, contenido: 84, versatilidad: 78, hooks: 72, impacto: 76 } },
+    bio: 'Patricia González, originaria de Monclova, Coahuila; empezó a rapear a los 13 años en Puerto Vallarta. Una de las voces femeninas más importantes del rap mexicano.' },
   { name: 'Yoss Bones', tier: 'active', estado: 'Guanajuato', female: true, tags: ['Salamanca','Rap','Rap Alternativo'],
-    bio: 'Jesica Martínez, de Salamanca, Guanajuato. Rapera, cantante y compositora que mezcla hip hop, R&B y pop rock; referente de la escena actual.',
-    scores: { flow: 82, lirica: 80, contenido: 78, versatilidad: 85, hooks: 82, impacto: 74 } },
+    bio: 'Jesica Martínez, de Salamanca, Guanajuato. Rapera, cantante y compositora que mezcla hip hop, R&B y pop rock; referente de la escena actual.' },
   { name: 'Mare Advertencia Lirika', tier: 'active', estado: 'Oaxaca', female: true, tags: ['Oaxaca','Rap Feminista','Indígena'],
-    bio: 'Rapera oaxaqueña que incorpora lenguas indígenas en su música. Una propuesta única que combina activismo social, identidad cultural y rap de calidad.',
-    scores: { flow: 80, lirica: 86, contenido: 94, versatilidad: 78, hooks: 70, impacto: 85 } },
+    bio: 'Rapera oaxaqueña que incorpora lenguas indígenas en su música. Una propuesta única que combina activismo social, identidad cultural y rap de calidad.' },
   { name: 'Audry Funk', tier: 'active', estado: 'Puebla', female: true, tags: ['Puebla','Rap Consciente','Feminismo'],
-    bio: 'Audry Bustos, nacida en Puebla y radicada en el Bronx, Nueva York. Mezcla rap, reggae y funk con un mensaje feminista, antirracista y sobre migración.',
-    scores: { flow: 78, lirica: 82, contenido: 90, versatilidad: 74, hooks: 68, impacto: 80 } },
+    bio: 'Audry Bustos, nacida en Puebla y radicada en el Bronx, Nueva York. Mezcla rap, reggae y funk con un mensaje feminista, antirracista y sobre migración.' },
   { name: 'Ximbo', tier: 'active', estado: '', female: true, tags: ['México','Underground','Rap Femenino'],
-    bio: 'Una de las raperas más importantes del rap mexicano. Defiende un hip hop que se vive en los barrios y ha colaborado con artistas como Vivir Quintana.',
-    scores: { flow: 84, lirica: 86, contenido: 84, versatilidad: 88, hooks: 68, impacto: 70 } },
+    bio: 'Una de las raperas más importantes del rap mexicano. Defiende un hip hop que se vive en los barrios y ha colaborado con artistas como Vivir Quintana.' },
   { name: 'Muelas de Gallo', tier: 'active', estado: 'Baja California Sur', tags: ['BCS','Rap','La Banda Bastön'],
-    bio: 'MC de La Banda Bastön, dúo originario del Valle de Santo Domingo, Baja California Sur, que se mudó a la Ciudad de México en 1999. Wordplay elaborado y sustancia sobre forma.',
-    scores: { flow: 87, lirica: 92, contenido: 88, versatilidad: 78, hooks: 68, impacto: 72 } },
+    bio: 'MC de La Banda Bastön, dúo originario del Valle de Santo Domingo, Baja California Sur, que se mudó a la Ciudad de México en 1999. Wordplay elaborado y sustancia sobre forma.' },
   { name: 'Tino El Pingüino', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Rap Alternativo','Jazz Rap'],
-    bio: 'El rapero de la ciudad: rap alternativo y muy autobiográfico, con raíces puristas pero sin encasillarse.',
-    scores: { flow: 82, lirica: 86, contenido: 87, versatilidad: 92, hooks: 74, impacto: 76 } },
+    bio: 'El rapero de la ciudad: rap alternativo y muy autobiográfico, con raíces puristas pero sin encasillarse.' },
   { name: 'Hadrian', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Freestyle','Campeón Red Bull 2008'],
-    bio: 'Adrián Salguero, de la Ciudad de México. Primer mexicano campeón internacional de Red Bull Batalla de los Gallos (2008); hoy fusiona rap, trap y corridos.',
-    scores: { flow: 82, lirica: 82, contenido: 84, versatilidad: 86, hooks: 74, impacto: 72 } },
+    bio: 'Adrián Salguero, de la Ciudad de México. Primer mexicano campeón internacional de Red Bull Batalla de los Gallos (2008); hoy fusiona rap, trap y corridos.' },
   { name: 'Danger AK', tier: 'active', estado: 'Baja California', tags: ['Tijuana','Rap','Rap Consciente'],
-    bio: 'Alfredo Martínez, de la colonia Mariano Matamoros en Tijuana. Wordplay, referencias literarias y temas sociales nacidos de su barrio.',
-    scores: { flow: 85, lirica: 84, contenido: 80, versatilidad: 76, hooks: 68, impacto: 70 } },
+    bio: 'Alfredo Martínez, de la colonia Mariano Matamoros en Tijuana. Wordplay, referencias literarias y temas sociales nacidos de su barrio.' },
   { name: 'T-Killa', tier: 'active', estado: '', tags: ['Los Ángeles / México','Freestyle','Batallas'],
-    bio: 'Nacido en Los Ángeles y criado en México. Figura de la escena de freestyle desde principios de los 2000; dio el salto a los discos en 2012.',
-    scores: { flow: 82, lirica: 80, contenido: 78, versatilidad: 72, hooks: 70, impacto: 82 } },
+    bio: 'Nacido en Los Ángeles y criado en México. Figura de la escena de freestyle desde principios de los 2000; dio el salto a los discos en 2012.' },
   { name: 'Bipo Montana', tier: 'emerging', estado: 'Veracruz', tags: ['Xalapa','Hip Hop','Nueva Escuela'],
-    bio: 'Exponente de la nueva generación del hip hop desde Xalapa, Veracruz.',
-    scores: { flow: 78, lirica: 70, contenido: 66, versatilidad: 78, hooks: 82, impacto: 62 } },
+    bio: 'Exponente de la nueva generación del hip hop desde Xalapa, Veracruz.' },
   { name: 'Sick Morrison', tier: 'emerging', estado: 'Nuevo León', tags: ['Monterrey','Rap Alternativo','Underground'],
-    bio: 'Jorge Gallardo, MC de Monterrey. Rap alternativo con influencias que van de Black Sabbath a Aesop Rock; se presentó en SXSW.',
-    scores: { flow: 82, lirica: 76, contenido: 70, versatilidad: 80, hooks: 76, impacto: 62 } },
+    bio: 'Jorge Gallardo, MC de Monterrey. Rap alternativo con influencias que van de Black Sabbath a Aesop Rock; se presentó en SXSW.' },
   { name: 'Mike Díaz', tier: 'active', estado: '', tags: ['México','Rap Técnico','Doble Dragón'],
-    bio: 'Rapero mexicano activo desde mediados de los 2000, con discos como Renace y Doble Dragón (2023).',
-    scores: { flow: 82, lirica: 82, contenido: 78, versatilidad: 76, hooks: 68, impacto: 66 } },
+    bio: 'Rapero mexicano activo desde mediados de los 2000, con discos como Renace y Doble Dragón (2023).' },
   { name: 'Smoky', tier: 'active', estado: 'Sinaloa', tags: ['Mazatlán','Rap Romántico','ADP'],
-    bio: 'Jesús Morfín, de Mazatlán, Sinaloa. Formó Los Ei Di Pi (ADP) con Santa RM en 2010 y fue pionero en mezclar rap con balada y regional.',
-    scores: { flow: 80, lirica: 78, contenido: 76, versatilidad: 70, hooks: 72, impacto: 74 } },
+    bio: 'Jesús Morfín, de Mazatlán, Sinaloa. Formó Los Ei Di Pi (ADP) con Santa RM en 2010 y fue pionero en mezclar rap con balada y regional.' },
   { name: 'Zimple', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Rap','Rap Romántico'],
-    bio: 'Rapero de Guadalajara. Debutó con Sin Corte (2015) y Zigo Soñando (2016); conocido por "Alguien Más" y "Por Toda Mi Gente".',
-    scores: { flow: 80, lirica: 82, contenido: 88, versatilidad: 72, hooks: 66, impacto: 76 } },
+    bio: 'Rapero de Guadalajara. Debutó con Sin Corte (2015) y Zigo Soñando (2016); conocido por "Alguien Más" y "Por Toda Mi Gente".' },
   { name: 'Maniako', tier: 'active', estado: 'Jalisco', tags: ['Guadalajara','Gangsta Rap','Calle'],
-    bio: 'Daniel Martínez, de Guadalajara. Salió del underground tapatío con su mixtape debut en 2010; letras crudas sobre la realidad urbana.',
-    scores: { flow: 82, lirica: 76, contenido: 80, versatilidad: 68, hooks: 74, impacto: 76 } },
+    bio: 'Daniel Martínez, de Guadalajara. Salió del underground tapatío con su mixtape debut en 2010; letras crudas sobre la realidad urbana.' },
 
-  // ── NUEVOS (octubre 2026) · puntuaciones provisionales ──
-  { name: 'Cartel de Santa', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['Santa Catarina, NL','Narco-Rap','Pioneros'],
-    bio: 'Grupo fundado en 1999 en Santa Catarina, Nuevo León, liderado por Babo. Siete discos de estudio, de Vol. I a Viejo marihuano, y una influencia enorme en el rap norteño.',
-    scores: { flow: 86, lirica: 80, contenido: 80, versatilidad: 76, hooks: 88, impacto: 96 } },
-  { name: 'La Santa Grifa', tier: 'active', estado: 'Tamaulipas', provisional: true, tags: ['Tampico','Rap Hardcore','Gangsta Rap'],
-    bio: 'Grupo de Tampico, Tamaulipas. Rap hardcore sobre bases lentas y oscuras; construyeron su base de fans en YouTube con discos independientes como Fuera de Órbita.',
-    scores: { flow: 82, lirica: 76, contenido: 76, versatilidad: 72, hooks: 84, impacto: 86 } },
-  { name: 'Aczino', tier: 'active', estado: 'Estado de México', provisional: true, tags: ['Neza','Freestyle','Bicampeón Red Bull'],
-    bio: 'Mauricio Hernández, de Ciudad Nezahualcóyotl. Primer bicampeón internacional de Red Bull Batalla (2017 y 2021) y artista con discos desde 2009.',
-    scores: { flow: 95, lirica: 90, contenido: 82, versatilidad: 88, hooks: 70, impacto: 90 } },
-  { name: 'Rapder', tier: 'active', estado: 'Jalisco', provisional: true, tags: ['Jalisco','Freestyle','Campeón Red Bull 2020'],
-    bio: 'MC jalisciense, campeón internacional de Red Bull Batalla 2020 en República Dominicana. Tercer mexicano en lograrlo, tras Hadrian y Aczino.',
-    scores: { flow: 93, lirica: 88, contenido: 80, versatilidad: 86, hooks: 68, impacto: 82 } },
-  { name: 'Santa RM', tier: 'active', estado: 'Sonora', provisional: true, tags: ['Nogales','Rap Consciente','ADP'],
-    bio: 'Christian Morales, de Nogales, Sonora. Pasó por GMC y Los Ei Di Pi (con Smoky); rap de calle, político y poético con millones de reproducciones.',
-    scores: { flow: 85, lirica: 84, contenido: 84, versatilidad: 76, hooks: 78, impacto: 82 } },
-  { name: 'Remik González', tier: 'active', estado: 'Baja California', provisional: true, tags: ['Tijuana','Rap de Calle','Batallas'],
-    bio: 'De Tijuana. Empezó en batallas locales; ritmos duros con letras introspectivas y realistas.',
-    scores: { flow: 82, lirica: 78, contenido: 78, versatilidad: 76, hooks: 80, impacto: 78 } },
-  { name: 'Under Side 821', tier: 'active', estado: 'Nuevo León', provisional: true, tags: ['Nuevo León','Rap de Calle','Grupo'],
-    bio: 'Grupo de hip hop de Nuevo León que publica música desde 2012. Uno de los canales de rap mexicano más grandes de YouTube.',
-    scores: { flow: 80, lirica: 74, contenido: 76, versatilidad: 70, hooks: 82, impacto: 78 } },
-  { name: 'Neto Reyno', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['Monterrey','Hip Hop','Sociedad Café'],
-    bio: 'Ernesto Arizpe, de Monterrey. Fundó Sociedad Café en 1998 ("Barrios bajos") y lanzó siete discos solistas. Falleció en diciembre de 2022.',
-    scores: { flow: 82, lirica: 80, contenido: 82, versatilidad: 74, hooks: 80, impacto: 86 } },
-  { name: 'Adán Zapata', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['San Nicolás, NL','Rap','Mente en Blanco'],
-    bio: 'Adán Zapata Mireles, de San Nicolás de los Garza. Voz principal de Mente en Blanco desde 2006. Fue asesinado en 2012, a los 21 años.',
-    scores: { flow: 84, lirica: 80, contenido: 82, versatilidad: 72, hooks: 82, impacto: 88 } },
-  { name: 'Kodigo 36', tier: 'legend', estado: 'Nuevo León', provisional: true, tags: ['San Nicolás, NL','Underground','Grupo'],
-    bio: 'Trío underground de San Nicolás de los Garza (Cruel, Reke y Went). Su disco Crónicas de un demente (2010) marcó a una generación antes de la tragedia que frenó al grupo.',
-    scores: { flow: 80, lirica: 78, contenido: 78, versatilidad: 70, hooks: 76, impacto: 80 } },
-  { name: 'Go Golden Junk', tier: 'active', estado: 'Ciudad de México', provisional: true, tags: ['CDMX','Trap','Productor'],
-    bio: 'Rapero, cantante y productor de la Ciudad de México, activo desde 2017. Mezcla hip hop, trap y dancehall.',
-    scores: { flow: 80, lirica: 76, contenido: 74, versatilidad: 86, hooks: 82, impacto: 70 } },
-  { name: 'Chato 473', tier: 'emerging', estado: 'Guanajuato', provisional: true, tags: ['Guanajuato','Rap','Nueva Escuela'],
-    bio: 'Rapero guanajuatense nacido en 2003, debutó en 2017 con "Buenas y Malas". Parte de la nueva generación de la escena de Guanajuato.',
-    scores: { flow: 78, lirica: 72, contenido: 72, versatilidad: 74, hooks: 82, impacto: 66 } },
+  { name: 'Cartel de Santa', tier: 'legend', estado: 'Nuevo León', tags: ['Santa Catarina, NL','Narco-Rap','Pioneros'],
+    bio: 'Grupo fundado en 1999 en Santa Catarina, Nuevo León, liderado por Babo. Siete discos de estudio, de Vol. I a Viejo marihuano, y una influencia enorme en el rap norteño.' },
+  { name: 'La Santa Grifa', tier: 'active', estado: 'Tamaulipas', tags: ['Tampico','Rap Hardcore','Gangsta Rap'],
+    bio: 'Grupo de Tampico, Tamaulipas. Rap hardcore sobre bases lentas y oscuras; construyeron su base de fans en YouTube con discos independientes como Fuera de Órbita.' },
+  { name: 'Aczino', tier: 'active', estado: 'Estado de México', tags: ['Neza','Freestyle','Bicampeón Red Bull'],
+    bio: 'Mauricio Hernández, de Ciudad Nezahualcóyotl. Primer bicampeón internacional de Red Bull Batalla (2017 y 2021) y artista con discos desde 2009.' },
+  { name: 'Rapder', tier: 'active', estado: 'Jalisco', tags: ['Jalisco','Freestyle','Campeón Red Bull 2020'],
+    bio: 'MC jalisciense, campeón internacional de Red Bull Batalla 2020 en República Dominicana. Tercer mexicano en lograrlo, tras Hadrian y Aczino.' },
+  { name: 'Santa RM', tier: 'active', estado: 'Sonora', tags: ['Nogales','Rap Consciente','ADP'],
+    bio: 'Christian Morales, de Nogales, Sonora. Pasó por GMC y Los Ei Di Pi (con Smoky); rap de calle, político y poético con millones de reproducciones.' },
+  { name: 'Remik González', tier: 'active', estado: 'Baja California', tags: ['Tijuana','Rap de Calle','Batallas'],
+    bio: 'De Tijuana. Empezó en batallas locales; ritmos duros con letras introspectivas y realistas.' },
+  { name: 'Under Side 821', tier: 'active', estado: 'Nuevo León', tags: ['Nuevo León','Rap de Calle','Grupo'],
+    bio: 'Grupo de hip hop de Nuevo León que publica música desde 2012. Uno de los canales de rap mexicano más grandes de YouTube.' },
+  { name: 'Neto Reyno', tier: 'legend', estado: 'Nuevo León', tags: ['Monterrey','Hip Hop','Sociedad Café'],
+    bio: 'Ernesto Arizpe, de Monterrey. Fundó Sociedad Café en 1998 ("Barrios bajos") y lanzó siete discos solistas. Falleció en diciembre de 2022.' },
+  { name: 'Adán Zapata', tier: 'legend', estado: 'Nuevo León', tags: ['San Nicolás, NL','Rap','Mente en Blanco'],
+    bio: 'Adán Zapata Mireles, de San Nicolás de los Garza. Voz principal de Mente en Blanco desde 2006. Fue asesinado en 2012, a los 21 años.' },
+  { name: 'Kodigo 36', tier: 'legend', estado: 'Nuevo León', tags: ['San Nicolás, NL','Underground','Grupo'],
+    bio: 'Trío underground de San Nicolás de los Garza (Cruel, Reke y Went). Su disco Crónicas de un demente (2010) marcó a una generación antes de la tragedia que frenó al grupo.' },
+  { name: 'Go Golden Junk', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Trap','Productor'],
+    bio: 'Rapero, cantante y productor de la Ciudad de México, activo desde 2017. Mezcla hip hop, trap y dancehall.' },
+  { name: 'Chato 473', tier: 'emerging', estado: 'Guanajuato', tags: ['Guanajuato','Rap','Nueva Escuela'],
+    bio: 'Rapero guanajuatense nacido en 2003, debutó en 2017 con "Buenas y Malas". Parte de la nueva generación de la escena de Guanajuato.' },
 ];
 
 // compute total
+const baseScores = () => Object.fromEntries(CATEGORIES.map(c => [c, BASE_SCORE]));
 const ARTISTS = RAW_ARTISTS.map(a => ({
   ...a,
   slug: slugify(a.name),
-  editorial: { ...a.scores },
-  editorialTotal: avgScores(a.scores),
+  scores: baseScores(),
   community: null,
-  total: avgScores(a.scores)
+  votes: 0,
+  total: BASE_SCORE
 }));
 
-// Mezcla puntuación editorial + calificaciones de la comunidad
-function blendArtist(a, stat) {
-  if (!a.editorial) { a.editorial = { ...a.scores }; a.editorialTotal = avgScores(a.scores); }
-  if (!a.slug) a.slug = slugify(a.name);
+// Calcula scores a partir del nivel medio + calificaciones de la comunidad.
+// Sirve para artistas nacionales y para propuestas por estado.
+function blendScores(stat) {
   const n = stat && stat.count > 0 ? stat.count : 0;
-  if (n > 0) {
-    const comm = {};
-    CATEGORIES.forEach(c => { comm[c] = (stat.sum?.[c] || 0) / n; });
-    a.community = { scores: comm, count: n, total: avgScores(comm) };
-    CATEGORIES.forEach(c => {
-      a.scores[c] = Math.round((COMMUNITY_WEIGHT_K * a.editorial[c] + n * comm[c]) / (COMMUNITY_WEIGHT_K + n));
-    });
-  } else {
-    a.community = null;
-    CATEGORIES.forEach(c => { a.scores[c] = a.editorial[c]; });
-  }
-  a.total = avgScores(a.scores);
+  const exact = {}, scores = {}, comm = {};
+  CATEGORIES.forEach(c => {
+    comm[c] = n ? (stat.sum?.[c] || 0) / n : 0;
+    exact[c] = (COMMUNITY_WEIGHT_K * BASE_SCORE + n * comm[c]) / (COMMUNITY_WEIGHT_K + n);
+    scores[c] = Math.round(exact[c]);
+  });
+  const mean = CATEGORIES.reduce((s, c) => s + exact[c], 0) / CATEGORIES.length;
+  return {
+    n, scores,
+    total: Math.round(mean * 10) / 10,
+    community: n ? { scores: comm, count: n, total: Math.round(CATEGORIES.reduce((s,c)=>s+comm[c],0) / CATEGORIES.length * 10) / 10 } : null
+  };
+}
+function blendArtist(a, stat) {
+  if (!a.slug) a.slug = slugify(a.name);
+  const r = blendScores(stat);
+  a.scores = r.scores; a.total = r.total; a.community = r.community; a.votes = r.n;
 }
 
 window.applyCommunityStats = function(stats) {
@@ -1496,6 +1556,7 @@ window.applyCommunityStats = function(stats) {
   refreshTable();
   if (typeof buildTicker === 'function') buildTicker();
   if (typeof refreshEstados === 'function') refreshEstados();
+  if (typeof window.refreshVotar === 'function') window.refreshVotar();
   if (expandedRow) {
     const a = ARTISTS.find(x => x.name === expandedRow);
     const panel = a && document.getElementById('panel-' + safeName(a.name));
@@ -1508,7 +1569,7 @@ window.applyCommunityStats = function(stats) {
 
 // estado de la tabla
 let currentSort = 'total', currentTier = 'all', currentSearch = '';
-let currentData = [...ARTISTS].sort((a,b) => b.total - a.total);
+let currentData = [...ARTISTS].sort((a,b) => a.name.localeCompare(b.name, 'es'));
 
 function refreshTable() {
   let list = ARTISTS.filter(a => currentTier === 'all' ? true
@@ -1517,8 +1578,9 @@ function refreshTable() {
     const t = currentSearch.toLowerCase();
     list = list.filter(a => a.name.toLowerCase().includes(t) || (a.tags||[]).some(x => x.toLowerCase().includes(t)));
   }
-  list.sort((a,b) => currentSort === 'total' ? b.total - a.total
-    : (b.scores[currentSort] - a.scores[currentSort]) || (b.total - a.total));
+  list.sort((a,b) => (currentSort === 'total' ? b.total - a.total
+    : (b.scores[currentSort] - a.scores[currentSort]) || (b.total - a.total))
+    || (b.votes - a.votes) || a.name.localeCompare(b.name, 'es'));
   currentData = list;
   renderTable(currentData);
 }
@@ -1574,7 +1636,7 @@ function renderTable(data) {
           <span class="score-val">${artist.scores.hooks}</span>
           <div class="score-bar"><div class="score-fill" style="width:${artist.scores.hooks}%"></div></div>
         </div>
-        <div class="total-cell"><span class="total-score">${artist.total}</span>${artist.community ? `<span class="total-votes">${artist.community.count} voto${artist.community.count===1?'':'s'}</span>` : ''}</div>
+        <div class="total-cell"><span class="total-score">${fmtTotal(artist.total)}</span><span class="total-votes">${artist.votes ? artist.votes + ' voto' + (artist.votes===1?'':'s') : 'sin votos'}</span></div>
         <div class="action-cell">
           <button class="expand-btn" data-name="${artist.name}" onclick="toggleExpand(event,'${artist.name}')">▾</button>
         </div>
@@ -1647,12 +1709,13 @@ function buildPanel(artist) {
       <h3>${esc(artist.name)}</h3>
       <p class="expanded-bio">${esc(artist.bio)}</p>
       <div class="score-split">
-        <div class="ss-item"><span class="ss-label">Crítica</span><span class="ss-val">${artist.editorialTotal}</span></div>
-        <div class="ss-item"><span class="ss-label">Comunidad</span><span class="ss-val">${comm ? comm.total : '—'}</span><span class="ss-sub">${comm ? comm.count + ' voto' + (comm.count===1?'':'s') : 'Sin votos aún'}</span></div>
-        <div class="ss-item"><span class="ss-label">Score final</span><span class="ss-val ss-final">${artist.total}</span></div>
+        <div class="ss-item"><span class="ss-label">Score RapScore</span><span class="ss-val ss-final">${fmtTotal(artist.total)}</span></div>
+        <div class="ss-item"><span class="ss-label">Promedio usuarios</span><span class="ss-val">${comm ? fmtTotal(comm.total) : '—'}</span></div>
+        <div class="ss-item"><span class="ss-label">Votos</span><span class="ss-val">${artist.votes}</span><span class="ss-sub">${artist.votes ? 'de la comunidad' : 'Sé el primero'}</span></div>
       </div>
       <div class="cats-grid">${cats}</div>
-      ${buildRateBox(artist.slug, artist.name, artist.editorial)}
+      <p class="ss-note">Todos arrancan en ${BASE_SCORE}. Cada voto acerca el score al promedio de la comunidad.</p>
+      ${buildRateBox(artist.slug, artist.name, baseScores())}
       <div class="vote-section">
         <button class="vote-btn" style="margin-left:auto" onclick="addToCompare('${artist.name.replace(/'/g, "\\'")}')">+ Comparar</button>
       </div>
@@ -1818,13 +1881,13 @@ function openCompareModal() {
     <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:16px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
       <div style="text-align:center">
         <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Total</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#ff3c00">${a1.total}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#ff3c00">${fmtTotal(a1.total)}</div>
         <canvas id="modalRadar1" width="160" height="160" style="margin-top:8px"></canvas>
       </div>
       <div></div>
       <div style="text-align:center">
         <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Total</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#b388ff">${a2.total}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#b388ff">${fmtTotal(a2.total)}</div>
         <canvas id="modalRadar2" width="160" height="160" style="margin-top:8px"></canvas>
       </div>
     </div>
@@ -1999,7 +2062,7 @@ function applyGoogleSheetsData(artists) {
   });
 
   // Re-render everything
-  ARTISTS.forEach(a => { a.slug = slugify(a.name); a.editorial = { ...a.scores }; a.editorialTotal = avgScores(a.scores); });
+  ARTISTS.forEach(a => { a.slug = slugify(a.name); });
   window.applyCommunityStats();
   if (_estadosRendered) {
     _estadosRendered = false;
@@ -2051,21 +2114,207 @@ async function loadFromGoogleSheets(url) {
   }
 })();
 
+// ─── SECCIÓN VOTAR ──────────────────────────────────────────
+let votarSel = null, votarFilter = 'pending', votarSearch = '', votarRendered = false;
+
+function myRated(slug) { return typeof window.getMyRating === 'function' && !!window.getMyRating(slug); }
+
+function renderVotar() {
+  const sec = document.getElementById('section-votar');
+  if (!sec) return;
+  if (!votarRendered) {
+    votarRendered = true;
+    sec.innerHTML = `
+      <div class="votar-wrap">
+        <div class="votar-hero">
+          <div class="hero-label">Tú decides el ranking</div>
+          <h2>VOTA Y <em>MUEVE</em><br>EL RANKING</h2>
+          <p class="votar-desc">Todos los raperos arrancan en <strong>${BASE_SCORE}</strong>. Cada calificación que das mueve su score hacia el promedio de la comunidad. Califica, suma puntos y sube en el ranking de contribuyentes.</p>
+          <div class="votar-steps">
+            <div><span>1</span>Elige un artista</div>
+            <div><span>2</span>Califícalo en 6 categorías</div>
+            <div><span>3</span>Gana +${POINTS_RATING} pts por cada artista nuevo</div>
+          </div>
+        </div>
+        <div class="votar-grid">
+          <div class="votar-main">
+            <div id="votarStage" class="votar-stage"></div>
+            <div class="votar-picker">
+              <div class="vp-head">
+                <div class="vp-title">Elige un artista</div>
+                <div class="vp-progress" id="votarProgress"></div>
+              </div>
+              <div class="vp-tools">
+                <input class="search-input vp-search" id="votarSearch" name="rs-votar-buscar" autocomplete="off" spellcheck="false" placeholder="Buscar artista o ciudad..." oninput="votarSearch=this.value.trim().toLowerCase();renderVotarList()">
+                <div class="vp-chips">
+                  <button class="vp-chip" data-f="pending" onclick="setVotarFilter('pending')">Pendientes</button>
+                  <button class="vp-chip" data-f="done" onclick="setVotarFilter('done')">Calificados</button>
+                  <button class="vp-chip" data-f="all" onclick="setVotarFilter('all')">Todos</button>
+                </div>
+              </div>
+              <div id="votarList" class="votar-list"></div>
+            </div>
+          </div>
+          <aside class="votar-side">
+            <div id="votarMe" class="vcard"></div>
+            <div id="votarBoard" class="vcard"></div>
+            <div class="vcard">
+              <div class="vcard-title">Niveles</div>
+              ${LEVELS.map(l => `<div class="lvl-row"><span>${l.name}</span><span>${l.min}+ pts</span></div>`).join('')}
+              <div class="vcard-note">+${POINTS_RATING} pts por cada artista que calificas por primera vez · +${POINTS_PROPOSAL} pts por proponer un artista en "Por Estado" (1 cada 24 h). Cambiar una calificación no suma puntos.</div>
+            </div>
+          </aside>
+        </div>
+      </div>`;
+  }
+  document.querySelectorAll('.vp-chip').forEach(c => c.classList.toggle('active', c.dataset.f === votarFilter));
+  renderVotarStage();
+  renderVotarList();
+  renderVotarSide();
+}
+
+function setVotarFilter(f) { votarFilter = f; renderVotar(); }
+
+function votarCandidates() {
+  return [...ARTISTS].sort((a,b) => a.votes - b.votes || a.name.localeCompare(b.name,'es'));
+}
+
+function renderVotarList() {
+  const el = document.getElementById('votarList');
+  if (!el) return;
+  const done = ARTISTS.filter(a => myRated(a.slug)).length;
+  const prog = document.getElementById('votarProgress');
+  if (prog) prog.innerHTML = `Has calificado <strong>${done}</strong> de ${ARTISTS.length}<div class="vp-bar"><div style="width:${Math.round(done/ARTISTS.length*100)}%"></div></div>`;
+  let list = votarCandidates();
+  if (votarFilter === 'pending') list = list.filter(a => !myRated(a.slug));
+  if (votarFilter === 'done') list = list.filter(a => myRated(a.slug));
+  if (votarSearch) list = list.filter(a => a.name.toLowerCase().includes(votarSearch) || (a.tags||[]).some(t => t.toLowerCase().includes(votarSearch)));
+  if (!list.length) {
+    el.innerHTML = `<div class="vp-empty">${votarFilter === 'pending' && !votarSearch ? '¡Ya calificaste a todos! Revisa "Calificados" si quieres ajustar alguno.' : 'No hay artistas con ese filtro.'}</div>`;
+    return;
+  }
+  el.innerHTML = list.map(a => `
+    <button class="vp-card ${votarSel === a.slug ? 'sel' : ''} ${myRated(a.slug) ? 'done' : ''}" onclick="selectVotar('${a.slug}')">
+      <span class="vp-av">${esc(getInitials(a.name))}</span>
+      <span class="vp-info"><span class="vp-name">${esc(a.name)}</span><span class="vp-sub">${esc(a.tags[0])} · ${a.votes} voto${a.votes===1?'':'s'}</span></span>
+      <span class="vp-check">${myRated(a.slug) ? '✓' : ''}</span>
+    </button>`).join('');
+}
+
+function selectVotar(slug) {
+  votarSel = slug;
+  renderVotarStage();
+  renderVotarList();
+  const st = document.getElementById('votarStage');
+  if (st && window.innerWidth < 900) st.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderVotarStage() {
+  const el = document.getElementById('votarStage');
+  if (!el) return;
+  const a = ARTISTS.find(x => x.slug === votarSel);
+  if (!a) {
+    el.innerHTML = `<div class="vs-empty"><div class="vs-empty-icon">★</div><div class="vs-empty-title">Elige un artista para calificar</div><div class="vs-empty-sub">Empieza por los que tienen menos votos: así el ranking se ajusta más rápido.</div>
+      <button class="rate-submit" onclick="votarNext()">Empezar a votar →</button></div>`;
+    return;
+  }
+  el.innerHTML = `
+    <div class="vs-head">
+      <div class="vs-av">${esc(getInitials(a.name))}</div>
+      <div class="vs-info">
+        <div class="vs-name">${esc(a.name)}${getTierBadge(a.tier)}</div>
+        <div class="vs-sub">${esc((a.tags||[]).join(' · '))}</div>
+      </div>
+      <div class="vs-score"><span>${fmtTotal(a.total)}</span><small>${a.votes} voto${a.votes===1?'':'s'}</small></div>
+    </div>
+    <p class="vs-bio">${esc(a.bio)}</p>
+    ${buildRateBox(a.slug, a.name, baseScores())}
+    <div class="vs-nav"><button class="btn-sm" onclick="votarNext(true)">Saltar →</button></div>`;
+}
+
+function votarNext(skip) {
+  const pending = votarCandidates().filter(a => !myRated(a.slug));
+  const list = pending.length ? pending : votarCandidates();
+  const i = list.findIndex(a => a.slug === votarSel);
+  const next = list[(i + 1) % list.length] || list[0];
+  if (next) selectVotar(next.slug);
+}
+
+function renderVotarSide() {
+  const me = document.getElementById('votarMe');
+  if (me) {
+    const user = window.RS_USER, c = window.RS_ME;
+    if (!user) {
+      me.innerHTML = `<div class="vcard-title">Tu perfil de contribuyente</div>
+        <p class="vcard-text">Inicia sesión para votar, ganar puntos y aparecer en el ranking de contribuyentes.</p>
+        <button class="rate-submit" style="width:100%" onclick="openAuthModal('login')">Entrar para votar</button>`;
+    } else {
+      const pts = c ? c.points : 0, lv = levelFor(pts);
+      const pct = lv.next ? Math.round((pts - lv.min) / (lv.next.min - lv.min) * 100) : 100;
+      me.innerHTML = `<div class="vcard-title">Tu perfil</div>
+        <div class="me-name">${esc(c?.name || window.RS_ALIAS || 'Tú')}</div>
+        <div class="me-level">${lv.name}</div>
+        <div class="me-stats"><div><strong>${pts}</strong><span>puntos</span></div><div><strong>${c ? c.ratings : 0}</strong><span>artistas</span></div><div><strong>${c ? c.proposals : 0}</strong><span>propuestas</span></div></div>
+        <div class="vp-bar"><div style="width:${pct}%"></div></div>
+        <div class="vcard-note">${lv.next ? `Te faltan ${lv.next.min - pts} pts para <strong>${lv.next.name}</strong>` : 'Nivel máximo alcanzado'}</div>
+        <div class="alias-row">
+          <input class="auth-input" id="aliasInput" maxlength="24" autocomplete="off" placeholder="Tu nombre en el ranking" value="${esc(c?.name || window.RS_ALIAS || '')}">
+          <button class="btn-sm" onclick="window.saveAlias ? saveAlias(document.getElementById('aliasInput').value) : null">Guardar</button>
+        </div>`;
+    }
+  }
+  const board = document.getElementById('votarBoard');
+  if (board) {
+    const list = window.RS_BOARD || [];
+    const uid = window.RS_USER?.uid;
+    board.innerHTML = `<div class="vcard-title">Top contribuyentes</div>` + (list.length
+      ? list.map((r,i) => `<div class="lb-row ${r.id === uid ? 'me' : ''}"><span class="lb-rank">${i+1}</span><span class="lb-name">${esc(r.name)}<small>${levelFor(r.points).name}</small></span><span class="lb-pts">${r.points}</span></div>`).join('')
+      : `<p class="vcard-text">Aún nadie ha votado. ¡Sé el primero en aparecer aquí!</p>`);
+  }
+}
+
+// Llamado por el módulo de Firebase después de guardar una calificación
+window.onRated = function(slug, isNew) {
+  if (document.getElementById('section-votar')?.style.display !== 'none') {
+    renderVotarSide();
+    renderVotarList();
+    if (votarSel === slug) setTimeout(() => votarNext(), isNew ? 700 : 0);
+  }
+};
+window.renderVotarSide = renderVotarSide;
+window.refreshVotar = function() {
+  if (document.getElementById('section-votar')?.style.display !== 'none' && votarRendered) {
+    renderVotarStage(); renderVotarList(); renderVotarSide();
+  }
+};
+
 // ─── TICKER (generado desde los datos) ─────────────────────
 function buildTicker() {
   const el = document.getElementById('ticker');
   if (!el || !ARTISTS.length) return;
-  const top = (fn) => [...ARTISTS].sort((a,b)=>fn(b)-fn(a))[0];
-  const items = [];
-  items.push([top(a=>a.total).name, '#1 OVERALL']);
-  [['flow','#1 FLOW'],['lirica','#1 LÍRICA'],['contenido','#1 CONTENIDO'],
-   ['versatilidad','#1 VERSATILIDAD'],['hooks','#1 HOOKS'],['impacto','#1 IMPACTO CULTURAL']]
-    .forEach(([k,label]) => items.push([top(a=>a.scores[k]||0).name, label]));
-  const fem = ARTISTS.filter(a=>a.female);
-  if (fem.length) items.push([[...fem].sort((a,b)=>b.total-a.total)[0].name, '#1 ARTISTAS FEMENINAS']);
-  const emer = ARTISTS.filter(a=>a.tier==='emerging');
-  if (emer.length) items.push([[...emer].sort((a,b)=>b.total-a.total)[0].name, '#1 EMERGENTES']);
-  const html = items.map(([n,l]) => `<span class="ticker-item">${n} <span class="ticker-sep">—</span> ${l}</span>`).join('');
+  const voted = ARTISTS.filter(a => a.votes > 0);
+  let items;
+  if (!voted.length) {
+    items = [
+      ['VOTA', 'TÚ DECIDES EL RANKING'],
+      ['TODOS ARRANCAN EN ' + BASE_SCORE, 'LA COMUNIDAD MUEVE EL SCORE'],
+      ['+' + POINTS_RATING + ' PTS', 'POR CADA ARTISTA QUE CALIFICAS'],
+      ['RAPSCOREMX.COM/VOTAR', 'ENTRA Y CALIFICA'],
+    ];
+  } else {
+    const top = (list, fn) => [...list].sort((a,b)=>fn(b)-fn(a) || b.votes-a.votes)[0];
+    items = [[top(voted, a=>a.total).name, '#1 OVERALL']];
+    [['flow','#1 FLOW'],['lirica','#1 LÍRICA'],['contenido','#1 CONTENIDO'],
+     ['versatilidad','#1 VERSATILIDAD'],['hooks','#1 HOOKS'],['impacto','#1 IMPACTO CULTURAL']]
+      .forEach(([k,label]) => items.push([top(voted, a=>a.scores[k]||0).name, label]));
+    const fem = voted.filter(a=>a.female);
+    if (fem.length) items.push([top(fem, a=>a.total).name, '#1 ARTISTAS FEMENINAS']);
+    const emer = voted.filter(a=>a.tier==='emerging');
+    if (emer.length) items.push([top(emer, a=>a.total).name, '#1 EMERGENTES']);
+    const totalVotes = voted.reduce((s,a)=>s+a.votes,0);
+    items.push([totalVotes + ' CALIFICACIONES', 'VOTA EN RAPSCOREMX.COM/VOTAR']);
+  }
+  const html = items.map(([n,l]) => `<span class="ticker-item">${esc(n)} <span class="ticker-sep">—</span> ${esc(l)}</span>`).join('');
   el.innerHTML = html + html; // duplicado para el loop continuo
 }
 
@@ -2598,11 +2847,8 @@ function refreshEstados() {
     e.artists = ARTISTS.filter(a => a.estado === e.name)
       .map(a => ({ name: a.name, genre: a.tags[1] || '', score: a.total, national: true }));
     e.proposed = PROPOSALS.filter(p => p.estado === e.id).map(p => {
-      const st = window._communityStats[p.slug];
-      const n = st && st.count > 0 ? st.count : 0;
-      const scores = {};
-      CATEGORIES.forEach(c => { scores[c] = n ? Math.round((st.sum?.[c] || 0) / n) : 0; });
-      return { ...p, votes: n, scores, total: n ? avgScores(scores) : 0 };
+      const r = blendScores(window._communityStats[p.slug]);
+      return { ...p, votes: r.n, scores: r.scores, total: r.total };
     });
   });
   if (_estadosRendered) {
@@ -2825,7 +3071,7 @@ function renderStatePanel(estado) {
               <div class="la-sub">${esc(a.genre)}</div>
             </div>
             <div style="text-align:right;min-width:60px">
-              <div class="la-score" style="color:${canUpgrade?'var(--accent2)':'var(--muted)'}">${a.votes ? a.total : '—'}</div>
+              <div class="la-score" style="color:${canUpgrade?'var(--accent2)':'var(--muted)'}">${a.votes ? fmtTotal(a.total) : '—'}</div>
               <div class="la-votes">${a.votes} voto${a.votes===1?'':'s'}</div>
             </div>
             <button class="la-upvote" title="Calificar" onclick="event.stopPropagation();openLocalArtist('${estado.id}','${a.id}')">★</button>
@@ -2902,7 +3148,8 @@ async function submitProposal(estadoId) {
     link,
     bio: (bio || 'Artista propuesto por la comunidad.').slice(0, 280)
   };
-  const id = await window.saveProposal(data);
+  const propId = (estadoId.toLowerCase() + '-' + slugify(name)).slice(0, 70).replace(/-+$/,'');
+  const id = await window.saveProposal(data, propId);
   if (!id) return;
   PROPOSALS.push({ ...data, id, slug: 'prop-' + id });
   refreshEstados();
@@ -2938,7 +3185,7 @@ function openLocalArtist(estadoId, propId) {
       <div class="upgrade-check">
         <div class="uc-title">¿Puede subir al ranking nacional?</div>
         <div class="uc-row"><span class="uc-label">Puntuación actual</span><span class="uc-val lose">${artist.votes ? artist.total : '—'}</span></div>
-        <div class="uc-row"><span class="uc-label">Mínimo para entrar al nacional</span><span class="uc-val">${floor.total + 1}+</span></div>
+        <div class="uc-row"><span class="uc-label">Para entrar al nacional necesita más de</span><span class="uc-val">${fmtTotal(floor.total)}</span></div>
         <div class="uc-verdict" style="color:var(--muted)">
           Aún no supera en puntuación a ningún artista del ranking nacional. Necesita más votos y calificaciones para que su score suba.
         </div>
@@ -2964,7 +3211,7 @@ function openLocalArtist(estadoId, propId) {
       `).join('')}
     </div>
     ${upgradeHtml}
-    ${buildRateBox(artist.slug, artist.name, { flow:50, lirica:50, contenido:50, versatilidad:50, hooks:50, impacto:50 })}
+    ${buildRateBox(artist.slug, artist.name, baseScores())}
   `;
   document.getElementById('laModal').classList.add('open');
 }
@@ -3044,6 +3291,7 @@ document.addEventListener('click', function(e) {
 function goTo(target) {
   const navR = document.getElementById('nav-rankings');
   if (target === 'estados') { showSection('estados', document.getElementById('nav-estados')); history.replaceState(null,'','#estados'); return; }
+  if (target === 'votar') { showSection('votar', document.getElementById('nav-votar')); history.replaceState(null,'','#votar'); window.scrollTo({ top: 0 }); return; }
   showSection('rankings', navR);
   if (target === 'emergentes') {
     filterTier('emerging');
@@ -3064,7 +3312,7 @@ function goTo(target) {
 }
 window.addEventListener('load', () => {
   const h = location.hash.replace('#','');
-  if (['estados','emergentes','comparar','editorial'].includes(h)) goTo(h);
+  if (['votar','estados','emergentes','comparar','editorial'].includes(h)) goTo(h);
 });
 
 function showSection(id, btn) {
@@ -3083,6 +3331,11 @@ function showSection(id, btn) {
     }, 0);
   } else {
     estSec.style.display = 'none';
+  }
+  const votSec = document.getElementById('section-votar');
+  if (votSec) {
+    votSec.style.display = id === 'votar' ? '' : 'none';
+    if (id === 'votar' && typeof renderVotar === 'function') renderVotar();
   }
   document.querySelector('.controls').style.display = id==='rankings' ? '' : 'none';
 }
@@ -3161,7 +3414,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, addDoc, serverTimestamp,
-  collection, getDocs, query, where, runTransaction
+  collection, getDocs, query, where, runTransaction, orderBy, limit
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 // ── INIT ─────────────────────────────────────────────────────
@@ -3320,8 +3573,40 @@ getRedirectResult(auth).then(async (cred) => {
 
 // ── AUTH STATE ────────────────────────────────────────────────
 let myRatings = {};
+window.RS_USER = null; window.RS_ME = null; window.RS_ALIAS = "";
+
+// Nombre público por defecto (sin exponer el correo)
+function defaultAlias(user) {
+  const clean = (t) => String(t || "").normalize("NFC").replace(/[^A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ ._-]/g, "").replace(/\s+/g, " ").trim();
+  if (user.displayName) {
+    const parts = clean(user.displayName).split(" ").filter(Boolean);
+    const alias = parts.length > 1 ? `${parts[0]} ${parts[parts.length-1][0]}.` : (parts[0] || "");
+    if (alias.length >= 3) return alias.slice(0, 24);
+  }
+  return "Fan " + user.uid.slice(0, 5).replace(/[^A-Za-z0-9]/g, "x").toUpperCase();
+}
+
+async function loadMe(user) {
+  try {
+    const snap = await getDoc(doc(db, "contributors", user.uid));
+    window.RS_ME = snap.exists() ? snap.data() : null;
+  } catch (err) { console.warn("RapScore perfil:", err.code || err.message); }
+}
+
+async function loadBoard() {
+  try {
+    const snap = await getDocs(query(collection(db, "contributors"), orderBy("points", "desc"), limit(20)));
+    window.RS_BOARD = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.points > 0);
+  } catch (err) { console.warn("RapScore contribuyentes:", err.code || err.message); window.RS_BOARD = []; }
+  if (window.renderVotarSide) window.renderVotarSide();
+}
+loadBoard();
+
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
+  window.RS_USER = user;
+  window.RS_ME = null;
+  window.RS_ALIAS = user ? defaultAlias(user) : "";
   syncAuthUI(user);
   myRatings = {};
   if (user) {
@@ -3329,8 +3614,11 @@ onAuthStateChanged(auth, async (user) => {
       const snap = await getDocs(query(collection(db, "ratings"), where("uid", "==", user.uid)));
       snap.forEach(d => { const r = d.data(); myRatings[r.artistSlug] = r.scores; });
     } catch (err) { console.warn("RapScore ratings:", err.code || err.message); }
+    await loadMe(user);
   }
   refreshOpenRateBoxes();
+  if (window.refreshVotar) window.refreshVotar();
+  if (window.renderVotarSide) window.renderVotarSide();
 });
 
 // Vuelve a dibujar el formulario abierto (para mostrar "Tu calificación")
@@ -3387,7 +3675,18 @@ async function ensureVerified() {
 }
 
 // ── GUARDAR CALIFICACIÓN ──────────────────────────────────────
-// Escribe ratings/{uid}_{slug} y actualiza artistStats/{slug} (suma y conteo) en una sola transacción.
+// En una sola transacción:
+//   ratings/{uid}_{slug}   tu calificación
+//   artistStats/{slug}     suma y conteo de todas las calificaciones
+//   contributors/{uid}     tus puntos (solo si es la primera vez que calificas a ese artista)
+const P_RATING = window.POINTS_RATING || 10, P_PROPOSAL = window.POINTS_PROPOSAL || 20;
+
+function contribBase(snap, user) {
+  const d = snap.exists() ? { ...snap.data() } : { name: window.RS_ALIAS || defaultAlias(user), points: 0, ratings: 0, proposals: 0 };
+  delete d.updatedAt;
+  return d;
+}
+
 window.submitRating = async function(btn) {
   const box = btn.closest(".rate-box");
   const slug = box?.dataset.slug, name = box?.dataset.name;
@@ -3398,28 +3697,41 @@ window.submitRating = async function(btn) {
     const v = parseInt(box.querySelector(`input[data-cat="${c}"]`).value, 10);
     scores[c] = Math.min(100, Math.max(1, isNaN(v) ? 50 : v));
   });
-  const uid = auth.currentUser.uid;
+  const user = auth.currentUser, uid = user.uid;
   const rRef = doc(db, "ratings", `${uid}_${slug}`);
   const sRef = doc(db, "artistStats", slug);
+  const cRef = doc(db, "contributors", uid);
   btn.disabled = true;
   try {
-    const newStats = await runTransaction(db, async (tx) => {
+    const res = await runTransaction(db, async (tx) => {
       const rSnap = await tx.get(rRef);
       const sSnap = await tx.get(sRef);
+      const cSnap = await tx.get(cRef);
       const old = rSnap.exists() ? rSnap.data().scores : null;
       const st = sSnap.exists() ? sSnap.data() : { count: 0, sum: {} };
       const sum = {};
       CATS.forEach(c => { sum[c] = (st.sum?.[c] || 0) + scores[c] - (old ? old[c] : 0); });
       const count = (st.count || 0) + (old ? 0 : 1);
-      tx.set(rRef, { uid, artistSlug: slug, artist: name, scores, updatedAt: serverTimestamp() });
+      tx.set(rRef, { uid, artistSlug: slug, artist: String(name).slice(0, 80), scores, updatedAt: serverTimestamp() });
       tx.set(sRef, { count, sum, updatedAt: serverTimestamp() });
-      return { count, sum };
+      let contrib = null;
+      if (!old) {
+        contrib = contribBase(cSnap, user);
+        contrib.ratings += 1;
+        contrib.points = contrib.ratings * P_RATING + contrib.proposals * P_PROPOSAL;
+        contrib.lastSlug = slug;
+        tx.set(cRef, { ...contrib, updatedAt: serverTimestamp() });
+      }
+      return { stats: { count, sum }, isNew: !old, contrib };
     });
     myRatings[slug] = scores;
-    window._communityStats[slug] = newStats;
+    window._communityStats[slug] = res.stats;
+    if (res.contrib) window.RS_ME = res.contrib;
     if (window.applyCommunityStats) window.applyCommunityStats();
     if (slug.startsWith("prop-") && window.refreshEstados) window.refreshEstados();
-    showToast("Calificación guardada ✓");
+    showToast(res.isNew ? `Calificación guardada ✓  +${P_RATING} pts` : "Calificación actualizada ✓");
+    if (window.onRated) window.onRated(slug, res.isNew);
+    if (res.isNew) loadBoard();
   } catch (err) {
     console.error(err);
     showToast(err.code === "permission-denied"
@@ -3431,17 +3743,63 @@ window.submitRating = async function(btn) {
 };
 
 // ── GUARDAR PROPUESTA ─────────────────────────────────────────
-window.saveProposal = async function(data) {
+// proposals/{id}: el id se arma con estado + nombre, así no se repiten.
+// Da puntos si pasaron 24 h desde la última propuesta con puntos.
+window.saveProposal = async function(data, propId) {
   if (!(await ensureVerified())) return null;
+  const user = auth.currentUser, uid = user.uid;
+  const pRef = doc(db, "proposals", propId);
+  const cRef = doc(db, "contributors", uid);
   try {
-    const ref = await addDoc(collection(db, "proposals"), {
-      ...data, createdBy: auth.currentUser.uid, createdAt: serverTimestamp()
+    const res = await runTransaction(db, async (tx) => {
+      const pSnap = await tx.get(pRef);
+      if (pSnap.exists()) return { dup: true };
+      const cSnap = await tx.get(cRef);
+      tx.set(pRef, { ...data, createdBy: uid, createdAt: serverTimestamp() });
+      const contrib = contribBase(cSnap, user);
+      const last = contrib.lastProposalAt && contrib.lastProposalAt.toMillis ? contrib.lastProposalAt.toMillis() : 0;
+      if (Date.now() - last > 24 * 3600 * 1000) {
+        contrib.proposals += 1;
+        contrib.points = contrib.ratings * P_RATING + contrib.proposals * P_PROPOSAL;
+        contrib.lastProposal = propId;
+        tx.set(cRef, { ...contrib, lastProposalAt: serverTimestamp(), updatedAt: serverTimestamp() });
+        return { points: true, contrib };
+      }
+      return { points: false };
     });
-    return ref.id;
+    if (res.dup) { showToast("Ese artista ya fue propuesto en este estado"); return null; }
+    if (res.points) { window.RS_ME = res.contrib; showToast(`+${P_PROPOSAL} pts por tu propuesta`); loadBoard(); }
+    else showToast("Propuesta guardada. Los puntos por propuesta se dan 1 vez cada 24 h.");
+    return propId;
   } catch (err) {
     console.error(err);
     showToast(err.code === "permission-denied" ? "No se pudo guardar la propuesta (permisos)" : "Error al guardar la propuesta");
     return null;
+  }
+};
+
+// ── NOMBRE EN EL RANKING DE CONTRIBUYENTES ────────────────────
+window.saveAlias = async function(raw) {
+  if (!(await ensureVerified())) return;
+  const name = String(raw || "").replace(/\s+/g, " ").trim();
+  if (!/^[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ ._-]{3,24}$/.test(name)) {
+    showToast("Usa de 3 a 24 letras, números, espacios, punto, guion o guion bajo");
+    return;
+  }
+  const user = auth.currentUser, cRef = doc(db, "contributors", user.uid);
+  try {
+    const contrib = await runTransaction(db, async (tx) => {
+      const c = contribBase(await tx.get(cRef), user);
+      c.name = name;
+      tx.set(cRef, { ...c, updatedAt: serverTimestamp() });
+      return c;
+    });
+    window.RS_ME = contrib; window.RS_ALIAS = name;
+    showToast("Nombre guardado ✓");
+    loadBoard();
+  } catch (err) {
+    console.error(err);
+    showToast("No se pudo guardar el nombre");
   }
 };
 </script>

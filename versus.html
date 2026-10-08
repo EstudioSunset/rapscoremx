@@ -406,60 +406,90 @@ const CATS = [
   {key:'versatilidad',label:'Versatilidad'},
   {key:'hooks',       label:'Hooks'},
   {key:'impacto',     label:'Impacto'},
-  {key:'delivery',    label:'Delivery'},
-  {key:'originalidad',label:'Originalidad'},
 ];
 
+// Mismo sistema que el ranking: todos arrancan en 50 y la comunidad mueve el score.
+const BASE_SCORE = 50, COMMUNITY_WEIGHT_K = 5;
 const ARTISTS = [
-  {name:'Santa Fe Klan',   estado:'Guanajuato',        tier:'Activo',   scores:{flow:88,lirica:78,contenido:82,versatilidad:90,hooks:92,impacto:94,delivery:85,originalidad:82}},
-  {name:'Alemán',          estado:'Baja California Sur',tier:'Activo',   scores:{flow:91,lirica:97,contenido:93,versatilidad:85,hooks:78,impacto:88,delivery:92,originalidad:90}},
-  {name:'Gera MX',         estado:'Nuevo León',     tier:'Activo',   scores:{flow:82,lirica:72,contenido:68,versatilidad:85,hooks:95,impacto:88,delivery:80,originalidad:75}},
-  {name:'C-Kan',           estado:'Jalisco',        tier:'Activo',   scores:{flow:85,lirica:80,contenido:86,versatilidad:72,hooks:80,impacto:85,delivery:84,originalidad:78}},
-  {name:'Dharius',         estado:'Nuevo León',tier:'Activo',   scores:{flow:90,lirica:92,contenido:90,versatilidad:80,hooks:74,impacto:78,delivery:88,originalidad:86}},
-  {name:'Babo',            estado:'Nuevo León',     tier:'Activo',   scores:{flow:87,lirica:82,contenido:78,versatilidad:70,hooks:85,impacto:92,delivery:88,originalidad:80}},
-  {name:'Millonario',      estado:'Nuevo León',     tier:'Activo',   scores:{flow:83,lirica:80,contenido:75,versatilidad:68,hooks:82,impacto:88,delivery:82,originalidad:76}},
-  {name:'MC Davo',         estado:'Nuevo León',tier:'Activo',   scores:{flow:80,lirica:68,contenido:65,versatilidad:78,hooks:91,impacto:82,delivery:78,originalidad:72}},
-  {name:'Lefty SM',        estado:'Sonora',        tier:'Leyenda',  scores:{flow:90,lirica:88,contenido:92,versatilidad:82,hooks:90,impacto:95,delivery:88,originalidad:86}},
-  {name:'Toser One',       estado:'Jalisco',        tier:'Activo',   scores:{flow:93,lirica:90,contenido:82,versatilidad:88,hooks:70,impacto:78,delivery:92,originalidad:85}},
-  {name:'Neto Peña',       estado:'Nuevo León',     tier:'Activo',   scores:{flow:78,lirica:70,contenido:65,versatilidad:80,hooks:93,impacto:78,delivery:76,originalidad:70}},
-  {name:'Charles Ans',     estado:'Sonora',tier:'Activo',   scores:{flow:88,lirica:94,contenido:91,versatilidad:80,hooks:68,impacto:72,delivery:86,originalidad:88}},
-  {name:'Simpson Ahuevo',  estado:'Sonora',tier:'Activo',   scores:{flow:85,lirica:88,contenido:86,versatilidad:92,hooks:74,impacto:76,delivery:84,originalidad:90}},
-  {name:'Eptos Uno',       estado:'Sonora',tier:'Activo',   scores:{flow:87,lirica:85,contenido:80,versatilidad:75,hooks:70,impacto:82,delivery:86,originalidad:80}},
-  {name:'Yoga Fire',       estado:'Estado de México',        tier:'Activo',   scores:{flow:90,lirica:88,contenido:80,versatilidad:82,hooks:68,impacto:70,delivery:88,originalidad:84}},
-  {name:'Bocafloja',       estado:'Ciudad de México',tier:'Leyenda',  scores:{flow:82,lirica:95,contenido:98,versatilidad:75,hooks:65,impacto:93,delivery:84,originalidad:92}},
-  {name:'Fermín IV',       estado:'Nuevo León',tier:'Leyenda',   scores:{flow:94,lirica:88,contenido:82,versatilidad:86,hooks:68,impacto:80,delivery:92,originalidad:84}},
-  {name:'Control Machete', estado:'Nuevo León',     tier:'Leyenda',  scores:{flow:85,lirica:88,contenido:90,versatilidad:80,hooks:88,impacto:97,delivery:84,originalidad:86}},
-  {name:'Niña Dioz',       estado:'Nuevo León',     tier:'Activo',   scores:{flow:82,lirica:86,contenido:92,versatilidad:80,hooks:76,impacto:88,delivery:82,originalidad:84}},
-  {name:'Hispana',         estado:'Coahuila',tier:'Activo',   scores:{flow:85,lirica:88,contenido:84,versatilidad:78,hooks:72,impacto:76,delivery:84,originalidad:82}},
-  {name:'Mare Advertencia Lirika',estado:'Oaxaca', tier:'Activo',   scores:{flow:80,lirica:86,contenido:94,versatilidad:78,hooks:70,impacto:85,delivery:80,originalidad:88}},
-  {name:'Muelas de Gallo', estado:'Baja California Sur',        tier:'Activo',   scores:{flow:87,lirica:92,contenido:88,versatilidad:78,hooks:68,impacto:72,delivery:86,originalidad:88}},
-  {name:'Tino El Pingüino',estado:'Ciudad de México',tier:'Activo',  scores:{flow:82,lirica:86,contenido:87,versatilidad:92,hooks:74,impacto:76,delivery:82,originalidad:84}},
-  {name:'Adán Cruz',       estado:'Nuevo León',tier:'Activo',   scores:{flow:80,lirica:90,contenido:95,versatilidad:72,hooks:65,impacto:80,delivery:78,originalidad:88}},
-  {name:'LNG/SHT',         estado:'Quintana Roo',tier:'Activo',   scores:{flow:87,lirica:91,contenido:88,versatilidad:78,hooks:72,impacto:75,delivery:86,originalidad:84}},
-  {name:'Akil Ammar',      estado:'Ciudad de México',tier:'Activo',   scores:{flow:82,lirica:87,contenido:90,versatilidad:88,hooks:72,impacto:76,delivery:84,originalidad:86}},
-  {name:'Pato Machete',    estado:'Nuevo León',tier:'Leyenda',  scores:{flow:84,lirica:86,contenido:88,versatilidad:82,hooks:84,impacto:94,delivery:82,originalidad:84}},
-  {name:'Zimple',          estado:'Jalisco',tier:'Activo',   scores:{flow:80,lirica:82,contenido:88,versatilidad:72,hooks:66,impacto:76,delivery:78,originalidad:80}},
-  {name:'Sabino',          estado:'Jalisco',tier:'Activo',   scores:{flow:76,lirica:84,contenido:88,versatilidad:86,hooks:78,impacto:72,delivery:78,originalidad:82}},
-  {name:'Audry Funk',      estado:'Puebla',tier:'Activo',   scores:{flow:78,lirica:82,contenido:90,versatilidad:74,hooks:68,impacto:80,delivery:76,originalidad:80}},
-  {name:'Maniako',         estado:'Jalisco',        tier:'Activo',   scores:{flow:82,lirica:76,contenido:80,versatilidad:68,hooks:74,impacto:76,delivery:80,originalidad:76}},
-  {name:'Cartel de Santa', estado:'Nuevo León', tier:'Leyenda', scores:{flow:86,lirica:80,contenido:80,versatilidad:76,hooks:88,impacto:96,delivery:85,originalidad:80}},
-  {name:'La Santa Grifa', estado:'Tamaulipas', tier:'Activo', scores:{flow:82,lirica:76,contenido:76,versatilidad:72,hooks:84,impacto:86,delivery:80,originalidad:76}},
-  {name:'Aczino', estado:'Estado de México', tier:'Activo', scores:{flow:95,lirica:90,contenido:82,versatilidad:88,hooks:70,impacto:90,delivery:90,originalidad:87}},
-  {name:'Rapder', estado:'Jalisco', tier:'Activo', scores:{flow:93,lirica:88,contenido:80,versatilidad:86,hooks:68,impacto:82,delivery:88,originalidad:84}},
-  {name:'Santa RM', estado:'Sonora', tier:'Activo', scores:{flow:85,lirica:84,contenido:84,versatilidad:76,hooks:78,impacto:82,delivery:84,originalidad:79}},
-  {name:'Remik González', estado:'Baja California', tier:'Activo', scores:{flow:82,lirica:78,contenido:78,versatilidad:76,hooks:80,impacto:78,delivery:80,originalidad:78}},
-  {name:'Under Side 821', estado:'Nuevo León', tier:'Activo', scores:{flow:80,lirica:74,contenido:76,versatilidad:70,hooks:82,impacto:78,delivery:78,originalidad:74}},
-  {name:'Neto Reyno', estado:'Nuevo León', tier:'Leyenda', scores:{flow:82,lirica:80,contenido:82,versatilidad:74,hooks:80,impacto:86,delivery:82,originalidad:78}},
-  {name:'Adán Zapata', estado:'Nuevo León', tier:'Leyenda', scores:{flow:84,lirica:80,contenido:82,versatilidad:72,hooks:82,impacto:88,delivery:82,originalidad:76}},
-  {name:'Kodigo 36', estado:'Nuevo León', tier:'Leyenda', scores:{flow:80,lirica:78,contenido:78,versatilidad:70,hooks:76,impacto:80,delivery:78,originalidad:74}},
-  {name:'Go Golden Junk', estado:'Ciudad de México', tier:'Activo', scores:{flow:80,lirica:76,contenido:74,versatilidad:86,hooks:82,impacto:70,delivery:79,originalidad:82}},
-  {name:'Chato 473', estado:'Guanajuato', tier:'Emergente', scores:{flow:78,lirica:72,contenido:72,versatilidad:74,hooks:82,impacto:66,delivery:76,originalidad:74}},
+  {name:'Santa Fe Klan', estado:'Guanajuato', tier:'Activo'},
+  {name:'Alemán', estado:'Baja California Sur', tier:'Activo'},
+  {name:'Gera MX', estado:'Nuevo León', tier:'Activo'},
+  {name:'C-Kan', estado:'Jalisco', tier:'Activo'},
+  {name:'Dharius', estado:'Nuevo León', tier:'Activo'},
+  {name:'Babo', estado:'Nuevo León', tier:'Activo'},
+  {name:'Millonario', estado:'Nuevo León', tier:'Activo'},
+  {name:'MC Davo', estado:'Nuevo León', tier:'Activo'},
+  {name:'Lefty SM', estado:'Sonora', tier:'Leyenda'},
+  {name:'Toser One', estado:'Jalisco', tier:'Activo'},
+  {name:'Neto Peña', estado:'Nuevo León', tier:'Activo'},
+  {name:'Charles Ans', estado:'Sonora', tier:'Activo'},
+  {name:'Simpson Ahuevo', estado:'Sonora', tier:'Activo'},
+  {name:'Eptos Uno', estado:'Sonora', tier:'Activo'},
+  {name:'Robot95', estado:'Baja California', tier:'Emergente'},
+  {name:'Fntxy', estado:'Baja California', tier:'Emergente'},
+  {name:'Sabino', estado:'Jalisco', tier:'Activo'},
+  {name:'LNG/SHT', estado:'Quintana Roo', tier:'Activo'},
+  {name:'Adán Cruz', estado:'Nuevo León', tier:'Activo'},
+  {name:'Yoga Fire', estado:'Estado de México', tier:'Activo'},
+  {name:'Serko Fu', estado:'Durango', tier:'Leyenda'},
+  {name:'Bocafloja', estado:'Ciudad de México', tier:'Leyenda'},
+  {name:'Akil Ammar', estado:'Ciudad de México', tier:'Activo'},
+  {name:'Fermín IV', estado:'Nuevo León', tier:'Leyenda'},
+  {name:'Pato Machete', estado:'Nuevo León', tier:'Leyenda'},
+  {name:'Control Machete', estado:'Nuevo León', tier:'Leyenda'},
+  {name:'Niña Dioz', estado:'Nuevo León', tier:'Activo'},
+  {name:'Hispana', estado:'Coahuila', tier:'Activo'},
+  {name:'Yoss Bones', estado:'Guanajuato', tier:'Activo'},
+  {name:'Mare Advertencia Lirika', estado:'Oaxaca', tier:'Activo'},
+  {name:'Audry Funk', estado:'Puebla', tier:'Activo'},
+  {name:'Ximbo', estado:'México', tier:'Activo'},
+  {name:'Muelas de Gallo', estado:'Baja California Sur', tier:'Activo'},
+  {name:'Tino El Pingüino', estado:'Ciudad de México', tier:'Activo'},
+  {name:'Hadrian', estado:'Ciudad de México', tier:'Activo'},
+  {name:'Danger AK', estado:'Baja California', tier:'Activo'},
+  {name:'T-Killa', estado:'México', tier:'Activo'},
+  {name:'Bipo Montana', estado:'Veracruz', tier:'Emergente'},
+  {name:'Sick Morrison', estado:'Nuevo León', tier:'Emergente'},
+  {name:'Mike Díaz', estado:'México', tier:'Activo'},
+  {name:'Smoky', estado:'Sinaloa', tier:'Activo'},
+  {name:'Zimple', estado:'Jalisco', tier:'Activo'},
+  {name:'Maniako', estado:'Jalisco', tier:'Activo'},
+  {name:'Cartel de Santa', estado:'Nuevo León', tier:'Leyenda'},
+  {name:'La Santa Grifa', estado:'Tamaulipas', tier:'Activo'},
+  {name:'Aczino', estado:'Estado de México', tier:'Activo'},
+  {name:'Rapder', estado:'Jalisco', tier:'Activo'},
+  {name:'Santa RM', estado:'Sonora', tier:'Activo'},
+  {name:'Remik González', estado:'Baja California', tier:'Activo'},
+  {name:'Under Side 821', estado:'Nuevo León', tier:'Activo'},
+  {name:'Neto Reyno', estado:'Nuevo León', tier:'Leyenda'},
+  {name:'Adán Zapata', estado:'Nuevo León', tier:'Leyenda'},
+  {name:'Kodigo 36', estado:'Nuevo León', tier:'Leyenda'},
+  {name:'Go Golden Junk', estado:'Ciudad de México', tier:'Activo'},
+  {name:'Chato 473', estado:'Guanajuato', tier:'Emergente'},
 ];
 
-ARTISTS.forEach(a => {
-  const vals = Object.values(a.scores);
-  a.total = Math.round(vals.reduce((s,v)=>s+v,0)/vals.length);
-});
+function slugify(t) {
+  return String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+function applyStats(stats) {
+  ARTISTS.forEach(a => {
+    const st = stats[slugify(a.name)];
+    const n = st && st.count > 0 ? st.count : 0;
+    a.scores = {}; let sum = 0;
+    CATS.forEach(c => {
+      const v = (COMMUNITY_WEIGHT_K * BASE_SCORE + n * (n ? (st.sum?.[c.key] || 0) / n : 0)) / (COMMUNITY_WEIGHT_K + n);
+      a.scores[c.key] = Math.round(v); sum += v;
+    });
+    a.total = Math.round(sum / CATS.length * 10) / 10;
+    a.votes = n;
+  });
+}
+applyStats({});
+window.applyVersusStats = function(stats) {
+  applyStats(stats);
+  ['A','B'].forEach(side => { if (selected[side]) selectArtist(selected[side].name, side, true); });
+};
 
 // ── STATE ─────────────────────────────────────────────────────
 let selected = { A: null, B: null };
@@ -540,7 +570,7 @@ function openDropdown(side) {
   if(q.trim()) searchArtist(q, side);
 }
 
-function selectArtist(name, side) {
+function selectArtist(name, side, silent) {
   const artist = ARTISTS.find(a => a.name === name);
   if (!artist) return;
   selected[side] = artist;
@@ -575,8 +605,8 @@ function selectArtist(name, side) {
     });
   }, 50);
 
-  showToast(name + ' seleccionado');
-  tryShowResults();
+  if (!silent) showToast(name + ' seleccionado');
+  tryShowResults(silent);
 }
 
 function clearArtist(side) {
@@ -591,12 +621,12 @@ function clearArtist(side) {
 }
 
 // ── RESULTS ───────────────────────────────────────────────────
-function tryShowResults() {
+function tryShowResults(silent) {
   if (!selected.A || !selected.B) return;
   renderResults(selected.A, selected.B);
   const el = document.getElementById('results');
   el.classList.add('show');
-  setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+  if (!silent) setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 100);
 }
 
 function renderResults(a, b) {
@@ -654,7 +684,7 @@ function renderResults(a, b) {
     return `<div class="summary-card ${isWinner?'winner':''}">
       <div class="summary-card-name" style="color:${color}">${artist.name}</div>
       <div class="summary-card-score">${artist.total}</div>
-      <div class="summary-card-lbl">promedio total</div>
+      <div class="summary-card-lbl">score RapScore · ${artist.votes} voto${artist.votes===1?'':'s'}</div>
       <div class="summary-wins">Gana <strong>${wins}</strong> de ${CATS.length} categorías</div>
       ${isWinner ? '<div class="winner-badge">★ Ganador general</div>' : ''}
       <div class="wins-row">
@@ -668,7 +698,7 @@ function renderResults(a, b) {
 }
 
 function generateVerdict(a, b, wA, wB, ties, catA, catB, winner) {
-  const diff = Math.abs(a.total - b.total);
+  const diff = Math.round(Math.abs(a.total - b.total) * 10) / 10;
   let text = '';
 
   if (!winner) {
@@ -792,6 +822,25 @@ document.addEventListener('keydown', e => {
     if (found) { document.getElementById('searchB').value=found.name; selectArtist(found.name,'B'); }
   }
 })();
+</script>
+<script type="module">
+// Carga los promedios de la comunidad (lectura pública)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+const app = initializeApp({
+  apiKey: "AIzaSyBhw4QNmzVnto-0nJ4Hm9C2dNy6l_IdtBI",
+  authDomain: "rapscoremx.firebaseapp.com",
+  projectId: "rapscoremx",
+  storageBucket: "rapscoremx.firebasestorage.app",
+  messagingSenderId: "971301585434",
+  appId: "1:971301585434:web:db4e6b2c2f651087ac87a3"
+});
+try {
+  const snap = await getDocs(collection(getFirestore(app), "artistStats"));
+  const stats = {};
+  snap.forEach(d => { stats[d.id] = d.data(); });
+  window.applyVersusStats(stats);
+} catch (err) { console.warn("RapScore versus:", err.code || err.message); }
 </script>
 </body>
 </html>

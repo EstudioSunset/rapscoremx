@@ -8,6 +8,9 @@ rules_version = '2';
 //   ratings/{uid}_{slug}        calificación de un usuario a un artista (6 categorías, 1–100)
 //   artistStats/{slug}          suma y conteo de calificaciones por artista (lectura pública)
 //   proposals/{id}              artistas propuestos por estado (lectura pública)
+//   contributors/{uid}          puntos y nombre público de cada contribuyente (lectura pública)
+//
+// IMPORTANTE: al agregar artistas nuevos al ranking, agrega su slug a knownArtists().
 //
 // Para votar o proponer se requiere cuenta con correo verificado.
 
@@ -25,6 +28,27 @@ service cloud.firestore {
         && validScore(s.versatilidad) && validScore(s.hooks) && validScore(s.impacto);
     }
     function validSlug(slug) { return slug is string && slug.matches('^[a-z0-9][a-z0-9-]{0,79}$'); }
+
+    // Slugs de los artistas del ranking nacional (slugify del nombre en index.html)
+    function knownArtists() {
+      return [
+      'santa-fe-klan', 'aleman', 'gera-mx', 'c-kan', 'dharius', 'babo', 'millonario', 'mc-davo',
+      'lefty-sm', 'toser-one', 'neto-pena', 'charles-ans', 'simpson-ahuevo', 'eptos-uno',
+      'robot95', 'fntxy', 'sabino', 'lng-sht', 'adan-cruz', 'yoga-fire', 'serko-fu', 'bocafloja',
+      'akil-ammar', 'fermin-iv', 'pato-machete', 'control-machete', 'nina-dioz', 'hispana',
+      'yoss-bones', 'mare-advertencia-lirika', 'audry-funk', 'ximbo', 'muelas-de-gallo',
+      'tino-el-pinguino', 'hadrian', 'danger-ak', 't-killa', 'bipo-montana', 'sick-morrison',
+      'mike-diaz', 'smoky', 'zimple', 'maniako', 'cartel-de-santa', 'la-santa-grifa', 'aczino',
+      'rapder', 'santa-rm', 'remik-gonzalez', 'under-side-821', 'neto-reyno', 'adan-zapata',
+      'kodigo-36', 'go-golden-junk', 'chato-473'
+      ];
+    }
+    function proposalDoc(id) { return /databases/$(database)/documents/proposals/$(id); }
+    function contribDoc(uid) { return /databases/$(database)/documents/contributors/$(uid); }
+    function knownSlug(slug) {
+      return slug in knownArtists()
+        || (slug.matches('^prop-[a-z0-9-]+$') && exists(proposalDoc(slug.replace('^prop-', ''))));
+    }
 
     function statsDoc(slug) { return /databases/$(database)/documents/artistStats/$(slug); }
     function ratingDoc(uid, slug) { return /databases/$(database)/documents/ratings/$(uid + '_' + slug); }
@@ -55,6 +79,7 @@ service cloud.firestore {
       allow list: if signedIn() && resource.data.uid == request.auth.uid;
       allow create, update: if verified()
         && validSlug(request.resource.data.artistSlug)
+        && knownSlug(request.resource.data.artistSlug)
         && rid == request.auth.uid + '_' + request.resource.data.artistSlug
         && request.resource.data.keys().hasOnly(['uid', 'artistSlug', 'artist', 'scores', 'updatedAt'])
         && request.resource.data.uid == request.auth.uid
@@ -83,6 +108,8 @@ service cloud.firestore {
     match /proposals/{id} {
       allow read: if true;
       allow create: if verified()
+        && id.matches('^[a-z]{3}-[a-z0-9][a-z0-9-]{0,66}$')
+        && id.split('-')[0] == request.resource.data.estado.lower()
         && request.resource.data.keys().hasOnly(['name', 'estado', 'genre', 'link', 'bio', 'createdBy', 'createdAt'])
         && request.resource.data.createdBy == request.auth.uid
         && request.resource.data.createdAt == request.time
@@ -93,6 +120,47 @@ service cloud.firestore {
         && request.resource.data.link.matches('^https://[^\\s]+$')
         && request.resource.data.bio is string && request.resource.data.bio.size() <= 280;
       allow update, delete: if false;
+    }
+
+    // ── Contribuyentes: puntos = calificaciones × 10 + propuestas × 20 ──
+    function validName(n) { return n is string && n.matches('^[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ ._-]{3,24}$'); }
+    function sameOpt(after, before, k) { return after.get(k, null) == before.get(k, null); }
+    function contribOk(uid, before, after) {
+      return after.keys().hasOnly(['name', 'points', 'ratings', 'proposals', 'lastSlug', 'lastProposal', 'lastProposalAt', 'updatedAt'])
+        && validName(after.name)
+        && after.ratings is int && after.proposals is int && after.points is int
+        && after.points == after.ratings * 10 + after.proposals * 20
+        && after.updatedAt == request.time
+        && (
+          // solo cambia el nombre
+          (after.ratings == before.ratings && after.proposals == before.proposals
+            && sameOpt(after, before, 'lastSlug') && sameOpt(after, before, 'lastProposal')
+            && sameOpt(after, before, 'lastProposalAt'))
+          // primera calificación a un artista (creada en esta misma escritura)
+          || (after.ratings == before.ratings + 1 && after.proposals == before.proposals
+            && sameOpt(after, before, 'lastProposal') && sameOpt(after, before, 'lastProposalAt')
+            && validSlug(after.lastSlug)
+            && !exists(ratingDoc(uid, after.lastSlug))
+            && getAfter(ratingDoc(uid, after.lastSlug)).data.updatedAt == request.time)
+          // propuesta nueva creada en esta escritura, máximo una con puntos cada 24 h
+          || (after.proposals == before.proposals + 1 && after.ratings == before.ratings
+            && sameOpt(after, before, 'lastSlug')
+            && after.lastProposal is string
+            && !exists(proposalDoc(after.lastProposal))
+            && getAfter(proposalDoc(after.lastProposal)).data.createdBy == uid
+            && after.lastProposalAt == request.time
+            && (before.get('lastProposalAt', null) == null
+                || request.time > before.lastProposalAt + duration.value(24, 'h')))
+        );
+    }
+
+    match /contributors/{uid} {
+      allow read: if true;
+      allow create: if verified() && request.auth.uid == uid
+        && contribOk(uid, {'ratings': 0, 'proposals': 0, 'points': 0}, request.resource.data);
+      allow update: if verified() && request.auth.uid == uid
+        && contribOk(uid, resource.data, request.resource.data);
+      allow delete: if false;
     }
 
     // El sistema anterior (votos "sobrevalorado/justo/infravalorado") queda cerrado.
