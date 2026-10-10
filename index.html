@@ -3474,7 +3474,62 @@ window.addEventListener('load', maybeWelcome);
   line-height: 1.7;
 }
 
+/* ── MAPA CON ZOOM Y PUNTOS ── */
+.map-viewport {
+  position: relative;
+  aspect-ratio: 1000 / 630;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 55% 60%, #141414 0%, #0b0b0b 75%);
+  border: 1px solid var(--border);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+.map-viewport.dragging { cursor: grabbing; }
+.map-viewport #mexico-map, .map-viewport #mexico-map svg { width: 100%; height: 100%; }
+.map-dot { pointer-events: none; stroke: #0a0a0a; }
+.map-dot.nat { fill: var(--accent); }
+.map-dot.prop { fill: var(--green); }
+.map-zoom {
+  position: absolute; top: 10px; right: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.map-zoom button {
+  width: 44px; height: 44px;
+  background: rgba(10,10,10,.85); border: 1px solid var(--border); color: var(--text);
+  font-family: 'Space Mono', monospace; font-size: 20px; line-height: 1; cursor: pointer;
+}
+.map-zoom button:hover { border-color: var(--accent); color: var(--accent); }
+.map-chip {
+  position: absolute; left: 10px; right: 64px; bottom: 10px;
+  display: none; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 8px 8px 8px 14px; background: rgba(10,10,10,.92); border: 1px solid var(--accent);
+}
+.map-chip.show { display: flex; }
+.map-chip-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; line-height: 1; }
+.map-chip-count { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.map-chip button {
+  min-height: 40px; padding: 0 14px; background: var(--accent); border: none; color: #000;
+  font-family: 'Space Mono', monospace; font-weight: 700; font-size: 11px; letter-spacing: 1px;
+  text-transform: uppercase; cursor: pointer; white-space: nowrap;
+}
+.legend-pin { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
 
+/* Estas reglas van al final para ganarle a las de arriba (antes el mapa quedaba en una columna angosta en celular) */
+@media (max-width: 900px) {
+  .estados-hero, .estados-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .estados-body { padding: 0 0 100px; gap: 16px; }
+  .estados-body > div { min-width: 0; }
+  .map-container { padding: 0; background: none; border: none; }
+  .map-title { padding: 14px 16px 10px; margin: 0; }
+  .map-viewport { aspect-ratio: auto; height: 72vh; min-height: 420px; border-left: none; border-right: none; }
+  .map-legend { padding: 0 16px; }
+  .states-list-view { padding: 16px 16px 0; }
+  .state-panel { padding: 0 16px; }
+}
 </style>
 
 <!-- ═══ ESTADOS HTML ═══ -->
@@ -3609,11 +3664,22 @@ function renderEstados() {
         <!-- MAP VIEW -->
         <div class="map-view-wrap" id="mapViewWrap">
           <div class="map-container">
-            <div class="map-title">Clic en un estado para ver su escena local</div>
-            <div id="mexico-map">${buildMexicoSVG()}</div>
+            <div class="map-title">Toca un estado para ver su escena · arrastra para moverte, pellizca o usa + / − para acercar</div>
+            <div class="map-viewport" id="mapViewport">
+              <div id="mexico-map">${buildMexicoSVG()}</div>
+              <div class="map-zoom">
+                <button type="button" onclick="mapZoomBy(1.6)" aria-label="Acercar">+</button>
+                <button type="button" onclick="mapZoomBy(1/1.6)" aria-label="Alejar">−</button>
+                <button type="button" onclick="mapShowAll()" aria-label="Ver todo el país" title="Ver todo el país">⤢</button>
+              </div>
+              <div class="map-chip" id="mapChip">
+                <div><div class="map-chip-name" id="mapChipName"></div><div class="map-chip-count" id="mapChipCount"></div></div>
+                <button type="button" onclick="document.getElementById('statePanel').scrollIntoView({behavior:'smooth', block:'start'})">Ver artistas ↓</button>
+              </div>
+            </div>
             <div class="map-legend">
-              <span style="font-size:10px;color:var(--muted)"><span class="legend-dot" style="background:#1a1a2e;border-color:#333366"></span>Con artistas nacionales</span>
-              <span style="font-size:10px;color:var(--muted)"><span class="legend-dot" style="background:#1a2a1a;border-color:#336633"></span>Con propuestas locales</span>
+              <span style="font-size:10px;color:var(--muted)"><span class="legend-pin" style="background:var(--accent)"></span>Rapero del ranking</span>
+              <span style="font-size:10px;color:var(--muted)"><span class="legend-pin" style="background:var(--green)"></span>Propuesta local</span>
               <span style="font-size:10px;color:var(--muted)"><span class="legend-dot" style="background:var(--surface2);border-color:var(--border)"></span>Sin artistas aún</span>
             </div>
           </div>
@@ -3647,6 +3713,7 @@ function renderEstados() {
 
   renderStatesList();
   applyMapClasses();
+  mapInit();
 }
 
 function switchEstView(view, btn) {
@@ -3683,14 +3750,199 @@ function applyMapClasses() {
   });
 }
 
-function selectEstado(id) {
+function selectEstado(id, fromMap) {
   selectedEstado = id;
   applyMapClasses();
   renderStatesList();
   const estado = ESTADOS.find(e=>e.id===id);
   renderStatePanel(estado);
-  document.getElementById('statePanel').scrollIntoView({behavior:'smooth', block:'nearest'});
+  updateMapChip(estado);
+  // En celular, al tocar el mapa no saltamos: aparece el aviso con "Ver artistas"
+  const mobile = window.matchMedia('(max-width: 768px)').matches;
+  if (!(fromMap && mobile)) document.getElementById('statePanel').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
+
+function updateMapChip(estado) {
+  const chip = document.getElementById('mapChip');
+  if (!chip || !estado) return;
+  const n = estado.artists.length, p = estado.proposed.length;
+  const parts = [];
+  if (n) parts.push(n + (n > 1 ? ' raperos' : ' rapero'));
+  if (p) parts.push(p + (p > 1 ? ' propuestas' : ' propuesta'));
+  document.getElementById('mapChipName').textContent = estado.name;
+  document.getElementById('mapChipCount').textContent = parts.join(' · ') || 'Sin artistas aún · propón uno';
+  chip.classList.add('show');
+}
+
+// ── MAPA: arrastrar, zoom y puntos por artista ───────────────
+// Se maneja con el viewBox del SVG. MAP.vb se conserva aunque se vuelva a dibujar la sección.
+const MAP = { full: { x: 0, y: 0, w: 1000, h: 630 }, vb: null, pointers: new Map(), moved: 0, anchors: {}, last: null };
+
+function mapEls() {
+  const vp = document.getElementById('mapViewport');
+  return { vp, svg: vp && vp.querySelector('svg') };
+}
+function mapAspect(vp) { const r = vp.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r.height / r.width : 0.63; }
+function mapMaxW(vp) { return Math.max(MAP.full.w, MAP.full.h / mapAspect(vp)) * 1.08; }
+
+function mapClamp(vp) {
+  const vb = MAP.vb, a = mapAspect(vp);
+  vb.w = Math.min(Math.max(vb.w, 70), mapMaxW(vp));
+  vb.h = vb.w * a;
+  // el centro de la vista siempre queda dentro del país
+  const cx = Math.min(Math.max(vb.x + vb.w / 2, MAP.full.x), MAP.full.x + MAP.full.w);
+  const cy = Math.min(Math.max(vb.y + vb.h / 2, MAP.full.y), MAP.full.y + MAP.full.h);
+  vb.x = cx - vb.w / 2; vb.y = cy - vb.h / 2;
+}
+
+function mapApply() {
+  const { vp, svg } = mapEls();
+  if (!svg) return;
+  mapClamp(vp);
+  const vb = MAP.vb;
+  svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  mapDrawDots(vp);
+}
+
+function mapDefaultView(vp) {
+  const a = mapAspect(vp);
+  if (a > 0.9) {
+    // celular vertical: llenamos el alto y centramos en el centro del país (donde hay más raperos)
+    const h = MAP.full.h * 0.92, w = h / a;
+    return { x: 560 - w / 2, y: (MAP.full.h - h) / 2 + 10, w, h };
+  }
+  const w = mapMaxW(vp) / 1.08;
+  return { x: (MAP.full.w - w) / 2, y: (MAP.full.h - w * a) / 2, w, h: w * a };
+}
+
+window.mapShowAll = function () {
+  const { vp } = mapEls(); if (!vp) return;
+  const w = mapMaxW(vp), a = mapAspect(vp);
+  MAP.vb = { x: (MAP.full.w - w) / 2, y: (MAP.full.h - w * a) / 2, w, h: w * a };
+  mapApply();
+};
+
+function mapZoomAt(px, py, factor) {
+  const { vp } = mapEls(); if (!vp) return;
+  const r = vp.getBoundingClientRect(), vb = MAP.vb;
+  const sx = vb.x + (px / r.width) * vb.w, sy = vb.y + (py / r.height) * vb.h;
+  vb.w /= factor; vb.h /= factor;
+  vb.x = sx - (px / r.width) * vb.w; vb.y = sy - (py / r.height) * vb.h;
+  mapApply();
+}
+window.mapZoomBy = function (factor) {
+  const { vp } = mapEls(); if (!vp) return;
+  const r = vp.getBoundingClientRect();
+  mapZoomAt(r.width / 2, r.height / 2, factor);
+};
+
+// Punto dentro de cada estado para colgar sus puntitos (centro de la caja; si cae fuera, el punto interior más cercano)
+function mapComputeAnchors(svg) {
+  MAP.anchors = {};
+  svg.querySelectorAll('[data-estado]').forEach(path => {
+    const b = path.getBBox();
+    let best = { x: b.x + b.width / 2, y: b.y + b.height / 2 };
+    const inside = (x, y) => { try { return path.isPointInFill(new DOMPoint(x, y)); } catch (e) { return true; } };
+    if (!inside(best.x, best.y)) {
+      let bestD = Infinity, found = null;
+      const steps = 24;
+      for (let i = 0; i <= steps; i++) for (let j = 0; j <= steps; j++) {
+        const x = b.x + b.width * i / steps, y = b.y + b.height * j / steps;
+        if (!inside(x, y)) continue;
+        const d = (x - best.x) ** 2 + (y - best.y) ** 2;
+        if (d < bestD) { bestD = d; found = { x, y }; }
+      }
+      if (found) best = found;
+    }
+    MAP.anchors[path.getAttribute('data-estado')] = best;
+  });
+}
+
+function mapDrawDots(vp) {
+  const svg = vp.querySelector('svg'), g = svg && svg.querySelector('#mapDots');
+  if (!g) return;
+  const pxToSvg = MAP.vb.w / vp.getBoundingClientRect().width;
+  const r = 4.5 * pxToSvg, gap = r * 2.5;
+  let html = '';
+  ESTADOS.forEach(e => {
+    const a = MAP.anchors[e.id];
+    if (!a) return;
+    const list = e.artists.map(() => 'nat').concat(e.proposed.map(() => 'prop'));
+    // acomodo en girasol: el primero en el centro y los demás alrededor
+    list.forEach((cls, i) => {
+      const ang = i * 2.39996, dist = gap * 0.62 * Math.sqrt(i);
+      const x = a.x + Math.cos(ang) * dist, y = a.y + Math.sin(ang) * dist;
+      html += `<circle class="map-dot ${cls}" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r.toFixed(2)}" stroke-width="${(r * 0.35).toFixed(2)}"/>`;
+    });
+  });
+  g.innerHTML = html;
+}
+
+window.mapTap = function (id) {
+  if (MAP.moved > 8) return; // fue arrastre, no toque
+  selectEstado(id, true);
+};
+
+function mapInit() {
+  const { vp, svg } = mapEls();
+  if (!svg) return;
+  // si la sección todavía no se ve, esperamos a que tenga tamaño
+  if (!vp.getBoundingClientRect().width) { requestAnimationFrame(() => { if (mapEls().vp === vp) mapInit(); }); return; }
+  if (!MAP.vb) MAP.vb = mapDefaultView(vp);
+  mapComputeAnchors(svg);
+  mapApply();
+  if (selectedEstado) updateMapChip(ESTADOS.find(e => e.id === selectedEstado));
+
+  const pos = ev => { const r = vp.getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; };
+  vp.addEventListener('pointerdown', ev => {
+    if (ev.target.closest('.map-zoom, .map-chip')) return;
+    MAP.pointers.set(ev.pointerId, pos(ev));
+    if (MAP.pointers.size === 1) MAP.moved = 0;
+    MAP.last = null;
+    vp.classList.add('dragging');
+  });
+  vp.addEventListener('pointermove', ev => {
+    if (!MAP.pointers.has(ev.pointerId)) return;
+    const prev = MAP.pointers.get(ev.pointerId), cur = pos(ev);
+    MAP.pointers.set(ev.pointerId, cur);
+    const r = vp.getBoundingClientRect();
+    if (MAP.pointers.size === 1) {
+      const dx = cur.x - prev.x, dy = cur.y - prev.y;
+      MAP.moved += Math.abs(dx) + Math.abs(dy);
+      if (MAP.moved > 8) {
+        MAP.vb.x -= dx / r.width * MAP.vb.w;
+        MAP.vb.y -= dy / r.height * MAP.vb.h;
+        mapApply();
+      }
+    } else if (MAP.pointers.size === 2) {
+      const [p1, p2] = [...MAP.pointers.values()];
+      const d = Math.hypot(p1.x - p2.x, p1.y - p2.y), mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+      if (MAP.last) {
+        MAP.vb.x -= (mid.x - MAP.last.mid.x) / r.width * MAP.vb.w;
+        MAP.vb.y -= (mid.y - MAP.last.mid.y) / r.height * MAP.vb.h;
+        if (MAP.last.d > 0) mapZoomAt(mid.x, mid.y, d / MAP.last.d); else mapApply();
+      }
+      MAP.last = { d, mid };
+      MAP.moved = 99;
+    }
+  });
+  const end = ev => {
+    MAP.pointers.delete(ev.pointerId);
+    MAP.last = null;
+    if (!MAP.pointers.size) vp.classList.remove('dragging');
+  };
+  vp.addEventListener('pointerup', end);
+  vp.addEventListener('pointercancel', end);
+  vp.addEventListener('pointerleave', end);
+  // En compu: zoom con pellizco del trackpad o Ctrl + rueda (la rueda sola sigue bajando la página)
+  vp.addEventListener('wheel', ev => {
+    if (!ev.ctrlKey) return;
+    ev.preventDefault();
+    const p = pos(ev);
+    mapZoomAt(p.x, p.y, Math.exp(-ev.deltaY * 0.01));
+  }, { passive: false });
+}
+window.addEventListener('resize', () => { if (MAP.vb && mapEls().svg) mapApply(); });
 
 function renderStatePanel(estado) {
   const panel = document.getElementById('statePanel');
@@ -4111,10 +4363,11 @@ function buildMexicoSVG() {
     const cls = 'mxstate' + (hasN && hasP ? ' both' : hasN ? ' has-artists' : hasP ? ' has-proposed' : '');
     const sel = selectedEstado === id ? ' selected' : '';
     const name = names[id] || id;
-    return `<path data-estado="${id}" class="${cls}${sel}" d="${d}" onclick="selectEstado('${id}')"><title>${name}</title></path>`;
+    return `<path data-estado="${id}" class="${cls}${sel}" d="${d}" onclick="mapTap('${id}')"><title>${name}</title></path>`;
   }).join('\n');
-  return `<svg viewBox="0 0 1000 630" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  return `<svg viewBox="0 0 1000 630" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
 ${svgPaths}
+<g id="mapDots"></g>
 </svg>`;
 }
 </script>
