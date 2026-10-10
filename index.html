@@ -788,6 +788,9 @@ h1 em { color: var(--accent); font-style: normal; }
 /* POP-UPS */
 .modal-overlay.open { display: flex; }
 .pop-modal { max-width: 520px; }
+.ajuste-stat { margin: 4px 0 6px; padding: 12px 14px; border: 1px dashed var(--border); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.ajuste-stat b { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--accent); font-weight: 400; margin-right: 6px; vertical-align: -3px; }
+.ajuste-stat:empty { display: none; }
 .pop-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
 .pop-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 10vw, 64px); line-height: .92; margin-bottom: 16px; }
 .pop-title em { color: var(--accent); font-style: normal; }
@@ -1530,9 +1533,9 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   </div>
 </div>
 <!-- BIENVENIDA -->
-<div class="modal-overlay" id="welcomeModal" onclick="if(event.target===this)closeWelcome()">
+<div class="modal-overlay" id="welcomeModal" onclick="if(event.target===this)closeWelcome('ranking')">
   <div class="modal pop-modal" role="dialog" aria-labelledby="welcomeTitle">
-    <button class="modal-close" onclick="closeWelcome()" aria-label="Cerrar">✕</button>
+    <button class="modal-close" onclick="closeWelcome('ranking')" aria-label="Cerrar">✕</button>
     <div class="pop-label">Bienvenido a RapScore MX</div>
     <div class="pop-title" id="welcomeTitle">EL RANKING<br>LO DECIDES <em>TÚ</em></div>
     <p class="pop-text">Somos una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Aquí no hay jurado: todos los raperos arrancan en <strong>50</strong> y cada voto mueve el ranking.</p>
@@ -1543,9 +1546,26 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     </ul>
     <div class="pop-actions">
       <button class="rate-submit" onclick="closeWelcome();goTo('votar')">Votar ahora →</button>
-      <button class="btn-sm" onclick="closeWelcome()">Ver el ranking</button>
+      <button class="btn-sm" onclick="closeWelcome('ranking')">Ver el ranking</button>
     </div>
     <div class="pop-social"><span>Síguenos</span><span class="social-links" data-social></span></div>
+  </div>
+</div>
+
+<!-- AVISO: RANKING EN AJUSTE -->
+<div class="modal-overlay" id="ajusteModal" onclick="if(event.target===this)closeAjuste()">
+  <div class="modal pop-modal" role="dialog" aria-labelledby="ajusteTitle">
+    <button class="modal-close" onclick="closeAjuste()" aria-label="Cerrar">✕</button>
+    <div class="pop-label">Ranking en proceso de ajuste</div>
+    <div class="pop-title" id="ajusteTitle">EL RANKING SE<br>ESTÁ <em>AJUSTANDO</em></div>
+    <p class="pop-text">Estamos arrancando. Todos los raperos empezaron en <strong>50</strong> y el ranking se va ajustando con cada calificación de la comunidad.</p>
+    <p class="pop-text">Entre más gente vote, <strong>mejor y más real es el promedio</strong>. Si ves a alguien muy arriba o muy abajo, tu voto lo pone en su lugar.</p>
+    <div class="ajuste-stat" id="ajusteStat"></div>
+    <div class="pop-actions">
+      <button class="rate-submit" onclick="closeAjuste();goTo('votar')">Votar ahora →</button>
+      <button class="btn-sm" onclick="closeAjuste();openShare('', false)">Invitar a votar</button>
+      <button class="btn-sm" onclick="closeAjuste()">Entendido</button>
+    </div>
   </div>
 </div>
 
@@ -2399,12 +2419,33 @@ function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return n
 function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
 // ─── POP-UP DE BIENVENIDA ───────────────────────────────────
-function closeWelcome() {
+function closeWelcome(next) {
   document.getElementById('welcomeModal').classList.remove('open');
   lsSet('rs_welcome_seen', '1');
+  // si se queda a ver el ranking, le avisamos que todavía se está ajustando
+  if (next === 'ranking') setTimeout(() => maybeAjuste(true), 500);
+}
+// ─── POP-UP: RANKING EN AJUSTE ──────────────────────────────
+const AJUSTE_EVERY_MS = 24 * 60 * 60 * 1000; // máximo una vez al día por visitante
+function closeAjuste() {
+  document.getElementById('ajusteModal').classList.remove('open');
+  lsSet('rs_ajuste_seen', String(Date.now()));
+}
+function maybeAjuste(force) {
+  const last = Number(lsGet('rs_ajuste_seen') || 0);
+  if (!force && Date.now() - last < AJUSTE_EVERY_MS) return;
+  const h = location.hash.replace('#','');
+  if (h === 'admin' || h === 'votar') return;
+  if (document.querySelector('.modal-overlay.open')) return;
+  const v = ARTISTS.reduce((s,a) => s + a.votes, 0);
+  const voted = ARTISTS.filter(a => a.votes > 0).length;
+  document.getElementById('ajusteStat').innerHTML = v
+    ? `<b>${v}</b> calificaciones · ${voted} de ${ARTISTS.length} raperos ya tienen votos`
+    : '';
+  document.getElementById('ajusteModal').classList.add('open');
 }
 function maybeWelcome() {
-  if (lsGet('rs_welcome_seen')) return;
+  if (lsGet('rs_welcome_seen')) { setTimeout(() => maybeAjuste(), 1500); return; }
   const h = location.hash.replace('#','');
   if (h === 'votar') { lsSet('rs_welcome_seen', '1'); return; }
   if (h === 'admin') return;
