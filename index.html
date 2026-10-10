@@ -3491,6 +3491,7 @@ window.addEventListener('load', maybeWelcome);
 .map-dot { pointer-events: none; stroke: #0a0a0a; }
 .map-dot.nat { fill: var(--accent); }
 .map-dot.prop { fill: var(--green); }
+.map-dot.pend { fill: #8a8a8a; }
 .map-zoom {
   position: absolute; top: 10px; right: 10px;
   display: flex; flex-direction: column; gap: 6px;
@@ -3680,6 +3681,7 @@ function renderEstados() {
             <div class="map-legend">
               <span style="font-size:10px;color:var(--muted)"><span class="legend-pin" style="background:var(--accent)"></span>Rapero del ranking</span>
               <span style="font-size:10px;color:var(--muted)"><span class="legend-pin" style="background:var(--green)"></span>Propuesta local</span>
+              <span style="font-size:10px;color:var(--muted)"><span class="legend-pin" style="background:#8a8a8a"></span>Origen por confirmar</span>
               <span style="font-size:10px;color:var(--muted)"><span class="legend-dot" style="background:var(--surface2);border-color:var(--border)"></span>Sin artistas aún</span>
             </div>
           </div>
@@ -3858,23 +3860,64 @@ function mapComputeAnchors(svg) {
   });
 }
 
+// Ciudad de origen → [latitud, longitud]. La llave es el primer tag del artista, normalizado.
+// Tags que solo dicen el estado ("Sonora", "CDMX", "BCS"…) no van aquí: esos usan el centro del estado.
+const CITY_COORDS = {
+  'los cabos': [22.89, -109.91], 'san nicolas, nl': [25.74, -100.30], 'guadalajara': [20.67, -103.35],
+  'monterrey': [25.67, -100.31], 'santa catarina, nl': [25.67, -100.46], 'guadalupe, nl': [25.68, -100.26],
+  'hermosillo': [29.07, -110.96], 'mexicali': [32.62, -115.45], 'tijuana': [32.51, -117.04],
+  'cancun': [21.16, -86.85], 'ecatepec': [19.60, -99.05], 'gomez palacio': [25.56, -103.50],
+  'monclova': [26.91, -101.42], 'salamanca': [20.57, -101.19], 'xalapa': [19.54, -96.91],
+  'mazatlan': [23.25, -106.41], 'tampico': [22.25, -97.86], 'neza': [19.40, -99.01],
+  'nogales': [31.31, -110.94], 'iztapalapa': [19.36, -99.06], 'jiquilpan, mich.': [19.99, -102.72],
+  'iramuco, gto.': [20.02, -100.92], 'linares, nl': [24.86, -99.57], 'matamoros': [25.87, -97.50],
+};
+const normCity = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+// El SVG del mapa está en proyección Mercator; estos números se ajustaron con los límites de varios estados (error ~1 px)
+function geoToMap(lat, lon) {
+  const r = Math.PI / 180;
+  return { x: 1643.45 * lon * r + 3441.3, y: -1645.25 * Math.log(Math.tan(Math.PI / 4 + lat * r / 2)) + 1023.21 };
+}
+const MAP_CENTER = geoToMap(23.4, -102.4); // para artistas sin estado: centro del país
+
+// Dónde va el punto de cada artista: su ciudad si la conocemos (y cae dentro de su estado),
+// si no el centro de su estado, y si no tiene estado el centro del país (gris = origen por confirmar)
+function mapComputePoints(svg) {
+  const pts = [];
+  ARTISTS.forEach(a => {
+    const e = ESTADOS.find(s => s.name === a.estado || s.id === a.estado);
+    const c = CITY_COORDS[normCity(a.tags && a.tags[0])];
+    let p = null;
+    if (c && e) {
+      const q = geoToMap(c[0], c[1]), path = svg.querySelector(`[data-estado="${e.id}"]`);
+      try { if (path && path.isPointInFill(new DOMPoint(q.x, q.y))) p = q; } catch (err) {}
+    }
+    if (p) pts.push({ ...p, cls: 'nat' });
+    else if (e && MAP.anchors[e.id]) pts.push({ ...MAP.anchors[e.id], cls: 'nat' });
+    else pts.push({ ...MAP_CENTER, cls: 'pend' });
+  });
+  ESTADOS.forEach(e => e.proposed.forEach(() => { if (MAP.anchors[e.id]) pts.push({ ...MAP.anchors[e.id], cls: 'prop' }); }));
+  MAP.points = pts;
+}
+
 function mapDrawDots(vp) {
   const svg = vp.querySelector('svg'), g = svg && svg.querySelector('#mapDots');
-  if (!g) return;
+  if (!g || !MAP.points) return;
   const pxToSvg = MAP.vb.w / vp.getBoundingClientRect().width;
   const r = 4.5 * pxToSvg, gap = r * 2.5;
-  let html = '';
-  ESTADOS.forEach(e => {
-    const a = MAP.anchors[e.id];
-    if (!a) return;
-    const list = e.artists.map(() => 'nat').concat(e.proposed.map(() => 'prop'));
-    // acomodo en girasol: el primero en el centro y los demás alrededor
-    list.forEach((cls, i) => {
-      const ang = i * 2.39996, dist = gap * 0.62 * Math.sqrt(i);
-      const x = a.x + Math.cos(ang) * dist, y = a.y + Math.sin(ang) * dist;
-      html += `<circle class="map-dot ${cls}" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r.toFixed(2)}" stroke-width="${(r * 0.35).toFixed(2)}"/>`;
-    });
+  // los que comparten lugar se acomodan en girasol: el primero en el centro y los demás alrededor
+  const groups = new Map();
+  MAP.points.forEach(p => {
+    const k = p.x.toFixed(1) + ',' + p.y.toFixed(1);
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(p);
   });
+  let html = '';
+  groups.forEach(list => list.forEach((p, i) => {
+    const ang = i * 2.39996, dist = gap * 0.62 * Math.sqrt(i);
+    const x = p.x + Math.cos(ang) * dist, y = p.y + Math.sin(ang) * dist;
+    html += `<circle class="map-dot ${p.cls}" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r.toFixed(2)}" stroke-width="${(r * 0.35).toFixed(2)}"/>`;
+  }));
   g.innerHTML = html;
 }
 
@@ -3890,6 +3933,7 @@ function mapInit() {
   if (!vp.getBoundingClientRect().width) { requestAnimationFrame(() => { if (mapEls().vp === vp) mapInit(); }); return; }
   if (!MAP.vb) MAP.vb = mapDefaultView(vp);
   mapComputeAnchors(svg);
+  mapComputePoints(svg);
   mapApply();
   if (selectedEstado) updateMapChip(ESTADOS.find(e => e.id === selectedEstado));
 
