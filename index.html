@@ -59,7 +59,7 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
   }, true);
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Saira+Stencil+One&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0a;
@@ -1339,7 +1339,7 @@ html { overflow-x: clip; }
 .street-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,10,10,.93) 0%, rgba(10,10,10,.74) 45%, rgba(10,10,10,.22) 100%), linear-gradient(180deg, rgba(10,10,10,0) 60%, #0a0a0a 100%); }
 .street-glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 84% 4%, rgba(255,176,72,.30), rgba(255,176,72,0) 38%); }
 .street-inner { position: relative; z-index: 2; width: 100%; max-width: 1400px; margin: 0 auto; padding: 64px 24px 96px; }
-.street-kicker { display: inline-block; font-family: 'Permanent Marker', cursive; font-size: 20px; color: var(--accent); transform: rotate(-2deg); margin-bottom: 10px; }
+.street-kicker { display: inline-block; font-family: 'Saira Stencil One', 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); transform: rotate(-2deg); margin-bottom: 10px; }
 .street-logo { margin: 0 0 0 -10px; line-height: 0; }
 .street-logo img { width: 100%; max-width: 720px; height: auto; display: block; filter: drop-shadow(8px 10px 0 rgba(0,0,0,.7)); }
 .street-claim { margin-top: 26px; max-width: 640px; font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 4.4vw, 54px); line-height: 1; letter-spacing: .5px; color: #fff; }
@@ -4483,7 +4483,7 @@ window.submitRating = async function(btn) {
   } catch (err) {
     console.error(err);
     showToast(err.code === "permission-denied"
-      ? "No se pudo guardar (permisos). Confirma tu correo o intenta más tarde."
+      ? "No pudimos guardar tu voto por este artista. Ya estamos enterados; intenta más tarde."
       : "Error al guardar la calificación");
   } finally {
     btn.disabled = false;
