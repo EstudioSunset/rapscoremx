@@ -54,3 +54,4 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - Agregar Instagram en `const SOCIAL` de `index.html` cuando exista la cuenta (Facebook y TikTok ya están puestos; Instagram se muestra como "muy pronto").
 - Verificar el origen de Lirika Inverza (está puesto como CDMX).
 - Opcional: campo de foto con casilla de derechos en el formulario de propuestas.
+- En pausa (Adn lo pidió así): que usuarios propongan corregir la ciudad de origen de un rapero (ciudad + link de prueba → revisión en Admin → se mueve el punto; da puntos). Requiere cambiar `firestore.rules`.
