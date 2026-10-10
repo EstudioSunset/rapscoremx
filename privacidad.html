@@ -51,6 +51,8 @@ button:disabled { opacity: .6; cursor: wait; }
 .form-msg { font-size: 12px; min-height: 1em; }
 
 footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 10px; letter-spacing: 1px; color: var(--muted); }
+footer .legal { max-width: 760px; margin: 0 auto 14px; font-size: 11px; line-height: 1.7; letter-spacing: 0; color: #9a9a9a; }
+footer .legal strong { color: var(--text); }
 @media (max-width: 600px) { header { position: static; } .logo-img img { height: 30px; } nav a { padding: 10px 8px; } }
 </style>
 </head>
@@ -136,7 +138,7 @@ footer { border-top: 1px solid var(--border); padding: 24px; text-align: center;
   <h2>5. Cuánto tiempo los guardamos</h2>
   <p>Los datos de tu cuenta se quedan mientras la tengas activa. Si pides borrarla, eliminamos tu correo y tu alias. Tus calificaciones pueden quedar dentro del promedio de cada artista, pero ya sin relación contigo. Las estadísticas de uso se guardan hasta 14 meses en Google Analytics.</p>
 
-  <h2>6. Tus derechos</h2>
+  <h2 id="derechos">6. Tus derechos</h2>
   <p>Puedes pedir <strong>ver</strong> qué datos tenemos de ti, <strong>corregirlos</strong>, <strong>borrarlos</strong> u <strong>oponerte</strong> a que los usemos para algún fin. También puedes retirar tu consentimiento en cualquier momento. Usa el formulario de abajo con el mismo correo de tu cuenta y te respondemos en un plazo máximo de 20 días hábiles.</p>
 
   <form id="privacyForm" novalidate>
@@ -150,6 +152,7 @@ footer { border-top: 1px solid var(--border); padding: 24px; text-align: center;
         <option>Borrar mi cuenta y mis datos</option>
         <option>Oponerme a un uso de mis datos</option>
         <option>Otra pregunta de privacidad</option>
+        <option>Soy artista o titular de derechos: retirar o corregir contenido</option>
       </select>
     </label>
     <label>Detalles (opcional)
@@ -163,7 +166,7 @@ footer { border-top: 1px solid var(--border); padding: 24px; text-align: center;
   <p>Si cambiamos algo importante, lo actualizamos en esta página con su nueva fecha.</p>
 </main>
 
-<footer>© 2026 RapScore MX · Un proyecto de Estudio Sunset · <a href="index.html">Volver al ranking</a></footer>
+<footer><p class="legal"><strong>Aviso legal:</strong> RapScore MX respeta los derechos de propiedad intelectual y de imagen de los artistas. Todo el contenido visual y musical de terceros se muestra únicamente mediante las herramientas de inserción oficiales de cada plataforma (como Spotify, YouTube o Instagram), sin alojar en nuestros servidores imágenes ni grabaciones no autorizadas. Si eres artista o titular de derechos y deseas que retiremos o corrijamos algún contenido, <a href="#derechos">contáctanos</a>.</p>© 2026 RapScore MX · Un proyecto de Estudio Sunset · <a href="index.html">Volver al ranking</a></footer>
 
 <script>
 // Las solicitudes llegan por correo vía Formspree (mismo endpoint que los avisos de propuestas)
