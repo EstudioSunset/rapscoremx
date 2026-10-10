@@ -47,7 +47,8 @@ service cloud.firestore {
       'mike-diaz', 'smoky', 'zimple', 'maniako', 'cartel-de-santa', 'la-santa-grifa', 'aczino',
       'rapder', 'santa-rm', 'remik-gonzalez', 'under-side-821', 'neto-reyno', 'adan-zapata',
       'kodigo-36', 'go-golden-junk', 'chato-473',
-      'eric-el-nino', 'mc-luka', 'w-corona', 'perro-zw', 'lirika-inverza', 'akwid', 'kinto-sol'
+      'eric-el-nino', 'mc-luka', 'w-corona', 'perro-zw', 'lirika-inverza', 'akwid', 'kinto-sol',
+      'tren-lokote', 'geassassin', 'teeam-revolver', 'tiro-loko', 'doble-one-flow-letal', 'eanz'
       ];
     }
     function proposalDoc(id) { return /databases/$(database)/documents/proposals/$(id); }
