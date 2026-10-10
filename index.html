@@ -13,6 +13,52 @@
 <meta property="og:image" content="https://www.rapscoremx.com/images/rapscore-logo.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="images/rs-favicon.png">
+<!-- ═══ MEDICIÓN: GA4 (vía Firebase Analytics, G-D6QMGC5N67) + Microsoft Clarity ═══ -->
+<script>
+// 1) Pega aquí el ID de tu proyecto de Microsoft Clarity (clarity.microsoft.com → Settings → Overview).
+//    Mientras esté vacío, Clarity no se carga.
+window.RS_CLARITY_ID = '';
+(function () {
+  // Tráfico interno: tus visitas no ensucian las métricas.
+  // Abre una vez rapscoremx.com/?rs_internal=1 en cada dispositivo tuyo (y ?rs_internal=0 para quitarlo).
+  // Si entras como admin se marca solo.
+  try {
+    var m = location.search.match(/[?&]rs_internal=([01])/);
+    if (m) localStorage.setItem('rs_internal', m[1]);
+    window.RS_INTERNAL = localStorage.getItem('rs_internal') === '1';
+  } catch (e) { window.RS_INTERNAL = false; }
+
+  // Microsoft Clarity
+  if (window.RS_CLARITY_ID) {
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', window.RS_CLARITY_ID);
+    if (window.RS_INTERNAL) clarity('set', 'traffic_type', 'internal');
+  }
+
+  // rsTrack(nombre, params): un solo punto para mandar eventos a GA4 y a Clarity.
+  // GA4 carga con Firebase (módulo al final de la página); lo que pase antes se guarda en cola.
+  var queue = [];
+  window.rsTrack = function (name, params) {
+    params = params || {};
+    try { if (window.clarity) window.clarity('event', name); } catch (e) {}
+    if (window._rsLog) { try { window._rsLog(name, params); } catch (e) {} }
+    else queue.push([name, params]);
+  };
+  window._rsReady = function (fn) {
+    window._rsLog = fn;
+    queue.splice(0).forEach(function (e) { try { fn(e[0], e[1]); } catch (x) {} });
+  };
+
+  // Clics en botones marcados con data-track="nombre" → evento cta_click
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest && e.target.closest('[data-track]');
+    if (el) window.rsTrack('cta_click', { cta: el.getAttribute('data-track') });
+  }, true);
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1406,8 +1452,8 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <p class="street-claim">El ranking del rap mexicano lo decide la calle.</p>
     <p class="street-sub">Califica a tus MCs en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Todos arrancan en 50 y el promedio de la comunidad manda.</p>
     <div class="street-ctas">
-      <button type="button" class="street-btn" onclick="goTo('votar')">Votar ahora</button>
-      <button type="button" class="street-btn ghost" onclick="scrollToRanking()">Ver ranking</button>
+      <button type="button" class="street-btn" data-track="hero_votar" onclick="goTo('votar')">Votar ahora</button>
+      <button type="button" class="street-btn ghost" data-track="hero_ver_ranking" onclick="scrollToRanking()">Ver ranking</button>
     </div>
     <p class="street-stats" id="streetStats">&nbsp;</p>
   </div>
@@ -1491,7 +1537,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
       <div class="section-count" id="waitCount"></div>
     </div>
     <p class="wait-note">Estos raperos están esperando entrar al Top 50. Califícalos: si su promedio supera al del lugar 50, suben al ranking.
-      <button type="button" class="wait-cta" onclick="goTo('votar')">Votar ahora →</button></p>
+      <button type="button" class="wait-cta" data-track="fila_votar" onclick="goTo('votar')">Votar ahora →</button></p>
     <div id="waitTable" class="artist-table wait-table"></div>
   </div>
 </main>
@@ -1561,7 +1607,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
       <li>¿Falta alguien? Propónlo y, tras revisarlo, la comunidad lo califica</li>
     </ul>
     <div class="pop-actions">
-      <button class="rate-submit" onclick="closeWelcome();goTo('votar')">Votar ahora →</button>
+      <button class="rate-submit" data-track="bienvenida_votar" onclick="closeWelcome();goTo('votar')">Votar ahora →</button>
       <button class="btn-sm" onclick="closeWelcome('ranking')">Ver el ranking</button>
     </div>
     <div class="pop-social"><span>Síguenos</span><span class="social-links" data-social></span></div>
@@ -1578,8 +1624,8 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <p class="pop-text">Entre más gente vote, <strong>mejor y más real es el promedio</strong>. Si ves a alguien muy arriba o muy abajo, tu voto lo pone en su lugar.</p>
     <div class="ajuste-stat" id="ajusteStat"></div>
     <div class="pop-actions">
-      <button class="rate-submit" onclick="closeAjuste();goTo('votar')">Votar ahora →</button>
-      <button class="btn-sm" onclick="closeAjuste();openShare('', false)">Invitar a votar</button>
+      <button class="rate-submit" data-track="ajuste_votar" onclick="closeAjuste();goTo('votar')">Votar ahora →</button>
+      <button class="btn-sm" data-track="ajuste_invitar" onclick="closeAjuste();openShare('', false)">Invitar a votar</button>
       <button class="btn-sm" onclick="closeAjuste()">Entendido</button>
     </div>
   </div>
@@ -2006,6 +2052,7 @@ function toggleExpand(e, name) {
   panel.classList.add('open');
   btn.classList.add('open');
   expandedRow = name;
+  rsTrack('view_artist', { artist_name: name, artist_slug: artist.slug });
   drawRadar('radar-' + safeName(name), artist.scores, '#ff3c00');
 }
 
@@ -2175,6 +2222,7 @@ function clearCompare() {
 function openCompareModal() {
   if (compareList.length < 2) { showToast('Selecciona 2 artistas para comparar'); return; }
   const [a1, a2] = compareList.map(n => ARTISTS.find(a => a.name === n));
+  rsTrack('compare_artists', { artists: a1.name + ' vs ' + a2.name });
   document.getElementById('modalSub').textContent = a1.name + ' vs ' + a2.name;
 
   let rows = CATEGORIES.map(c => {
@@ -2267,6 +2315,7 @@ function sortBy(key, btn) {
 }
 
 function filterTier(tier, btn) {
+  if (btn) rsTrack('filter_ranking', { filter: tier });
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   if (!btn) btn = document.querySelector(`.filter-btn[onclick*="'${tier}'"]`);
   if (btn) btn.classList.add('active');
@@ -2274,9 +2323,12 @@ function filterTier(tier, btn) {
   refreshTable();
 }
 
+let _searchTimer = null;
 function searchArtists(q) {
   currentSearch = q.trim();
   refreshTable();
+  clearTimeout(_searchTimer);
+  if (currentSearch.length >= 2) _searchTimer = setTimeout(() => rsTrack('search', { search_term: currentSearch.slice(0, 60), results: currentData.length }), 1200);
 }
 
 // ─── TOAST ──────────────────────────────────────────────────
@@ -2507,6 +2559,7 @@ function maybeAjuste(force) {
     ? `<b>${v}</b> calificaciones · ${voted} de ${ARTISTS.length} raperos ya tienen votos`
     : '';
   document.getElementById('ajusteModal').classList.add('open');
+  rsTrack('popup_view', { popup: 'ranking_en_ajuste' });
 }
 function maybeWelcome() {
   if (lsGet('rs_welcome_seen')) { setTimeout(() => maybeAjuste(), 1500); return; }
@@ -2516,6 +2569,7 @@ function maybeWelcome() {
   setTimeout(() => {
     if (document.querySelector('.modal-overlay.open')) return;
     document.getElementById('welcomeModal').classList.add('open');
+    rsTrack('popup_view', { popup: 'bienvenida' });
   }, 1200);
 }
 
@@ -2529,6 +2583,7 @@ function shareMessage() {
 }
 function openShare(artistName, isNew) {
   shareArtist = artistName || '';
+  rsTrack('popup_view', { popup: 'compartir' });
   const done = typeof window.getMyRating === 'function' ? ARTISTS.filter(a => window.getMyRating(a.slug)).length : 0;
   document.getElementById('shareLabel').textContent = isNew ? `+${POINTS_RATING} pts · Tu voto cuenta` : 'Tu voto cuenta';
   document.getElementById('shareText').textContent = done >= ARTISTS.length
@@ -2540,6 +2595,7 @@ function openShare(artistName, isNew) {
 function closeShare() { document.getElementById('shareModal').classList.remove('open'); }
 async function shareTo(where) {
   const text = shareMessage(), url = VOTE_URL;
+  rsTrack('share', { method: where, content_type: 'ranking', item_id: shareArtist ? slugify(shareArtist) : 'sitio' });
   const enc = encodeURIComponent;
   if (where === 'whatsapp') window.open('https://wa.me/?text=' + enc(text + ' ' + url), '_blank', 'noopener');
   else if (where === 'facebook') window.open('https://www.facebook.com/sharer/sharer.php?u=' + enc(url), '_blank', 'noopener,width=620,height=560');
@@ -2927,7 +2983,7 @@ function renderTopPosters() {
       <div class="poster-name">${esc(a.name)}</div>
       <div class="poster-tag">${esc((a.tags||[])[0]||a.estado||'')}${a.tier==='legend'?' · Leyenda':a.tier==='emerging'?' · Emergente':''}</div>
       <div class="poster-score"><b>${a.total.toFixed(1)}</b><span>${a.votes} voto${a.votes===1?'':'s'}</span></div>
-      <button type="button" class="poster-cta" onclick="rateFromHome('${a.slug}')">Calificar →</button>
+      <button type="button" class="poster-cta" data-track="top5_calificar" onclick="rateFromHome('${a.slug}')">Calificar →</button>
     </article>`).join('');
   const st = document.getElementById('streetStats');
   if (st) {
@@ -3940,6 +3996,7 @@ document.addEventListener('click', function(e) {
 
 // ─── RUTAS (#estados, #emergentes, #comparar, #editorial) ──
 function goTo(target) {
+  rsTrack('section_view', { section: target });
   const navR = document.getElementById('nav-rankings');
   if (target === 'estados') { showSection('estados', document.getElementById('nav-estados')); history.replaceState(null,'','#estados'); return; }
   if (target === 'votar') { showSection('votar', document.getElementById('nav-votar')); history.replaceState(null,'','#votar'); window.scrollTo({ top: 0 }); return; }
@@ -4063,7 +4120,7 @@ ${svgPaths}
 <script type="module">
 // ── IMPORTS ─────────────────────────────────────────────────
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getAnalytics }    from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+import { getAnalytics, logEvent, setUserId, setUserProperties, setDefaultEventParameters } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
 import {
   getAuth, onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -4088,6 +4145,15 @@ const firebaseConfig = {
 };
 const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+// ── MEDICIÓN: conecta rsTrack() con GA4 ──
+window.rsMarkInternal = function () {
+  try { localStorage.setItem('rs_internal', '1'); } catch (e) {}
+  window.RS_INTERNAL = true;
+  try { setDefaultEventParameters({ traffic_type: 'internal' }); } catch (e) {}
+  try { if (window.clarity) clarity('set', 'traffic_type', 'internal'); } catch (e) {}
+};
+if (window.RS_INTERNAL) { try { setDefaultEventParameters({ traffic_type: 'internal' }); } catch (e) {} }
+window._rsReady((name, params) => logEvent(analytics, name, params));
 const auth      = getAuth(app);
 const db        = getFirestore(app);
 
@@ -4164,9 +4230,11 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
         email, role: "user", createdAt: serverTimestamp()
       });
       try { await sendEmailVerification(cred.user); } catch (e) { console.warn(e); }
+      rsTrack("sign_up", { method: "email" });
       showToast("Cuenta creada ✓ Revisa tu correo para confirmarla y poder votar");
     } else {
       await signInWithEmailAndPassword(auth, email, password);
+      rsTrack("login", { method: "email" });
       showToast("Sesión iniciada ✓");
     }
     closeAuthModal();
@@ -4191,7 +4259,10 @@ async function saveGoogleProfile(user) {
     const ref = doc(db, "users", user.uid);
     if (!(await getDoc(ref)).exists()) {
       await setDoc(ref, { email: user.email || "", role: "user", provider: "google", createdAt: serverTimestamp() });
+      rsTrack("sign_up", { method: "google" });
+      return;
     }
+    rsTrack("login", { method: "google" });
   } catch (e) { console.warn("RapScore perfil:", e.code || e.message); }
 }
 
@@ -4263,6 +4334,11 @@ loadBoard();
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
+  try {
+    setUserId(analytics, user ? user.uid : null);
+    setUserProperties(analytics, { logged_in: user ? "yes" : "no" });
+    if (window.clarity) { clarity("set", "logged_in", user ? "yes" : "no"); if (user) clarity("identify", user.uid); }
+  } catch (e) {}
   window.RS_USER = user;
   window.RS_ME = null;
   window.RS_ALIAS = user ? defaultAlias(user) : "";
@@ -4394,6 +4470,11 @@ window.submitRating = async function(btn) {
     if (res.contrib) window.RS_ME = res.contrib;
     if (window.applyCommunityStats) window.applyCommunityStats();
     if (slug.startsWith("prop-") && window.refreshEstados) window.refreshEstados();
+    rsTrack("rate_artist", {
+      artist_slug: slug, artist_name: String(name).slice(0, 80),
+      is_new: res.isNew ? "yes" : "no", is_proposal: slug.startsWith("prop-") ? "yes" : "no",
+      score: Math.round(CATS.reduce((t, c) => t + scores[c], 0) / CATS.length)
+    });
     showToast(res.isNew ? `Calificación guardada ✓  +${P_RATING} pts` : "Calificación actualizada ✓");
     if (window.onRated) window.onRated(slug, res.isNew);
     if (window.afterVote) window.afterVote(slug, name, res.isNew);
@@ -4427,6 +4508,7 @@ window.saveProposal = async function(data, propId) {
     batch.set(lRef, { lastProposalAt: serverTimestamp() });
     await batch.commit();
     window.RS_MYPROPS = [{ id: propId, name: data.name, estado: data.estado, status: "pending" }, ...(window.RS_MYPROPS || [])];
+    rsTrack("propose_artist", { estado: String(data.estado || "") });
     if (window.renderMyProps) window.renderMyProps();
     return propId;
   } catch (err) {
@@ -4452,6 +4534,7 @@ async function checkAdmin(user) {
   try {
     const a = await getDoc(doc(db, "admins", user.uid));
     window.RS_IS_ADMIN = a.exists() && user.emailVerified;
+    if (window.RS_IS_ADMIN && window.rsMarkInternal) window.rsMarkInternal();
   } catch (e) { window.RS_IS_ADMIN = false; }
   if (window.RS_IS_ADMIN) await window.adminLoad();
   else if (window.setAdminBadge) window.setAdminBadge(0);
