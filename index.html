@@ -304,6 +304,11 @@ h1 em { color: var(--accent); font-style: normal; }
 
 /* ARTIST TABLE */
 .artist-table { width: 100%; }
+.wait-section { margin-top: 56px; padding-top: 28px; border-top: 2px dashed var(--border); }
+.wait-note { font-size: 12px; line-height: 1.8; color: var(--muted); margin: -4px 0 18px; max-width: 760px; }
+.wait-cta { background: none; border: none; color: var(--accent); font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; cursor: pointer; padding: 0 0 0 6px; text-decoration: underline; }
+.wait-table .artist-row { opacity: .82; }
+.wait-table .artist-row:hover { opacity: 1; }
 
 .artist-row {
   display: grid;
@@ -1478,6 +1483,17 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   </div>
 
   <div id="artistTable" class="artist-table"></div>
+
+  <!-- EN LA FILA: artistas fuera del Top 50 -->
+  <div id="waitSection" class="wait-section" style="display:none">
+    <div class="section-header">
+      <div class="section-title">En la fila</div>
+      <div class="section-count" id="waitCount"></div>
+    </div>
+    <p class="wait-note">Estos raperos están esperando entrar al Top 50. Califícalos: si su promedio supera al del lugar 50, suben al ranking.
+      <button type="button" class="wait-cta" onclick="goTo('votar')">Votar ahora →</button></p>
+    <div id="waitTable" class="artist-table wait-table"></div>
+  </div>
 </main>
 </div><!-- /section-rankings -->
 
@@ -1787,12 +1803,28 @@ const RAW_ARTISTS = [
     bio: 'Rapero, cantante y productor de la Ciudad de México, activo desde 2017. Mezcla hip hop, trap y dancehall.' },
   { name: 'Chato 473', tier: 'emerging', estado: 'Guanajuato', tags: ['Guanajuato','Rap','Nueva Escuela'],
     bio: 'Rapero guanajuatense nacido en 2003, debutó en 2017 con "Buenas y Malas". Parte de la nueva generación de la escena de Guanajuato.' },
+  // ── Agregados oct 2026 (lista de Spotify). Entran a "En la fila" y suben al Top 50 con votos ──
+  { name: 'Eric El Niño', tier: 'legend', estado: 'Ciudad de México', tags: ['CDMX','Freestyle','Batallas'],
+    bio: 'MC de la Ciudad de México que empezó en el freestyle desde los 13 años. Subcampeón de la final internacional de Red Bull Batalla de los Gallos 2005. Discos: "Exxxtra zerdo" y "Bienvenido al incendio" (2007).' },
+  { name: 'MC Luka', tier: 'legend', estado: 'Ciudad de México', tags: ['CDMX','Rap','Vieja Escuela'],
+    bio: 'Empezó a rapear en San Diego y regresó a México para hacerlo en español. Ligado a la vieja guardia del rap capitalino; en 2010 lanzó "Trucha en la Capirucha".' },
+  { name: 'W. Corona', tier: 'active', estado: 'Nuevo León', tags: ['Monterrey','Trap Norteño','Rap'],
+    bio: 'Rapero de Monterrey. Formó dúo con Millonario en sus inicios y destacó con su participación en "Éxtasis" de Cartel de Santa (2012). Mezcla rap y trap con norteño y banda; su disco solista "Ocho Diamantes" salió en 2014.' },
+  { name: 'Perro Zw', tier: 'active', estado: 'Ciudad de México', tags: ['Iztapalapa','Freestyle','Manicomio Clan'],
+    bio: 'Enrique Zwittag, de Iztapalapa, al oriente de la CDMX. Salió de Manicomio Clan, graba desde 2004 y fue semifinalista de Red Bull Batalla de los Gallos en 2006 y 2007. Con Lirika Inverza hizo "La Noche de los Poetas Muertos".' },
+  { name: 'Lirika Inverza', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Rap Lírico','Rap Consciente'],
+    bio: 'MC de letras poéticas y críticas. Grabó "Hardcore Rulez" con Aczino (2012) y "La Noche de los Poetas Muertos" con Perro Zw; entre sus discos están "Desde la profundidad de las alturas" y "Ni la gravedad es ley".' },
+  { name: 'Akwid', tier: 'legend', estado: 'Michoacán', tags: ['Jiquilpan, Mich.','Regional Urbano','Grupo'],
+    bio: 'Los hermanos Sergio y Francisco Gómez, nacidos en Jiquilpan, Michoacán, y criados en Los Ángeles. Pioneros en mezclar rap con banda; su disco "Proyecto Akwid" ganó un Latin Grammy.' },
+  { name: 'Kinto Sol', tier: 'legend', estado: 'Guanajuato', tags: ['Iramuco, Gto.','Rap','Grupo'],
+    bio: 'Los hermanos García, originarios de Iramuco, Guanajuato, y radicados en Milwaukee. Activos desde los años 90, mezclan hip hop con música tradicional mexicana.' },
 ];
 
 // compute total
 const baseScores = () => Object.fromEntries(CATEGORIES.map(c => [c, BASE_SCORE]));
-const ARTISTS = RAW_ARTISTS.map(a => ({
+const ARTISTS = RAW_ARTISTS.map((a, i) => ({
   ...a,
+  order: i,
   slug: slugify(a.name),
   scores: baseScores(),
   community: null,
@@ -1855,8 +1887,27 @@ function refreshTable() {
   list.sort((a,b) => (currentSort === 'total' ? b.total - a.total
     : (b.scores[currentSort] - a.scores[currentSort]) || (b.total - a.total))
     || (b.votes - a.votes) || a.name.localeCompare(b.name, 'es'));
-  currentData = list;
+  // El ranking muestra solo el Top 50 (por score total); el resto queda "En la fila"
+  const top = rankedSet();
+  currentData = list.filter(a => top.has(a.slug));
   renderTable(currentData);
+  renderWaiting(list.filter(a => !top.has(a.slug)), currentData.length);
+}
+
+// ─── TOP 50 + "EN LA FILA" ──────────────────────────────────
+const RANKING_SIZE = 50;
+// Entran los 50 con mejor total; en empate, más votos y luego el orden del roster.
+function rankedSet() {
+  return new Set([...ARTISTS]
+    .sort((a,b) => b.total - a.total || b.votes - a.votes || a.order - b.order)
+    .slice(0, RANKING_SIZE).map(a => a.slug));
+}
+function renderWaiting(list, offset) {
+  const sec = document.getElementById('waitSection');
+  if (!sec) return;
+  sec.style.display = list.length ? '' : 'none';
+  document.getElementById('waitCount').textContent = list.length + ' en espera';
+  renderTable(list, 'waitTable', offset);
 }
 let compareList = [];
 let expandedRow = null;
@@ -1872,9 +1923,9 @@ function getTierBadge(tier) {
   return '';
 }
 
-function renderTable(data) {
-  const tbody = document.getElementById('artistTable');
-  document.getElementById('countLabel').textContent = data.length + ' artistas';
+function renderTable(data, targetId = 'artistTable', offset = 0) {
+  const tbody = document.getElementById(targetId);
+  if (targetId === 'artistTable') document.getElementById('countLabel').textContent = data.length + ' artistas';
   tbody.innerHTML = '';
 
   data.forEach((artist, i) => {
@@ -1882,7 +1933,7 @@ function renderTable(data) {
     const row = document.createElement('div');
     row.innerHTML = `
       <div class="artist-row ${isCompared?'selected':''}" data-name="${artist.name}" onclick="handleRowClick(event,'${artist.name}')">
-        <div class="rank-cell">${i+1}</div>
+        <div class="rank-cell">${offset+i+1}</div>
         <div class="info-cell">
           <div class="avatar">${getInitials(artist.name)}</div>
           <div>
@@ -2082,7 +2133,7 @@ function addToCompare(name) {
   if (compareList.length >= 2) { showToast('Máximo 2 artistas'); return; }
   compareList.push(name);
   updateCompareBar();
-  renderTable(currentData);
+  refreshTable();
   showToast(name + ' añadido a la comparativa');
 }
 
@@ -2099,13 +2150,13 @@ function updateCompareBar() {
 function removeCompare(name) {
   compareList = compareList.filter(n => n !== name);
   updateCompareBar();
-  renderTable(currentData);
+  refreshTable();
 }
 
 function clearCompare() {
   compareList = [];
   updateCompareBar();
-  renderTable(currentData);
+  refreshTable();
 }
 
 function openCompareModal() {
@@ -2873,7 +2924,7 @@ function renderTopPosters() {
 }
 
 // ─── INIT ───────────────────────────────────────────────────
-renderTable(currentData);
+refreshTable();
 buildTicker();
 renderTopPosters();
 renderSocial();
