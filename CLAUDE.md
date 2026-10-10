@@ -36,7 +36,8 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - Colores: fondo `#0a0a0a`, acento naranja `#ff3c00` (el del logo), amarillo `#ffcc00` para Votar. Fuentes: Bebas Neue, Permanent Marker y Space Mono.
 - Todas las páginas llevan los mismos tabs: Rankings · Votar · Por Estado · Emergentes · Comparar · Editorial (Admin solo para admins en `index.html`).
 - Tiene que funcionar en celular. La mayoría del tráfico viene de Facebook/TikTok.
-- Fotos de raperos: solo con permiso, licencia o foto propia (sin descargar de Google o Instagram). Por ahora se usan iniciales.
+- Fotos de raperos: solo con permiso escrito, licencia libre verificada (Creative Commons) o foto propia; nunca descargadas de Google o redes, ni links directos a imágenes. Las fotos van en `images/artistas/<slug>.jpg` (máx. 600 px) y en `ARTIST_PHOTOS` de `index.html` con autor, licencia y link: el crédito se muestra junto a la foto y en "Créditos de fotos" del footer (lo exige la licencia). Hoy hay 8 de Wikimedia Commons. Quien no tiene foto lleva un avatar de graffiti generado (`graffitiAvatar`, iniciales + colores fijos por nombre; corona = leyenda, estrella = emergente).
+- Fotos de Commons descartadas tras revisarlas (oct 2026): Akwid y Neto Peña (no se distingue a la persona), Charles Ans (solo un letrero). Por revisar: Alemán, Kinto Sol, Mare Advertencia, Sabino.
 
 ## Medición
 - **GA4** vía Firebase Analytics (`G-D6QMGC5N67`) y **Microsoft Clarity** (`yvosalsr5z`, en `window.RS_CLARITY_ID`).

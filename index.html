@@ -879,6 +879,10 @@ h1 em { color: var(--accent); font-style: normal; }
 .sf-legal { max-width: 1400px; margin: 28px auto 0; font-size: 11px; line-height: 1.7; color: #9a9a9a; }
 .sf-legal strong { color: var(--text); font-weight: 700; }
 .sf-legal a { color: var(--accent); }
+.sf-credits { max-width: 1400px; margin: 12px auto 0; font-size: 11px; color: #9a9a9a; }
+.sf-credits summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; color: var(--text); }
+.sf-credits ul { margin: 6px 0 0 18px; line-height: 1.8; }
+.sf-credits a { color: inherit; }
 .sf-copy { max-width: 1400px; margin: 28px auto 0; padding-top: 16px; border-top: 1px solid var(--border); font-size: 10px; color: var(--muted); letter-spacing: 1px; }
 @media (max-width: 768px) {
   .sf-inner { grid-template-columns: 1fr; gap: 24px; }
@@ -1021,6 +1025,13 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rate-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; height:24px; margin-top:-9px; background:var(--accent); border:2px solid #0a0a0a; box-shadow:0 0 0 1px var(--accent); cursor:pointer; }
 .rate-row input[type=range]::-moz-range-thumb { width:22px; height:22px; background:var(--accent); border:2px solid #0a0a0a; border-radius:0; cursor:pointer; }
 .rate-hint { font-size:10px; color:var(--muted); margin:-4px 0 10px; }
+/* Avatares: foto (Commons) o graffiti generado; llenan su recuadro */
+.avatar, .vp-av, .vs-av, .poster-av, .la-avatar { overflow:hidden; padding:0; }
+.avatar > img, .vp-av > img, .vs-av > img, .poster-av > img, .la-avatar > img, .expanded-photo > img,
+.avatar > svg, .vp-av > svg, .vs-av > svg, .poster-av > svg, .la-avatar > svg { width:100%; height:100%; object-fit:cover; display:block; }
+.expanded-photo { width:100%; max-width:320px; aspect-ratio:4/3; overflow:hidden; border:1px solid var(--border); margin:4px 0 6px; }
+.photo-credit { font-size:10px; color:#8a8a8a; margin:6px 0 2px; letter-spacing:.5px; }
+.photo-credit a { color:inherit; text-decoration:underline; }
 .listen-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:12px 0 4px; }
 .listen-label { flex-basis:100%; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
 .listen-btn { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 16px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-family:'Space Mono',monospace; font-size:12px; font-weight:700; text-decoration:none; }
@@ -1723,7 +1734,8 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
       <span class="social-links" data-social></span>
     </div>
   </div>
-  <p class="sf-legal"><strong>Aviso legal:</strong> RapScore MX respeta los derechos de propiedad intelectual y de imagen de los artistas. Todo el contenido visual y musical de terceros se muestra únicamente mediante las herramientas de inserción oficiales de cada plataforma (como Spotify, YouTube o Instagram), sin alojar en nuestros servidores imágenes ni grabaciones no autorizadas. Si eres artista o titular de derechos y deseas que retiremos o corrijamos algún contenido, <a href="privacidad.html#derechos">contáctanos</a>.</p>
+  <p class="sf-legal"><strong>Aviso legal:</strong> RapScore MX respeta los derechos de propiedad intelectual y de imagen de los artistas. El contenido visual y musical de terceros se muestra mediante las herramientas de inserción oficiales de cada plataforma (como Spotify, YouTube o Instagram) o con fotografías bajo licencias libres (Creative Commons) con crédito a sus autores; no alojamos imágenes ni grabaciones no autorizadas. Si eres artista o titular de derechos y deseas que retiremos o corrijamos algún contenido, <a href="privacidad.html#derechos">contáctanos</a>.</p>
+  <details class="sf-credits"><summary>Créditos de fotos</summary><p>Fotos de Wikimedia Commons bajo licencias Creative Commons. Los demás artistas se muestran con un avatar de graffiti generado por RapScore MX.</p><ul id="photoCredits"></ul></details>
   <div class="sf-copy">© 2026 RapScore MX · Hecho en la comunidad, para la comunidad · Usamos Google Analytics y Microsoft Clarity para mejorar el sitio. <a href="privacidad.html" style="color:inherit">Aviso de privacidad</a></div>
 </footer>
 
@@ -2022,6 +2034,60 @@ function getInitials(name) {
   return name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
 }
 
+// ─── FOTOS Y AVATARES ───────────────────────────────────────
+// Fotos con licencia libre de Wikimedia Commons (se guardan en images/artistas/<slug>.jpg).
+// La licencia obliga a dar crédito: autor + licencia + link (se muestra junto a la foto y en el footer).
+// Solo agregar fotos con licencia libre verificada o con permiso escrito del artista. `pos` = dónde está la cara.
+const ARTIST_PHOTOS = {
+  'santa-fe-klan':   { pos: '50% 30%', autor: 'LA LATA', lic: 'CC BY 3.0', licUrl: 'https://creativecommons.org/licenses/by/3.0/', page: 'https://commons.wikimedia.org/wiki/File:Santa_Fe_Klan_-_2023.jpg' },
+  'c-kan':           { pos: '50% 22%', autor: 'Patricia Ramírez', lic: 'CC BY 2.0', licUrl: 'https://creativecommons.org/licenses/by/2.0/', page: 'https://commons.wikimedia.org/wiki/File:C-Kan.jpg' },
+  'aczino':          { pos: '45% 30%', autor: 'Skills MIC', lic: 'CC BY 3.0', licUrl: 'https://creativecommons.org/licenses/by/3.0/', page: 'https://commons.wikimedia.org/wiki/File:Aczino.jpg' },
+  'mc-davo':         { pos: '55% 18%', autor: 'Citlali Martínez Medina', lic: 'CC BY-SA 4.0', licUrl: 'https://creativecommons.org/licenses/by-sa/4.0/', page: 'https://commons.wikimedia.org/wiki/File:Mc_davo.jpg' },
+  'fermin-iv':       { pos: '50% 14%', autor: 'Dankluxuries', lic: 'CC BY-SA 4.0', licUrl: 'https://creativecommons.org/licenses/by-sa/4.0/', page: 'https://commons.wikimedia.org/wiki/File:Fermin_IV_2021.jpg' },
+  'santa-rm':        { pos: '50% 20%', autor: 'Cayfan', lic: 'CC BY-SA 4.0', licUrl: 'https://creativecommons.org/licenses/by-sa/4.0/', page: 'https://commons.wikimedia.org/wiki/File:Santa_RM.jpg' },
+  'bocafloja':       { pos: '55% 22%', autor: 'Quilomboarte', lic: 'CC BY 3.0', licUrl: 'https://creativecommons.org/licenses/by/3.0/', page: 'https://commons.wikimedia.org/wiki/File:Bocafloja,_Aldo_Villegas_en_92Y_NYC_2012.jpeg' },
+  'cartel-de-santa': { pos: '50% 30%', autor: 'Rafael Rdzz', lic: 'CC BY-SA 3.0', licUrl: 'https://creativecommons.org/licenses/by-sa/3.0/', page: 'https://commons.wikimedia.org/wiki/File:Cartel%2BDe%2BSanta%2B1862_carteldesanta.jpg' },
+};
+
+// Avatar de graffiti para quien no tiene foto: sus iniciales en marcador con goteo, colores fijos por artista.
+// No intenta parecerse a nadie (sin riesgo de derechos de imagen). Corona = leyenda, estrella = emergente.
+const AV_BG = ['#1c1c1c', '#24160e', '#0e1a24', '#14210f', '#251019', '#1c1428', '#23200c'];
+const AV_INK = ['#ff3c00', '#ffcc00', '#39c0ff', '#00e676', '#ff4fa3', '#b98cff', '#f0ede6'];
+function hashStr(s) { let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function graffitiAvatar(name, tier) {
+  const h = hashStr(name), bg = AV_BG[h % AV_BG.length], ink = AV_INK[(h >>> 3) % AV_INK.length];
+  const rot = ((h >>> 6) % 13) - 6, d1 = 30 + (h >>> 9) % 14, d2 = 52 + (h >>> 12) % 14, l1 = 12 + (h >>> 15) % 16, l2 = 8 + (h >>> 18) % 14;
+  const crown = tier === 'legend' ? '<path d="M70 8l5 6 5-8 5 8 5-6v12H70z" fill="#ffcc00"/>' : '';
+  const star = tier === 'emerging' ? '<path d="M84 6l2.6 6.4 6.4 2.6-6.4 2.6L84 24l-2.6-6.4L75 15l6.4-2.6z" fill="#00e676"/>' : '';
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="100" height="100" fill="${bg}"/>
+    <path d="M0 33h100M0 66h100M33 0v33M66 33v33M33 66v34" stroke="#ffffff" stroke-opacity=".05" stroke-width="2"/>
+    <g transform="rotate(${rot} 50 50)">
+      <rect x="${d1}" y="58" width="4" height="${l1}" rx="2" fill="${ink}"/>
+      <rect x="${d2}" y="58" width="3" height="${l2}" rx="1.5" fill="${ink}"/>
+      <text x="50" y="62" text-anchor="middle" font-family="Permanent Marker, cursive" font-size="40" fill="${ink}" stroke="#0a0a0a" stroke-width="2.5" paint-order="stroke">${esc(getInitials(name))}</text>
+    </g>${crown}${star}
+  </svg>`;
+}
+// Contenido de cualquier recuadro de avatar: foto si tiene, si no el graffiti
+function artistAvatar(a) {
+  const slug = a.slug || slugify(a.name), p = ARTIST_PHOTOS[slug];
+  if (p) return `<img src="images/artistas/${slug}.jpg" alt="Foto de ${esc(a.name)}" loading="lazy" decoding="async" style="object-position:${p.pos}" title="Foto: ${esc(p.autor)} · ${p.lic}">`;
+  return graffitiAvatar(a.name, a.tier);
+}
+function photoCredit(a) {
+  const p = ARTIST_PHOTOS[a.slug || slugify(a.name)];
+  return p ? `<div class="photo-credit">Foto: <a href="${p.page}" target="_blank" rel="noopener">${esc(p.autor)}</a> · <a href="${p.licUrl}" target="_blank" rel="noopener">${p.lic}</a> · Wikimedia Commons</div>` : '';
+}
+function renderPhotoCredits() {
+  const el = document.getElementById('photoCredits');
+  if (!el) return;
+  el.innerHTML = Object.entries(ARTIST_PHOTOS).map(([slug, p]) => {
+    const a = ARTISTS.find(x => (x.slug || slugify(x.name)) === slug);
+    return `<li>${esc(a ? a.name : slug)}: <a href="${p.page}" target="_blank" rel="noopener">${esc(p.autor)}</a>, <a href="${p.licUrl}" target="_blank" rel="noopener">${p.lic}</a></li>`;
+  }).join('');
+}
+
 function getTierBadge(tier) {
   if (tier === 'legend') return '<span class="badge-legend">Leyenda</span>';
   if (tier === 'emerging') return '<span class="badge-emer">Emergente</span>';
@@ -2040,7 +2106,7 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
       <div class="artist-row ${isCompared?'selected':''}" data-name="${artist.name}" onclick="handleRowClick(event,'${artist.name}')">
         <div class="rank-cell">${offset+i+1}</div>
         <div class="info-cell">
-          <div class="avatar">${getInitials(artist.name)}</div>
+          <div class="avatar">${artistAvatar(artist)}</div>
           <div>
             <div class="artist-name">${artist.name}${getTierBadge(artist.tier)}</div>
             <div class="artist-tag">${artist.tags[0]} · ${artist.tags[1]||''}</div>
@@ -2199,6 +2265,7 @@ function buildPanel(artist) {
   return `
     <div class="expanded-left">
       <h3>${esc(artist.name)}</h3>
+      ${ARTIST_PHOTOS[artist.slug] ? `<div class="expanded-photo">${artistAvatar(artist)}</div>${photoCredit(artist)}` : ''}
       <p class="expanded-bio">${esc(artist.bio)}</p>
       ${listenLinks(artist)}
       <div class="score-split">
@@ -3046,7 +3113,7 @@ function renderVotarList() {
   }
   el.innerHTML = list.map(a => `
     <button class="vp-card ${votarSel === a.slug ? 'sel' : ''} ${myRated(a.slug) ? 'done' : ''}" onclick="selectVotar('${a.slug}')">
-      <span class="vp-av">${esc(getInitials(a.name))}</span>
+      <span class="vp-av">${artistAvatar(a)}</span>
       <span class="vp-info"><span class="vp-name">${esc(a.name)}</span><span class="vp-sub">${votarSkipped.has(a.slug) && !myRated(a.slug) ? 'Saltado · ' : ''}${esc(a.tags[0])} · ${a.votes} voto${a.votes===1?'':'s'}</span></span>
       <span class="vp-check">${myRated(a.slug) ? '✓' : ''}</span>
     </button>`).join('');
@@ -3077,13 +3144,14 @@ function renderVotarStage() {
       <button class="btn-sm vs-skip" onclick="votarNext(true)">Saltar →</button>
     </div>
     <div class="vs-head">
-      <div class="vs-av">${esc(getInitials(a.name))}</div>
+      <div class="vs-av">${artistAvatar(a)}</div>
       <div class="vs-info">
         <div class="vs-name">${esc(a.name)}${getTierBadge(a.tier)}</div>
         <div class="vs-sub">${esc((a.tags||[]).join(' · '))}</div>
       </div>
       <div class="vs-score"><span>${fmtTotal(a.total)}</span><small>${a.votes} voto${a.votes===1?'':'s'}</small></div>
     </div>
+    ${photoCredit(a)}
     <p class="vs-bio">${esc(a.bio)}</p>
     ${listenLinks(a)}
     ${buildRateBox(a.slug, a.name, baseScores())}`;
@@ -3214,7 +3282,7 @@ function renderTopPosters() {
   el.innerHTML = top.map((a,i) => `
     <article class="poster">
       <div class="poster-n">${String(i+1).padStart(2,'0')}</div>
-      <div class="poster-av" aria-hidden="true">${esc(getInitials(a.name))}</div>
+      <div class="poster-av" aria-hidden="true">${artistAvatar(a)}</div>
       <div class="poster-name">${esc(a.name)}</div>
       <div class="poster-tag">${esc((a.tags||[])[0]||a.estado||'')}${a.tier==='legend'?' · Leyenda':a.tier==='emerging'?' · Emergente':''}</div>
       <div class="poster-score"><b>${a.total.toFixed(1)}</b><span>${a.votes} voto${a.votes===1?'':'s'}</span></div>
@@ -3232,6 +3300,7 @@ refreshTable();
 buildTicker();
 renderTopPosters();
 renderSocial();
+renderPhotoCredits();
 window.addEventListener('load', maybeWelcome);
 </script>
 <!-- ═══ ESTADOS STYLES ═══ -->
@@ -4241,7 +4310,7 @@ function renderStatePanel(estado) {
         ${sorted.map((a,i) => `
           <div class="local-artist-row" onclick="openNationalArtist('${a.name.replace(/'/g, "\\'")}')">
             <div class="la-rank">${i+1}</div>
-            <div class="la-avatar">${esc(a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase())}</div>
+            <div class="la-avatar">${artistAvatar(a)}</div>
             <div class="la-info">
               <div class="la-name">${esc(a.name)}</div>
               <div class="la-sub">${a.genre}</div>
@@ -4273,7 +4342,7 @@ function renderStatePanel(estado) {
           return `
           <div class="local-artist-row" onclick="openLocalArtist('${estado.id}','${a.id}')">
             <div class="la-rank" style="color:${canUpgrade?'var(--accent2)':'var(--muted)'}">${i+1}</div>
-            <div class="la-avatar" style="border-color:${canUpgrade?'rgba(255,204,0,0.4)':'var(--border)'}">${esc(a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase())}</div>
+            <div class="la-avatar" style="border-color:${canUpgrade?'rgba(255,204,0,0.4)':'var(--border)'}">${artistAvatar(a)}</div>
             <div class="la-info">
               <div class="la-name">${esc(a.name)}${canUpgrade?'<span class="upgrade-badge">Puede subir</span>':''}</div>
               <div class="la-sub">${esc(a.genre)}</div>
