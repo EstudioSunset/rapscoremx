@@ -1,0 +1,682 @@
+[
+  {
+    "artista": "Santa Fe Klan",
+    "slug": "santa-fe-klan",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4tm8CEdm4pkQsEh4jIr9Yp",
+    "nombre_en_plataforma": "Santa Fe Klan",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Santa Fe Klan\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4tm8CEdm4pkQsEh4jIr9Yp\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Alemán",
+    "slug": "aleman",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4QFG9KrGWEbr6hNA58CAqE",
+    "nombre_en_plataforma": "Alemán",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Alemán\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4QFG9KrGWEbr6hNA58CAqE\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Gera MX",
+    "slug": "gera-mx",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2hejA1Dkf8v8R0koF44FvW",
+    "nombre_en_plataforma": "Gera MX",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Gera MX\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2hejA1Dkf8v8R0koF44FvW\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "C-Kan",
+    "slug": "c-kan",
+    "plataforma": "spotify",
+    "spotify_artist_id": "1QhaqxeqF9sipS2gwbEKpu",
+    "nombre_en_plataforma": "C-Kan",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: C-Kan\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/1QhaqxeqF9sipS2gwbEKpu\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Dharius",
+    "slug": "dharius",
+    "plataforma": "spotify",
+    "spotify_artist_id": "66RfYVdftqnuHRicyClgL0",
+    "nombre_en_plataforma": "Dharius",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Dharius\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/66RfYVdftqnuHRicyClgL0\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Babo",
+    "slug": "babo",
+    "plataforma": "spotify",
+    "spotify_artist_id": "50A4LkkoiVLuJAtcRvfqYh",
+    "nombre_en_plataforma": "Babo",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Babo\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/50A4LkkoiVLuJAtcRvfqYh\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": "Perfil solista (acreditado en 'De Aquí los Veo' con Millonario)"
+  },
+  {
+    "artista": "Millonario",
+    "slug": "millonario",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2N2aJ1SXQxMkhHD8C6fhYD",
+    "nombre_en_plataforma": "Millonario",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Millonario\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2N2aJ1SXQxMkhHD8C6fhYD\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "MC Davo",
+    "slug": "mc-davo",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3TGeuw7OmACouH5JAKkX7I",
+    "nombre_en_plataforma": "MC Davo",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: MC Davo\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3TGeuw7OmACouH5JAKkX7I\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Lefty SM",
+    "slug": "lefty-sm",
+    "plataforma": "spotify",
+    "spotify_artist_id": "6eXHRfK9Ad3IpMpSAqvcDf",
+    "nombre_en_plataforma": "Lefty Sm",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Lefty Sm\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/6eXHRfK9Ad3IpMpSAqvcDf\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Toser One",
+    "slug": "toser-one",
+    "plataforma": "spotify",
+    "spotify_artist_id": "1oHPSeQJBwNmpq0J52Wjn1",
+    "nombre_en_plataforma": "Toser One",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Toser One\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/1oHPSeQJBwNmpq0J52Wjn1\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Neto Peña",
+    "slug": "neto-pena",
+    "plataforma": "spotify",
+    "spotify_artist_id": "0U5RYP2HMdGv2GhicLhkOI",
+    "nombre_en_plataforma": "Neto Peña",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Neto Peña\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/0U5RYP2HMdGv2GhicLhkOI\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Charles Ans",
+    "slug": "charles-ans",
+    "plataforma": "spotify",
+    "spotify_artist_id": "5lYeiQxUTcGKVgAuTqbTeL",
+    "nombre_en_plataforma": "Charles Ans",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Charles Ans\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/5lYeiQxUTcGKVgAuTqbTeL\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Simpson Ahuevo",
+    "slug": "simpson-ahuevo",
+    "plataforma": "spotify",
+    "spotify_artist_id": "6viZnVSHavFUcW0blu6Mvw",
+    "nombre_en_plataforma": "Simpson Ahuevo",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Simpson Ahuevo\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/6viZnVSHavFUcW0blu6Mvw\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Eptos Uno",
+    "slug": "eptos-uno",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3fo4UvMNzZUCFS90Roh5iK",
+    "nombre_en_plataforma": "Eptos Uno",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Eptos Uno\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3fo4UvMNzZUCFS90Roh5iK\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Robot95",
+    "slug": "robot95",
+    "plataforma": "spotify",
+    "spotify_artist_id": "30CTTIqrcr82nS6B40j975",
+    "nombre_en_plataforma": "Robot95",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Robot95\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/30CTTIqrcr82nS6B40j975\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Fntxy",
+    "slug": "fntxy",
+    "plataforma": "spotify",
+    "spotify_artist_id": "7I85Ma5xjAo6nlvqOCIiWx",
+    "nombre_en_plataforma": "Fntxy",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Fntxy\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/7I85Ma5xjAo6nlvqOCIiWx\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Sabino",
+    "slug": "sabino",
+    "plataforma": "spotify",
+    "spotify_artist_id": "0zgFL90nGTrH2iOMD8Vysy",
+    "nombre_en_plataforma": "Sabino",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Sabino\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/0zgFL90nGTrH2iOMD8Vysy\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "LNG/SHT",
+    "slug": "lng-sht",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2q9p1IXueDbcN4de5C9fI2",
+    "nombre_en_plataforma": "Lng Sht",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Lng Sht\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2q9p1IXueDbcN4de5C9fI2\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Adán Cruz",
+    "slug": "adan-cruz",
+    "plataforma": "spotify",
+    "spotify_artist_id": "645xd9cHiiLqqehoLzLMDR",
+    "nombre_en_plataforma": "Adán Cruz",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Adán Cruz\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/645xd9cHiiLqqehoLzLMDR\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Yoga Fire",
+    "slug": "yoga-fire",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3AgxRYe2kXEfsZyB07hqJF",
+    "nombre_en_plataforma": "Yoga Fire",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Yoga Fire\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3AgxRYe2kXEfsZyB07hqJF\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Serko Fu",
+    "slug": "serko-fu",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3V0tt9H5XH3KAGobLFhoGw",
+    "nombre_en_plataforma": "Serko Fu",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Serko Fu\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3V0tt9H5XH3KAGobLFhoGw\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Bocafloja",
+    "slug": "bocafloja",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2bj9MQez88g09q4NSr2xjS",
+    "nombre_en_plataforma": "Bocafloja",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Bocafloja\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2bj9MQez88g09q4NSr2xjS\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Akil Ammar",
+    "slug": "akil-ammar",
+    "plataforma": "spotify",
+    "spotify_artist_id": "6lOqlvNZmpkmHNN1Ud4KXr",
+    "nombre_en_plataforma": "Akil Ammar",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Akil Ammar\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/6lOqlvNZmpkmHNN1Ud4KXr\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Fermín IV",
+    "slug": "fermin-iv",
+    "plataforma": "spotify",
+    "spotify_artist_id": "74OPWhLPyLylAzgqcJlNMm",
+    "nombre_en_plataforma": "Fermin IV",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Fermin IV\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/74OPWhLPyLylAzgqcJlNMm\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Pato Machete",
+    "slug": "pato-machete",
+    "plataforma": "spotify",
+    "spotify_artist_id": "0Wvud7hEqI5zaI0o0iIkj2",
+    "nombre_en_plataforma": "Pato Machete",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Pato Machete\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/0Wvud7hEqI5zaI0o0iIkj2\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Control Machete",
+    "slug": "control-machete",
+    "plataforma": "spotify",
+    "spotify_artist_id": "628gUkswCfCS1hIOOHmIpK",
+    "nombre_en_plataforma": "Control Machete",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Control Machete\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/628gUkswCfCS1hIOOHmIpK\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Niña Dioz",
+    "slug": "nina-dioz",
+    "plataforma": "spotify",
+    "spotify_artist_id": "7G4N4GY4l0qHm1yflRvsQ0",
+    "nombre_en_plataforma": "Niña Dioz",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Niña Dioz\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/7G4N4GY4l0qHm1yflRvsQ0\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Hispana",
+    "slug": "hispana",
+    "plataforma": "spotify",
+    "spotify_artist_id": "7rTmbfDJtDCjoy8XK5Dsj5",
+    "nombre_en_plataforma": "Hispana",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Hispana\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/7rTmbfDJtDCjoy8XK5Dsj5\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Yoss Bones",
+    "slug": "yoss-bones",
+    "plataforma": "spotify",
+    "spotify_artist_id": "0SmgVe3giVHaJjGmIz8xA4",
+    "nombre_en_plataforma": "Yoss Bones",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Yoss Bones\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/0SmgVe3giVHaJjGmIz8xA4\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Mare Advertencia Lirika",
+    "slug": "mare-advertencia-lirika",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3QVB7ctBlqEFuQZeMDt6Qh",
+    "nombre_en_plataforma": "Mare Advertencia",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Mare Advertencia\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3QVB7ctBlqEFuQZeMDt6Qh\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": "En Spotify aparece como 'Mare Advertencia'"
+  },
+  {
+    "artista": "Audry Funk",
+    "slug": "audry-funk",
+    "plataforma": "spotify",
+    "spotify_artist_id": "7eWbFrseRms5D5quwPDkm2",
+    "nombre_en_plataforma": "Audry Funk",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Audry Funk\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/7eWbFrseRms5D5quwPDkm2\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Ximbo",
+    "slug": "ximbo",
+    "plataforma": "spotify",
+    "spotify_artist_id": "0RjHsbbdfnI3okpxdZ2JOV",
+    "nombre_en_plataforma": "Ximbo",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Ximbo\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/0RjHsbbdfnI3okpxdZ2JOV\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Muelas de Gallo",
+    "slug": "muelas-de-gallo",
+    "plataforma": "spotify",
+    "spotify_artist_id": "5ET6v0l25osw5BzztPsMvD",
+    "nombre_en_plataforma": "Muelas De Gallo",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Muelas De Gallo\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/5ET6v0l25osw5BzztPsMvD\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Tino El Pingüino",
+    "slug": "tino-el-pinguino",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3BbLQNj5OTxm4AZcwyREFF",
+    "nombre_en_plataforma": "Tino El Pingüino",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Tino El Pingüino\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3BbLQNj5OTxm4AZcwyREFF\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Hadrian",
+    "slug": "hadrian",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2F9icYS5KP4Td9nbxIjo9q",
+    "nombre_en_plataforma": "Hadrian",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Hadrian\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2F9icYS5KP4Td9nbxIjo9q\"></iframe>",
+    "verificacion": "revisar",
+    "nota": "Acreditado junto a Go Golden Junk; confirmar que es el freestyler de CDMX"
+  },
+  {
+    "artista": "Danger AK",
+    "slug": "danger-ak",
+    "plataforma": "spotify",
+    "spotify_artist_id": "23TYM4mYLQjyJLr4x89MjH",
+    "nombre_en_plataforma": "Danger AK",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Danger AK\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/23TYM4mYLQjyJLr4x89MjH\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "T-Killa",
+    "slug": "t-killa",
+    "plataforma": "spotify",
+    "spotify_artist_id": "52QQ2BADyRwXsS8uqLu2Hl",
+    "nombre_en_plataforma": "T-Killa",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: T-Killa\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/52QQ2BADyRwXsS8uqLu2Hl\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Bipo Montana",
+    "slug": "bipo-montana",
+    "plataforma": "spotify",
+    "spotify_artist_id": "6JG2QQcaQBzinELNvu9PRk",
+    "nombre_en_plataforma": "Bipo Montana",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Bipo Montana\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/6JG2QQcaQBzinELNvu9PRk\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Sick Morrison",
+    "slug": "sick-morrison",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4oMSYrYeZPbi9uvI1ql9wm",
+    "nombre_en_plataforma": "Sick Morrison",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Sick Morrison\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4oMSYrYeZPbi9uvI1ql9wm\"></iframe>",
+    "verificacion": "revisar",
+    "nota": "Perfil pequeño (~1.8K oyentes); confirmar que es el de Monterrey"
+  },
+  {
+    "artista": "Mike Díaz",
+    "slug": "mike-diaz",
+    "plataforma": "spotify",
+    "spotify_artist_id": "5pR3pEU0bCMZhhAzag3DUz",
+    "nombre_en_plataforma": "Mike Diaz",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Mike Diaz\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/5pR3pEU0bCMZhhAzag3DUz\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": "Álbum 'Doble Dragón' (2023)"
+  },
+  {
+    "artista": "Smoky",
+    "slug": "smoky",
+    "plataforma": "spotify",
+    "spotify_artist_id": "1P184E1yqU3hzj71d1oOzb",
+    "nombre_en_plataforma": "Smoky",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Smoky\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/1P184E1yqU3hzj71d1oOzb\"></iframe>",
+    "verificacion": "revisar",
+    "nota": "Nombre común; confirmar que es el de Mazatlán"
+  },
+  {
+    "artista": "Zimple",
+    "slug": "zimple",
+    "plataforma": "spotify",
+    "spotify_artist_id": "0l1OSQn6GtjfEE1Cb8LE1t",
+    "nombre_en_plataforma": "Zimple",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Zimple\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/0l1OSQn6GtjfEE1Cb8LE1t\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Maniako",
+    "slug": "maniako",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4XVWGb0bUVdiBhmWbSKSF3",
+    "nombre_en_plataforma": "Maniako",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Maniako\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4XVWGb0bUVdiBhmWbSKSF3\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": "Acreditado en 'Guadalajara - Remix'"
+  },
+  {
+    "artista": "Aczino",
+    "slug": "aczino",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4r1ZDYKzPt3iIjuq8LbT6X",
+    "nombre_en_plataforma": "Aczino",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Aczino\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4r1ZDYKzPt3iIjuq8LbT6X\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Rapder",
+    "slug": "rapder",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4trcako8l5gOpLIsfBmQyf",
+    "nombre_en_plataforma": "Rapder",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Rapder\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4trcako8l5gOpLIsfBmQyf\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Santa RM",
+    "slug": "santa-rm",
+    "plataforma": "spotify",
+    "spotify_artist_id": "30BSBWLKnYJION1lCPugXc",
+    "nombre_en_plataforma": "Santa RM",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Santa RM\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/30BSBWLKnYJION1lCPugXc\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Remik González",
+    "slug": "remik-gonzalez",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4Hzj6dfl1y5x5TzCSsvLB6",
+    "nombre_en_plataforma": "Remik Gonzalez",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Remik Gonzalez\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4Hzj6dfl1y5x5TzCSsvLB6\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Under Side 821",
+    "slug": "under-side-821",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2NtN73hhhgFt2NmbBOlFz1",
+    "nombre_en_plataforma": "Under Side 821",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Under Side 821\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2NtN73hhhgFt2NmbBOlFz1\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Neto Reyno",
+    "slug": "neto-reyno",
+    "plataforma": "spotify",
+    "spotify_artist_id": "7sgnuH8OwU32WbGLZwD03q",
+    "nombre_en_plataforma": "Neto Reyno",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Neto Reyno\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/7sgnuH8OwU32WbGLZwD03q\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Adán Zapata",
+    "slug": "adan-zapata",
+    "plataforma": "spotify",
+    "spotify_artist_id": "1NGy8h3j8jFQvFv6cniUnl",
+    "nombre_en_plataforma": "Adán Zapata",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Adán Zapata\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/1NGy8h3j8jFQvFv6cniUnl\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Kodigo 36",
+    "slug": "kodigo-36",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3NALGBTx0BvaR4z2eUZ9aR",
+    "nombre_en_plataforma": "Kodigo 36",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Kodigo 36\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3NALGBTx0BvaR4z2eUZ9aR\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Go Golden Junk",
+    "slug": "go-golden-junk",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2tU377oBzcCBbRNeVve8FC",
+    "nombre_en_plataforma": "Go Golden Junk",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Go Golden Junk\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2tU377oBzcCBbRNeVve8FC\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Chato 473",
+    "slug": "chato-473",
+    "plataforma": "spotify",
+    "spotify_artist_id": "7zvcqoLiInqmSmPzX0gwfp",
+    "nombre_en_plataforma": "Chato 473",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Chato 473\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/7zvcqoLiInqmSmPzX0gwfp\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Eric El Niño",
+    "slug": "eric-el-nino",
+    "plataforma": null,
+    "spotify_artist_id": null,
+    "nombre_en_plataforma": null,
+    "embed": "",
+    "verificacion": "sin_embed",
+    "nota": "No se encontró un perfil confirmado"
+  },
+  {
+    "artista": "MC Luka",
+    "slug": "mc-luka",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2HpeQd3eecBJ1cPR7SLcrP",
+    "nombre_en_plataforma": "Mc Luka",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Mc Luka\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2HpeQd3eecBJ1cPR7SLcrP\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "W. Corona",
+    "slug": "w-corona",
+    "plataforma": "spotify",
+    "spotify_artist_id": "2wqy0ojBEcx7OvHezdGDXQ",
+    "nombre_en_plataforma": "W. Corona",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: W. Corona\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/2wqy0ojBEcx7OvHezdGDXQ\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Perro Zw",
+    "slug": "perro-zw",
+    "plataforma": "spotify",
+    "spotify_artist_id": "7CPuRgoqujB5wHULxqiIqv",
+    "nombre_en_plataforma": "Perro Zw",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Perro Zw\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/7CPuRgoqujB5wHULxqiIqv\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Lirika Inverza",
+    "slug": "lirika-inverza",
+    "plataforma": "spotify",
+    "spotify_artist_id": "214wdmDstodTL0SEEPDyxb",
+    "nombre_en_plataforma": "Lirika Inverza",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Lirika Inverza\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/214wdmDstodTL0SEEPDyxb\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Akwid",
+    "slug": "akwid",
+    "plataforma": "spotify",
+    "spotify_artist_id": "3mYFuz6iY7D9X78rOXg5CG",
+    "nombre_en_plataforma": "Akwid",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Akwid\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/3mYFuz6iY7D9X78rOXg5CG\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Kinto Sol",
+    "slug": "kinto-sol",
+    "plataforma": "spotify",
+    "spotify_artist_id": "0nOyxRsVicKeiBbB6zdIMu",
+    "nombre_en_plataforma": "Kinto Sol",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Kinto Sol\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/0nOyxRsVicKeiBbB6zdIMu\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Tren Lokote",
+    "slug": "tren-lokote",
+    "plataforma": "spotify",
+    "spotify_artist_id": "6DjBv6gyR1HLsvwGUOD5V9",
+    "nombre_en_plataforma": "TREN LOKOTE",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: TREN LOKOTE\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/6DjBv6gyR1HLsvwGUOD5V9\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Geassassin",
+    "slug": "geassassin",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4V2V4PaSblStayYVWTGDbZ",
+    "nombre_en_plataforma": "Geassassin",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Geassassin\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4V2V4PaSblStayYVWTGDbZ\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Teeam Revolver",
+    "slug": "teeam-revolver",
+    "plataforma": "spotify",
+    "spotify_artist_id": "5MRMYpdAWZawm3ivBeWvdK",
+    "nombre_en_plataforma": "Teeam Revolver",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Teeam Revolver\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/5MRMYpdAWZawm3ivBeWvdK\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Tiro Loko",
+    "slug": "tiro-loko",
+    "plataforma": "spotify",
+    "spotify_artist_id": "4Y5HJP3oFOJ8UVBXHYWBgx",
+    "nombre_en_plataforma": "Tiro Loko",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Tiro Loko\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/4Y5HJP3oFOJ8UVBXHYWBgx\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": "Acreditado con Dharius ('16 Toneladas')"
+  },
+  {
+    "artista": "Doble ONE Flow Letal",
+    "slug": "doble-one-flow-letal",
+    "plataforma": "spotify",
+    "spotify_artist_id": "25OaNybC8G6g5KkAmthQtX",
+    "nombre_en_plataforma": "Doble ONE Flow Letal",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Doble ONE Flow Letal\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/25OaNybC8G6g5KkAmthQtX\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "Eanz",
+    "slug": "eanz",
+    "plataforma": "spotify",
+    "spotify_artist_id": "1n3IJebgRBALmnzo45Q3mD",
+    "nombre_en_plataforma": "Eanz",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Eanz\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/1n3IJebgRBALmnzo45Q3mD\"></iframe>",
+    "verificacion": "revisar",
+    "nota": "Perfil con ~80K oyentes; confirmar que es el de CDMX"
+  },
+  {
+    "artista": "Cartel de Santa",
+    "slug": "cartel-de-santa",
+    "plataforma": "spotify",
+    "spotify_artist_id": "07PdYoE4jVRF6Ut40GgVSP",
+    "nombre_en_plataforma": "Cartel De Santa",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: Cartel De Santa\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/07PdYoE4jVRF6Ut40GgVSP\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  },
+  {
+    "artista": "La Santa Grifa",
+    "slug": "la-santa-grifa",
+    "plataforma": "spotify",
+    "spotify_artist_id": "1oH2B8tcHn4Gpl2bmmyd4A",
+    "nombre_en_plataforma": "La Santa Grifa",
+    "embed": "<iframe style=\"border-radius: 12px\" width=\"100%\" height=\"352\" title=\"Spotify Embed: La Santa Grifa\" frameborder=\"0\" allowfullscreen allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\" src=\"https://open.spotify.com/embed/artist/1oH2B8tcHn4Gpl2bmmyd4A\"></iframe>",
+    "verificacion": "confirmado",
+    "nota": ""
+  }
+]

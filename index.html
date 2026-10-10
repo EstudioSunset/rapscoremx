@@ -1028,6 +1028,10 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .listen-btn.yt svg { color:#ff3333; }
 .listen-btn.sp svg { color:#1ed760; }
 .listen-btn:hover { border-color:var(--accent); }
+.listen-btn.play { background:#1ed760; border-color:#1ed760; color:#000; cursor:pointer; }
+.listen-btn.play:hover { filter:brightness(1.08); border-color:#1ed760; }
+.sp-player { margin:8px 0 4px; border-radius:12px; overflow:hidden; background:#121212; min-height:152px; }
+.sp-player iframe { display:block; border:0; }
 /* Buzón de sugerencias: aparece tras 1 minuto activo */
 .sug-box { position:fixed; right:16px; bottom:16px; z-index:300; width:340px; max-width:calc(100vw - 32px); background:var(--surface); border:1px solid var(--accent); box-shadow:0 18px 40px rgba(0,0,0,.6); padding:18px; display:none; }
 .sug-box.open { display:block; animation:sugIn .25s ease-out; }
@@ -2098,11 +2102,44 @@ function toggleExpand(e, name) {
   drawRadar('radar-' + safeName(name), artist.scores, '#ff3c00');
 }
 
-// Botones para escuchar al artista antes de calificarlo. Si el artista tiene `youtube` / `spotify`
-// en RAW_ARTISTS se usa ese link directo; si no, una búsqueda con su nombre (siempre funciona).
+// Perfil oficial de Spotify de cada artista (slug → ID), verificado con los créditos de sus canciones
+// y con el oEmbed oficial de Spotify (ver embeds-artistas.json). Solo van los confirmados.
+const SPOTIFY_IDS = {
+  'santa-fe-klan': '4tm8CEdm4pkQsEh4jIr9Yp', 'aleman': '4QFG9KrGWEbr6hNA58CAqE', 'gera-mx': '2hejA1Dkf8v8R0koF44FvW',
+  'c-kan': '1QhaqxeqF9sipS2gwbEKpu', 'dharius': '66RfYVdftqnuHRicyClgL0', 'babo': '50A4LkkoiVLuJAtcRvfqYh',
+  'millonario': '2N2aJ1SXQxMkhHD8C6fhYD', 'mc-davo': '3TGeuw7OmACouH5JAKkX7I', 'lefty-sm': '6eXHRfK9Ad3IpMpSAqvcDf',
+  'toser-one': '1oHPSeQJBwNmpq0J52Wjn1', 'neto-pena': '0U5RYP2HMdGv2GhicLhkOI',
+  'charles-ans': '5lYeiQxUTcGKVgAuTqbTeL', 'simpson-ahuevo': '6viZnVSHavFUcW0blu6Mvw',
+  'eptos-uno': '3fo4UvMNzZUCFS90Roh5iK', 'robot95': '30CTTIqrcr82nS6B40j975', 'fntxy': '7I85Ma5xjAo6nlvqOCIiWx',
+  'sabino': '0zgFL90nGTrH2iOMD8Vysy', 'lng-sht': '2q9p1IXueDbcN4de5C9fI2', 'adan-cruz': '645xd9cHiiLqqehoLzLMDR',
+  'yoga-fire': '3AgxRYe2kXEfsZyB07hqJF', 'serko-fu': '3V0tt9H5XH3KAGobLFhoGw', 'bocafloja': '2bj9MQez88g09q4NSr2xjS',
+  'akil-ammar': '6lOqlvNZmpkmHNN1Ud4KXr', 'fermin-iv': '74OPWhLPyLylAzgqcJlNMm',
+  'pato-machete': '0Wvud7hEqI5zaI0o0iIkj2', 'control-machete': '628gUkswCfCS1hIOOHmIpK',
+  'nina-dioz': '7G4N4GY4l0qHm1yflRvsQ0', 'hispana': '7rTmbfDJtDCjoy8XK5Dsj5', 'yoss-bones': '0SmgVe3giVHaJjGmIz8xA4',
+  'mare-advertencia-lirika': '3QVB7ctBlqEFuQZeMDt6Qh', 'audry-funk': '7eWbFrseRms5D5quwPDkm2',
+  'ximbo': '0RjHsbbdfnI3okpxdZ2JOV', 'muelas-de-gallo': '5ET6v0l25osw5BzztPsMvD',
+  'tino-el-pinguino': '3BbLQNj5OTxm4AZcwyREFF', 'danger-ak': '23TYM4mYLQjyJLr4x89MjH',
+  't-killa': '52QQ2BADyRwXsS8uqLu2Hl', 'bipo-montana': '6JG2QQcaQBzinELNvu9PRk',
+  'mike-diaz': '5pR3pEU0bCMZhhAzag3DUz', 'zimple': '0l1OSQn6GtjfEE1Cb8LE1t', 'maniako': '4XVWGb0bUVdiBhmWbSKSF3',
+  'aczino': '4r1ZDYKzPt3iIjuq8LbT6X', 'rapder': '4trcako8l5gOpLIsfBmQyf', 'santa-rm': '30BSBWLKnYJION1lCPugXc',
+  'remik-gonzalez': '4Hzj6dfl1y5x5TzCSsvLB6', 'under-side-821': '2NtN73hhhgFt2NmbBOlFz1',
+  'neto-reyno': '7sgnuH8OwU32WbGLZwD03q', 'adan-zapata': '1NGy8h3j8jFQvFv6cniUnl',
+  'kodigo-36': '3NALGBTx0BvaR4z2eUZ9aR', 'go-golden-junk': '2tU377oBzcCBbRNeVve8FC',
+  'chato-473': '7zvcqoLiInqmSmPzX0gwfp', 'mc-luka': '2HpeQd3eecBJ1cPR7SLcrP', 'w-corona': '2wqy0ojBEcx7OvHezdGDXQ',
+  'perro-zw': '7CPuRgoqujB5wHULxqiIqv', 'lirika-inverza': '214wdmDstodTL0SEEPDyxb',
+  'akwid': '3mYFuz6iY7D9X78rOXg5CG', 'kinto-sol': '0nOyxRsVicKeiBbB6zdIMu', 'tren-lokote': '6DjBv6gyR1HLsvwGUOD5V9',
+  'geassassin': '4V2V4PaSblStayYVWTGDbZ', 'teeam-revolver': '5MRMYpdAWZawm3ivBeWvdK',
+  'tiro-loko': '4Y5HJP3oFOJ8UVBXHYWBgx', 'doble-one-flow-letal': '25OaNybC8G6g5KkAmthQtX',
+  'cartel-de-santa': '07PdYoE4jVRF6Ut40GgVSP', 'la-santa-grifa': '1oH2B8tcHn4Gpl2bmmyd4A',
+};
+
+// Botones para escuchar al artista antes de calificarlo. YouTube: link directo si el artista tiene `youtube`,
+// si no, búsqueda. Spotify: si está en SPOTIFY_IDS, botón "Escuchar aquí" que carga el reproductor oficial
+// SOLO al tocarlo (no frena la página ni carga cookies de Spotify a quien no lo usa); si no, búsqueda.
 function listenLinks(a) {
   const yt = a.youtube || 'https://www.youtube.com/results?search_query=' + encodeURIComponent(a.name + ' rap');
-  const sp = a.spotify || 'https://open.spotify.com/search/' + encodeURIComponent(a.name);
+  const spId = SPOTIFY_IDS[a.slug || slugify(a.name)];
+  const sp = spId ? 'https://open.spotify.com/artist/' + spId : 'https://open.spotify.com/search/' + encodeURIComponent(a.name);
   const nm = esc(a.name).replace(/'/g, '&#39;');
   return `<div class="listen-row">
     <span class="listen-label">¿No lo conoces? Escúchalo y regresa a votar</span>
@@ -2110,7 +2147,17 @@ function listenLinks(a) {
       <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1-5.8 3.1z"/></svg>YouTube</a>
     <a class="listen-btn sp" href="${esc(sp)}" target="_blank" rel="noopener" onclick="rsTrack('listen_click',{artist_name:'${nm}',platform:'spotify'})">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 1 0 0 23 11.5 11.5 0 0 0 0-23zm5.3 16.6a.7.7 0 0 1-1 .2c-2.7-1.6-6-2-10-1.1a.7.7 0 1 1-.3-1.4c4.3-1 8-.6 11 1.3.3.2.4.7.3 1zm1.4-3.1a.9.9 0 0 1-1.2.3c-3-1.9-7.7-2.4-11.3-1.3a.9.9 0 1 1-.5-1.7c4.1-1.2 9.2-.6 12.7 1.5.4.3.5.8.3 1.2zm.1-3.2C15.2 8.6 9.2 8.4 5.8 9.4a1 1 0 1 1-.6-2c3.9-1.2 10.5-1 14.6 1.5a1 1 0 0 1-1 1.8z"/></svg>Spotify</a>
+    ${spId ? `<button type="button" class="listen-btn play" onclick="loadSpotifyPlayer(this, '${spId}', '${nm}')">▶ Escuchar aquí</button>` : ''}
   </div>`;
+}
+
+function loadSpotifyPlayer(btn, id, name) {
+  const box = document.createElement('div');
+  box.className = 'sp-player';
+  box.innerHTML = `<iframe title="Spotify: ${esc(name)}" src="https://open.spotify.com/embed/artist/${id}?theme=0" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+  btn.closest('.listen-row').after(box);
+  btn.remove();
+  rsTrack('listen_click', { artist_name: name, platform: 'spotify_player' });
 }
 
 function buildRateBox(slug, name, baseScores) {
