@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://www.rapscoremx.com/images/rapscore-logo.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="images/rs-favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0a;
@@ -1275,20 +1275,75 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
   cursor: pointer;
   text-decoration: underline;
 }
+
+/* ═══ ESTILO CALLE (home) ═══ */
+html { overflow-x: clip; }
+.logo-img { display: inline-flex; align-items: center; min-height: 44px; }
+.logo-img img { height: 38px; width: auto; display: block; }
+.street-hero { position: relative; overflow: hidden; min-height: 600px; display: flex; align-items: center; border-bottom: 2px solid #000; }
+.street-wall { position: absolute; inset: 0; width: 100%; height: 100%; }
+.street-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,10,10,.93) 0%, rgba(10,10,10,.74) 45%, rgba(10,10,10,.22) 100%), linear-gradient(180deg, rgba(10,10,10,0) 60%, #0a0a0a 100%); }
+.street-glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 84% 4%, rgba(255,176,72,.30), rgba(255,176,72,0) 38%); }
+.street-inner { position: relative; z-index: 2; width: 100%; max-width: 1400px; margin: 0 auto; padding: 64px 24px 96px; }
+.street-kicker { display: inline-block; font-family: 'Permanent Marker', cursive; font-size: 20px; color: var(--accent); transform: rotate(-2deg); margin-bottom: 10px; }
+.street-logo { margin: 0 0 0 -10px; line-height: 0; }
+.street-logo img { width: 100%; max-width: 720px; height: auto; display: block; filter: drop-shadow(8px 10px 0 rgba(0,0,0,.7)); }
+.street-claim { margin-top: 26px; max-width: 640px; font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 4.4vw, 54px); line-height: 1; letter-spacing: .5px; color: #fff; }
+.street-sub { margin-top: 14px; max-width: 540px; font-size: 13px; line-height: 1.8; color: #cfc9bf; }
+.street-ctas { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 30px; }
+.street-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1.5px; cursor: pointer; border: 3px solid #000; background: var(--accent); color: #000; box-shadow: 6px 6px 0 #000; transition: transform .12s, box-shadow .12s; }
+.street-btn:hover { transform: translate(2px,2px); box-shadow: 4px 4px 0 #000; }
+.street-btn.ghost { background: rgba(10,10,10,.6); color: var(--text); border-color: var(--text); box-shadow: 6px 6px 0 rgba(0,0,0,.6); }
+.street-stats { margin-top: 26px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #a39b90; }
+/* ticker como cinta de precaución */
+.ticker { position: relative; z-index: 3; height: auto; display: block; transform: rotate(-1.4deg); margin: -22px -2% 0; width: 104%; box-shadow: 0 10px 28px rgba(0,0,0,.6); }
+.ticker::before, .ticker::after { content: ""; display: block; height: 8px; background: repeating-linear-gradient(-45deg, #000 0 14px, transparent 14px 28px); }
+.ticker-inner { padding-top: 9px; padding-bottom: 9px; width: max-content; animation-duration: 40s; }
+.ticker-item { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1.5px; color: #000; font-weight: 400; }
+.ticker-sep { color: rgba(0,0,0,.45); }
+body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
+@media (prefers-reduced-motion: reduce) { .ticker-inner { animation: none; } }
+/* top 5 como carteles */
+.street-top { max-width: 1400px; margin: 0 auto; padding: 80px 24px 40px; }
+.street-top-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 38px; }
+.street-h2 { font-family: 'Permanent Marker', cursive; font-weight: 400; font-size: clamp(34px, 4.6vw, 56px); line-height: 1; color: var(--text); }
+.street-top-sub { margin-top: 8px; font-size: 12px; color: #a39b90; }
+.street-link { background: none; border: none; cursor: pointer; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; color: var(--accent); min-height: 44px; }
+.posters { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 30px 26px; }
+.poster { position: relative; background: #ede6d6; color: #221e1b; padding: 22px 18px 14px; box-shadow: 0 18px 30px rgba(0,0,0,.55); display: flex; flex-direction: column; gap: 8px; transition: transform .18s; }
+.poster:nth-child(1) { transform: rotate(-2.2deg); } .poster:nth-child(2) { transform: rotate(1.6deg); } .poster:nth-child(3) { transform: rotate(-1deg); } .poster:nth-child(4) { transform: rotate(2.3deg); } .poster:nth-child(5) { transform: rotate(-1.8deg); }
+.poster:hover { transform: rotate(0) scale(1.02); }
+.poster::before { content: ""; position: absolute; top: -12px; left: 50%; width: 90px; height: 26px; margin-left: -45px; background: rgba(240,232,200,.78); transform: rotate(-3deg); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.poster-n { font-family: 'Bebas Neue', sans-serif; font-size: 60px; line-height: .8; color: #c8281a; }
+.poster-av { height: 120px; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg, #2a2522 0 10px, #332d29 10px 20px); color: #ede6d6; font-family: 'Permanent Marker', cursive; font-size: 44px; }
+.poster-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; margin-top: 4px; }
+.poster-tag { font-family: 'Space Mono', monospace; font-size: 11px; color: #4a433d; }
+.poster-score { display: flex; align-items: baseline; justify-content: space-between; border-top: 2px dashed #b9ae98; padding-top: 8px; }
+.poster-score b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 38px; line-height: 1; }
+.poster-score span { font-size: 11px; font-weight: 700; color: #4a433d; }
+.poster-cta { align-self: flex-start; min-height: 44px; background: none; border: none; padding: 0; cursor: pointer; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #221e1b; text-decoration: underline; }
+/* footer con goteo */
+.street-drip { display: block; width: 100%; height: 56px; margin-top: 40px; }
+.site-footer { margin-top: 0; border-top: none; }
+.sf-brand .logo-img img { height: 64px; }
+.sf-tag { font-family: 'Permanent Marker', cursive; font-size: 16px; color: #a39b90; margin-top: 8px; }
+@media (max-width: 600px) {
+  .logo-img img { height: 30px; }
+  .street-hero { min-height: 520px; }
+  .street-inner { padding: 44px 16px 80px; }
+  .street-btn { flex: 1 1 auto; }
+  .ticker { height: auto; }
+  .ticker-item { font-size: 18px; letter-spacing: 1px; }
+  .street-top { padding: 64px 16px 24px; }
+}
 </style>
 </head>
 <body>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner" id="ticker">
-    <span class="ticker-item">RapScore MX <span class="ticker-sep">—</span> Rankings de rap mexicano</span>
-  </div>
-</div>
 
 <!-- HEADER -->
 <header>
-  <div class="logo">RAP<span>SCORE</span></div>
+  <a href="#" class="logo-img" onclick="goTo('rankings');return false"><img src="images/rapscore-logo-transparente.png" alt="RapScore MX, inicio" width="1200" height="337"></a>
   <nav id="mainNav">
     <a href="#" class="active" id="nav-rankings" onclick="goTo('rankings');closeNav();return false">Rankings</a>
     <a href="#votar" id="nav-votar" class="nav-votar" onclick="goTo('votar');closeNav();return false">Votar</a>
@@ -1310,6 +1365,66 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
     <span></span><span></span><span></span>
   </button>
 </header>
+
+<!-- ═══ HERO ESTILO CALLE ═══ -->
+<section class="street-hero home-only" aria-label="Bienvenida">
+  <svg class="street-wall" aria-hidden="true" viewBox="0 0 1440 640" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="rsBrick" width="96" height="48" patternUnits="userSpaceOnUse">
+        <rect width="96" height="48" fill="#161210"/>
+        <rect x="2" y="2" width="92" height="20" fill="#3c2c25"/>
+        <rect x="-46" y="26" width="92" height="20" fill="#35271f"/>
+        <rect x="50" y="26" width="92" height="20" fill="#41302a"/>
+      </pattern>
+      <filter id="rsGrain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+    </defs>
+    <rect width="1440" height="640" fill="url(#rsBrick)"/>
+    <rect width="1440" height="640" filter="url(#rsGrain)" opacity="0.14"/>
+    <g transform="rotate(-8 1120 250)"><text x="840" y="300" font-family="Bebas Neue, sans-serif" font-size="300" fill="none" stroke="#ff3c00" stroke-width="5" opacity="0.8">MX</text></g>
+    <g transform="rotate(5 1180 470)">
+      <text x="930" y="500" font-family="Permanent Marker, cursive" font-size="92" fill="#c8281a" opacity="0.9">PURO RAP</text>
+      <rect x="985" y="508" width="6" height="46" rx="3" fill="#c8281a" opacity="0.85"/>
+      <rect x="1068" y="510" width="5" height="70" rx="3" fill="#c8281a" opacity="0.85"/>
+      <rect x="1176" y="506" width="6" height="34" rx="3" fill="#c8281a" opacity="0.85"/>
+      <rect x="1262" y="509" width="5" height="58" rx="3" fill="#c8281a" opacity="0.85"/>
+    </g>
+    <text x="1240" y="140" font-family="Permanent Marker, cursive" font-size="44" fill="#f0ede6" opacity="0.5" transform="rotate(-12 1290 130)">la calle vota</text>
+    <text x="760" y="600" font-family="Permanent Marker, cursive" font-size="38" fill="#39c0ff" opacity="0.5" transform="rotate(-4 860 590)">RSMX 2026</text>
+  </svg>
+  <div class="street-shade"></div>
+  <div class="street-glow"></div>
+  <div class="street-inner">
+    <span class="street-kicker">Ranking comunitario del rap mexicano</span>
+    <h1 class="street-logo"><img src="images/rapscore-logo-transparente.png" alt="RapScore MX" width="1200" height="337"></h1>
+    <p class="street-claim">El ranking del rap mexicano lo decide la calle.</p>
+    <p class="street-sub">Califica a tus MCs en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Todos arrancan en 50 y el promedio de la comunidad manda.</p>
+    <div class="street-ctas">
+      <button type="button" class="street-btn" onclick="goTo('votar')">Votar ahora</button>
+      <button type="button" class="street-btn ghost" onclick="scrollToRanking()">Ver ranking</button>
+    </div>
+    <p class="street-stats" id="streetStats">&nbsp;</p>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">RapScore MX <span class="ticker-sep">—</span> Rankings de rap mexicano</span>
+  </div>
+</div>
+
+
+<!-- ═══ TOP 5 (carteles) ═══ -->
+<section class="street-top home-only" aria-labelledby="topTitle">
+  <div class="street-top-head">
+    <div>
+      <h2 class="street-h2" id="topTitle">Top 5 de la comunidad</h2>
+      <p class="street-top-sub">Todos arrancan en 50. Tus votos los mueven.</p>
+    </div>
+    <button type="button" class="street-link" onclick="scrollToRanking()">Ver ranking completo →</button>
+  </div>
+  <div class="posters" id="topPosters"></div>
+</section>
 
 <!-- Google Sheets: carga automática silenciosa -->
 
@@ -1458,10 +1573,17 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 </div>
 
 <!-- FOOTER -->
+<svg class="street-drip" aria-hidden="true" viewBox="0 0 1440 56" preserveAspectRatio="none">
+  <rect width="1440" height="12" fill="#ff3c00"/>
+  <rect x="120" y="0" width="14" height="42" rx="7" fill="#ff3c00"/><rect x="310" y="0" width="10" height="28" rx="5" fill="#ff3c00"/>
+  <rect x="540" y="0" width="16" height="54" rx="8" fill="#ff3c00"/><rect x="780" y="0" width="10" height="24" rx="5" fill="#ff3c00"/>
+  <rect x="990" y="0" width="14" height="46" rx="7" fill="#ff3c00"/><rect x="1220" y="0" width="12" height="32" rx="6" fill="#ff3c00"/>
+</svg>
 <footer class="site-footer">
   <div class="sf-inner">
     <div class="sf-brand">
-      <div class="logo">RAP<span>SCORE</span></div>
+      <a href="#" class="logo-img" onclick="goTo('rankings');return false"><img src="images/rapscore-logo-transparente.png" alt="RapScore MX" width="1200" height="337" loading="lazy"></a>
+      <div class="sf-tag">Hecho en México, para la calle.</div>
       <p>Una comunidad hecha por amantes de la música y la cultura hip hop mexicana. El ranking lo decide la gente.</p>
     </div>
     <div class="sf-links">
@@ -1688,6 +1810,7 @@ window.applyCommunityStats = function(stats) {
   ARTISTS.forEach(a => blendArtist(a, window._communityStats[a.slug]));
   refreshTable();
   if (typeof buildTicker === 'function') buildTicker();
+  if (typeof renderTopPosters === 'function') renderTopPosters();
   if (typeof refreshEstados === 'function') refreshEstados();
   if (typeof window.refreshVotar === 'function') window.refreshVotar();
   if (expandedRow) {
@@ -2680,9 +2803,40 @@ function buildTicker() {
   el.innerHTML = html + html; // duplicado para el loop continuo
 }
 
+
+// ─── HOME ESTILO CALLE: top 5 en carteles ──────────────────
+function scrollToRanking() {
+  const el = document.querySelector('.controls');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function rateFromHome(slug) {
+  goTo('votar');
+  if (typeof selectVotar === 'function') selectVotar(slug);
+}
+function renderTopPosters() {
+  const el = document.getElementById('topPosters');
+  if (!el) return;
+  const top = [...ARTISTS].sort((a,b) => b.total - a.total || b.votes - a.votes || a.name.localeCompare(b.name,'es')).slice(0,5);
+  el.innerHTML = top.map((a,i) => `
+    <article class="poster">
+      <div class="poster-n">${String(i+1).padStart(2,'0')}</div>
+      <div class="poster-av" aria-hidden="true">${esc(getInitials(a.name))}</div>
+      <div class="poster-name">${esc(a.name)}</div>
+      <div class="poster-tag">${esc((a.tags||[])[0]||a.estado||'')}${a.tier==='legend'?' · Leyenda':a.tier==='emerging'?' · Emergente':''}</div>
+      <div class="poster-score"><b>${a.total.toFixed(1)}</b><span>${a.votes} voto${a.votes===1?'':'s'}</span></div>
+      <button type="button" class="poster-cta" onclick="rateFromHome('${a.slug}')">Calificar →</button>
+    </article>`).join('');
+  const st = document.getElementById('streetStats');
+  if (st) {
+    const v = ARTISTS.reduce((s,a)=>s+a.votes,0);
+    st.textContent = ARTISTS.length + ' artistas · 6 categorías' + (v ? ' · ' + v + ' calificaciones' : ' · 1 voto por cuenta');
+  }
+}
+
 // ─── INIT ───────────────────────────────────────────────────
 renderTable(currentData);
 buildTicker();
+renderTopPosters();
 renderSocial();
 window.addEventListener('load', maybeWelcome);
 </script>
@@ -3738,6 +3892,8 @@ function showSection(id, btn) {
     if (id === 'admin') renderAdmin();
   }
   document.querySelector('.controls').style.display = id==='rankings' ? '' : 'none';
+  document.querySelectorAll('.home-only').forEach(el => el.style.display = id==='rankings' ? '' : 'none');
+  document.body.classList.toggle('no-hero', id !== 'rankings');
 }
 </script>
 <script>
