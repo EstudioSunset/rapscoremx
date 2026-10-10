@@ -82,6 +82,7 @@ body {
   font-family: 'Space Mono', monospace;
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-x: clip; /* clip no rompe position: sticky (hidden sí); hidden queda para navegadores viejos */
 }
 
 /* NOISE TEXTURE */
@@ -917,6 +918,10 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .vs-empty-icon { font-size: 28px; color: var(--accent2); }
 .vs-empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 30px; margin: 8px 0; }
 .vs-empty-sub { color: var(--muted); font-size: 12px; margin-bottom: 18px; }
+/* se queda pegada arriba mientras bajas a las barras, para que "Saltar" siempre esté a la mano */
+.vs-top { position: sticky; top: 60px; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: -24px -24px 18px; padding: 12px 24px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.vs-left { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.vs-skip { min-height: 40px; flex-shrink: 0; }
 .vs-head { display: flex; align-items: center; gap: 16px; }
 .vs-av { width: 56px; height: 56px; flex: none; border: 1px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 22px; }
 .vs-info { flex: 1; min-width: 0; }
@@ -978,6 +983,7 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
   .votar-side { position: static; }
   .votar-wrap { padding: 28px 16px 64px; }
   .votar-stage { padding: 16px; }
+  .vs-top { margin: -16px -16px 14px; padding: 8px 16px; }
   .vs-name { font-size: 18px; }
   .votar-list { grid-template-columns: 1fr; max-height: 55vh; }
   .votar-grid { display: flex; flex-direction: column; }
@@ -1143,11 +1149,12 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 
   /* ── CONTROLS ── */
   .controls {
-    top: 60px;
+    top: 52px; /* igual al alto del header en celular */
     padding: 0 14px;
     overflow-x: auto;
     scrollbar-width: none;
   }
+  .vs-top { top: 52px; }
   .controls::-webkit-scrollbar { display: none; }
   .controls-inner { gap: 0; flex-wrap: nowrap; }
   .filter-btn { font-size: 10px; padding: 12px 10px; white-space: nowrap; }
@@ -2880,7 +2887,12 @@ function renderVotarStage() {
       <button class="rate-submit" onclick="votarNext()">Empezar a votar →</button></div>`;
     return;
   }
+  const left = ARTISTS.filter(x => !myRated(x.slug)).length;
   el.innerHTML = `
+    <div class="vs-top">
+      <span class="vs-left">${left ? `Te faltan ${left} por calificar` : 'Ya calificaste a todos'}</span>
+      <button class="btn-sm vs-skip" onclick="votarNext(true)">Saltar →</button>
+    </div>
     <div class="vs-head">
       <div class="vs-av">${esc(getInitials(a.name))}</div>
       <div class="vs-info">
@@ -2890,8 +2902,7 @@ function renderVotarStage() {
       <div class="vs-score"><span>${fmtTotal(a.total)}</span><small>${a.votes} voto${a.votes===1?'':'s'}</small></div>
     </div>
     <p class="vs-bio">${esc(a.bio)}</p>
-    ${buildRateBox(a.slug, a.name, baseScores())}
-    <div class="vs-nav"><button class="btn-sm" onclick="votarNext(true)">Saltar →</button></div>`;
+    ${buildRateBox(a.slug, a.name, baseScores())}`;
 }
 
 // Cola fija para la sesión: el orden no cambia cuando cambian los votos,
