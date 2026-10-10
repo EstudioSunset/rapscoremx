@@ -54,6 +54,10 @@ header {
   text-decoration:none;
 }
 .logo span { color:var(--accent); }
+.logo-img { display:inline-flex; align-items:center; min-height:44px; }
+.logo-img img { height:38px; width:auto; display:block; }
+nav a.nav-votar { color:var(--accent2, #ffcc00); }
+@media (max-width:600px) { .logo-img img { height:30px; } }
 nav { display:flex; gap:0; }
 nav a {
   color:var(--muted); text-decoration:none;
@@ -654,17 +658,18 @@ nav a.active { border-bottom:2px solid var(--accent); }
 
 <!-- HEADER -->
 <header>
-  <a href="index.html" class="logo">RAP<span>SCORE</span></a>
+  <a href="index.html" class="logo logo-img"><img src="images/rapscore-logo-transparente.png" alt="RapScore MX, inicio" width="1200" height="337"></a>
   <nav id="mainNav">
     <a href="index.html" onclick="closeNav()">Rankings</a>
+    <a href="index.html#votar" class="nav-votar" onclick="closeNav()">Votar</a>
     <a href="index.html#estados" onclick="closeNav()">Por Estado</a>
     <a href="index.html#emergentes" onclick="closeNav()">Emergentes</a>
     <a href="index.html#comparar" onclick="closeNav()">Comparar</a>
     <a href="index.html#editorial" onclick="closeNav()">Editorial</a>
   </nav>
   <div class="header-actions">
-    <button class="btn-sm">Iniciar sesión</button>
-    <button class="btn-sm btn-primary">Registrarse</button>
+    <a class="btn-sm" href="index.html#votar" style="text-decoration:none">Iniciar sesión</a>
+    <a class="btn-sm btn-primary" href="index.html#votar" style="text-decoration:none">Registrarse</a>
   </div>
   <button class="hamburger" id="hamburgerBtn" onclick="toggleNav()" aria-label="Menú">
     <span></span><span></span><span></span>
