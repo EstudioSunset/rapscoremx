@@ -907,7 +907,8 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .votar-desc { color: #aaa; font-size: 13px; line-height: 1.8; max-width: 620px; }
 .votar-desc strong { color: var(--accent2); }
 .votar-steps { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
-.votar-steps div { border: 1px solid var(--border); padding: 10px 14px; font-size: 11px; color: var(--text); display: flex; gap: 10px; align-items: center; }
+.votar-steps button { border: 1px solid var(--border); background: none; padding: 10px 14px; min-height: 44px; font-family: inherit; font-size: 11px; color: var(--text); display: flex; gap: 10px; align-items: center; cursor: pointer; text-align: left; }
+.votar-steps button:hover { border-color: var(--accent); }
 .votar-steps span { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); }
 .votar-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
 .votar-main { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
@@ -979,8 +980,12 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
   .votar-stage { padding: 16px; }
   .vs-name { font-size: 18px; }
   .votar-list { grid-template-columns: 1fr; max-height: 55vh; }
-  .votar-side { order: -1; }
   .votar-grid { display: flex; flex-direction: column; }
+  /* en celular la calificación va primero: menos texto arriba y el perfil/niveles después */
+  .votar-hero { margin-bottom: 18px; }
+  .votar-desc { display: none; }
+  .votar-steps { gap: 6px; margin-top: 12px; }
+  .votar-steps button { padding: 6px 10px; min-height: 40px; }
 }
 
 /* VOTACIÓN */
@@ -999,9 +1004,14 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rate-row { display:grid; grid-template-columns:88px 1fr 34px; align-items:center; gap:10px; cursor:pointer; }
 .rate-cat { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
 .rate-val { font-family:'Bebas Neue',sans-serif; font-size:20px; text-align:right; color:var(--text); }
-.rate-row input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:4px; background:var(--border); outline:none; margin:0; }
-.rate-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; background:var(--accent); border:none; cursor:pointer; }
-.rate-row input[type=range]::-moz-range-thumb { width:16px; height:16px; background:var(--accent); border:none; border-radius:0; cursor:pointer; }
+/* Barra con área de toque alta (antes medía 4px y los taps no la movían). --p = valor en %, pinta la parte llena */
+.rate-row input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:40px; background:transparent; outline:none; margin:0; cursor:pointer; touch-action:pan-y; }
+.rate-row input[type=range]::-webkit-slider-runnable-track { height:6px; background:linear-gradient(to right, var(--accent) var(--p, 50%), var(--border) var(--p, 50%)); }
+.rate-row input[type=range]::-moz-range-track { height:6px; background:var(--border); }
+.rate-row input[type=range]::-moz-range-progress { height:6px; background:var(--accent); }
+.rate-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; height:24px; margin-top:-9px; background:var(--accent); border:2px solid #0a0a0a; box-shadow:0 0 0 1px var(--accent); cursor:pointer; }
+.rate-row input[type=range]::-moz-range-thumb { width:22px; height:22px; background:var(--accent); border:2px solid #0a0a0a; border-radius:0; cursor:pointer; }
+.rate-hint { font-size:10px; color:var(--muted); margin:-4px 0 10px; }
 .rate-row input[type=range]:focus-visible { outline:1px solid var(--accent2); outline-offset:4px; }
 .rate-actions { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:14px; }
 .rate-submit { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:10px 18px; background:var(--accent); color:#fff; border:none; cursor:pointer; }
@@ -2063,8 +2073,8 @@ function buildRateBox(slug, name, baseScores) {
   const sliders = CATEGORIES.map(c => `
     <label class="rate-row">
       <span class="rate-cat">${CAT_LABELS[c]}</span>
-      <input type="range" min="1" max="100" step="1" value="${start[c]}" data-cat="${c}"
-        oninput="this.nextElementSibling.textContent=this.value">
+      <input type="range" min="1" max="100" step="1" value="${start[c]}" data-cat="${c}" style="--p:${(start[c] - 1) / 99 * 100}%"
+        oninput="this.nextElementSibling.textContent=this.value;this.style.setProperty('--p',(this.value-1)/99*100+'%')">
       <output class="rate-val">${start[c]}</output>
     </label>`).join('');
   return `
@@ -2073,6 +2083,7 @@ function buildRateBox(slug, name, baseScores) {
         <span class="rate-title">${mine ? 'Tu calificación' : 'Califica a ' + esc(name)}</span>
         ${mine ? '<span class="rate-badge">Ya votaste · puedes cambiarla</span>' : ''}
       </div>
+      <div class="rate-hint">Toca o desliza cada barra: izquierda = flojo, derecha = élite.</div>
       <div class="rate-grid">${sliders}</div>
       <div class="rate-actions">
         <button class="rate-submit" onclick="window.submitRating ? submitRating(this) : showToast('La votación no está disponible en este momento')">${mine ? 'Actualizar calificación' : 'Guardar calificación'}</button>
@@ -2736,9 +2747,9 @@ function renderVotar() {
           <h2>VOTA Y <em>MUEVE</em><br>EL RANKING</h2>
           <p class="votar-desc">RapScore MX es una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Todos los raperos arrancan en <strong>${BASE_SCORE}</strong>. Cada calificación que das mueve su score hacia el promedio de la comunidad. Califica, suma puntos y sube en el ranking de contribuyentes.</p>
           <div class="votar-steps">
-            <div><span>1</span>Elige un artista</div>
-            <div><span>2</span>Califícalo en 6 categorías</div>
-            <div><span>3</span>Gana +${POINTS_RATING} pts por cada artista nuevo</div>
+            <button type="button" onclick="votarGoTo('votarList')"><span>1</span>Elige un artista</button>
+            <button type="button" onclick="votarGoTo('votarStage')"><span>2</span>Califícalo en 6 categorías</button>
+            <button type="button" onclick="votarGoTo('votarStage')"><span>3</span>Gana +${POINTS_RATING} pts por cada artista nuevo</button>
           </div>
         </div>
         <div class="votar-grid">
@@ -2786,12 +2797,22 @@ function renderVotar() {
       </div>`;
   }
   document.querySelectorAll('.vp-chip').forEach(c => c.classList.toggle('active', c.dataset.f === votarFilter));
+  // Arrancamos con un artista ya listo para calificar (antes había que encontrar "Empezar a votar")
+  if (!votarSel && ARTISTS.length) {
+    const first = votarCandidates().find(a => !myRated(a.slug));
+    if (first) { getVotarQueue(); votarSel = first.slug; }
+  }
   renderVotarStage();
   renderVotarList();
   renderVotarSide();
 }
 
 function setVotarFilter(f) { votarFilter = f; renderVotar(); }
+// Los pasos 1-2-3 de arriba también llevan a donde se hace cada cosa (la gente los tocaba esperando que hicieran algo)
+function votarGoTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 function votarCandidates() {
   if (votarQueue && votarQueue.length === ARTISTS.length) {
@@ -4668,6 +4689,7 @@ function refreshOpenRateBoxes() {
     if (!mine) return;
     box.querySelectorAll('input[type="range"]').forEach(inp => {
       inp.value = mine[inp.dataset.cat]; inp.nextElementSibling.textContent = inp.value;
+      inp.style.setProperty('--p', (inp.value - 1) / 99 * 100 + '%');
     });
     const t = box.querySelector(".rate-title"); if (t) t.textContent = "Tu calificación";
     const btn = box.querySelector(".rate-submit"); if (btn) btn.textContent = "Actualizar calificación";
