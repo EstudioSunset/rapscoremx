@@ -50,6 +50,6 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - Publicar `firestore.rules` en Firebase con los 13 slugs nuevos (sin eso no se puede votar por los artistas agregados el 10 oct 2026).
 - En GA4: subir la retención de datos a 14 meses, marcar los eventos clave, crear dimensiones personalizadas (`artist_name`, `section`, `cta`, `filter`, `popup`, `estado`; de usuario: `logged_in`) y activar el filtro de tráfico interno.
 - Decidir qué hacer con `artista.html`.
-- Llenar las redes en `const SOCIAL = {facebook, instagram, tiktok}` (hoy están vacías y se muestran como "muy pronto").
+- Agregar Instagram en `const SOCIAL` de `index.html` cuando exista la cuenta (Facebook y TikTok ya están puestos; Instagram se muestra como "muy pronto").
 - Verificar el origen de Lirika Inverza (está puesto como CDMX).
 - Opcional: campo de foto con casilla de derechos en el formulario de propuestas.
