@@ -20,7 +20,7 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 | `images/rapscore-logo-transparente.png` | Logo oficial actual (el que usa el sitio). `images/rapscore-logo.png` es una versión vieja que solo usa `og:image`. |
 
 ## Datos y reglas del ranking
-- Los artistas están en `const RAW_ARTISTS = [...]` dentro de `index.html`. Campos: `name`, `tier` (`legend` | `active` | `emerging`), `estado` (nombre exacto de la lista `ESTADOS`), `tags` (el primero se muestra como ciudad), `bio`, y `female: true` cuando aplica. Roster actual: 68.
+- Los artistas están en `const RAW_ARTISTS = [...]` dentro de `index.html`. Campos: `name`, `tier` (`legend` | `active` | `emerging`), `estado` (nombre exacto de la lista `ESTADOS`), `tags` (el primero se muestra como ciudad), `bio`, y `female: true` cuando aplica. Roster actual: 89 (21 agregados el 11 oct 2026; 20 de ellos sin estado confirmado).
 - Mapa por estado: cada artista es un punto en su ciudad (primer tag) si está en `CITY_COORDS` de `index.html` (lat/lon); si no, en el centro de su estado; sin estado, gris en el centro del país ("origen por confirmar"). Al agregar un artista de una ciudad nueva, agrega la ciudad a `CITY_COORDS`.
 - Botones "Escúchalo" en Votar y en la ficha del ranking. Spotify: si el slug está en `SPOTIFY_IDS` (index.html) el botón va al perfil oficial y aparece "▶ Escuchar aquí", que carga el reproductor oficial **solo al tocarlo**; si no, búsqueda. YouTube: `youtube` en `RAW_ARTISTS` o búsqueda.
 - `embeds-artistas.json`: investigación de perfiles de Spotify (oct 2026), verificados con créditos de canciones + oEmbed oficial. En `SPOTIFY_IDS` solo están los "confirmado" (67; Hadrian, Sick Morrison, Smoky y Eanz los confirmó Adn). Falta Eric El Niño: no se encontró perfil. Nunca usar URLs de imágenes: solo embeds oficiales (lo dice el aviso legal del footer).
@@ -52,7 +52,8 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - Al terminar, dile a Adn en 2–3 líneas qué cambió en el sitio y si le toca hacer algo (por ejemplo, publicar reglas de Firebase).
 
 ## Pendientes conocidos
-- Publicar `firestore.rules` en Firebase con los 13 slugs nuevos (sin eso no se puede votar por los artistas agregados el 10 oct 2026).
+- Publicar `firestore.rules` en Firebase: trae los slugs de los 13 artistas del 10 oct y los 21 del 11 oct 2026. Sin eso, sus votos fallan con permission-denied.
+- Confirmar estado y ciudad de los agregados el 11 oct (todos menos Primero Company, que es de Ecatepec). Excluidos de esa lista por falta de datos o por no ser raperos: Tocadiscos Trez, Shei Durand, Mezcal Music, Phrase, Mess, Esencia Mx, Bajo Perfil Crew, JASE ODC, Cadeellac, Blanco Pikete.
 - En GA4: subir la retención de datos a 14 meses, marcar los eventos clave, crear dimensiones personalizadas (`artist_name`, `section`, `cta`, `filter`, `popup`, `estado`; de usuario: `logged_in`) y activar el filtro de tráfico interno.
 - Decidir qué hacer con `artista.html`.
 - Agregar Instagram en `const SOCIAL` de `index.html` cuando exista la cuenta (Facebook y TikTok ya están puestos; Instagram se muestra como "muy pronto").
