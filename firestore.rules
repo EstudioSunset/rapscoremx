@@ -53,7 +53,8 @@ service cloud.firestore {
       'union-fatal', 'juancauf', 'soor-uefe', 'solo-cadaver', 'isek', 'thr-cru2', 'danny-brasco',
       'tankeone', 'churro-one', 'el-pinche-brujo', 'slow-flavor', 'dsmxnd', 'metrik-vader',
       'senor-marrano', 'mack-liricks', 'racal-tresvecestres', 'primero-company', 'bizor',
-      'tumba2-rr', 'manoso-fast', 'sucia-elegancia'
+      'tumba2-rr', 'manoso-fast', 'sucia-elegancia',
+      'faruz-feet', 'mc-aese', 'big-metra', 'el-pinche-mara', 'mr-yosie-locote', 'tornillo', 'iluminatik', 'jauria-santa'
       ];
     }
     function proposalDoc(id) { return /databases/$(database)/documents/proposals/$(id); }

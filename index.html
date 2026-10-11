@@ -2076,6 +2076,23 @@ const RAW_ARTISTS = [
     bio: 'Rapero con el disco "Oro Molido" (2023). Aparece en las recopilaciones "Rap en Breve" y "Rap en Breve, Vol. 2".' },
   { name: 'Sucia elegancia', tier: 'active', estado: '', tags: ['México','Rap','Underground'],
     bio: 'Proyecto de rap underground con cientos de miles de oyentes en Spotify; su tema "No Te Drogues" es de los más escuchados. Ha colaborado con juancaUF.' },
+  // ── Agregados el 11 oct 2026 (segunda lista de Adn). Spotify oficial + origen en Apple Music, Last.fm, Believe, La Jornada, Qobuz.
+  { name: 'Faruz Feet', tier: 'active', estado: 'Ciudad de México', tags: ['CDMX','Rap','Nueva Escuela'],
+    bio: 'Rapero de la Ciudad de México y referente de la escena independiente. Su serie de discos "Faruz Fit" (vol. 2 en 2022, vol. 3 en 2025) conecta con el público del gimnasio; también publicó "Crashed" (2018), "Amor y Psique" (2023) y el EP "Sin Sendero" (2024).' },
+  { name: 'MC Aese', tier: 'active', estado: 'Nuevo León', tags: ['Guadalupe, NL','Rap','Rap Romántico'],
+    bio: 'Adrián Saldaña, rapero de Guadalupe, Nuevo León. Discos como "Munchies" (2016), "Mint" (2017), "Orígenes" (2020) y "222" (2025).' },
+  { name: 'Big Metra', tier: 'legend', estado: 'Ciudad de México', tags: ['CDMX','Rap','Pionero'],
+    bio: 'Óscar Castro, rapero de la Ciudad de México conocido por su velocidad. Formó LCV en 1993 y cofundó Petate Funky; su disco solista "A Otro Nivel" (2005), con "La Crema" y "Desnúdate", marcó el inicio del reguetón mexicano. En 2022 lanzó "Homogéneo".' },
+  { name: 'El Pinche Mara', tier: 'active', estado: 'Yucatán', tags: ['Mérida','Rap','Trap'],
+    bio: 'Rapero nacido en Mérida, Yucatán, que desarrolló su carrera en Guadalajara. Discos como "Más Locos Que Simpáticos", "Alambre de Púas" (2018), "Bajo Penumbra" (2024) y "Maldito y Bendito" (2025); grabó "Raptrónico" (2020) con Remik González.' },
+  { name: 'Mr. Yosie Locote', tier: 'legend', estado: 'Jalisco', tags: ['Guadalajara','Rap de Calle','Gangsta Rap'],
+    bio: 'Ramón Conchas, rapero de Guadalajara conocido como "El Maestro de las Rimas" y referente del rap de calle tapatío, con influencia del G-funk. Murió en abril de 2018; su catálogo sigue entre lo más escuchado del género.' },
+  { name: 'Tornillo', tier: 'active', estado: 'San Luis Potosí', tags: ['San Luis Potosí','Rap','Cumbia Rap'],
+    bio: 'Rapero de San Luis Potosí nacido en 2003. Mezcla hip hop y cumbia con acordeón, que toca desde niño. Publicó "Cactus" (2022) y "Estilo Fino" (2024), y grabó "Sentosa" con Peso Pluma y Polo González.' },
+  { name: 'Iluminatik', tier: 'emerging', estado: '', tags: ['México','Rap','Underground'],
+    bio: 'Rapero con más de 200 mil oyentes mensuales en Spotify; entre sus temas más escuchados están "Payaso", "Dopamina", "Inhala" y "Depresión".' },
+  { name: 'Jauria Santa', tier: 'active', estado: '', tags: ['México','Rap','Underground'],
+    bio: 'Proyecto con más de 2 millones de oyentes mensuales en Spotify; "Cada Noche", "Consumo" y "Que Si Fumo Tanto" son sus temas más escuchados. En 2026 sacó "Las Prohibidas, Vol. 6".' },
 ];
 
 // compute total
@@ -2350,6 +2367,9 @@ const SPOTIFY_IDS = {
   'racal-tresvecestres': '4KosFzORspeFHQfYxt8quF', 'primero-company': '6pu8qjuOYZRBYc1hiHEVL5',
   'bizor': '7F6fxMv0tz2Clj8H02Y2k7', 'tumba2-rr': '1ZGnDmMf6asDVc1ml9in3D', 'manoso-fast': '6uzPFxNekmYiiRwJrYknCY',
   'sucia-elegancia': '7JgowUBmgLV9RMiICQrS7m',
+  'faruz-feet': '6tJRAxu0HwB2GI9GueEj4l', 'mc-aese': '2q8rYroKKPkO6fHFv86lG8', 'big-metra': '5J5DLfdC5YmPjVk8ljdOqU',
+  'el-pinche-mara': '3L7OHIT4kfdcDSnnGM0TKN', 'mr-yosie-locote': '0Dek2t04zGDa5wisG7oYrR', 'tornillo': '5OGraDcSkO4oTWthkm77WL',
+  'iluminatik': '0N6H5exnFMoW4yNQ3vDJ3Z', 'jauria-santa': '662f8mEv1eRLXE9DzBy4vV',
 };
 
 // Botones para escuchar al artista antes de calificarlo. YouTube: link directo si el artista tiene `youtube`,
@@ -4200,6 +4220,7 @@ const CITY_COORDS = {
   'mazatlan': [23.25, -106.41], 'tampico': [22.25, -97.86], 'neza': [19.40, -99.01],
   'nogales': [31.31, -110.94], 'iztapalapa': [19.36, -99.06], 'jiquilpan, mich.': [19.99, -102.72],
   'iramuco, gto.': [20.02, -100.92], 'linares, nl': [24.86, -99.57], 'matamoros': [25.87, -97.50],
+  'merida': [20.97, -89.62], 'san luis potosi': [22.15, -100.98],
 };
 const normCity = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 // El SVG del mapa está en proyección Mercator; estos números se ajustaron con los límites de varios estados (error ~1 px)
