@@ -59,7 +59,7 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
   }, true);
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Saira+Stencil+One&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Saira+Stencil+One&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0a;
@@ -1415,7 +1415,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 /* top 5 como carteles */
 .street-top { max-width: 1400px; margin: 0 auto; padding: 80px 24px 40px; }
 .street-top-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 38px; }
-.street-h2 { font-family: 'Permanent Marker', cursive; font-weight: 400; font-size: clamp(34px, 4.6vw, 56px); line-height: 1; color: var(--text); }
+.street-h2 { font-family: 'Saira Stencil One', 'Bebas Neue', sans-serif; text-transform: uppercase; font-weight: 400; font-size: clamp(34px, 4.6vw, 56px); line-height: 1; color: var(--text); }
 .street-top-sub { margin-top: 8px; font-size: 12px; color: #a39b90; }
 .street-link { background: none; border: none; cursor: pointer; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; color: var(--accent); min-height: 44px; }
 .posters { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 30px 26px; }
@@ -1424,7 +1424,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .poster:hover { transform: rotate(0) scale(1.02); }
 .poster::before { content: ""; position: absolute; top: -12px; left: 50%; width: 90px; height: 26px; margin-left: -45px; background: rgba(240,232,200,.78); transform: rotate(-3deg); box-shadow: 0 1px 2px rgba(0,0,0,.25); }
 .poster-n { font-family: 'Bebas Neue', sans-serif; font-size: 60px; line-height: .8; color: #c8281a; }
-.poster-av { height: 120px; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg, #2a2522 0 10px, #332d29 10px 20px); color: #ede6d6; font-family: 'Permanent Marker', cursive; font-size: 44px; }
+.poster-av { height: 120px; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg, #2a2522 0 10px, #332d29 10px 20px); color: #ede6d6; font-family: 'Saira Stencil One', 'Bebas Neue', sans-serif; font-size: 44px; }
 .poster-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; margin-top: 4px; }
 .poster-tag { font-family: 'Space Mono', monospace; font-size: 11px; color: #4a433d; }
 .poster-score { display: flex; align-items: baseline; justify-content: space-between; border-top: 2px dashed #b9ae98; padding-top: 8px; }
@@ -1435,7 +1435,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .street-drip { display: block; width: 100%; height: 56px; margin-top: 40px; }
 .site-footer { margin-top: 0; border-top: none; }
 .sf-brand .logo-img img { height: 64px; }
-.sf-tag { font-family: 'Permanent Marker', cursive; font-size: 16px; color: #a39b90; margin-top: 8px; }
+.sf-tag { font-family: 'Saira Stencil One', 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: #a39b90; margin-top: 8px; }
 @media (max-width: 600px) {
   .logo-img img { height: 30px; }
   .street-hero { min-height: 520px; }
@@ -1444,6 +1444,114 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   .ticker { height: auto; }
   .ticker-item { font-size: 18px; letter-spacing: 1px; }
   .street-top { padding: 64px 16px 24px; }
+}
+</style>
+<style>
+/* ═══ PORTADA NUEVA (borrador) ═══ */
+.nh-hero { position: relative; overflow: hidden; background: #0b0b0b; border-bottom: 1px solid var(--border); }
+.nh-hero-media { position: absolute; inset: 0 0 0 42%; }
+.nh-hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #0b0b0b 0%, rgba(11,11,11,.55) 35%, rgba(11,11,11,.15) 100%); }
+.nh-ph { display: flex; align-items: center; justify-content: center; text-align: center; color: #6d6d6d; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  background: repeating-linear-gradient(135deg, #161616 0 14px, #1b1b1b 14px 28px); border: 1px dashed #333; }
+.nh-ph small { display: block; margin-top: 6px; letter-spacing: 0; text-transform: none; font-size: 10px; }
+.nh-ph-hero { position: absolute; inset: 0; }
+.nh-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 30%; display: block; }
+.nh-hero-tag { position: absolute; right: 4%; top: 12%; z-index: 1; font-family: 'Saira Stencil One', 'Bebas Neue', sans-serif; font-size: clamp(26px, 3vw, 46px); line-height: 1.05; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,237,230,.3); transform: rotate(-6deg); text-align: right; }
+.nh-crown { position: absolute; right: 7%; top: 56%; z-index: 1; width: 64px; color: rgba(240,237,230,.3); transform: rotate(-8deg); }
+.nh-hero-inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; padding: 48px 24px 32px; }
+.nh-kicker { display: block; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent2); margin-bottom: 12px; }
+.nh-title { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(44px, 6.4vw, 92px); line-height: .92; letter-spacing: .5px; color: var(--text); max-width: 760px; }
+.nh-title em { font-style: normal; color: var(--accent); }
+.nh-sub { margin-top: 18px; max-width: 520px; font-size: 13px; line-height: 1.8; color: #cfc9bf; }
+.nh-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 26px; }
+.nh-btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 24px; background: var(--accent); color: #000; border: 2px solid var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1.5px; cursor: pointer; }
+.nh-btn:hover { filter: brightness(1.08); }
+.nh-btn.ghost { background: transparent; color: var(--text); border-color: var(--text); }
+.nh-stats { display: flex; flex-wrap: wrap; justify-content: flex-end; margin-top: 34px; }
+.nh-stat { padding: 4px 22px; border-left: 1px solid #3a3a3a; }
+.nh-stat b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 30px; line-height: 1; color: var(--text); }
+.nh-stat span { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9a9a; }
+.nh-stat.live b { font-size: 18px; color: var(--accent2); margin-top: 6px; }
+.nh-features { max-width: 1400px; margin: 0 auto; padding: 22px 24px; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--border); }
+.nh-feature { display: flex; gap: 16px; align-items: flex-start; padding: 6px 22px; border-left: 1px solid var(--border); }
+.nh-feature:first-child { border-left: none; padding-left: 0; }
+.nh-feature svg { flex: none; width: 44px; height: 44px; fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.nh-feature b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 20px; letter-spacing: 1px; color: var(--text); }
+.nh-feature span { font-size: 11px; line-height: 1.6; color: #9a9a9a; }
+.nh-top, .nh-explore, .nh-editorial { max-width: 1400px; margin: 0 auto; padding: 34px 24px 10px; }
+.nh-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 18px; }
+.nh-head h2 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 44px); line-height: 1; color: var(--text); }
+.nh-head-sub { font-size: 11px; color: #9a9a9a; flex: 1 1 260px; }
+.nh-more { margin-left: auto; background: none; border: none; color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; cursor: pointer; min-height: 44px; }
+.nh-top-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.nh-card { position: relative; background: var(--surface); border: 1px solid var(--border); padding: 12px 12px 14px; cursor: pointer; text-align: left; color: var(--text); font: inherit; display: flex; flex-direction: column; gap: 8px; }
+.nh-card:hover { border-color: var(--accent); }
+.nh-card.first { border: 2px solid var(--accent); }
+.nh-card-n { position: absolute; top: 10px; left: 12px; z-index: 1; font-family: 'Bebas Neue', sans-serif; font-size: 46px; line-height: 1; color: var(--accent); text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.nh-card-img { height: 130px; overflow: hidden; background: #111; }
+.nh-card-img > img, .nh-card-img > svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nh-card-name { font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 1; letter-spacing: .5px; }
+.nh-card-loc { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #9a9a9a; display: flex; gap: 6px; align-items: center; }
+.nh-card-loc svg { width: 12px; height: 12px; flex: none; fill: var(--accent); }
+.nh-card-score { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
+.nh-card-score b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 40px; line-height: 1; }
+.nh-card.first .nh-card-score b { color: var(--accent2); }
+.nh-card-score span { font-size: 10px; color: #9a9a9a; text-align: right; }
+.nh-tabs { display: flex; margin-bottom: 16px; }
+.nh-tab { min-height: 40px; padding: 0 22px; background: transparent; border: 1px solid #3a3a3a; color: var(--text); font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
+.nh-tab.active { background: var(--accent); border-color: var(--accent); color: #000; }
+.nh-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.nh-place { position: relative; height: 110px; border: 1px solid var(--border); cursor: pointer; overflow: hidden; text-align: left; padding: 0; font: inherit; color: var(--text); background: none; }
+.nh-place .nh-ph { position: absolute; inset: 0; font-size: 9px; align-items: flex-start; padding-top: 10px; }
+.nh-place::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.1) 70%); }
+.nh-place-txt { position: absolute; left: 12px; bottom: 10px; right: 30px; z-index: 1; }
+.nh-place-txt b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 24px; line-height: 1; }
+.nh-place-txt span { font-size: 10px; color: #cfc9bf; }
+.nh-place-arrow { position: absolute; right: 10px; bottom: 12px; z-index: 1; color: var(--text); font-size: 18px; }
+.nh-place:hover { border-color: var(--accent); }
+.nh-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.nh-note { display: grid; grid-template-columns: 120px 1fr; background: var(--surface); border: 1px solid var(--border); min-height: 120px; }
+.nh-ph-note { font-size: 9px; }
+.nh-note-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.nh-note-cat { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; color: var(--accent); }
+.nh-note-body b { font-family: 'Syne', sans-serif; font-size: 14px; line-height: 1.3; }
+.nh-note-body p { font-size: 11px; line-height: 1.6; color: #9a9a9a; }
+.nh-note-body small { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #6d6d6d; margin-top: auto; }
+/* Ranking corto en la portada: 10 filas + botón para ver todo (se abre solo al buscar, filtrar u ordenar) */
+#section-rankings.nh-collapsed #artistTable > div:nth-child(n+11), #section-rankings.nh-collapsed #waitSection { display: none !important; }
+.nh-showall { display: none; width: 100%; min-height: 48px; margin: 14px 0 0; background: transparent; border: 1px solid var(--accent); color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; cursor: pointer; }
+#section-rankings.nh-collapsed .nh-showall { display: block; }
+.nh-cta { max-width: 1400px; margin: 34px auto 0; padding: 26px 24px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  background: linear-gradient(90deg, rgba(255,60,0,.08), transparent 60%); }
+.nh-cta-text b, .nh-cta-text span { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 44px); line-height: .95; }
+.nh-cta-text b { color: var(--accent); }
+.nh-cta p { flex: 1 1 260px; font-size: 12px; line-height: 1.7; color: #cfc9bf; }
+@media (max-width: 1000px) {
+  .nh-features { grid-template-columns: repeat(2, 1fr); gap: 14px 0; }
+  .nh-feature:nth-child(3) { border-left: none; padding-left: 0; }
+  .nh-cards { grid-template-columns: repeat(3, 1fr); }
+  .nh-notes { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .nh-hero-media { inset: 0; opacity: .5; }
+  .nh-hero-img { object-position: 78% 30%; }
+  .nh-hero-media::after { background: linear-gradient(0deg, #0b0b0b 10%, rgba(11,11,11,.6) 60%, rgba(11,11,11,.4)); }
+  .nh-hero-tag, .nh-crown { display: none; }
+  .nh-hero-inner { padding: 34px 16px 24px; }
+  .nh-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; margin-top: 26px; }
+  .nh-stat { border-left: none; border-top: 1px solid #3a3a3a; padding: 8px 0 0; }
+  .nh-ph-hero span { display: none; }
+  .nh-features { grid-template-columns: 1fr; padding: 18px 16px; }
+  .nh-feature, .nh-feature:nth-child(3) { border-left: none; padding: 4px 0; }
+  .nh-top, .nh-explore, .nh-editorial { padding: 28px 16px 6px; }
+  /* Top 5 deslizable de lado en celular */
+  .nh-top-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin: 0 -16px; padding: 0 16px 8px; scrollbar-width: none; }
+  .nh-top-row::-webkit-scrollbar { display: none; }
+  .nh-card { flex: 0 0 72%; scroll-snap-align: start; }
+  .nh-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .nh-note { grid-template-columns: 96px 1fr; }
+  .nh-cta { margin: 28px 0 0; padding: 22px 16px; }
+  .nh-cta .nh-btn { width: 100%; justify-content: center; }
 }
 </style>
 </head>
@@ -1459,8 +1567,6 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <a href="#admin" id="nav-admin" style="display:none" onclick="goTo('admin');closeNav();return false">Admin</a>
     <a href="#estados" id="nav-estados" onclick="goTo('estados');closeNav();return false">Por Estado</a>
     <a href="#emergentes" id="nav-emergentes" onclick="goTo('emergentes');closeNav();return false">Emergentes</a>
-    <a href="#comparar" id="nav-comparar" onclick="goTo('comparar');closeNav();return false">Comparar</a>
-    <a href="#editorial" onclick="goTo('editorial');closeNav();return false">Editorial</a>
   </nav>
   <!-- Desktop: two buttons -->
   <div class="header-actions" id="headerActions">
@@ -1475,64 +1581,53 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 </header>
 
 <!-- ═══ HERO ESTILO CALLE ═══ -->
-<section class="street-hero home-only" aria-label="Bienvenida">
-  <svg class="street-wall" aria-hidden="true" viewBox="0 0 1440 640" preserveAspectRatio="xMidYMid slice">
-    <defs>
-      <pattern id="rsBrick" width="96" height="48" patternUnits="userSpaceOnUse">
-        <rect width="96" height="48" fill="#161210"/>
-        <rect x="2" y="2" width="92" height="20" fill="#3c2c25"/>
-        <rect x="-46" y="26" width="92" height="20" fill="#35271f"/>
-        <rect x="50" y="26" width="92" height="20" fill="#41302a"/>
-      </pattern>
-      <filter id="rsGrain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
-    </defs>
-    <rect width="1440" height="640" fill="url(#rsBrick)"/>
-    <rect width="1440" height="640" filter="url(#rsGrain)" opacity="0.14"/>
-    <g transform="rotate(-8 1120 250)"><text x="840" y="300" font-family="Bebas Neue, sans-serif" font-size="300" fill="none" stroke="#ff3c00" stroke-width="5" opacity="0.8">MX</text></g>
-    <g transform="rotate(5 1180 470)">
-      <text x="930" y="500" font-family="Permanent Marker, cursive" font-size="92" fill="#c8281a" opacity="0.9">PURO RAP</text>
-      <rect x="985" y="508" width="6" height="46" rx="3" fill="#c8281a" opacity="0.85"/>
-      <rect x="1068" y="510" width="5" height="70" rx="3" fill="#c8281a" opacity="0.85"/>
-      <rect x="1176" y="506" width="6" height="34" rx="3" fill="#c8281a" opacity="0.85"/>
-      <rect x="1262" y="509" width="5" height="58" rx="3" fill="#c8281a" opacity="0.85"/>
-    </g>
-    <text x="1240" y="140" font-family="Permanent Marker, cursive" font-size="44" fill="#f0ede6" opacity="0.5" transform="rotate(-12 1290 130)">la calle vota</text>
-    <text x="760" y="600" font-family="Permanent Marker, cursive" font-size="38" fill="#39c0ff" opacity="0.5" transform="rotate(-4 860 590)">RSMX 2026</text>
-  </svg>
-  <div class="street-shade"></div>
-  <div class="street-glow"></div>
-  <div class="street-inner">
-    <span class="street-kicker">Ranking comunitario del rap mexicano</span>
-    <h1 class="street-logo"><img src="images/rapscore-logo-transparente.png" alt="RapScore MX" width="1200" height="337"></h1>
-    <p class="street-claim">El ranking del rap mexicano lo decide la calle.</p>
-    <p class="street-sub">Califica a tus MCs en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Todos arrancan en 50 y el promedio de la comunidad manda.</p>
-    <div class="street-ctas">
-      <button type="button" class="street-btn" data-track="hero_votar" onclick="goTo('votar')">Votar ahora</button>
-      <button type="button" class="street-btn ghost" data-track="hero_ver_ranking" onclick="scrollToRanking()">Ver ranking</button>
+<!-- ═══ PORTADA NUEVA (borrador en index-nuevo.html) ═══ -->
+<section class="nh-hero home-only" aria-label="Bienvenida">
+  <div class="nh-hero-media" aria-hidden="true">
+    <img class="nh-hero-img" src="images/artistas/rapero-entre-humo-y-sombras.webp" alt="" width="1672" height="941" fetchpriority="high" decoding="async">
+    <div class="nh-hero-tag">La calle<br>también<br>rankea</div>
+    <svg class="nh-crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M4 40 L10 10 L24 26 L32 6 L40 26 L54 10 L60 40 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="nh-hero-inner">
+    <span class="nh-kicker">Ranking comunitario del rap mexicano</span>
+    <h1 class="nh-title">El ranking comunitario<br><em>del rap mexicano.</em></h1>
+    <p class="nh-sub">La comunidad decide la calle. Califica a tus MCs en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Todos arrancan en 50 y el promedio de la comunidad manda.</p>
+    <div class="nh-ctas">
+      <button type="button" class="nh-btn" data-track="hero_ver_ranking" onclick="scrollToRanking()">Ver ranking <span aria-hidden="true">›</span></button>
+      <button type="button" class="nh-btn ghost" data-track="hero_como_funciona" onclick="document.getElementById('welcomeModal').classList.add('open')">Cómo funciona</button>
     </div>
-    <p class="street-stats" id="streetStats">&nbsp;</p>
+    <div class="nh-stats" id="nhStats"></div>
   </div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner" id="ticker">
-    <span class="ticker-item">RapScore MX <span class="ticker-sep">—</span> Rankings de rap mexicano</span>
+<section class="nh-features home-only" aria-label="Por qué RapScore">
+  <div class="nh-feature">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="16" cy="16" r="6"/><circle cx="32" cy="16" r="6"/><path d="M4 38c0-7 5-12 12-12s12 5 12 12M20 38c0-7 5-12 12-12s12 5 12 12"/></svg>
+    <div><b>Votación comunitaria</b><span>Fans reales, opiniones reales. La comunidad decide.</span></div>
   </div>
-</div>
-
-
-<!-- ═══ TOP 5 (carteles) ═══ -->
-<section class="street-top home-only" aria-labelledby="topTitle">
-  <div class="street-top-head">
-    <div>
-      <h2 class="street-h2" id="topTitle">Top 5 de la comunidad</h2>
-      <p class="street-top-sub">Todos arrancan en 50. Tus votos los mueven.</p>
-    </div>
-    <button type="button" class="street-link" onclick="scrollToRanking()">Ver ranking completo →</button>
+  <div class="nh-feature">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40V26h7v14M21 40V16h7v24M34 40V8h7v32"/></svg>
+    <div><b>Criterios transparentes</b><span>Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto.</span></div>
   </div>
-  <div class="posters" id="topPosters"></div>
+  <div class="nh-feature">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10z"/><path d="M17 24l5 5 9-10"/></svg>
+    <div><b>Perfiles verificables</b><span>Bios con datos comprobables y perfiles oficiales.</span></div>
+  </div>
+  <div class="nh-feature">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36l12-12 8 8 16-16M32 16h10v10"/></svg>
+    <div><b>Datos en evolución</b><span>El ranking se actualiza con cada voto nuevo.</span></div>
+  </div>
 </section>
+
+<section class="nh-top home-only" aria-labelledby="nhTopTitle">
+  <div class="nh-head">
+    <h2 id="nhTopTitle">Top 5 de la comunidad</h2>
+    <span class="nh-head-sub">Los artistas mejor calificados. Tus votos los mueven.</span>
+    <button type="button" class="nh-more" onclick="nhExpandRanking();scrollToRanking()">Ver ranking completo →</button>
+  </div>
+  <div class="nh-top-row" id="nhTop"></div>
+</section>
+
 
 <!-- Google Sheets: carga automática silenciosa -->
 
@@ -1598,29 +1693,31 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 </main>
 </div><!-- /section-rankings -->
 
+<section class="nh-explore home-only" aria-labelledby="nhExploreTitle">
+  <div class="nh-head">
+    <h2 id="nhExploreTitle">Explora por estado y categoría</h2>
+    <span class="nh-head-sub">Descubre artistas por región, etapa o estilo. México suena en todos lados.</span>
+    <button type="button" class="nh-more" onclick="goTo('estados')">Ver mapa de estados →</button>
+  </div>
+  <div class="nh-tabs" role="tablist">
+    <button type="button" class="nh-tab active" role="tab" onclick="nhExploreTab('estado', this)">Por estado</button>
+    <button type="button" class="nh-tab" role="tab" onclick="nhExploreTab('categoria', this)">Por categoría</button>
+  </div>
+  <div class="nh-cards" id="nhExplore"></div>
+</section>
+
+
+<section class="nh-cta home-only" aria-label="Califica">
+  <div class="nh-cta-text"><b>Tu voto suma</b><span>cuando conoces la escena.</span></div>
+  <p>Apoya a tus artistas, descubre nuevos talentos y sé parte del ranking más completo del rap mexicano.</p>
+  <button type="button" class="nh-btn" data-track="cta_calificar" onclick="goTo('votar')">Calificar artistas →</button>
+</section>
+
 <!-- ═══ SECTION: POR ESTADO ═══ -->
 <div id="section-votar" style="display:none"></div>
 <div id="section-admin" style="display:none"></div>
 
 <div id="section-estados" style="display:none">
-</div>
-
-<!-- COMPARE BAR -->
-<div class="compare-bar" id="compareBar">
-  <span class="compare-label">Comparar:</span>
-  <div class="compare-names" id="compareNames"></div>
-  <button class="btn-compare" onclick="openCompareModal()">Ver comparativa ↗</button>
-  <button class="btn-sm" onclick="clearCompare()">Limpiar</button>
-</div>
-
-<!-- COMPARE MODAL -->
-<div class="modal-overlay" id="compareModal" onclick="closeModalOutside(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeCompareModal()">✕</button>
-    <div class="modal-title">Comparativa</div>
-    <div class="modal-sub" id="modalSub"></div>
-    <div id="modalContent"></div>
-  </div>
 </div>
 
 <!-- AUTH MODAL -->
@@ -2070,7 +2167,6 @@ function renderWaiting(list, offset) {
   document.getElementById('waitCount').textContent = list.length + ' en espera';
   renderTable(list, 'waitTable', offset);
 }
-let compareList = [];
 let expandedRow = null;
 
 // ─── RENDER ────────────────────────────────────────────────
@@ -2112,7 +2208,7 @@ function graffitiAvatar(name, tier) {
     <g transform="rotate(${rot} 50 50)">
       <rect x="${d1}" y="58" width="4" height="${l1}" rx="2" fill="${ink}"/>
       <rect x="${d2}" y="58" width="3" height="${l2}" rx="1.5" fill="${ink}"/>
-      <text x="50" y="62" text-anchor="middle" font-family="Permanent Marker, cursive" font-size="40" fill="${ink}" stroke="#0a0a0a" stroke-width="2.5" paint-order="stroke">${esc(getInitials(name))}</text>
+      <text x="50" y="62" text-anchor="middle" font-family="Saira Stencil One, Bebas Neue, sans-serif" font-size="38" fill="${ink}" stroke="#0a0a0a" stroke-width="2.5" paint-order="stroke">${esc(getInitials(name))}</text>
     </g>${crown}${star}
   </svg>`;
 }
@@ -2147,10 +2243,9 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
   tbody.innerHTML = '';
 
   data.forEach((artist, i) => {
-    const isCompared = compareList.includes(artist.name);
     const row = document.createElement('div');
     row.innerHTML = `
-      <div class="artist-row ${isCompared?'selected':''}" data-name="${artist.name}" onclick="handleRowClick(event,'${artist.name}')">
+      <div class="artist-row" data-name="${artist.name}">
         <div class="rank-cell">${offset+i+1}</div>
         <div class="info-cell">
           <div class="avatar">${artistAvatar(artist)}</div>
@@ -2333,7 +2428,6 @@ function buildPanel(artist) {
       <p class="ss-note">Todos arrancan en ${BASE_SCORE}. Cada voto acerca el score al promedio de la comunidad.</p>
       ${buildRateBox(artist.slug, artist.name, baseScores())}
       <div class="vote-section">
-        <button class="vote-btn" style="margin-left:auto" onclick="addToCompare('${artist.name.replace(/'/g, "\\'")}')">+ Comparar</button>
       </div>
     </div>
     <div class="radar-wrap">
@@ -2412,130 +2506,6 @@ function drawRadar(canvasId, scores, color) {
     ctx.fill();
   });
 }
-
-// ─── COMPARE ───────────────────────────────────────────────
-function handleRowClick(e, name) {
-  // only if ctrl/cmd
-  if (e.ctrlKey || e.metaKey) addToCompare(name);
-}
-
-function addToCompare(name) {
-  if (compareList.includes(name)) { showToast('Ya está en la comparativa'); return; }
-  if (compareList.length >= 2) { showToast('Máximo 2 artistas'); return; }
-  compareList.push(name);
-  updateCompareBar();
-  refreshTable();
-  showToast(name + ' añadido a la comparativa');
-}
-
-function updateCompareBar() {
-  const bar = document.getElementById('compareBar');
-  const names = document.getElementById('compareNames');
-  if (compareList.length === 0) { bar.classList.remove('show'); return; }
-  bar.classList.add('show');
-  names.innerHTML = compareList.map(n =>
-    `<div class="compare-chip"><span>${n}</span><button class="compare-chip-x" onclick="removeCompare('${n}')">✕</button></div>`
-  ).join('<span class="compare-label">vs</span>');
-}
-
-function removeCompare(name) {
-  compareList = compareList.filter(n => n !== name);
-  updateCompareBar();
-  refreshTable();
-}
-
-function clearCompare() {
-  compareList = [];
-  updateCompareBar();
-  refreshTable();
-}
-
-function openCompareModal() {
-  if (compareList.length < 2) { showToast('Selecciona 2 artistas para comparar'); return; }
-  const [a1, a2] = compareList.map(n => ARTISTS.find(a => a.name === n));
-  rsTrack('compare_artists', { artists: a1.name + ' vs ' + a2.name });
-  document.getElementById('modalSub').textContent = a1.name + ' vs ' + a2.name;
-
-  let rows = CATEGORIES.map(c => {
-    const v1 = a1.scores[c], v2 = a2.scores[c];
-    const win1 = v1 > v2 ? '#ff3c00' : 'rgba(255,255,255,0.2)';
-    const win2 = v2 > v1 ? '#b388ff' : 'rgba(255,255,255,0.2)';
-    return `
-      <div style="margin-bottom:14px">
-        <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:8px;align-items:center">
-          <div>
-            <div class="cat-name">${CAT_LABELS[c]}</div>
-            <div style="height:4px;background:var(--border);position:relative;overflow:hidden;margin-top:4px">
-              <div style="height:100%;position:absolute;right:0;width:${v1}%;background:${win1}"></div>
-            </div>
-          </div>
-          <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted)">${v1} / ${v2}</div>
-          <div>
-            <div style="height:4px;background:var(--border);position:relative;overflow:hidden;margin-top:20px">
-              <div style="height:100%;position:absolute;left:0;width:${v2}%;background:${win2}"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  document.getElementById('modalContent').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:16px;margin-bottom:24px;align-items:start">
-      <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#ff3c00">${a1.name}</div>
-        <div style="font-size:11px;color:var(--muted)">${a1.tags.join(' · ')}</div>
-      </div>
-      <div style="text-align:center;padding-top:6px">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);border:1px solid var(--accent);width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin:0 auto">VS</div>
-      </div>
-      <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#b388ff">${a2.name}</div>
-        <div style="font-size:11px;color:var(--muted)">${a2.tags.join(' · ')}</div>
-      </div>
-    </div>
-    ${rows}
-    <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:16px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
-      <div style="text-align:center">
-        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Total</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#ff3c00">${fmtTotal(a1.total)}</div>
-        <canvas id="modalRadar1" width="160" height="160" style="margin-top:8px"></canvas>
-      </div>
-      <div></div>
-      <div style="text-align:center">
-        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Total</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#b388ff">${fmtTotal(a2.total)}</div>
-        <canvas id="modalRadar2" width="160" height="160" style="margin-top:8px"></canvas>
-      </div>
-    </div>
-  `;
-
-  document.getElementById('compareModal').classList.add('open');
-  setTimeout(() => {
-    drawRadarSmall('modalRadar1', a1.scores, '#ff3c00');
-    drawRadarSmall('modalRadar2', a2.scores, '#b388ff');
-  }, 50);
-}
-
-function drawRadarSmall(id, scores, color) {
-  const canvas = document.getElementById(id);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W=160,H=160,cx=W/2,cy=H/2,R=58;
-  const n=CATEGORIES.length, a0=-Math.PI/2;
-  ctx.clearRect(0,0,W,H);
-  [0.25,0.5,0.75,1].forEach(f=>{
-    ctx.beginPath();
-    for(let i=0;i<n;i++){const a=a0+2*Math.PI*i/n;i===0?ctx.moveTo(cx+R*f*Math.cos(a),cy+R*f*Math.sin(a)):ctx.lineTo(cx+R*f*Math.cos(a),cy+R*f*Math.sin(a));}
-    ctx.closePath();ctx.strokeStyle='rgba(255,255,255,0.07)';ctx.lineWidth=0.5;ctx.stroke();
-  });
-  ctx.beginPath();
-  CATEGORIES.forEach((c,i)=>{const a=a0+2*Math.PI*i/n,v=scores[c]/100;i===0?ctx.moveTo(cx+R*v*Math.cos(a),cy+R*v*Math.sin(a)):ctx.lineTo(cx+R*v*Math.cos(a),cy+R*v*Math.sin(a));});
-  ctx.closePath();ctx.fillStyle=color+'33';ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.stroke();
-}
-
-function closeCompareModal() { document.getElementById('compareModal').classList.remove('open'); }
-function closeModalOutside(e) { if(e.target===document.getElementById('compareModal')) closeCompareModal(); }
 
 // ─── SORT & FILTER ──────────────────────────────────────────
 function sortBy(key, btn) {
@@ -4650,7 +4620,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ─── RUTAS (#estados, #emergentes, #comparar, #editorial) ──
+// ─── RUTAS (#votar, #estados, #emergentes, #admin) ──
 function goTo(target) {
   rsTrack('section_view', { section: target });
   const navR = document.getElementById('nav-rankings');
@@ -4662,13 +4632,6 @@ function goTo(target) {
     filterTier('emerging');
     navR.classList.remove('active'); document.getElementById('nav-emergentes').classList.add('active');
     history.replaceState(null,'','#emergentes');
-  } else if (target === 'comparar') {
-    navR.classList.remove('active'); document.getElementById('nav-comparar').classList.add('active');
-    history.replaceState(null,'','#comparar');
-    if (compareList.length === 2) openCompareModal();
-    else showToast('Abre un artista con ▾ y toca "+ Comparar" (elige 2)');
-  } else if (target === 'editorial') {
-    showToast('La sección editorial llega pronto');
   } else {
     filterTier('all');
     history.replaceState(null,'',location.pathname);
@@ -4677,7 +4640,7 @@ function goTo(target) {
 }
 window.addEventListener('load', () => {
   const h = location.hash.replace('#','');
-  if (['votar','admin','estados','emergentes','comparar','editorial'].includes(h)) goTo(h);
+  if (['votar','admin','estados','emergentes'].includes(h)) goTo(h);
 });
 
 function showSection(id, btn) {
@@ -5295,6 +5258,104 @@ window.saveAlias = async function(raw) {
     showToast("No se pudo guardar el nombre");
   }
 };
+</script>
+<script>
+// ═══ PORTADA NUEVA (borrador): todo con datos reales del sitio ═══
+const NH_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>';
+let nhExploreMode = 'estado';
+function renderNewHome() {
+  const stats = document.getElementById('nhStats');
+  if (stats) {
+    const votes = ARTISTS.reduce((s, a) => s + (a.votes || 0), 0);
+    const states = new Set(ARTISTS.map(a => a.estado).filter(Boolean)).size;
+    stats.innerHTML = `
+      <div class="nh-stat"><b>${ARTISTS.length}</b><span>Artistas en el ranking</span></div>
+      <div class="nh-stat"><b>${votes.toLocaleString('es-MX')}</b><span>Calificaciones de la comunidad</span></div>
+      <div class="nh-stat"><b>${states}</b><span>Estados representados</span></div>
+      <div class="nh-stat live"><span>Actualizado</span><b>En vivo</b></div>`;
+  }
+  const top = document.getElementById('nhTop');
+  if (top) {
+    const list = [...ARTISTS].sort((a, b) => b.total - a.total || b.votes - a.votes || a.name.localeCompare(b.name, 'es')).slice(0, 5);
+    top.innerHTML = list.map((a, i) => `
+      <button type="button" class="nh-card ${i === 0 ? 'first' : ''}" data-track="top5_calificar" onclick="rateFromHome('${a.slug}')" aria-label="${esc(a.name)}, lugar ${i + 1}. Calificar">
+        <span class="nh-card-n">${String(i + 1).padStart(2, '0')}</span>
+        <div class="nh-card-img">${artistAvatar(a)}</div>
+        <div class="nh-card-name">${esc(a.name)}</div>
+        <div class="nh-card-loc">${NH_PIN}${esc((a.tags || [])[0] || a.estado || 'México')}</div>
+        <div class="nh-card-score"><b>${a.total.toFixed(1)}</b><span>${a.votes.toLocaleString('es-MX')}<br>voto${a.votes === 1 ? '' : 's'}</span></div>
+      </button>`).join('');
+  }
+  renderNhExplore();
+}
+function nhExploreTab(mode, btn) {
+  nhExploreMode = mode;
+  document.querySelectorAll('.nh-tab').forEach(b => b.classList.toggle('active', b === btn));
+  renderNhExplore();
+}
+function nhOpenEstado(id) {
+  goTo('estados');
+  setTimeout(() => { if (id && typeof selectEstado === 'function') selectEstado(id); }, 150);
+}
+function nhOpenCategoria(tier) {
+  goTo('rankings');
+  const btn = [...document.querySelectorAll('.controls .filter-btn')].find(b => (b.getAttribute('onclick') || '').includes(`'${tier}'`));
+  filterTier(tier, btn);
+  setTimeout(scrollToRanking, 300);
+}
+function renderNhExplore() {
+  const el = document.getElementById('nhExplore');
+  if (!el) return;
+  if (nhExploreMode === 'estado') {
+    const counts = {};
+    ARTISTS.forEach(a => { if (a.estado) counts[a.estado] = (counts[a.estado] || 0) + 1; });
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    el.innerHTML = top.map(([name, n]) => {
+      const e = ESTADOS.find(s => s.name === name);
+      const label = name === 'Ciudad de México' ? 'CDMX' : name;
+      return `<button type="button" class="nh-place" onclick="nhOpenEstado('${e ? e.id : ''}')">
+        <div class="nh-ph"><span>FOTO DE ${esc(label)}</span></div>
+        <div class="nh-place-txt"><b>${esc(label)}</b><span>${n} artista${n === 1 ? '' : 's'}</span></div>
+        <span class="nh-place-arrow" aria-hidden="true">›</span></button>`;
+    }).join('');
+  } else {
+    const cats = [['legend', 'Leyendas', a => a.tier === 'legend'], ['active', 'Activos', a => a.tier === 'active'],
+      ['emerging', 'Emergentes', a => a.tier === 'emerging'], ['female', 'Artistas femeninas', a => a.female]];
+    el.innerHTML = cats.map(([k, label, fn]) => {
+      const n = ARTISTS.filter(fn).length;
+      return `<button type="button" class="nh-place" onclick="nhOpenCategoria('${k}')">
+        <div class="nh-ph"><span>IMAGEN DE CATEGORÍA</span></div>
+        <div class="nh-place-txt"><b>${label}</b><span>${n} artista${n === 1 ? '' : 's'}</span></div>
+        <span class="nh-place-arrow" aria-hidden="true">›</span></button>`;
+    }).join('');
+  }
+}
+// Ranking corto en la portada
+(function () {
+  const sec = document.getElementById('section-rankings'), table = document.getElementById('artistTable');
+  if (!sec || !table) return;
+  const btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'nh-showall';
+  btn.onclick = () => nhExpandRanking();
+  table.after(btn);
+  window.nhExpandRanking = () => sec.classList.remove('nh-collapsed');
+  window.nhUpdateShowAll = () => { btn.textContent = `Ver los ${ARTISTS.length} artistas ↓`; };
+  sec.classList.add('nh-collapsed');
+  nhUpdateShowAll();
+  ['filterTier', 'searchArtists', 'sortBy'].forEach(fn => {
+    const orig = window[fn];
+    if (typeof orig !== 'function') return;
+    window[fn] = function (...args) {
+      const isReset = fn === 'filterTier' && args[0] === 'all' || fn === 'searchArtists' && !String(args[0] || '').trim();
+      if (!isReset) nhExpandRanking();
+      return orig.apply(this, args);
+    };
+  });
+})();
+// Se vuelve a dibujar cada vez que el sitio recalcula el Top 5 (al cargar votos)
+const _nhOrigTop = renderTopPosters;
+renderTopPosters = function () { _nhOrigTop(); renderNewHome(); if (window.nhUpdateShowAll) nhUpdateShowAll(); };
+renderNewHome();
 </script>
 </body>
 </html>

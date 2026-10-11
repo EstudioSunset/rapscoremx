@@ -12,10 +12,10 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 ## Archivos
 | Archivo | Qué es |
 |---|---|
-| `index.html` | Todo el sitio (~4,600 líneas): ranking, Votar, Por Estado, Admin, login, pop-ups. Las secciones se cambian con `goTo()` / `showSection()` y un hash (`#votar`, `#estados`, `#admin`…). |
+| `index.html` | Todo el sitio: portada, ranking, Votar, Por Estado, Admin, login, pop-ups. Las secciones se cambian con `goTo()` / `showSection()` y un hash (`#votar`, `#estados`, `#emergentes`, `#admin`). La portada (clases `nh-*`, oct 2026) tiene hero con imagen, franja de características, Top 5 en tarjetas, ranking corto (10 filas + "Ver todos"), Explora por estado/categoría y franja final para votar. |
 | `firestore.rules` | Reglas de seguridad. **No se publican solas:** después de cambiarlas, Adn las pega en la consola de Firebase (Firestore Database → Reglas → Publicar). Siempre recuérdaselo. |
 | `privacidad.html` | Aviso de privacidad con formulario de derechos (Formspree). |
-| `votar.html`, `versus.html` | Solo redirigen a `index.html#votar` / `#comparar` conservando `location.search` (UTMs). |
+| `votar.html`, `versus.html` | Solo redirigen a `index.html#votar` / `index.html` conservando `location.search` (UTMs). |
 | `artista.html` | Perfil de prueba de Alemán con datos inventados (89/100, etc.). Nadie lo enlaza. **Pendiente decidir:** borrarlo o convertirlo en perfil dinámico (`artista.html?a=slug`). |
 | `images/rapscore-logo-transparente.png` | Logo oficial actual (el que usa el sitio). `images/rapscore-logo.png` es una versión vieja que solo usa `og:image`. |
 
@@ -32,9 +32,9 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - Las bios deben ser **verificables**: sin calificaciones inventadas ni datos sin fuente. La investigación del roster está en el proyecto de claude.ai ("investigacion-roster-oct-2026").
 
 ## Diseño
-- Estética de calle: muro de ladrillo con graffiti en el hero, ticker como cinta de precaución, Top 5 como carteles pegados, footer con goteo de pintura.
-- Colores: fondo `#0a0a0a`, acento naranja `#ff3c00` (el del logo), amarillo `#ffcc00` para Votar. Fuentes: Bebas Neue, Permanent Marker y Space Mono.
-- Todas las páginas llevan los mismos tabs: Rankings · Votar · Por Estado · Emergentes · Comparar · Editorial (Admin solo para admins en `index.html`).
+- Estética de calle pero seria: hero con foto (`images/artistas/rapero-entre-humo-y-sombras.webp`), Top 5 en tarjetas oscuras, footer con goteo de pintura.
+- Colores: fondo `#0a0a0a`, acento naranja `#ff3c00` (el del logo), amarillo `#ffcc00` para Votar. Fuentes: Bebas Neue, Saira Stencil One (toques de calle) y Space Mono. **No usar Permanent Marker** (Adn la quitó: se ve infantil).
+- Todas las páginas llevan los mismos tabs: Rankings · Votar · Por Estado · Emergentes (Admin solo para admins en `index.html`). Comparar y Editorial se quitaron en oct 2026 por no ser útiles todavía.
 - Tiene que funcionar en celular. La mayoría del tráfico viene de Facebook/TikTok.
 - Fotos de raperos: solo con permiso escrito, licencia libre verificada (Creative Commons) o foto propia; nunca descargadas de Google o redes, ni links directos a imágenes. Las fotos van en `images/artistas/<slug>.jpg` (máx. 600 px) y en `ARTIST_PHOTOS` de `index.html` con autor, licencia y link: el crédito se muestra junto a la foto y en "Créditos de fotos" del footer (lo exige la licencia). Hoy hay 11 de Wikimedia Commons. Quien no tiene foto lleva un avatar de graffiti generado (`graffitiAvatar`, iniciales + colores fijos por nombre; corona = leyenda, estrella = emergente).
 - Fotos de Commons descartadas tras revisarlas (oct 2026): Akwid y Neto Peña (no se distingue a la persona), Charles Ans (solo un letrero). Sabino: no se usa (retrato de estudio profesional subido como "obra propia" en CC0; probable foto de un tercero). Alemán, Kinto Sol y Mare Advertencia los confirmó Adn.
@@ -42,7 +42,7 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 ## Medición
 - **GA4** vía Firebase Analytics (`G-D6QMGC5N67`) y **Microsoft Clarity** (`yvosalsr5z`, en `window.RS_CLARITY_ID`).
 - Para medir algo nuevo usa `rsTrack('nombre_evento', { ... })` (manda a GA4 y Clarity, con cola hasta que carga Firebase), o pon `data-track="nombre"` en un botón para mandar un `cta_click`.
-- Eventos actuales: `rate_artist`, `sign_up`, `login`, `propose_artist`, `share` (estos cuatro son eventos clave), `section_view`, `view_artist`, `compare_artists`, `search`, `filter_ranking`, `popup_view`, `cta_click`, `listen_click` (YouTube/Spotify), `send_suggestion`.
+- Eventos actuales: `rate_artist`, `sign_up`, `login`, `propose_artist`, `share` (estos cuatro son eventos clave), `section_view`, `view_artist`, `search`, `filter_ranking`, `popup_view`, `cta_click`, `listen_click` (YouTube/Spotify), `send_suggestion`.
 - Tráfico interno: `?rs_internal=1` o sesión de admin → `traffic_type=internal`.
 - Si cambia qué datos se recopilan, actualiza `privacidad.html`.
 
