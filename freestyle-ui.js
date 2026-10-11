@@ -116,7 +116,7 @@
       return `
       <button type="button" class="fl-beat${st.house ? ' house' : ''}${lock ? ' locked' : ''}" data-style="${st.id}" ${lock ? `aria-label="${escH(st.name)}: bloqueado, califica ${st.unlock} raperos"` : ''}>
         <span class="fl-beat-art fl-art-${st.house ? 'house' : st.id}" aria-hidden="true">${lock ? '<em>🔒</em>' : ''}</span>
-        <b>${escH(st.name)}</b><small>${st.house ? (lock ? `Califica ${Math.max(0, st.unlock - r)} más` : escH(st.sub)) : 'Práctica · ' + escH(st.sub)} · ${st.bpm} BPM</small>
+        <b>${escH(st.name)}</b><small>${st.house ? (lock ? `Califica ${Math.max(0, st.unlock - r)} más` : escH(st.sub)) : 'Práctica · ' + escH(st.sub)} · ${Math.round(st.bpm)} BPM</small>
       </button>`;
     }).join('');
     const h = $('flHouse');
@@ -157,13 +157,13 @@
     const r = $('flBpmRange'), bpm = bpmOf(st);
     r.min = st.file ? st.bpm : st.range[0]; r.max = st.file ? st.bpm : st.range[1]; r.value = bpm;
     r.disabled = !!st.file || reto;
-    $('flBpmVal').textContent = bpm;
+    $('flBpmVal').textContent = Math.round(bpm);
     $('flReto').classList.toggle('on', reto);
     $('flReto').innerHTML = `<b>${reto ? '✓ ' : ''}Reto del ${new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</b><small>Mismas palabras para todos hoy · ${escH(retoStyle().name)} · 1 min · nivel ${F.LEVELS[prefs.level].name}</small>`;
-    $('flMetaBpm').textContent = bpm + ' BPM';
-    $('flStBpm').textContent = bpm;
+    $('flMetaBpm').textContent = Math.round(bpm) + ' BPM';
+    $('flStBpm').textContent = Math.round(bpm);
     $('flMetaBars').textContent = F.barsFor(prefs.level, bpm) + ' compases por palabra';
-    $('flLiveInfo').textContent = `${st.name} · ${bpm} BPM · ${F.LEVELS[prefs.level].name}${reto ? ' · Reto del día' : prefs.dur ? ' · ' + DURS.find(d => d[0] === prefs.dur)[1] : ' · Libre'}`;
+    $('flLiveInfo').textContent = `${st.name} · ${Math.round(bpm)} BPM · ${F.LEVELS[prefs.level].name}${reto ? ' · Reto del día' : prefs.dur ? ' · ' + DURS.find(d => d[0] === prefs.dur)[1] : ' · Libre'}`;
     renderHist();
   }
 
