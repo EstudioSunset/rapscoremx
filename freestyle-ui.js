@@ -21,7 +21,11 @@
   const todayKey = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
   const fmt = sec => { sec = Math.max(0, Math.round(sec)); return String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'); };
   // Reto del día: mismo beat, nivel elegido y palabras iguales para todos ese día
-  const retoStyle = () => F.STYLES[F.hashStr(todayKey()) % F.STYLES.length];
+  const retoStyle = () => F.STYLES_PRACTICE[F.hashStr(todayKey()) % F.STYLES_PRACTICE.length];
+  // Calificaciones del usuario (cuenta del servidor, validada en firestore.rules)
+  const myRatings = () => (window.RS_USER && window.RS_ME && window.RS_ME.ratings) || 0;
+  const unlocked = st => F.isUnlocked(st, myRatings());
+  const usableStyle = id => { const st = styleOf(id); return unlocked(st) ? st : F.STYLES_PRACTICE[0]; };
 
   function render() {
     const sec = $('section-freestyle');
@@ -44,6 +48,7 @@
           <button type="button" role="tab" data-tab="modo">Modo</button>
         </div>
         <div class="fl-panel" data-panel="beat">
+          <div class="fl-house" id="flHouse" hidden></div>
           <div class="fl-beats" id="flBeats"></div>
           <div class="fl-bpm" id="flBpmRow">
             <span>Tempo</span>
@@ -104,12 +109,32 @@
     refreshIdle();
   }
 
+  function buildBeats() {
+    const r = myRatings();
+    $('flBeats').innerHTML = F.STYLES.map(st => {
+      const lock = !unlocked(st);
+      return `
+      <button type="button" class="fl-beat${st.house ? ' house' : ''}${lock ? ' locked' : ''}" data-style="${st.id}" ${lock ? `aria-label="${escH(st.name)}: bloqueado, califica ${st.unlock} raperos"` : ''}>
+        <span class="fl-beat-art fl-art-${st.house ? 'house' : st.id}" aria-hidden="true">${lock ? '<em>🔒</em>' : ''}</span>
+        <b>${escH(st.name)}</b><small>${st.house ? (lock ? `Califica ${Math.max(0, st.unlock - r)} más` : escH(st.sub)) : 'Práctica · ' + escH(st.sub)} · ${st.bpm} BPM</small>
+      </button>`;
+    }).join('');
+    const h = $('flHouse');
+    if (!F.HOUSE_BEATS.length) { h.hidden = true; return; }
+    const need = F.UNLOCK_RATINGS, done = Math.min(r, need), all = F.HOUSE_BEATS.every(unlocked);
+    h.hidden = false;
+    h.innerHTML = all
+      ? `<b>Beats de la casa desbloqueados</b><span>${F.HOUSE_PRODUCER ? 'Producidos por ' + escH(F.HOUSE_PRODUCER) + '. ' : ''}Gracias por calificar.</span>`
+      : `<b>🔒 Beats de la casa</b><span>${F.HOUSE_PRODUCER ? 'Beats originales de ' + escH(F.HOUSE_PRODUCER) + '. ' : 'Beats originales. '}Se desbloquean al calificar ${need} raperos.</span>
+         <div class="fl-house-bar"><i style="width:${done / need * 100}%"></i></div>
+         <span class="fl-house-n">${window.RS_USER ? `Llevas ${done} de ${need}` : 'Necesitas una cuenta para calificar'}</span>
+         <button type="button" class="fl-btn go" id="flHouseCta">${window.RS_USER ? 'Calificar raperos' : 'Entrar y calificar'}</button>`;
+    const cta = $('flHouseCta');
+    if (cta) cta.onclick = () => { if (window.RS_USER) window.goTo && goTo('votar'); else if (window.openAuthModal) openAuthModal('login'); };
+  }
+
   function buildSetup() {
-    $('flBeats').innerHTML = F.STYLES.map(st => `
-      <button type="button" class="fl-beat" data-style="${st.id}">
-        <span class="fl-beat-art fl-art-${st.id}" aria-hidden="true"></span>
-        <b>${escH(st.name)}</b><small>${escH(st.sub)} · ${st.bpm} BPM</small>
-      </button>`).join('');
+    buildBeats();
     $('flLevels').innerHTML = [1, 2, 3].map(l => {
       const L = F.LEVELS[l];
       return `<button type="button" class="fl-level" data-level="${l}"><span class="fl-stars">${'★'.repeat(L.stars)}</span><b>${L.name}</b><small>${L.desc}</small></button>`;
@@ -124,7 +149,7 @@
     document.querySelectorAll('.fl-tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === prefs.tab));
     document.querySelectorAll('.fl-panel').forEach(p => p.hidden = p.dataset.panel !== prefs.tab);
     const reto = prefs.mode === 'reto';
-    const st = reto ? retoStyle() : styleOf(prefs.style);
+    const st = reto ? retoStyle() : usableStyle(prefs.style);
     document.querySelectorAll('.fl-beat').forEach(b => b.classList.toggle('on', b.dataset.style === st.id));
     document.querySelectorAll('.fl-level').forEach(b => b.classList.toggle('on', +b.dataset.level === prefs.level));
     document.querySelectorAll('[data-dur]').forEach(b => b.classList.toggle('on', !reto && +b.dataset.dur === prefs.dur));
@@ -148,7 +173,11 @@
       const b = e.target.closest('button');
       if (!b) return;
       if (b.dataset.tab) { prefs.tab = b.dataset.tab; savePrefs(); syncSetup(); return; }
-      if (b.dataset.style) { if (prefs.mode === 'reto') prefs.mode = 'ronda'; prefs.style = b.dataset.style; savePrefs(); applyLive('style'); syncSetup(); return; }
+      if (b.dataset.style) {
+        const st = styleOf(b.dataset.style);
+        if (!unlocked(st)) { toast(`Califica ${Math.max(0, st.unlock - myRatings())} raperos más para usar este beat`); $('flHouse').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
+        if (prefs.mode === 'reto') prefs.mode = 'ronda'; prefs.style = b.dataset.style; savePrefs(); applyLive('style'); syncSetup(); return;
+      }
       if (b.dataset.level) { prefs.level = +b.dataset.level; savePrefs(); applyLive('level'); syncSetup(); return; }
       if (b.dataset.dur !== undefined) { prefs.dur = +b.dataset.dur; prefs.mode = prefs.dur ? 'ronda' : 'libre'; savePrefs(); syncSetup(); return; }
       if (b.dataset.theme) { prefs.theme = b.dataset.theme; if (prefs.mode === 'reto') prefs.mode = 'ronda'; savePrefs(); applyLive('level'); syncSetup(); return; }
@@ -184,7 +213,7 @@
   function applyLive(what) {
     if (!S) return;
     if (what === 'style') {
-      const st = styleOf(prefs.style);
+      const st = usableStyle(prefs.style);
       const go = () => { eng.setStyle(st.id); eng.setBpm(bpmOf(st)); S.bpm = bpmOf(st); };
       if (st.file) eng.load(st).then(go).catch(() => toast('No se pudo cargar ese beat')); else go();
     } else {
@@ -209,7 +238,7 @@
 
   async function start() {
     const reto = prefs.mode === 'reto';
-    const st = reto ? retoStyle() : styleOf(prefs.style);
+    const st = reto ? retoStyle() : usableStyle(prefs.style);
     try {
       eng.init();
       if (st.file) { $('flPrompt').textContent = 'Cargando beat…'; await eng.load(st); }
@@ -381,6 +410,8 @@
 
   // Si sales de la sección, pausa el beat
   window.freestylePause = () => { if (S && !S.paused && !S.ended) togglePlay(); };
+  // Se llama al iniciar/cerrar sesión y al guardar una calificación (desbloqueo en vivo)
+  window.freestyleRefresh = () => { if (rendered) { buildBeats(); syncSetup(); } };
   window.renderFreestyle = () => { render(); syncSetup(); setTimeout(fitWord, 50); };
   window.addEventListener('resize', () => { if (rendered) fitWord(); });
 })();

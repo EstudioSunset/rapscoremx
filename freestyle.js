@@ -137,17 +137,26 @@
 
   // ═══════════════════════ BEATS (síntesis Web Audio) ═══════════════════════
   const m2f = m => 440 * Math.pow(2, (m - 69) / 12);
-  // BEATS EN ARCHIVO: para agregar un beat propio, súbelo a /beats y añade al inicio de STYLES algo como:
-  //   { id: 'mi-beat', name: 'Nombre', sub: 'Productor · estilo', bpm: 92, bars: 8, file: 'beats/mi-beat.mp3' },
-  // El loop se corta por BPM × compases (no depende de la duración del archivo) y se salta el silencio inicial
-  // que agregan los MP3, así que repite sin brincos. Los beats en archivo no permiten cambiar el BPM (cambiaría el tono).
-  const STYLES = [
+  // BEATS DE LA CASA (en archivo): súbelos a /beats y regístralos en HOUSE_BEATS, por ejemplo:
+  //   { id: 'callejero', name: 'Callejero', sub: 'Boom bap', bpm: 90, bars: 8, file: 'beats/boombap-90-8c.mp3' },
+  // Se desbloquean al calificar UNLOCK_RATINGS raperos (o el número en `unlock` de cada beat). El conteo viene
+  // del servidor (contributors/{uid}.ratings, validado en firestore.rules), no del celular.
+  // El loop se corta por BPM × compases y se salta el silencio inicial de los MP3, así que repite sin brincos.
+  // Los beats en archivo no permiten cambiar el BPM (cambiaría el tono).
+  const UNLOCK_RATINGS = 5;
+  const HOUSE_PRODUCER = '';          // nombre artístico del productor para el crédito
+  const HOUSE_BEATS = [
+  ].map(b => Object.assign({ house: true, unlock: UNLOCK_RATINGS, range: [b.bpm, b.bpm], swing: 0, play: () => {} }, b));
+  // ¿Puede usar este beat? Los de práctica siempre; los de la casa con suficientes calificaciones.
+  const isUnlocked = (st, ratings) => !st.house || (ratings || 0) >= (st.unlock || UNLOCK_RATINGS);
+  const STYLES_PRACTICE = [
     { id: 'boombap', name: 'Boom bap', sub: 'Clásico noventero', bpm: 90, range: [78, 100], swing: 0.16, play: playBoombap },
     { id: 'trap', name: 'Trap', sub: 'Hi-hats y 808', bpm: 140, range: [120, 155], swing: 0, play: playTrap },
     { id: 'lofi', name: 'Lo-fi', sub: 'Relajado, jazzy', bpm: 80, range: [68, 92], swing: 0.22, play: playLofi },
     { id: 'oldschool', name: 'Old school', sub: 'Caja de ritmos', bpm: 98, range: [88, 110], swing: 0.06, play: playOldschool },
     { id: 'cumbia', name: 'Cumbia rap', sub: 'Güiro y bajo, mexa', bpm: 96, range: [86, 106], swing: 0, play: playCumbia },
   ];
+  const STYLES = HOUSE_BEATS.concat(STYLES_PRACTICE);
   const chordAt = (prog, bar) => prog[((bar % prog.length) + prog.length) % prog.length];
 
   function playBoombap(e, bar, s, t) {
@@ -356,12 +365,14 @@
     t('Compases por palabra a 140 BPM: 8 / 4 / 2', barsFor(1, 140) === 8 && barsFor(2, 140) === 4 && barsFor(3, 140) === 2, [1, 2, 3].map(l => barsFor(l, 140)).join('/'));
     const gm = createGenerator({ level: 1, theme: 'mex' }); const mex = Array.from({ length: 15 }, () => gm.next().cat);
     t('Tema México: solo palabras de México', mex.every(c => c === 'mex'), mex.join(','));
+    const fakeHouse = { house: true, unlock: 5 };
+    t('Beats de la casa: bloqueados con 4 calificaciones, libres con 5', !isUnlocked(fakeHouse, 4) && isUnlocked(fakeHouse, 5) && isUnlocked(STYLES_PRACTICE[0], 0), '');
     const ok = T.filter(x => x.ok).length;
     if (typeof console !== 'undefined') { (console.table || console.log)(T); console.log(`Freestyle: ${ok}/${T.length} pruebas pasaron`); }
     return { passed: ok, total: T.length, results: T };
   }
 
-  const api = { BANK, CATS, LEVELS, STYLES, ENDINGS, TEMAS, barsFor, createGenerator, hashStr, BeatEngine, runFreestyleTests };
+  const api = { BANK, CATS, LEVELS, STYLES, STYLES_PRACTICE, HOUSE_BEATS, HOUSE_PRODUCER, UNLOCK_RATINGS, isUnlocked, ENDINGS, TEMAS, barsFor, createGenerator, hashStr, BeatEngine, runFreestyleTests };
   root.Freestyle = api;
   root.runFreestyleTests = runFreestyleTests;
   if (typeof module !== 'undefined' && module.exports) {

@@ -1581,6 +1581,17 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .fl-art-trap { background: linear-gradient(135deg, #22123a, #101018); }
 .fl-art-lofi { background: linear-gradient(135deg, #2c2a1a, #141414); }
 .fl-art-oldschool { background: repeating-linear-gradient(90deg, #2a2a2a 0 10px, #1a1a1a 10px 20px); }
+.fl-art-house { background: linear-gradient(135deg, #4a1a08, #1a0d06); }
+.fl-beat.house { border-color: #5a2a14; }
+.fl-beat.house.on { border-color: var(--accent); }
+.fl-beat.locked { opacity: .6; }
+.fl-beat-art em { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 22px; background: rgba(0,0,0,.45); }
+.fl-house { margin-bottom: 10px; padding: 12px 14px; border: 1px solid #5a2a14; background: linear-gradient(90deg, rgba(255,60,0,.1), transparent); }
+.fl-house b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 22px; color: var(--accent); }
+.fl-house span { display: block; font-size: 12px; color: #cfc9bf; line-height: 1.5; }
+.fl-house-bar { height: 8px; margin: 10px 0 6px; background: #2a2a2a; border-radius: 4px; overflow: hidden; }
+.fl-house-bar i { display: block; height: 100%; background: var(--accent); }
+.fl-house-n { margin-bottom: 10px; }
 .fl-art-cumbia { background: linear-gradient(90deg, #0f3a24 0 33%, #2a2a2a 33% 66%, #4a1414 66%); }
 .fl-bpm { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--border); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #9a9a9a; }
 .fl-bpm input { flex: 1; accent-color: var(--accent); min-width: 60px; }
@@ -3441,6 +3452,7 @@ function renderVotarSide() {
 
 // Llamado por el módulo de Firebase después de guardar una calificación
 window.onRated = function(slug, isNew) {
+  if (window.freestyleRefresh) window.freestyleRefresh();
   if (document.getElementById('section-votar')?.style.display !== 'none') {
     renderVotarSide();
     renderVotarList();
@@ -5319,6 +5331,7 @@ onAuthStateChanged(auth, async (user) => {
   refreshOpenRateBoxes();
   if (window.refreshVotar) window.refreshVotar();
   if (window.renderVotarSide) window.renderVotarSide();
+  if (window.freestyleRefresh) window.freestyleRefresh();
 });
 
 // Vuelve a dibujar el formulario abierto (para mostrar "Tu calificación")
