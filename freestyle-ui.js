@@ -83,6 +83,7 @@
         <div class="fl-word" id="flWord">¿LISTO?</div>
         <div class="fl-sub" id="flSub"></div>
         <div class="fl-segs" id="flSegs"></div>
+        <canvas class="fl-viz" id="flViz" aria-hidden="true"></canvas>
         <div class="fl-dots" id="flDots"><i></i><i></i><i></i><i></i></div>
         <div class="fl-next" id="flNext">&nbsp;</div>
         <div class="fl-controls">
@@ -228,10 +229,10 @@
   async function togglePlay() {
     if (!S) return start();
     if (S.paused) {
-      S.paused = false; eng.resume(); setPlayIcon(true); keepAwake(true);
+      S.paused = false; eng.resume(); setPlayIcon(true); keepAwake(true); startViz();
       $('section-freestyle').classList.add('fl-live');
     } else {
-      S.paused = true; eng.pause(); setPlayIcon(false); keepAwake(false);
+      S.paused = true; eng.pause(); setPlayIcon(false); keepAwake(false); stopViz(false);
       $('flPrompt').textContent = 'En pausa';
     }
   }
@@ -252,7 +253,7 @@
     $('flSummary').hidden = true;
     $('section-freestyle').classList.add('fl-live');
     eng.start(true);
-    setPlayIcon(true); keepAwake(true);
+    setPlayIcon(true); keepAwake(true); startViz();
     $('flRoundLbl').textContent = (S.reto ? 'Reto del día' : 'Ronda ' + S.round);
     $('flPrompt').textContent = 'Prepárate';
     $('flWord').textContent = '4';
@@ -362,7 +363,7 @@
     if (!S || S.ended) return;
     S.ended = true;
     const secs = S.musicStart != null ? Math.max(0, eng.now - S.musicStart) : 0;
-    eng.stop(); keepAwake(false); setPlayIcon(false);
+    eng.stop(); keepAwake(false); setPlayIcon(false); stopViz(true);
     $('section-freestyle').classList.remove('fl-live');
     if (secs >= 15) {
       const h = ls.get('rs_fl_hist', { sessions: 0, seconds: 0, days: [] });
@@ -395,7 +396,7 @@
     $('flWord').textContent = '¿LISTO?'; $('flWord').dataset.type = 'word';
     $('flSub').textContent = ''; $('flSegs').innerHTML = ''; $('flNext').innerHTML = '&nbsp;';
     $('flStTime').textContent = '00:00'; $('flStWords').textContent = '0'; $('flStBars').textContent = '0';
-    setPlayIcon(false); fitWord(); syncSetup();
+    setPlayIcon(false); fitWord(); syncSetup(); stopViz(true);
   }
 
   function renderHist() {
@@ -408,10 +409,53 @@
     el.textContent = `En este dispositivo: ${mins} min practicados · ${h.sessions} sesión${h.sessions === 1 ? '' : 'es'} · ${week} día${week === 1 ? '' : 's'} esta semana.`;
   }
 
+  // ── Visualizador de frecuencias (lee el audio real con un AnalyserNode) ──
+  let vizRaf = 0, vizData = null, peaks = [], vizGrad = null, vizW = 0;
+  function vizCanvas() {
+    const c = $('flViz'); if (!c) return null;
+    const dpr = Math.min(2, window.devicePixelRatio || 1), w = c.clientWidth, h = c.clientHeight;
+    if (!w || !h) return null;
+    if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); vizGrad = null; }
+    const g = c.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (!vizGrad || vizW !== w) {
+      vizW = w; vizGrad = g.createLinearGradient(0, h, 0, 0);
+      vizGrad.addColorStop(0, '#ff3c00'); vizGrad.addColorStop(1, '#ff8a3d');
+    }
+    return { g, w, h };
+  }
+  function drawViz(live) {
+    const v = vizCanvas(); if (!v) return;
+    const { g, w, h } = v, n = Math.max(16, Math.min(64, Math.floor(w / 9))), gap = 3, bw = (w - gap * (n - 1)) / n;
+    g.clearRect(0, 0, w, h);
+    const an = eng.analyser;
+    if (live && an) { if (!vizData || vizData.length !== an.frequencyBinCount) vizData = new Uint8Array(an.frequencyBinCount); an.getByteFrequencyData(vizData); }
+    const binHz = (eng.ctx ? eng.ctx.sampleRate : 44100) / 2 / (vizData ? vizData.length : 1024);
+    for (let i = 0; i < n; i++) {
+      let val = 0;
+      if (live && vizData) {
+        // bandas logarítmicas de 40 Hz a 14 kHz (como se oye: más detalle en graves)
+        const f0 = 40 * Math.pow(350, i / n), f1 = 40 * Math.pow(350, (i + 1) / n);
+        const b0 = Math.floor(f0 / binHz), b1 = Math.max(b0 + 1, Math.ceil(f1 / binHz));
+        for (let b = b0; b < b1 && b < vizData.length; b++) val = Math.max(val, vizData[b]);
+        val = Math.min(1, Math.pow(val / 255, 1.4) * (1 + 0.5 * i / n));
+      }
+      const bh = Math.max(2, val * (h - 3)), x = i * (bw + gap);
+      g.globalAlpha = live ? 0.9 : 0.35; g.fillStyle = vizGrad; g.fillRect(x, h - bh, bw, bh);
+      peaks[i] = Math.max(bh, (peaks[i] || 0) - 0.7);
+      if (live && peaks[i] > 4) { g.globalAlpha = 0.9; g.fillStyle = '#ffcc00'; g.fillRect(x, h - peaks[i] - 2, bw, 2); }
+    }
+    g.globalAlpha = 1;
+  }
+  // Para pruebas desde la consola: dibuja un cuadro y dice qué tan fuerte llega el audio (0–255)
+  window.freestyleVizFrame = () => { drawViz(true); return vizData ? Math.max(...vizData) : 0; };
+  function vizLoop() { vizRaf = requestAnimationFrame(vizLoop); drawViz(true); }
+  function startViz() { cancelAnimationFrame(vizRaf); vizRaf = requestAnimationFrame(vizLoop); }
+  function stopViz(idle) { cancelAnimationFrame(vizRaf); vizRaf = 0; if (idle) { peaks = []; drawViz(false); } }
+
   // Si sales de la sección, pausa el beat
   window.freestylePause = () => { if (S && !S.paused && !S.ended) togglePlay(); };
   // Se llama al iniciar/cerrar sesión y al guardar una calificación (desbloqueo en vivo)
   window.freestyleRefresh = () => { if (rendered) { buildBeats(); syncSetup(); } };
   window.renderFreestyle = () => { render(); syncSetup(); setTimeout(fitWord, 50); };
-  window.addEventListener('resize', () => { if (rendered) fitWord(); });
+  window.addEventListener('resize', () => { if (rendered) { fitWord(); if (!vizRaf) drawViz(false); } });
 })();

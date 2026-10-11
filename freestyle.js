@@ -144,18 +144,17 @@
   // El loop se corta por BPM × compases y se salta el silencio inicial de los MP3, así que repite sin brincos.
   // Los beats en archivo no permiten cambiar el BPM (cambiaría el tono).
   const UNLOCK_RATINGS = 5;
-  const HOUSE_PRODUCER = '';          // nombre artístico del productor para el crédito
-  // Beats completos (no loops cortos): BPM y primer golpe medidos del audio; se repite de loopFrom a loopTo
-  // (compases) para saltar la intro suave y el fade final. Ajustar el BPM si el productor da el valor exacto.
+  const HOUSE_PRODUCER = 'RapScore MX';   // crédito de los beats de la casa
+  // Beats completos exportados desde el DAW: el compás 1 empieza en el segundo 0 (offset 0) y el BPM es el del productor.
+  // Se repite de loopFrom a loopTo (compases) para saltar la intro suave y el fade final.
   const HOUSE_BEATS = [
-    { id: 'dusty-boom-bap', name: 'Dusty Boom Bap', sub: 'Boom bap', bpm: 92, offset: 0.238, bars: 52, loopFrom: 4, loopTo: 48, file: 'beats/Dusty-Boom-Bap.m4a' },
-    { id: 'vinyl-battle', name: 'Vinyl Battle', sub: 'Boom bap de batalla', bpm: 85.5, offset: 0.232, bars: 42, loopFrom: 0, loopTo: 40, file: 'beats/Vinyl-Battle.m4a' },
-    { id: 'piano-loop-trap', name: 'Piano Loop Trap', sub: 'Trap con piano', bpm: 89.35, offset: 0.493, bars: 52, loopFrom: 8, loopTo: 48, file: 'beats/Piano-Loop-Trap.m4a' },
-    { id: 'menace-in-th-air', name: 'Menace in th Air', sub: 'Oscuro', bpm: 95.32, offset: 0.261, bars: 41, loopFrom: 8, loopTo: 40, file: 'beats/Menace-in-th-Air.m4a' },
-    { id: 'frase-intima', name: 'Frase íntima', sub: 'Íntimo', bpm: 85, offset: 0.424, bars: 53, loopFrom: 4, loopTo: 48, file: 'beats/Frase-intima.m4a' },
-    { id: 'guitar-loop', name: 'Guitar Loop', sub: 'Guitarra', bpm: 80, offset: 0.151, bars: 51, loopFrom: 4, loopTo: 48, file: 'beats/Guitar-Loop.m4a' },
-    { id: 'banjo-beat', name: 'Banjo Beat', sub: 'Banjo', bpm: 91, offset: 0.122, bars: 44, loopFrom: 4, loopTo: 44, file: 'beats/Banjo-Beat.m4a' },
-    { id: 'banjo-beat-v2', name: 'Banjo Beat v2', sub: 'Banjo', bpm: 92, offset: 0.049, bars: 44, loopFrom: 4, loopTo: 44, file: 'beats/Banjo-Beat-v2.m4a' },
+    { id: 'dusty-boom-bap', name: 'Dusty Boom Bap', sub: 'Boom bap', bpm: 92, offset: 0, bars: 52, loopFrom: 4, loopTo: 48, file: 'beats/Dusty-Boom-Bap.m4a' },
+    { id: 'vinyl-battle', name: 'Vinyl Battle', sub: 'Boom bap de batalla', bpm: 85, offset: 0, bars: 42, loopFrom: 0, loopTo: 40, file: 'beats/Vinyl-Battle.m4a' },
+    { id: 'piano-loop-trap', name: 'Piano Loop Trap', sub: 'Trap con piano', bpm: 134, offset: 0, bars: 79, loopFrom: 8, loopTo: 72, file: 'beats/Piano-Loop-Trap.m4a' },
+    { id: 'menace-in-the-air', name: 'Menace in the Air', sub: 'Trap oscuro', bpm: 142, offset: 0, bars: 61, loopFrom: 8, loopTo: 60, file: 'beats/Menace-in-th-Air.m4a' },
+    { id: 'frase-intima', name: 'Frase íntima', sub: 'Íntimo', bpm: 85, offset: 0, bars: 53, loopFrom: 4, loopTo: 52, file: 'beats/Frase-intima.m4a' },
+    { id: 'guitar-loop', name: 'Guitar Loop', sub: 'Guitarra', bpm: 80, offset: 0, bars: 51, loopFrom: 4, loopTo: 48, file: 'beats/Guitar-Loop.m4a' },
+    { id: 'banjo-beat', name: 'Banjo Beat', sub: 'Banjo', bpm: 91, offset: 0, bars: 44, loopFrom: 4, loopTo: 44, file: 'beats/Banjo-Beat.m4a' },
   ].map(b => Object.assign({ house: true, unlock: UNLOCK_RATINGS, range: [b.bpm, b.bpm], swing: 0, play: () => {} }, b));
   // ¿Puede usar este beat? Los de práctica siempre; los de la casa con suficientes calificaciones.
   const isUnlocked = (st, ratings) => !st.house || (ratings || 0) >= (st.unlock || UNLOCK_RATINGS);
@@ -235,7 +234,9 @@
       this.master = ctx.createGain(); this.master.gain.value = this.vol;
       const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -12; comp.ratio.value = 4; comp.attack.value = 0.005; comp.release.value = 0.15;
       this.bus = ctx.createGain(); this.bus.gain.value = 0.7;
-      this.bus.connect(comp); comp.connect(this.master); this.master.connect(ctx.destination);
+      // analizador para el visualizador de frecuencias (antes del volumen, así no se apaga al bajarle)
+      this.analyser = ctx.createAnalyser(); this.analyser.fftSize = 2048; this.analyser.smoothingTimeConstant = 0.78;
+      this.bus.connect(comp); comp.connect(this.analyser); this.analyser.connect(this.master); this.master.connect(ctx.destination);
       const len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
       this.loopSrc = null;
       for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
