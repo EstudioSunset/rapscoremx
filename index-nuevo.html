@@ -1455,6 +1455,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   background: repeating-linear-gradient(135deg, #161616 0 14px, #1b1b1b 14px 28px); border: 1px dashed #333; }
 .nh-ph small { display: block; margin-top: 6px; letter-spacing: 0; text-transform: none; font-size: 10px; }
 .nh-ph-hero { position: absolute; inset: 0; }
+.nh-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 30%; display: block; }
 .nh-hero-tag { position: absolute; right: 4%; top: 12%; z-index: 1; font-family: 'Permanent Marker', cursive; font-size: clamp(28px, 3.4vw, 54px); line-height: 1; color: rgba(240,237,230,.35); transform: rotate(-12deg); text-align: right; }
 .nh-crown { position: absolute; right: 7%; top: 56%; z-index: 1; width: 64px; color: rgba(240,237,230,.3); transform: rotate(-8deg); }
 .nh-hero-inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; padding: 48px 24px 32px; }
@@ -1532,7 +1533,8 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   .nh-notes { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .nh-hero-media { inset: 0; opacity: .45; }
+  .nh-hero-media { inset: 0; opacity: .5; }
+  .nh-hero-img { object-position: 78% 30%; }
   .nh-hero-media::after { background: linear-gradient(0deg, #0b0b0b 10%, rgba(11,11,11,.6) 60%, rgba(11,11,11,.4)); }
   .nh-hero-tag, .nh-crown { display: none; }
   .nh-hero-inner { padding: 34px 16px 24px; }
@@ -1586,7 +1588,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 <!-- ═══ PORTADA NUEVA (borrador en index-nuevo.html) ═══ -->
 <section class="nh-hero home-only" aria-label="Bienvenida">
   <div class="nh-hero-media" aria-hidden="true">
-    <div class="nh-ph nh-ph-hero"><span>FOTO DEL HERO<br><small>Placeholder · usar foto propia o con permiso del artista</small></span></div>
+    <img class="nh-hero-img" src="images/artistas/rapero-entre-humo-y-sombras.webp" alt="" width="1672" height="941" fetchpriority="high" decoding="async">
     <div class="nh-hero-tag">La calle<br>también<br>rankea</div>
     <svg class="nh-crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M4 40 L10 10 L24 26 L32 6 L40 26 L54 10 L60 40 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
   </div>
