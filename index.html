@@ -1554,6 +1554,57 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   .nh-cta .nh-btn { width: 100%; justify-content: center; }
 }
 </style>
+<script src="letras.js" defer></script>
+<style>
+/* ═══ LETRAS: analizador de rimas ═══ */
+.lt-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+.lt-wrap h2 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(44px, 8vw, 80px); line-height: .9; margin: 10px 0 12px; }
+.lt-wrap h2 em { color: var(--accent); font-style: normal; }
+.lt-intro { color: #cfc9bf; font-size: 13px; line-height: 1.8; max-width: 640px; }
+.lt-privacy { display: inline-flex; gap: 8px; align-items: center; margin-top: 12px; padding: 8px 12px; border: 1px solid var(--border); font-size: 11px; color: #cfc9bf; }
+.lt-privacy b { color: var(--green); }
+.lt-input { width: 100%; min-height: 260px; margin-top: 20px; padding: 14px; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-family: 'Space Mono', monospace; font-size: 16px; line-height: 1.7; resize: vertical; outline: none; }
+.lt-input:focus { border-color: var(--accent2); }
+.lt-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.lt-btn { min-height: 48px; padding: 0 22px; border: 2px solid var(--border); background: transparent; color: var(--text); font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; cursor: pointer; }
+.lt-btn.go { background: var(--accent2); border-color: var(--accent2); color: #000; }
+.lt-btn:hover { border-color: var(--accent2); }
+.lt-msg { margin-top: 10px; font-size: 12px; color: var(--accent2); min-height: 18px; }
+.lt-result { margin-top: 26px; display: none; }
+.lt-result.show { display: block; }
+.lt-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.lt-card { background: var(--surface); border: 1px solid var(--border); padding: 14px; }
+.lt-card b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 34px; line-height: 1; color: var(--text); }
+.lt-card span { display: block; margin-top: 4px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #9a9a9a; }
+.lt-card small { display: block; margin-top: 6px; font-size: 11px; color: #cfc9bf; line-height: 1.5; }
+.lt-legend { margin-top: 14px; padding: 14px; border: 1px solid var(--border); font-size: 12px; line-height: 1.8; color: #cfc9bf; }
+.lt-legend div { display: flex; gap: 10px; align-items: baseline; }
+.lt-legend i { font-style: normal; flex: none; min-width: 64px; }
+.lt-schemes { margin-top: 14px; font-size: 12px; color: #9a9a9a; }
+.lt-schemes code { font-family: 'Space Mono', monospace; color: var(--text); letter-spacing: 2px; }
+.lt-out { margin-top: 18px; background: var(--surface); border: 1px solid var(--border); padding: 12px 0; font-size: 15px; line-height: 2.1; }
+.lt-line { display: grid; grid-template-columns: 34px 1fr 34px; align-items: baseline; padding: 0 10px; }
+.lt-line.rep { background: rgba(255,204,0,.05); }
+.lt-letter { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #9a9a9a; }
+.lt-letter.consonante { color: var(--accent2); }
+.lt-letter.asonante { color: var(--accent); }
+.lt-text { overflow-wrap: anywhere; }
+.lt-syl { text-align: right; font-size: 10px; color: #6d6d6d; }
+.lt-gap { height: 14px; }
+.lt-sec { padding: 6px 10px 0 44px; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent2); }
+.lt-w { padding: 1px 2px; border-radius: 3px; background: color-mix(in srgb, var(--c) 26%, transparent); box-shadow: inset 0 -2px 0 var(--c); cursor: pointer; }
+.lt-w.m { font-weight: 700; box-shadow: inset 0 -4px 0 var(--c); background: color-mix(in srgb, var(--c) 40%, transparent); }
+.lt-out.focus .lt-w { opacity: .3; }
+.lt-out.focus .lt-w.on { opacity: 1; outline: 1px solid var(--c); }
+.lt-tip { margin-top: 8px; font-size: 11px; color: #9a9a9a; }
+@media (max-width: 600px) {
+  .lt-wrap { padding: 24px 16px 80px; }
+  .lt-metrics { grid-template-columns: repeat(2, 1fr); }
+  .lt-out { font-size: 14px; }
+  .lt-line { grid-template-columns: 26px 1fr 26px; padding: 0 6px; }
+  .lt-sec { padding-left: 32px; }
+}
+</style>
 </head>
 <body>
 
@@ -1567,6 +1618,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <a href="#admin" id="nav-admin" style="display:none" onclick="goTo('admin');closeNav();return false">Admin</a>
     <a href="#estados" id="nav-estados" onclick="goTo('estados');closeNav();return false">Por Estado</a>
     <a href="#emergentes" id="nav-emergentes" onclick="goTo('emergentes');closeNav();return false">Emergentes</a>
+    <a href="#letras" id="nav-letras" onclick="goTo('letras');closeNav();return false">Letras</a>
   </nav>
   <!-- Desktop: two buttons -->
   <div class="header-actions" id="headerActions">
@@ -1716,6 +1768,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 <!-- ═══ SECTION: POR ESTADO ═══ -->
 <div id="section-votar" style="display:none"></div>
 <div id="section-admin" style="display:none"></div>
+<div id="section-letras" style="display:none"></div>
 
 <div id="section-estados" style="display:none">
 </div>
@@ -4641,12 +4694,13 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ─── RUTAS (#votar, #estados, #emergentes, #admin) ──
+// ─── RUTAS (#votar, #estados, #emergentes, #letras, #admin) ──
 function goTo(target) {
   rsTrack('section_view', { section: target });
   const navR = document.getElementById('nav-rankings');
   if (target === 'estados') { showSection('estados', document.getElementById('nav-estados')); history.replaceState(null,'','#estados'); return; }
   if (target === 'votar') { showSection('votar', document.getElementById('nav-votar')); history.replaceState(null,'','#votar'); window.scrollTo({ top: 0 }); return; }
+  if (target === 'letras') { showSection('letras', document.getElementById('nav-letras')); history.replaceState(null,'','#letras'); window.scrollTo({ top: 0 }); return; }
   if (target === 'admin') { showSection('admin', document.getElementById('nav-admin')); history.replaceState(null,'','#admin'); window.scrollTo({ top: 0 }); return; }
   showSection('rankings', navR);
   if (target === 'emergentes') {
@@ -4661,7 +4715,7 @@ function goTo(target) {
 }
 window.addEventListener('load', () => {
   const h = location.hash.replace('#','');
-  if (['votar','admin','estados','emergentes'].includes(h)) goTo(h);
+  if (['votar','admin','estados','emergentes','letras'].includes(h)) goTo(h);
 });
 
 function showSection(id, btn) {
@@ -4690,6 +4744,11 @@ function showSection(id, btn) {
   if (admSec) {
     admSec.style.display = id === 'admin' ? '' : 'none';
     if (id === 'admin') renderAdmin();
+  }
+  const letSec = document.getElementById('section-letras');
+  if (letSec) {
+    letSec.style.display = id === 'letras' ? '' : 'none';
+    if (id === 'letras') renderLetras();
   }
   document.querySelector('.controls').style.display = id==='rankings' ? '' : 'none';
   document.querySelectorAll('.home-only').forEach(el => el.style.display = id==='rankings' ? '' : 'none');
@@ -4757,6 +4816,138 @@ ${svgPaths}
 <g id="mapDots"></g>
 </svg>`;
 }
+</script>
+<script>
+// ═══ LETRAS: interfaz del analizador (la lógica está en letras.js) ═══
+// La letra no se guarda en ningún lado ni se manda a ningún servidor.
+const LT_COLORS = ['#ff6a3d', '#ffcc00', '#39c0ff', '#00e676', '#ff4fa3', '#b98cff', '#ff9f1c', '#4dd0e1', '#c6ff00', '#ff6e6e', '#82b1ff', '#ffd180'];
+const LT_MAX_LINES = 400;
+const LT_EXAMPLE = `Salgo temprano, la calle me llama,
+cargo en la mano lo que nadie reclama,
+sigo mi camino solo, sin pausa,
+buscando mi destino propio y mi causa.
+
+Rima tras rima levanto mi casa,
+cada palabra pesa, nada se pasa,
+mi barrio me enseñó a ganar la apuesta,
+si el mundo pregunta, la calle contesta.
+
+Que suene fuerte, que suene la calle,
+que nadie me pare, que nadie me falle,
+que suene fuerte, que suene la calle,
+que nadie me pare, que nadie me falle.
+
+Libreta en la mano y la mente despierta,
+voy tocando fondo y abriendo la puerta,
+con mi gente al lado no hay nada que temer,
+lo que hoy es un sueño mañana va a ser.
+
+Que suene fuerte, que suene la calle,
+que nadie me pare, que nadie me falle.`;
+let letrasRendered = false;
+
+function renderLetras() {
+  const sec = document.getElementById('section-letras');
+  if (!sec || letrasRendered) return;
+  letrasRendered = true;
+  sec.innerHTML = `
+    <div class="lt-wrap">
+      <div class="hero-label">Herramienta</div>
+      <h2>ANALIZA TU <em>LETRA</em></h2>
+      <p class="lt-intro">Pega una letra de rap y te mostramos sus rimas: las del final de cada verso, las internas y las multisilábicas (varias sílabas seguidas con las mismas vocales), además de su estructura y esquema.</p>
+      <div class="lt-privacy">🔒 <span><b>Tu letra se analiza en tu celular y no se guarda.</b> No se manda a ningún servidor.</span></div>
+      <textarea id="ltInput" class="lt-input" placeholder="Pega aquí tu letra. Deja una línea en blanco entre estrofas…" spellcheck="false" autocomplete="off" aria-label="Letra a analizar"></textarea>
+      <div class="lt-actions">
+        <button type="button" class="lt-btn go" onclick="letrasAnalyze()">Analizar</button>
+        <button type="button" class="lt-btn" onclick="letrasClear()">Limpiar</button>
+        <button type="button" class="lt-btn" data-track="lyrics_example" onclick="letrasExample()">Probar con un ejemplo</button>
+      </div>
+      <div class="lt-msg" id="ltMsg" role="status"></div>
+      <div class="lt-result" id="ltResult"></div>
+    </div>`;
+}
+
+function letrasExample() {
+  document.getElementById('ltInput').value = LT_EXAMPLE;
+  letrasAnalyze();
+}
+function letrasClear() {
+  document.getElementById('ltInput').value = '';
+  const res = document.getElementById('ltResult');
+  res.classList.remove('show'); res.innerHTML = '';
+  document.getElementById('ltMsg').textContent = '';
+}
+
+function letrasAnalyze() {
+  const msg = document.getElementById('ltMsg'), res = document.getElementById('ltResult');
+  if (!window.Letras) { msg.textContent = 'El analizador no cargó. Recarga la página.'; return; }
+  let text = document.getElementById('ltInput').value;
+  if (!text.trim()) { msg.textContent = 'Pega una letra primero.'; return; }
+  const lines = text.split('\n');
+  msg.textContent = '';
+  if (lines.length > LT_MAX_LINES) { text = lines.slice(0, LT_MAX_LINES).join('\n'); msg.textContent = `Analizamos los primeros ${LT_MAX_LINES} renglones.`; }
+  const r = Letras.analyzeLyrics(text);
+  const m = r.metrics;
+  if (!m.words) { msg.textContent = 'No encontramos palabras para analizar.'; return; }
+  const pct = x => Math.round(x * 100) + '%';
+
+  // letra pintada
+  const col = f => LT_COLORS[f % LT_COLORS.length];
+  let out = '', lastSec = -1;
+  r.verses.forEach(v => {
+    if (v.blank) { out += '<div class="lt-gap"></div>'; return; }
+    if (v.section !== lastSec) {
+      lastSec = v.section;
+      const s = r.sections[v.section];
+      if (s.chorus) out += `<div class="lt-sec">↻ Posible coro</div>`;
+    }
+    const words = v.tokens.map(t => {
+      if (t.space) return t.raw;
+      if (t.fam < 0) return esc(t.raw);
+      return `<span class="lt-w${t.multi ? ' m' : ''}" data-f="${t.fam}" style="--c:${col(t.fam)}">${esc(t.raw)}</span>`;
+    }).join('');
+    const tip = v.endType === 'consonante' ? 'Rima consonante' : v.endType === 'asonante' ? 'Rima asonante' : 'Sin rima final en esta estrofa';
+    out += `<div class="lt-line${v.repeated ? ' rep' : ''}"><span class="lt-letter ${v.endType}" title="${tip}">${esc(v.letter)}</span><span class="lt-text">${words}</span><span class="lt-syl" title="Sílabas">${v.syllables}</span></div>`;
+  });
+
+  const schemes = r.sections.map((s, i) => `Estrofa ${i + 1}: <code>${esc(s.scheme)}</code>${s.chorus ? ' · posible coro' : ''}`).join('<br>');
+  res.innerHTML = `
+    <div class="lt-metrics">
+      <div class="lt-card"><b>${pct(m.density)}</b><span>Densidad de rima</span><small>${m.rhymingWords} de ${m.words} palabras riman con otra.</small></div>
+      <div class="lt-card"><b>${m.families}</b><span>Familias de rima</span><small>Grupos de palabras que riman entre sí.</small></div>
+      <div class="lt-card"><b>${m.longestMulti ? m.longestMulti + ' sílabas' : '—'}</b><span>Multisilábica más larga</span><small>${m.longestMulti ? esc(m.longestMultiText) : 'No encontramos rimas de 3 o más sílabas.'}</small></div>
+      <div class="lt-card"><b>${pct(m.lexical)}</b><span>Palabras distintas</span><small>Qué tan variado es tu vocabulario.</small></div>
+      <div class="lt-card"><b>${m.lines}</b><span>Versos</span><small>${m.sections} estrofa${m.sections === 1 ? '' : 's'}.</small></div>
+      <div class="lt-card"><b>${m.words}</b><span>Palabras</span><small>Sin contar números.</small></div>
+    </div>
+    <div class="lt-legend">
+      <div><i><span class="lt-w" style="--c:${LT_COLORS[2]}">color</span></i><span>Cada color es una familia de palabras que riman entre sí, al final o dentro del verso.</span></div>
+      <div><i><span class="lt-w m" style="--c:${LT_COLORS[1]}">grueso</span></i><span>Rima multisilábica: varias sílabas seguidas con las mismas vocales. Es la que más pesa en el rap.</span></div>
+      <div><i><b style="color:var(--accent2)">A</b> <b style="color:var(--accent)">B</b></i><span>Esquema de rima al final del verso: misma letra = riman. Amarillo = consonante (suena igual desde la vocal fuerte); naranja = asonante (solo coinciden las vocales).</span></div>
+      <div><i style="color:#6d6d6d">12</i><span>Sílabas del verso, sin juntar vocales entre palabras.</span></div>
+      <div><i style="color:var(--accent2)">↻</i><span>Versos o estrofas que se repiten: posible coro.</span></div>
+    </div>
+    <div class="lt-schemes">${schemes}</div>
+    <div class="lt-out" id="ltOut">${out}</div>
+    <p class="lt-tip">Toca una palabra de color para ver todas las de su familia.</p>`;
+  res.classList.add('show');
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  rsTrack('analyze_lyrics', { lines: m.lines, words: m.words, rhyme_density: Math.round(m.density * 100) / 100 });
+}
+
+// Tocar una palabra resalta su familia (un solo listener para toda la letra)
+document.addEventListener('click', e => {
+  const out = document.getElementById('ltOut');
+  if (!out || !out.contains(e.target)) return;
+  const w = e.target.closest('.lt-w');
+  const f = w ? w.dataset.f : null;
+  const same = f !== null && out.dataset.focus === f;
+  out.querySelectorAll('.lt-w.on').forEach(x => x.classList.remove('on'));
+  if (!w || same) { out.classList.remove('focus'); delete out.dataset.focus; return; }
+  out.dataset.focus = f;
+  out.classList.add('focus');
+  out.querySelectorAll(`.lt-w[data-f="${f}"]`).forEach(x => x.classList.add('on'));
+});
 </script>
 <script type="module">
 // ── IMPORTS ─────────────────────────────────────────────────
