@@ -334,8 +334,23 @@
       longestMultiText: multiText(top),
       lexical: words ? distinct.size / words : 0,
       sections: sections.length,
+      // pares de versos distintos con rima multisilábica (cada par cuenta una vez)
+      multiCount: new Set(multis.map(m => [Math.min(m.a.vi, m.b.vi), Math.max(m.a.vi, m.b.vi)].join('-'))).size,
     };
+    Object.assign(metrics, rhymeIndex(metrics));
     return { verses, sections, families, multis, metrics };
+  }
+
+  // Índice de rima (0–100): SOLO con lo que se mide de forma objetiva. No mide flow, contenido ni punchlines.
+  //   40% densidad de rima (60% de palabras rimando = máximo)
+  //   35% rimas multisilábicas (largo de la más larga hasta 8 sílabas + cuántos pares hay, 1 por cada 2 versos = máximo)
+  //   25% variedad de vocabulario (75% de palabras distintas = máximo)
+  function rhymeIndex(m) {
+    const clamp = x => Math.max(0, Math.min(1, x));
+    const dens = clamp(m.density / 0.6);
+    const multi = clamp(m.longestMulti / 8) * 0.6 + clamp(m.multiCount / Math.max(1, m.lines / 2)) * 0.4;
+    const vari = clamp(m.lexical / 0.75);
+    return { index: Math.round(100 * (0.4 * dens + 0.35 * multi + 0.25 * vari)), indexParts: { densidad: dens, multisilabicas: multi, variedad: vari } };
   }
 
   // ─── Pruebas (llámalas desde la consola: runLetrasTests()) ───
@@ -361,6 +376,8 @@
     t('multisilábica de 3+ sílabas entre dos versos', r.metrics.longestMulti >= 3, r.metrics.longestMulti + ' sílabas: ' + r.metrics.longestMultiText);
     const r2 = analyzeLyrics('la calle me llama\nla gente reclama\nsigo mi camino\nbusco mi destino');
     t('esquema AABB', r2.sections[0].scheme === 'AABB', r2.sections[0].scheme);
+    const ri = rhymeIndex({ density: 0.6, longestMulti: 8, multiCount: 5, lines: 10, lexical: 0.75 }), r0 = rhymeIndex({ density: 0, longestMulti: 0, multiCount: 0, lines: 4, lexical: 0 });
+    t('índice de rima: máximo 100, mínimo 0', ri.index === 100 && r0.index === 0, ri.index + ' / ' + r0.index);
     const r3 = analyzeLyrics('que suene la calle\nque nadie me falle\n\nverso distinto aquí\notro verso así\n\nque suene la calle\nque nadie me falle');
     t('bloque repetido → posible coro', r3.sections[0].chorus && r3.sections[2].chorus && !r3.sections[1].chorus, r3.sections.map(s => s.chorus).join(','));
     const ok = T.filter(x => x.ok).length;
@@ -368,7 +385,7 @@
     return { passed: ok, total: T.length, results: T };
   }
 
-  const api = { cleanWord, syllabify, phonetize, analyzeWord, rhymeType, analyzeLyrics, runLetrasTests };
+  const api = { cleanWord, syllabify, phonetize, analyzeWord, rhymeType, analyzeLyrics, rhymeIndex, runLetrasTests };
   root.Letras = api;
   root.runLetrasTests = runLetrasTests;
   if (typeof module !== 'undefined' && module.exports) {

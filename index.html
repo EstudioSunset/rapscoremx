@@ -1555,6 +1555,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 }
 </style>
 <script src="letras.js" defer></script>
+<script src="letras-share.js" defer></script>
 <script src="freestyle.js" defer></script>
 <script src="freestyle-ui.js" defer></script>
 <style>
@@ -1701,7 +1702,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .lt-btn.go { background: var(--accent2); border-color: var(--accent2); color: #000; }
 .lt-btn:hover { border-color: var(--accent2); }
 .lt-msg { margin-top: 10px; font-size: 12px; color: var(--accent2); min-height: 18px; }
-.lt-result { margin-top: 26px; display: none; }
+.lt-result { margin-top: 26px; display: none; scroll-margin-top: 64px; }
 .lt-result.show { display: block; }
 .lt-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .lt-card { background: var(--surface); border: 1px solid var(--border); padding: 14px; }
@@ -1713,7 +1714,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .lt-legend i { font-style: normal; flex: none; min-width: 64px; }
 .lt-schemes { margin-top: 14px; font-size: 12px; color: #9a9a9a; }
 .lt-schemes code { font-family: 'Space Mono', monospace; color: var(--text); letter-spacing: 2px; }
-.lt-out { margin-top: 18px; background: var(--surface); border: 1px solid var(--border); padding: 12px 0; font-size: 15px; line-height: 2.1; }
+.lt-out { margin-top: 8px; background: var(--surface); border: 1px solid var(--border); padding: 12px 0; font-size: 15px; line-height: 2.1; }
 .lt-line { display: grid; grid-template-columns: 34px 1fr 34px; align-items: baseline; padding: 0 10px; }
 .lt-line.rep { background: rgba(255,204,0,.05); }
 .lt-letter { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #9a9a9a; }
@@ -1728,6 +1729,20 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .lt-out.focus .lt-w { opacity: .3; }
 .lt-out.focus .lt-w.on { opacity: 1; outline: 1px solid var(--c); }
 .lt-tip { margin-top: 8px; font-size: 11px; color: #9a9a9a; }
+.lt-res-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); }
+.lt-index { display: flex; align-items: center; gap: 12px; }
+.lt-index b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 64px; line-height: .9; color: var(--accent); }
+.lt-index span { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #cfc9bf; line-height: 1.4; }
+.lt-index small { color: #6d6d6d; }
+.lt-schemes { margin: 12px 0 16px; }
+.lt-share-bottom { width: 100%; margin-top: 16px; }
+.lt-share-modal { max-width: 520px; }
+.lt-share-modal .auth-input { width: 100%; margin: 12px 0; font-size: 16px; }
+.lt-share-prev { background: #0a0a0a; border: 1px solid var(--border); aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; }
+.lt-share-prev img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.lt-share-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.lt-share-actions .lt-btn { flex: 1 1 140px; }
+.lt-share-note { margin-top: 10px; font-size: 11px; line-height: 1.6; color: #9a9a9a; }
 @media (max-width: 600px) {
   .lt-wrap { padding: 24px 16px 80px; }
   .lt-metrics { grid-template-columns: repeat(2, 1fr); }
@@ -4961,7 +4976,7 @@ ${svgPaths}
 <script>
 // ═══ LETRAS: interfaz del analizador (la lógica está en letras.js) ═══
 // La letra no se guarda en ningún lado ni se manda a ningún servidor.
-const LT_COLORS = ['#ff6a3d', '#ffcc00', '#39c0ff', '#00e676', '#ff4fa3', '#b98cff', '#ff9f1c', '#4dd0e1', '#c6ff00', '#ff6e6e', '#82b1ff', '#ffd180'];
+const LT_COLORS = window.LT_COLORS_PUBLIC = ['#ff6a3d', '#ffcc00', '#39c0ff', '#00e676', '#ff4fa3', '#b98cff', '#ff9f1c', '#4dd0e1', '#c6ff00', '#ff6e6e', '#82b1ff', '#ffd180'];
 const LT_MAX_LINES = 400;
 const LT_EXAMPLE = `Salgo temprano, la calle me llama,
 cargo en la mano lo que nadie reclama,
@@ -5052,7 +5067,15 @@ function letrasAnalyze() {
   });
 
   const schemes = r.sections.map((s, i) => `Estrofa ${i + 1}: <code>${esc(s.scheme)}</code>${s.chorus ? ' · posible coro' : ''}`).join('<br>');
+  window.LT_LAST = r;   // para la tarjeta de compartir (solo en memoria; se pierde al recargar)
   res.innerHTML = `
+    <div class="lt-res-head">
+      <div class="lt-index"><b>${m.index}</b><span>Índice de rima<br><small>de 100</small></span></div>
+      <button type="button" class="lt-btn go" data-track="lyrics_share_open" onclick="letrasShareOpen()">Compartir mi análisis</button>
+    </div>
+    <p class="lt-tip">Toca una palabra de color para ver todas las de su familia.</p>
+    <div class="lt-out" id="ltOut">${out}</div>
+    <div class="lt-schemes">${schemes}</div>
     <div class="lt-metrics">
       <div class="lt-card"><b>${pct(m.density)}</b><span>Densidad de rima</span><small>${m.rhymingWords} de ${m.words} palabras riman con otra.</small></div>
       <div class="lt-card"><b>${m.families}</b><span>Familias de rima</span><small>Grupos de palabras que riman entre sí.</small></div>
@@ -5062,15 +5085,14 @@ function letrasAnalyze() {
       <div class="lt-card"><b>${m.words}</b><span>Palabras</span><small>Sin contar números.</small></div>
     </div>
     <div class="lt-legend">
+      <div><i><b style="color:var(--accent)">${m.index}</b></i><span>Índice de rima (0 a 100): 40% densidad de rima, 35% rimas multisilábicas y 25% variedad de vocabulario. Lo calcula la herramienta sola; no mide flow, contenido ni punchlines.</span></div>
       <div><i><span class="lt-w" style="--c:${LT_COLORS[2]}">color</span></i><span>Cada color es una familia de palabras que riman entre sí, al final o dentro del verso.</span></div>
       <div><i><span class="lt-w m" style="--c:${LT_COLORS[1]}">grueso</span></i><span>Rima multisilábica: varias sílabas seguidas con las mismas vocales. Es la que más pesa en el rap.</span></div>
       <div><i><b style="color:var(--accent2)">A</b> <b style="color:var(--accent)">B</b></i><span>Esquema de rima al final del verso: misma letra = riman. Amarillo = consonante (suena igual desde la vocal fuerte); naranja = asonante (solo coinciden las vocales).</span></div>
       <div><i style="color:#6d6d6d">12</i><span>Sílabas del verso, sin juntar vocales entre palabras.</span></div>
       <div><i style="color:var(--accent2)">↻</i><span>Versos o estrofas que se repiten: posible coro.</span></div>
     </div>
-    <div class="lt-schemes">${schemes}</div>
-    <div class="lt-out" id="ltOut">${out}</div>
-    <p class="lt-tip">Toca una palabra de color para ver todas las de su familia.</p>`;
+    <button type="button" class="lt-btn go lt-share-bottom" data-track="lyrics_share_open" onclick="letrasShareOpen()">Compartir mi análisis</button>`;
   res.classList.add('show');
   res.scrollIntoView({ behavior: 'smooth', block: 'start' });
   rsTrack('analyze_lyrics', { lines: m.lines, words: m.words, rhyme_density: Math.round(m.density * 100) / 100 });
