@@ -132,16 +132,45 @@
     return plain(t);
   }
 
+  // ── Acentos que faltan ──
+  // En rap casi nadie escribe tildes ("accion", "corazon", "musica"). Sin la tilde, la regla de acentuación
+  // pone el golpe en otra sílaba y la rima no se detecta. Restauramos las más comunes:
+  //  • -ión / -ón al final (acción, misión, corazón, renglón): en español casi siempre son agudas con tilde.
+  //  • Una lista de palabras frecuentes que llevan tilde (esdrújulas, -ía, agudas en vocal/n/s, llanas en consonante).
+  const ACCENT_FIX = (() => {
+    const list = ('música último único público número lágrima rápido máximo mínimo práctica técnica lógica crítica política ' +
+      'fábrica página teléfono sábado éxito código método símbolo título cómplice cámara brújula fórmula época ' +
+      'mágico trágico clásico básico físico químico histórico típico pésimo próximo íntimo legítimo ' +
+      'día días mía mío tía tío río frío vía guía todavía poesía energía policía alegría melodía fantasía armonía ' +
+      'filosofía economía tecnología fotografía compañía manía agonía ironía valentía rebeldía cobardía osadía ' +
+      'tenía tenían vivía decía sabía podía quería sentía había seguía venía corría dormía pedía oía reía ' +
+      'jamás además atrás detrás después también quizás mamá papá aquí allá allí acá así ahí sofá café bebé ' +
+      'ángel árbol fácil difícil útil débil lápiz cárcel azúcar césped huésped móvil frágil hábil inútil ' +
+      'mándame dímelo dámelo cómo qué quién cuándo dónde').split(' ');
+    const m = {}; list.forEach(w => { m[plain(w)] = w; }); return m;
+  })();
+  const QUESTION = new Set(['cómo', 'qué', 'quién', 'cuándo', 'dónde']);   // solo si ya vienen con tilde (como/que sin tilde son otra cosa)
+  function restoreAccent(w) {
+    if (/[áéíóú]/.test(w)) return w;
+    const fix = ACCENT_FIX[w];
+    if (fix && !QUESTION.has(fix)) return fix;
+    // -on al final con otra vocal antes: acción, misión, corazón, renglón, perdón, león…
+    // (menos los verbos en -aron / -eron: dijeron, llegaron, fueron, que son llanas)
+    if (/on$/.test(w) && !/[ae]ron$/.test(w) && /[aeiouü]/.test(w.slice(0, -2))) return w.slice(0, -2) + 'ón';
+    return w;
+  }
+
   const wordCache = new Map();
   // Analiza una palabra suelta. Devuelve null si no se puede (números, sin vocales, etc.).
   function analyzeWord(raw) {
     const w = cleanWord(raw);
     if (!w) return null;
     if (wordCache.has(w)) return wordCache.get(w);
-    const sylls = syllabify(w);
+    const wa = restoreAccent(w);                 // forma con tilde (solo para sílabas y golpe; la palabra sigue siendo w)
+    const sylls = syllabify(wa);
     let res = null;
     if (sylls.length) {
-      const st = stressIndex(w, sylls);
+      const st = stressIndex(wa, sylls);
       const ss = sylls[st];
       const v = ss.vowel;
       const posInNuc = Math.max(0, [...ss.nucleus.replace(/y/g, 'i')].findIndex(c => plain(c) === v));
@@ -318,6 +347,36 @@
       words++; distinct.add(t.a.word);
       if (t.fam >= 0 || t.multi) rhyming++;
     }));
+    // Variedad justa con el largo: promedio de palabras distintas en ventanas de 40 palabras (MATTR),
+    // y sin contar dos veces los versos repetidos (coros). Así un texto largo no sale castigado solo por ser largo.
+    const seenLine = new Set(), seq = [];
+    real.forEach(vi => {
+      const k = normLine(verses[vi].text);
+      if (seenLine.has(k)) return; seenLine.add(k);
+      verses[vi].tokens.forEach(t => { if (t.a) seq.push(t.a.word); });
+    });
+    const WIN = 40;
+    let lexical = 0;
+    if (seq.length && seq.length <= WIN) lexical = new Set(seq).size / seq.length;
+    else if (seq.length) {
+      let sum = 0; const cnt = new Map(); let uniq = 0;
+      const add = w => { const c = (cnt.get(w) || 0) + 1; cnt.set(w, c); if (c === 1) uniq++; };
+      const del = w => { const c = cnt.get(w) - 1; cnt.set(w, c); if (c === 0) uniq--; };
+      for (let i = 0; i < WIN; i++) add(seq[i]);
+      sum += uniq / WIN;
+      for (let i = WIN; i < seq.length; i++) { del(seq[i - WIN]); add(seq[i]); sum += uniq / WIN; }
+      lexical = sum / (seq.length - WIN + 1);
+    }
+    // Calidad multisilábica justa con el largo: la mejor multi de cada bloque de 8 versos, promediada
+    // (un último bloque de menos de 4 versos se une al anterior). Antes contaba solo la más larga de toda la letra.
+    const BLOCK = 8, pos = new Map(real.map((vi, k) => [vi, k]));
+    const nBlocks = Math.max(1, Math.floor(real.length / BLOCK) + (real.length % BLOCK >= 4 ? 1 : 0));
+    const blockBest = new Array(nBlocks).fill(0);
+    multis.forEach(m => {
+      const b = Math.min(nBlocks - 1, Math.floor(pos.get(Math.max(m.a.vi, m.b.vi)) / BLOCK));
+      if (m.len > blockBest[b]) blockBest[b] = m.len;
+    });
+    const multiAvg = blockBest.reduce((x, y) => x + y, 0) / nBlocks;
     const top = multis[0];
     const multiText = m => {
       if (!m) return '';
@@ -332,7 +391,8 @@
       families: families.length,
       longestMulti: top ? top.len : 0,
       longestMultiText: multiText(top),
-      lexical: words ? distinct.size / words : 0,
+      lexical,
+      multiAvg,
       sections: sections.length,
       // pares de versos distintos con rima multisilábica (cada par cuenta una vez)
       multiCount: new Set(multis.map(m => [Math.min(m.a.vi, m.b.vi), Math.max(m.a.vi, m.b.vi)].join('-'))).size,
@@ -343,14 +403,19 @@
 
   // Índice de rima (0–100): SOLO con lo que se mide de forma objetiva. No mide flow, contenido ni punchlines.
   //   40% densidad de rima (60% de palabras rimando = máximo)
-  //   35% rimas multisilábicas (largo de la más larga hasta 8 sílabas + cuántos pares hay, 1 por cada 2 versos = máximo)
-  //   25% variedad de vocabulario (75% de palabras distintas = máximo)
+  //   35% rimas multisilábicas (promedio de la mejor multi por bloque de 8 versos, 6 sílabas = máximo,
+  //       + cuántos pares hay, 1 por cada 2 versos = máximo)
+  //   25% variedad de vocabulario (palabras distintas en ventanas de 40 palabras, sin repetir coros; 75% = máximo)
+  // Con menos de 8 versos no hay índice (index = null): con tan poco texto el número no sería justo.
+  const MIN_LINES = 8;
   function rhymeIndex(m) {
     const clamp = x => Math.max(0, Math.min(1, x));
     const dens = clamp(m.density / 0.6);
-    const multi = clamp(m.longestMulti / 8) * 0.6 + clamp(m.multiCount / Math.max(1, m.lines / 2)) * 0.4;
+    const avg = m.multiAvg === undefined ? m.longestMulti : m.multiAvg;
+    const multi = clamp(avg / 6) * 0.6 + clamp(m.multiCount / Math.max(1, m.lines / 2)) * 0.4;
     const vari = clamp(m.lexical / 0.75);
-    return { index: Math.round(100 * (0.4 * dens + 0.35 * multi + 0.25 * vari)), indexParts: { densidad: dens, multisilabicas: multi, variedad: vari } };
+    if (m.lines < MIN_LINES) return { index: null, indexParts: { densidad: dens, multisilabicas: multi, variedad: vari }, minLines: MIN_LINES };
+    return { minLines: MIN_LINES, index: Math.round(100 * (0.4 * dens + 0.35 * multi + 0.25 * vari)), indexParts: { densidad: dens, multisilabicas: multi, variedad: vari } };
   }
 
   // ─── Pruebas (llámalas desde la consola: runLetrasTests()) ───
@@ -365,6 +430,10 @@
     t('país → 2 sílabas', analyzeWord('país').count === 2, analyzeWord('país').syllables.join('-'));
     t('río → 2 sílabas', analyzeWord('río').count === 2, analyzeWord('río').syllables.join('-'));
     t('árbol → llana', analyzeWord('árbol').type === 'llana', analyzeWord('árbol').type);
+    t('sin tilde: accion / proteccion → consonante', rhymeType('accion', 'proteccion') === 'consonante', rhymeType('accion', 'proteccion'));
+    t('sin tilde: mision / razon / renglon → agudas', ['mision', 'razon', 'renglon'].every(x => analyzeWord(x).type === 'aguda'), ['mision', 'razon', 'renglon'].map(x => analyzeWord(x).type).join(','));
+    t('sin tilde: musica esdrújula, dia 2 sílabas, arbol llana', analyzeWord('musica').type === 'esdrújula' && analyzeWord('dia').count === 2 && analyzeWord('arbol').type === 'llana', [analyzeWord('musica').type, analyzeWord('dia').count, analyzeWord('arbol').type].join(','));
+    t('canciones (plural) sigue llana', analyzeWord('canciones').type === 'llana', analyzeWord('canciones').type);
     t('que → u muda (suena "ke")', phonetize('que') === 'ke' && analyzeWord('que').count === 1, phonetize('que'));
     t('guerra → u muda, pingüino → ü suena', phonetize('guerra') === 'geRa' && phonetize('pingüino').includes('gu'), phonetize('guerra') + ' / ' + phonetize('pingüino'));
     t('b=v, s=z=c: vez / bes', phonetize('vez') === phonetize('bes'), phonetize('vez'));
@@ -376,8 +445,10 @@
     t('multisilábica de 3+ sílabas entre dos versos', r.metrics.longestMulti >= 3, r.metrics.longestMulti + ' sílabas: ' + r.metrics.longestMultiText);
     const r2 = analyzeLyrics('la calle me llama\nla gente reclama\nsigo mi camino\nbusco mi destino');
     t('esquema AABB', r2.sections[0].scheme === 'AABB', r2.sections[0].scheme);
-    const ri = rhymeIndex({ density: 0.6, longestMulti: 8, multiCount: 5, lines: 10, lexical: 0.75 }), r0 = rhymeIndex({ density: 0, longestMulti: 0, multiCount: 0, lines: 4, lexical: 0 });
+    const ri = rhymeIndex({ density: 0.6, longestMulti: 8, multiCount: 5, lines: 10, lexical: 0.75 }), r0 = rhymeIndex({ density: 0, longestMulti: 0, multiCount: 0, lines: 8, lexical: 0 });
     t('índice de rima: máximo 100, mínimo 0', ri.index === 100 && r0.index === 0, ri.index + ' / ' + r0.index);
+    t('menos de 8 versos → sin índice', rhymeIndex({ density: 0.5, longestMulti: 4, multiCount: 2, lines: 7, lexical: 0.7 }).index === null, '');
+    t('sin tilde: dijeron / llegaron siguen llanas', analyzeWord('dijeron').type === 'llana' && analyzeWord('llegaron').type === 'llana', analyzeWord('dijeron').type);
     const r3 = analyzeLyrics('que suene la calle\nque nadie me falle\n\nverso distinto aquí\notro verso así\n\nque suene la calle\nque nadie me falle');
     t('bloque repetido → posible coro', r3.sections[0].chorus && r3.sections[2].chorus && !r3.sections[1].chorus, r3.sections.map(s => s.chorus).join(','));
     const ok = T.filter(x => x.ok).length;

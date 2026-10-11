@@ -1554,10 +1554,10 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   .nh-cta .nh-btn { width: 100%; justify-content: center; }
 }
 </style>
-<script src="letras.js" defer></script>
-<script src="letras-share.js" defer></script>
-<script src="freestyle.js" defer></script>
-<script src="freestyle-ui.js" defer></script>
+<script src="letras.js?v=20261011" defer></script>
+<script src="letras-share.js?v=20261011" defer></script>
+<script src="freestyle.js?v=20261011" defer></script>
+<script src="freestyle-ui.js?v=20261011" defer></script>
 <style>
 /* ═══ FREESTYLE LAB ═══ */
 .fl-wrap { max-width: 980px; margin: 0 auto; padding: 26px 24px 80px; }
@@ -5068,10 +5068,15 @@ function letrasAnalyze() {
 
   const schemes = r.sections.map((s, i) => `Estrofa ${i + 1}: <code>${esc(s.scheme)}</code>${s.chorus ? ' · posible coro' : ''}`).join('<br>');
   window.LT_LAST = r;   // para la tarjeta de compartir (solo en memoria; se pierde al recargar)
+  // Con menos de 8 versos no hay índice (no sería justo con tan poco texto): se muestra el análisis sin número ni tarjeta.
+  const hasIdx = typeof m.index === 'number';
+  const minL = m.minLines || 8;
+  const idxTxt = hasIdx ? m.index : '—';
+  const shareBtn = cls => hasIdx ? `<button type="button" class="lt-btn go${cls}" data-track="lyrics_share_open" onclick="letrasShareOpen()">Compartir mi análisis</button>` : '';
   res.innerHTML = `
     <div class="lt-res-head">
-      <div class="lt-index"><b>${m.index}</b><span>Índice de rima<br><small>de 100</small></span></div>
-      <button type="button" class="lt-btn go" data-track="lyrics_share_open" onclick="letrasShareOpen()">Compartir mi análisis</button>
+      <div class="lt-index"><b>${idxTxt}</b><span>Índice de rima<br><small>${hasIdx ? 'de 100' : `agrega más versos para calcularlo (mínimo ${minL}, llevas ${m.lines})`}</small></span></div>
+      ${shareBtn('')}
     </div>
     <p class="lt-tip">Toca una palabra de color para ver todas las de su familia.</p>
     <div class="lt-out" id="ltOut">${out}</div>
@@ -5085,17 +5090,17 @@ function letrasAnalyze() {
       <div class="lt-card"><b>${m.words}</b><span>Palabras</span><small>Sin contar números.</small></div>
     </div>
     <div class="lt-legend">
-      <div><i><b style="color:var(--accent)">${m.index}</b></i><span>Índice de rima (0 a 100): 40% densidad de rima, 35% rimas multisilábicas y 25% variedad de vocabulario. Lo calcula la herramienta sola; no mide flow, contenido ni punchlines.</span></div>
+      <div><i><b style="color:var(--accent)">${idxTxt}</b></i><span>Índice de rima (0 a 100): 40% densidad de rima, 35% rimas multisilábicas (la mejor de cada 8 versos, promediada) y 25% variedad de vocabulario (medida por tramos y sin contar el coro repetido). Así una letra larga no sube ni baja solo por ser larga. Se calcula desde ${minL} versos. No mide flow, contenido ni punchlines.</span></div>
       <div><i><span class="lt-w" style="--c:${LT_COLORS[2]}">color</span></i><span>Cada color es una familia de palabras que riman entre sí, al final o dentro del verso.</span></div>
       <div><i><span class="lt-w m" style="--c:${LT_COLORS[1]}">grueso</span></i><span>Rima multisilábica: varias sílabas seguidas con las mismas vocales. Es la que más pesa en el rap.</span></div>
       <div><i><b style="color:var(--accent2)">A</b> <b style="color:var(--accent)">B</b></i><span>Esquema de rima al final del verso: misma letra = riman. Amarillo = consonante (suena igual desde la vocal fuerte); naranja = asonante (solo coinciden las vocales).</span></div>
       <div><i style="color:#6d6d6d">12</i><span>Sílabas del verso, sin juntar vocales entre palabras.</span></div>
       <div><i style="color:var(--accent2)">↻</i><span>Versos o estrofas que se repiten: posible coro.</span></div>
     </div>
-    <button type="button" class="lt-btn go lt-share-bottom" data-track="lyrics_share_open" onclick="letrasShareOpen()">Compartir mi análisis</button>`;
+    ${shareBtn(' lt-share-bottom')}`;
   res.classList.add('show');
   res.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  rsTrack('analyze_lyrics', { lines: m.lines, words: m.words, rhyme_density: Math.round(m.density * 100) / 100 });
+  rsTrack('analyze_lyrics', { lines: m.lines, words: m.words, rhyme_density: Math.round(m.density * 100) / 100, rhyme_index: hasIdx ? m.index : -1 });
 }
 
 // Tocar una palabra resalta su familia (un solo listener para toda la letra)

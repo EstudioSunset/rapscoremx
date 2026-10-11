@@ -207,7 +207,8 @@
   }
 
   window.letrasShareOpen = async function () {
-    if (!window.LT_LAST) return;
+    // sin índice (menos de 8 versos) no hay tarjeta: el número no sería justo
+    if (!window.LT_LAST || typeof window.LT_LAST.metrics.index !== 'number') return;
     const el = modal();
     el.classList.add('open');
     document.getElementById('ltShareImg').removeAttribute('src');
