@@ -1,6 +1,6 @@
 # RapScore MX — guía para Claude Code
 
-Ranking comunitario de rap mexicano en **https://www.rapscoremx.com**. Proyecto de Estudio Sunset.
+Ranking de rap mexicano (lo deciden los fans) en **https://www.rapscoremx.com**. Proyecto de Estudio Sunset.
 El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica los cambios en términos de lo que ve el usuario del sitio.
 
 ## Cómo está armado

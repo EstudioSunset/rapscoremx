@@ -848,6 +848,7 @@ h1 em { color: var(--accent); font-style: normal; }
 .pop-title em { color: var(--accent); font-style: normal; }
 .pop-text { font-size: 13px; color: #bbb; line-height: 1.8; margin-bottom: 14px; }
 .pop-text strong { color: var(--accent2); }
+.pop-note { font-size: 12px; padding: 10px 12px; border-left: 3px solid var(--accent); background: rgba(255,255,255,.04); }
 .pop-list { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-direction: column; gap: 8px; }
 .pop-list li { font-size: 12px; color: var(--text); padding-left: 18px; position: relative; }
 .pop-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
@@ -1788,8 +1789,8 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <svg class="nh-crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M4 40 L10 10 L24 26 L32 6 L40 26 L54 10 L60 40 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
   </div>
   <div class="nh-hero-inner">
-    <span class="nh-kicker">Ranking comunitario del rap mexicano</span>
-    <h1 class="nh-title">El ranking comunitario<br><em>del rap mexicano.</em></h1>
+    <span class="nh-kicker">Sin jurado · Lo deciden los fans</span>
+    <h1 class="nh-title">El ranking<br><em>del rap mexicano.</em></h1>
     <p class="nh-sub">La comunidad decide la calle. Califica a tus MCs en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Todos arrancan en 50 y el promedio de la comunidad manda.</p>
     <div class="nh-ctas">
       <button type="button" class="nh-btn" data-track="hero_ver_ranking" onclick="scrollToRanking()">Ver ranking <span aria-hidden="true">›</span></button>
@@ -1802,7 +1803,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 <section class="nh-features home-only" aria-label="Por qué RapScore">
   <div class="nh-feature">
     <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="16" cy="16" r="6"/><circle cx="32" cy="16" r="6"/><path d="M4 38c0-7 5-12 12-12s12 5 12 12M20 38c0-7 5-12 12-12s12 5 12 12"/></svg>
-    <div><b>Votación comunitaria</b><span>Fans reales, opiniones reales. La comunidad decide.</span></div>
+    <div><b>Votación abierta</b><span>Fans reales, opiniones reales. La comunidad decide.</span></div>
   </div>
   <div class="nh-feature">
     <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40V26h7v14M21 40V16h7v24M34 40V8h7v32"/></svg>
@@ -1954,6 +1955,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <div class="pop-label">Bienvenido a RapScore MX</div>
     <div class="pop-title" id="welcomeTitle">EL RANKING<br>LO DECIDES <em>TÚ</em></div>
     <p class="pop-text">Somos una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Aquí no hay jurado: todos los raperos arrancan en <strong>50</strong> y cada voto mueve el ranking.</p>
+    <p class="pop-text pop-note">Estamos arrancando: el ranking <strong>se va ajustando</strong> con cada calificación. Si ves a alguien fuera de lugar, tu voto lo acomoda.</p>
     <ul class="pop-list">
       <li>Califica a tus raperos en 6 categorías</li>
       <li>Gana puntos y sube en el ranking de contribuyentes</li>
@@ -3072,8 +3074,6 @@ function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 function closeWelcome(next) {
   document.getElementById('welcomeModal').classList.remove('open');
   lsSet('rs_welcome_seen', '1');
-  // si se queda a ver el ranking, le avisamos que todavía se está ajustando
-  if (next === 'ranking') setTimeout(() => maybeAjuste(true), 500);
 }
 // ─── POP-UP: RANKING EN AJUSTE ──────────────────────────────
 const AJUSTE_EVERY_MS = 24 * 60 * 60 * 1000; // máximo una vez al día por visitante
@@ -3081,9 +3081,9 @@ function closeAjuste() {
   document.getElementById('ajusteModal').classList.remove('open');
   lsSet('rs_ajuste_seen', String(Date.now()));
 }
-function maybeAjuste(force) {
+function maybeAjuste() {
   const last = Number(lsGet('rs_ajuste_seen') || 0);
-  if (!force && Date.now() - last < AJUSTE_EVERY_MS) return;
+  if (Date.now() - last < AJUSTE_EVERY_MS) return;
   const h = location.hash.replace('#','');
   if (h === 'admin' || h === 'votar') return;
   if (document.querySelector('.modal-overlay.open')) return;
@@ -3103,6 +3103,7 @@ function maybeWelcome() {
   setTimeout(() => {
     if (document.querySelector('.modal-overlay.open')) return;
     document.getElementById('welcomeModal').classList.add('open');
+    lsSet('rs_ajuste_seen', String(Date.now()));   // la bienvenida ya incluye el aviso de ajuste: no lo repetimos hoy
     rsTrack('popup_view', { popup: 'bienvenida' });
   }, 1200);
 }
