@@ -1764,7 +1764,6 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <a href="#votar" id="nav-votar" class="nav-votar" onclick="goTo('votar');closeNav();return false">Votar</a>
     <a href="#admin" id="nav-admin" style="display:none" onclick="goTo('admin');closeNav();return false">Admin</a>
     <a href="#estados" id="nav-estados" onclick="goTo('estados');closeNav();return false">Por Estado</a>
-    <a href="#emergentes" id="nav-emergentes" onclick="goTo('emergentes');closeNav();return false">Emergentes</a>
     <a href="#letras" id="nav-letras" onclick="goTo('letras');closeNav();return false">Letras</a>
     <a href="#freestyle" id="nav-freestyle" onclick="goTo('freestyle');closeNav();return false">Freestyle</a>
   </nav>
@@ -1789,7 +1788,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
     <svg class="nh-crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M4 40 L10 10 L24 26 L32 6 L40 26 L54 10 L60 40 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
   </div>
   <div class="nh-hero-inner">
-    <span class="nh-kicker">Sin jurado · Lo deciden los fans</span>
+    <span class="nh-kicker">Lo decidimos todos</span>
     <h1 class="nh-title">El ranking<br><em>del rap mexicano.</em></h1>
     <p class="nh-sub">La comunidad decide la calle. Califica a tus MCs en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Todos arrancan en 50 y el promedio de la comunidad manda.</p>
     <div class="nh-ctas">
@@ -4856,8 +4855,7 @@ function goTo(target) {
   showSection('rankings', navR);
   if (target === 'emergentes') {
     filterTier('emerging');
-    navR.classList.remove('active'); document.getElementById('nav-emergentes').classList.add('active');
-    history.replaceState(null,'','#emergentes');
+    history.replaceState(null,'','#emergentes');   // ya no hay pestaña; los links viejos abren el ranking filtrado
   } else {
     filterTier('all');
     history.replaceState(null,'',location.pathname);
