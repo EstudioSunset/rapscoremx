@@ -103,7 +103,7 @@
       </div>
       <button type="button" class="fl-end" id="flEnd">■ Terminar sesión</button>
       <p class="fl-hist" id="flHist"></p>
-      <p class="fl-note">Usa audífonos o una bocina. No grabamos tu voz ni guardamos nada de lo que improvises. Los beats de prueba se generan en tu navegador; pronto llegan los beats originales de la casa.</p>
+      <p class="fl-note">Usa audífonos o una bocina. No grabamos tu voz ni guardamos nada de lo que improvises. Los beats de práctica se generan en tu navegador y los de la casa son originales de RapScore MX.</p>
     </div>`;
     buildSetup();
     bindEvents();
