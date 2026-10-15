@@ -2339,6 +2339,17 @@ const RAW_ARTISTS = [
     bio: 'Dayner Roblero, rapero de Motozintla, Chiapas, que busca poner el rap chiapaneco en el mapa. Temas como "Cumbia del Cafetal", "Mi Vida" y "No Era Necesario" (2024).' },
   { name: 'República Antigua', tier: 'emerging', estado: 'Chiapas', tags: ['Tuxtla Gutiérrez','Rap','Grupo'],
     bio: 'Grupo de rap de Tuxtla Gutiérrez, Chiapas.' },
+  // Veracruz (agregados el 15 de octubre de 2026; datos de su perfil de Spotify y prensa)
+  { name: 'Coko Yamasaki', tier: 'active', estado: 'Veracruz', tags: ['Puerto de Veracruz','Rap','Hip Hop'],
+    bio: 'Rapero nacido en la Ciudad de México y criado en el Puerto de Veracruz; músico desde los 9 años y en el hip hop desde los 11. Sacó los EP "Reiniciando" y "Recargando" (2021) y ha grabado con C-Kan ("Dan pena ajena"), Adán Cruz, Remik González y Faruz Feet.' },
+  { name: 'Stilo', tier: 'active', estado: 'Veracruz', tags: ['Xalapa','Rap','Rap Mexa'],
+    bio: 'Rapero de Xalapa, independiente desde 2007, de voz sombría y versátil; mezcla rap con música mexicana. Discos "Larga Distancia" (2018), "Números" (2019), "A Lo Mexa" (2022, con "Borracho") y "Siete Vidas". "La Morena", con Bipo Montana, pasa de 7 millones de reproducciones.' },
+  { name: 'Jay Romero', tier: 'active', estado: 'Veracruz', tags: ['Veracruz','Rap','R&B'],
+    bio: 'Rapero veracruzano conocido como "El Flaco Diamante" y cofundador del sello Rich Vagos (2018) con Gera MX y Bipo Montana. Mezcla rap y R&B; discos "Desayuno a la Cama" (2017) y "Fortuna" (2020), y colaboraciones con Gera MX, C-Kan y Santa Fe Klan.' },
+  { name: 'Javier Kaze', tier: 'emerging', estado: 'Veracruz', tags: ['Xalapa','Rap','Freestyle'],
+    bio: 'Rapero, compositor y productor independiente nacido en Xalapa en 1996. MC, host y freestyler; además del rap canta R&B, reggae y dancehall. Temas como "Venimos de Abajo" y "Gallo de Pelea" con ElReghosg.' },
+  { name: 'Hugo Alarcón', tier: 'emerging', estado: 'Veracruz', tags: ['Xalapa','Rap','Nueva Escuela'],
+    bio: 'Rapero de Xalapa con el sello Loudness Music desde 2021. Discos "Enfocado" (2022), "Hechos en México" y "Basado en Hechos Reales" (2023); graba seguido con Carlos Luengo ("Niña Bien", "Tomando por Ti").' },
 ];
 
 // compute total
@@ -2620,6 +2631,8 @@ const SPOTIFY_IDS = {
   'iluminatik': '0N6H5exnFMoW4yNQ3vDJ3Z', 'jauria-santa': '662f8mEv1eRLXE9DzBy4vV',
   'bory-rvh': '7CYs7xRtL5UgcCB1tatWE6', 'frecuencia-callejera-3': '2rtVaOGYvBypK1RrBVcATE', 'aryez': '6cGAAJbPjB3z93g2hgXtPE',
   'dayner-mc': '76T4r6b1XnFhwYJXydy0sy',
+  'coko-yamasaki': '1txbs9MMkT4FszkaA96atm', 'stilo': '6nyqrmf9qc4W94YKtsPel9', 'jay-romero': '4VECwDIJ0DYczPqCyP85kQ',
+  'javier-kaze': '1j5MHON8mBRtqYF4oLYpAH', 'hugo-alarcon': '71QHn06XTdsxhkfQQTvYzm',
 };
 
 // Botones para escuchar al artista antes de calificarlo. YouTube: link directo si el artista tiene `youtube`,
@@ -4592,6 +4605,7 @@ const CITY_COORDS = {
   'iramuco, gto.': [20.02, -100.92], 'linares, nl': [24.86, -99.57], 'matamoros': [25.87, -97.50],
   'merida': [20.97, -89.62], 'san luis potosi': [22.15, -100.98],
   'tapachula': [14.91, -92.26], 'tuxtla gutierrez': [16.75, -93.12], 'motozintla': [15.37, -92.25],
+  'puerto de veracruz': [19.18, -96.13],
 };
 const normCity = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 // El SVG del mapa está en proyección Mercator; estos números se ajustaron con los límites de varios estados (error ~1 px)
