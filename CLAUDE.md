@@ -68,3 +68,8 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - En pausa (Adn lo pidió así): que usuarios propongan corregir la ciudad de origen de un rapero (ciudad + link de prueba → revisión en Admin → se mueve el punto; da puntos). Requiere cambiar `firestore.rules`.
 
 **Caché de scripts:** los `<script src="letras.js?v=AAAAMMDD">` (y letras-share, freestyle, freestyle-ui) llevan versión. **Al cambiar cualquiera de esos archivos, sube el `?v=` en index.html**; si no, los celulares siguen usando el archivo viejo (así salió "UNDEFINED" en el índice).
+
+**Anti-bots (oct 2026):**
+- Votar/proponer exige correo verificado, **no desechable** (`DISPOSABLE_DOMAINS` en index.html y `disposableEmail()` en firestore.rules: mantener las dos listas iguales) y **no bloqueado** (`banned/{uid}`).
+- Admin → pestaña **Votos sospechosos** (`adminSuspects`): cuentas que solo calificaron 1–2 artistas con todo 10 (o todo 1), cuentas con ≥80% de calificaciones extremas, 5 calificaciones en menos de 1 minuto, y artistas con ≥5 votos en 24 h mayormente en 10. Botones: **Anular sus votos** (`adminVoid`: borra la calificación y resta sus valores de `artistStats` con `lastVoid`) y **Anular y bloquear**. Las cuentas bloqueadas se ocultan del ranking de contribuyentes.
+- Pendiente (lo activa Adn): **App Check con reCAPTCHA v3** para que Firestore solo acepte peticiones desde el sitio. Adn crea la llave en google.com/recaptcha/admin (v3, dominios rapscoremx.com y www.rapscoremx.com), pega la clave secreta en Firebase → App Check, y pasa la clave del sitio (pública) para conectarla con `initializeAppCheck`. Activar la protección obligatoria en Firestore solo cuando las métricas de App Check muestren casi todo verificado.

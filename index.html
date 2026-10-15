@@ -1025,6 +1025,9 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rate-n:focus-visible { outline:1px solid var(--accent2); outline-offset:2px; }
 .rate-row.missing .rate-n { border-color:rgba(255,60,0,.6); }
 .rate-row.missing .rate-cat { color:var(--accent); }
+.adm-switch { margin:0 0 14px; }
+.adm-flag { font-size:12px; color:var(--accent2); margin-top:4px; }
+.adm-votes { margin-top:8px; padding-top:8px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:2px; }
 .rate-cat { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
 .rate-val { font-family:'Bebas Neue',sans-serif; font-size:20px; text-align:right; color:var(--text); }
 .rate-hint { font-size:10px; color:var(--muted); margin:-4px 0 10px; }
@@ -3224,6 +3227,67 @@ window.renderMyProps = renderMyProps;
 
 // ─── PANEL DE ADMINISTRACIÓN (#admin) ───────────────────────
 let adminTab = 'pending';
+let adminView = 'props';   // 'props' = propuestas · 'votes' = votos sospechosos
+function adminSwitch() {
+  return `<div class="vp-chips adm-switch">
+    <button class="vp-chip ${adminView === 'props' ? 'active' : ''}" onclick="adminView='props';renderAdmin()">Propuestas</button>
+    <button class="vp-chip ${adminView === 'votes' ? 'active' : ''}" onclick="adminView='votes';renderAdmin()">Votos sospechosos</button>
+  </div>`;
+}
+// Señales de votos inflados. No anula nada sola: el admin revisa y decide.
+function adminSuspects(data) {
+  const isTop = r => CATEGORIES.every(c => (r.scores?.[c] || 0) >= 100);
+  const isBottom = r => CATEGORIES.every(c => (r.scores?.[c] || 0) <= 10);
+  const bannedSet = new Set(data.banned.map(b => b.uid));
+  const byUser = {};
+  data.ratings.forEach(r => { (byUser[r.uid] = byUser[r.uid] || []).push(r); });
+  const accounts = Object.entries(byUser).filter(([uid]) => !bannedSet.has(uid)).map(([uid, list]) => {
+    list.sort((a, b) => a.at - b.at);
+    const ext = list.filter(r => isTop(r) || isBottom(r)).length;
+    const reasons = [];
+    if (list.length <= 2 && ext === list.length) reasons.push(`Solo calificó ${list.length === 1 ? 'a 1 artista' : 'a 2 artistas'}, todo con ${isTop(list[0]) ? '10' : '1'}`);
+    else if (list.length >= 3 && ext / list.length >= 0.8) reasons.push(`${ext} de ${list.length} calificaciones son todo 10 o todo 1`);
+    for (let i = 0; i + 4 < list.length; i++) {
+      if (list[i + 4].at && list[i].at && list[i + 4].at - list[i].at < 60000) { reasons.push('Calificó 5 artistas en menos de un minuto'); break; }
+    }
+    return { uid, name: data.names[uid] || '', list, reasons };
+  }).filter(a => a.reasons.length).sort((a, b) => b.reasons.length - a.reasons.length || b.list.length - a.list.length);
+  // Artistas con muchos votos de 10 en las últimas 24 horas
+  const since = Date.now() - 864e5, recent = {};
+  data.ratings.filter(r => r.at > since).forEach(r => { const k = r.artistSlug; recent[k] = recent[k] || { n: 0, top: 0, name: r.artist }; recent[k].n++; if (isTop(r)) recent[k].top++; });
+  const spikes = Object.entries(recent).filter(([, v]) => v.n >= 5 && v.top / v.n >= 0.6).map(([slug, v]) => ({ slug, ...v })).sort((a, b) => b.n - a.n);
+  return { accounts, spikes };
+}
+function renderAdminVotes(sec) {
+  const data = window.RS_ADMIN_VOTES;
+  if (!data) { sec.innerHTML = `<div class="votar-wrap">${adminSwitch()}<p class="vcard-text">Cargando votos…</p></div>`; window.adminLoadVotes && window.adminLoadVotes(); return; }
+  const { accounts, spikes } = adminSuspects(data);
+  const avg = r => (CATEGORIES.reduce((t, c) => t + (r.scores?.[c] || 0), 0) / CATEGORIES.length / 10).toFixed(1);
+  const when = t => t ? new Date(t).toLocaleString('es-MX', { dateStyle: 'short', timeStyle: 'short' }) : '';
+  sec.innerHTML = `
+    <div class="votar-wrap">
+      <div class="hero-label">Administración</div>
+      <h2 class="adm-title">Votos sospechosos</h2>
+      ${adminSwitch()}
+      <p class="vcard-text">Cuentas con señales de votos inflados: solo calificaron a 1 o 2 artistas con todo en 10 (o todo en 1), casi todas sus calificaciones son extremas, o calificaron muy rápido. <strong>Una señal no prueba que sea bot</strong>: un fan real también puede ponerle 10 a su favorito. Revisa antes de anular. Anular resta sus votos del artista; bloquear además impide que esa cuenta vuelva a votar.</p>
+      <div class="vp-chips" style="margin-bottom:16px"><span class="vp-chip">${data.ratings.length} calificaciones · ${new Set(data.ratings.map(r => r.uid)).size} cuentas</span><button class="vp-chip" onclick="window.RS_ADMIN_VOTES=null;renderAdmin()">↻ Actualizar</button></div>
+      ${spikes.length ? `<div class="adm-card"><div class="adm-name">Artistas con muchos 10 en las últimas 24 h</div>${spikes.map(s => `<div class="vs-sub">${esc(s.name || s.slug)}: ${s.n} calificaciones, ${s.top} con todo en 10</div>`).join('')}</div>` : ''}
+      ${accounts.length ? accounts.map(a => `
+        <div class="adm-card">
+          <div class="adm-head"><div>
+            <div class="adm-name">${esc(a.name || 'Sin nombre')} <small class="vs-sub">· cuenta ${esc(a.uid.slice(0, 6))}…</small></div>
+            ${a.reasons.map(t => `<div class="adm-flag">⚠ ${esc(t)}</div>`).join('')}
+          </div></div>
+          <div class="adm-votes">${a.list.map(r => `<div class="vs-sub">${esc(r.artist || r.artistSlug)} · <b>${avg(r)}</b> · ${when(r.at)}</div>`).join('')}</div>
+          <div class="pop-actions" style="margin-top:8px">
+            <button class="btn-sm" onclick="if(confirm('¿Anular los ${a.list.length} voto(s) de esta cuenta?'))adminVoid('${esc(a.uid)}', false)">Anular sus votos</button>
+            <button class="btn-sm adm-del" onclick="if(confirm('¿Anular sus votos y bloquear la cuenta? Ya no podrá votar.'))adminVoid('${esc(a.uid)}', true)">Anular y bloquear</button>
+          </div>
+        </div>`).join('') : `<div class="vp-empty">${data.error ? 'No se pudieron leer los votos. Revisa que las reglas nuevas estén publicadas.' : 'No hay cuentas sospechosas por ahora.'}</div>`}
+      ${data.banned.length ? `<div class="vcard-title" style="margin:24px 0 8px">Cuentas bloqueadas (${data.banned.length})</div>${data.banned.map(b => `
+        <div class="mp-row"><span>${esc(data.names[b.uid] || 'Sin nombre')} <small>cuenta ${esc(b.uid.slice(0, 6))}… · ${when(b.at)}</small></span><button class="btn-sm" onclick="adminUnban('${esc(b.uid)}')">Desbloquear</button></div>`).join('')}` : ''}
+    </div>`;
+}
 function renderAdmin() {
   const sec = document.getElementById('section-admin');
   if (!sec) return;
@@ -3231,6 +3295,7 @@ function renderAdmin() {
     sec.innerHTML = `<div class="votar-wrap"><div class="vcard"><div class="vcard-title">Administración</div><p class="vcard-text">Esta sección es solo para administradores. Inicia sesión con la cuenta de administrador.</p><button class="rate-submit" onclick="openAuthModal('login')">Iniciar sesión</button></div></div>`;
     return;
   }
+  if (adminView === 'votes') { renderAdminVotes(sec); return; }
   const all = window.RS_ADMIN_PROPS;
   if (!all) { sec.innerHTML = `<div class="votar-wrap"><p class="vcard-text">Cargando propuestas…</p></div>`; window.adminLoad && window.adminLoad(); return; }
   const count = (st) => all.filter(p => p.status === st).length;
@@ -3239,6 +3304,7 @@ function renderAdmin() {
     <div class="votar-wrap">
       <div class="hero-label">Administración</div>
       <h2 class="adm-title">Propuestas de raperos</h2>
+      ${adminSwitch()}
       <p class="vcard-text">Revisa el link antes de aprobar. Puedes corregir nombre, estilo, link o descripción. Al aprobar, el rapero aparece en Por Estado y quien lo propuso gana +${POINTS_PROPOSAL} pts.</p>
       <div class="vp-chips" style="margin-bottom:16px">
         ${['pending','approved','rejected'].map(t => `<button class="vp-chip ${adminTab===t?'active':''}" onclick="adminTab='${t}';renderAdmin()">${PROP_STATUS[t]} (${count(t)})</button>`).join('')}
@@ -5254,6 +5320,15 @@ window.openAuthModal         = openAuthModal;
 window.closeAuthModal        = closeAuthModal;
 window.closeAuthModalOutside = closeAuthModalOutside;
 
+// Correos desechables: no pueden registrarse ni votar (la misma lista está en firestore.rules → disposableEmail())
+const DISPOSABLE_DOMAINS = new Set('mailinator.com guerrillamail.com guerrillamail.net guerrillamail.org sharklasers.com grr.la 10minutemail.com 10minutemail.net temp-mail.org temp-mail.io tempmail.com tempmail.net tempmailo.com tempmail.plus yopmail.com yopmail.net yopmail.fr trashmail.com trashmail.de getnada.com nada.email dispostable.com maildrop.cc mailnesia.com mintemail.com mohmal.com throwawaymail.com fakeinbox.com emailondeck.com mailcatch.com mytemp.email tempr.email discard.email spamgourmet.com burnermail.io 1secmail.com 1secmail.net 1secmail.org mail.tm mail.gw moakt.com tmpmail.org tmpmail.net tmail.ws inboxkitten.com mailpoof.com emailfake.com generator.email fakemail.net tempinbox.com spambox.us luxusmail.org emltmp.com cyclesat.com'.split(' '));
+function isDisposableEmail(email) {
+  const dom = String(email).toLowerCase().split('@')[1] || '';
+  const parts = dom.split('.');
+  for (let i = 0; i < parts.length - 1; i++) if (DISPOSABLE_DOMAINS.has(parts.slice(i).join('.'))) return true;
+  return false;
+}
+
 // ── AUTH SUBMIT ───────────────────────────────────────────────
 document.getElementById("authSubmitBtn").addEventListener("click", async () => {
   const email    = document.getElementById("authEmail").value.trim();
@@ -5262,6 +5337,7 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
   if (password.length < 6) { showToast("La contraseña debe tener mínimo 6 caracteres"); return; }
   try {
     if (authMode === "register") {
+      if (isDisposableEmail(email)) { showToast("Usa un correo personal (Gmail, Outlook, iCloud…). No aceptamos correos temporales."); return; }
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", cred.user.uid), {
         email, role: "user", createdAt: serverTimestamp()
@@ -5362,8 +5438,12 @@ async function loadMe(user) {
 
 async function loadBoard() {
   try {
-    const snap = await getDocs(query(collection(db, "contributors"), orderBy("points", "desc"), limit(20)));
-    window.RS_BOARD = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.points > 0);
+    const [snap, bSnap] = await Promise.all([
+      getDocs(query(collection(db, "contributors"), orderBy("points", "desc"), limit(25))),
+      getDocs(collection(db, "banned")).catch(() => null)
+    ]);
+    const blocked = new Set(bSnap ? bSnap.docs.map(d => d.id) : []);
+    window.RS_BOARD = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.points > 0 && !blocked.has(r.id)).slice(0, 20);
   } catch (err) { console.warn("RapScore contribuyentes:", err.code || err.message); window.RS_BOARD = []; }
   if (window.renderVotarSide) window.renderVotarSide();
 }
@@ -5659,6 +5739,65 @@ window.adminReview = async function(id, action, fields) {
     console.error(err);
     showToast(err.code === "permission-denied" ? "Sin permiso: revisa que las reglas estén publicadas" : (err.message || "Error"));
   }
+};
+
+// ── VOTOS SOSPECHOSOS (solo admin) ────────────────────────────
+window.adminLoadVotes = async function() {
+  if (!window.RS_IS_ADMIN) return;
+  try {
+    const [rSnap, cSnap, bSnap] = await Promise.all([
+      getDocs(collection(db, "ratings")), getDocs(collection(db, "contributors")), getDocs(collection(db, "banned"))
+    ]);
+    const names = {};
+    cSnap.forEach(d => { names[d.id] = d.data().name || ""; });
+    window.RS_ADMIN_VOTES = {
+      ratings: rSnap.docs.map(d => ({ id: d.id, ...d.data(), at: d.data().updatedAt?.toMillis?.() || 0 })),
+      names,
+      banned: bSnap.docs.map(d => ({ uid: d.id, ...d.data(), at: d.data().at?.toMillis?.() || 0 }))
+    };
+  } catch (err) {
+    console.error(err);
+    showToast(err.code === "permission-denied" ? "Sin permiso: publica las reglas nuevas de Firebase" : "No se pudieron cargar los votos");
+    window.RS_ADMIN_VOTES = { ratings: [], names: {}, banned: [], error: true };
+  }
+  if (window.renderAdmin) window.renderAdmin();
+};
+// Anula todas las calificaciones de una cuenta (resta sus valores del artista) y, si se pide, la bloquea
+window.adminVoid = async function(uid, ban) {
+  if (!window.RS_IS_ADMIN || !window.RS_ADMIN_VOTES) return;
+  const me = auth.currentUser.uid;
+  const mine = window.RS_ADMIN_VOTES.ratings.filter(r => r.uid === uid);
+  let ok = 0;
+  try {
+    if (ban) await setDoc(doc(db, "banned", uid), { reason: "Votos sospechosos", by: me, at: serverTimestamp() });
+    for (const r of mine) {
+      const rRef = doc(db, "ratings", r.id), sRef = doc(db, "artistStats", r.artistSlug);
+      await runTransaction(db, async (tx) => {
+        const rSnap = await tx.get(rRef), sSnap = await tx.get(sRef);
+        if (!rSnap.exists() || !sSnap.exists()) return;
+        const sc = rSnap.data().scores, st = sSnap.data(), sum = {};
+        CATS.forEach(c => { sum[c] = (st.sum?.[c] || 0) - (sc[c] || 0); });
+        tx.set(sRef, { count: Math.max(0, (st.count || 0) - 1), sum, updatedAt: serverTimestamp(), lastVoid: r.id });
+        tx.delete(rRef);
+      });
+      ok++;
+    }
+    showToast(`${ok} voto${ok === 1 ? "" : "s"} anulado${ok === 1 ? "" : "s"}${ban ? " · cuenta bloqueada" : ""} ✓`);
+    rsTrack("admin_void_votes", { votes: ok, banned: ban ? "yes" : "no" });
+  } catch (err) {
+    console.error(err);
+    showToast(err.code === "permission-denied" ? "Sin permiso: publica las reglas nuevas de Firebase" : (err.message || "Error"));
+  }
+  await window.adminLoadVotes();
+  loadCommunity();
+  loadBoard();
+};
+window.adminUnban = async function(uid) {
+  if (!window.RS_IS_ADMIN) return;
+  try { await deleteDoc(doc(db, "banned", uid)); showToast("Cuenta desbloqueada"); }
+  catch (err) { showToast("No se pudo desbloquear"); }
+  await window.adminLoadVotes();
+  loadBoard();
 };
 
 // ── NOMBRE EN EL RANKING DE CONTRIBUYENTES ────────────────────

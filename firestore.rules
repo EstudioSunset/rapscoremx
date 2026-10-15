@@ -11,18 +11,24 @@ rules_version = '2';
 //   contributors/{uid}          puntos y nombre público de cada contribuyente (lectura pública)
 //   limits/{uid}                control anti-spam de propuestas (1 cada 10 min)
 //   admins/{uid}                administradores (se crean a mano en la consola; nadie puede escribirlos desde el sitio)
+//   banned/{uid}                cuentas bloqueadas por el admin (ya no pueden votar ni proponer; lectura pública para ocultarlas del ranking de contribuyentes)
 //
 // Las propuestas quedan en "pending" y solo se publican cuando un admin las aprueba.
 //
 // IMPORTANTE: al agregar artistas nuevos al ranking, agrega su slug a knownArtists().
 //
-// Para votar o proponer se requiere cuenta con correo verificado.
+// Para votar o proponer se requiere cuenta con correo verificado, que no sea de un servicio de correos
+// desechables (lista en disposableEmail(); la misma lista está en index.html → DISPOSABLE_DOMAINS) y que no esté bloqueada.
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
     function signedIn() { return request.auth != null; }
-    function verified() { return signedIn() && request.auth.token.email_verified == true; }
+    function disposableEmail() {
+      return request.auth.token.get('email', '').lower().matches('.*@([a-z0-9-]+\\.)*(mailinator\\.com|guerrillamail\\.com|guerrillamail\\.net|guerrillamail\\.org|sharklasers\\.com|grr\\.la|10minutemail\\.com|10minutemail\\.net|temp-mail\\.org|temp-mail\\.io|tempmail\\.com|tempmail\\.net|tempmailo\\.com|tempmail\\.plus|yopmail\\.com|yopmail\\.net|yopmail\\.fr|trashmail\\.com|trashmail\\.de|getnada\\.com|nada\\.email|dispostable\\.com|maildrop\\.cc|mailnesia\\.com|mintemail\\.com|mohmal\\.com|throwawaymail\\.com|fakeinbox\\.com|emailondeck\\.com|mailcatch\\.com|mytemp\\.email|tempr\\.email|discard\\.email|spamgourmet\\.com|burnermail\\.io|1secmail\\.com|1secmail\\.net|1secmail\\.org|mail\\.tm|mail\\.gw|moakt\\.com|tmpmail\\.org|tmpmail\\.net|tmail\\.ws|inboxkitten\\.com|mailpoof\\.com|emailfake\\.com|generator\\.email|fakemail\\.net|tempinbox\\.com|spambox\\.us|luxusmail\\.org|emltmp\\.com|cyclesat\\.com)$');
+    }
+    function banned() { return exists(/databases/$(database)/documents/banned/$(request.auth.uid)); }
+    function verified() { return signedIn() && request.auth.token.email_verified == true && !disposableEmail() && !banned(); }
     function isAdmin() { return verified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
     function limitDoc(uid) { return /databases/$(database)/documents/limits/$(uid); }
 
@@ -91,6 +97,10 @@ service cloud.firestore {
     match /ratings/{rid} {
       allow get: if signedIn() && rid.matches(request.auth.uid + '_.+');
       allow list: if signedIn() && resource.data.uid == request.auth.uid;
+      // El admin revisa todas las calificaciones (panel "Votos sospechosos")
+      allow get, list: if isAdmin();
+      // El admin anula una calificación: se borra en la misma transacción que resta sus valores de artistStats
+      allow delete: if isAdmin() && getAfter(statsDoc(resource.data.artistSlug)).data.get('lastVoid', '') == rid;
       allow create, update: if verified()
         && validSlug(request.resource.data.artistSlug)
         && knownSlug(request.resource.data.artistSlug)
@@ -103,7 +113,6 @@ service cloud.firestore {
         && validScores(request.resource.data.scores)
         && statsConsistent(request.resource.data.artistSlug, request.resource.data.scores,
                            resource == null ? null : resource.data.scores);
-      allow delete: if false;
     }
 
     match /artistStats/{slug} {
@@ -116,7 +125,26 @@ service cloud.firestore {
         && request.resource.data.count is int && request.resource.data.count >= 1
         && request.resource.data.updatedAt == request.time
         && getAfter(ratingDoc(request.auth.uid, slug)).data.updatedAt == request.time;
+      // Anulación por el admin: resta exactamente la calificación que se está borrando (lastVoid = id de esa calificación)
+      allow update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['count', 'sum', 'updatedAt', 'lastVoid'])
+        && request.resource.data.updatedAt == request.time
+        && voidOk(slug, request.resource.data.lastVoid);
       allow delete: if false;
+    }
+
+    function subOk(after, before, s, c) { return after[c] is int && after[c] == before.get(c, 0) - s[c]; }
+    function voidOk(slug, rid) {
+      let r = get(/databases/$(database)/documents/ratings/$(rid)).data;
+      let after = request.resource.data;
+      let before = resource.data;
+      return rid is string && r.artistSlug == slug
+        && !existsAfter(/databases/$(database)/documents/ratings/$(rid))
+        && after.count is int && after.count == before.count - 1
+        && after.sum.keys().hasOnly(cats())
+        && subOk(after.sum, before.sum, r.scores, 'flow') && subOk(after.sum, before.sum, r.scores, 'lirica')
+        && subOk(after.sum, before.sum, r.scores, 'contenido') && subOk(after.sum, before.sum, r.scores, 'versatilidad')
+        && subOk(after.sum, before.sum, r.scores, 'hooks') && subOk(after.sum, before.sum, r.scores, 'impacto');
     }
 
     function proposalFieldsOk(d) {
@@ -162,6 +190,17 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['lastProposalAt'])
         && request.resource.data.lastProposalAt == request.time;
       allow delete: if false;
+    }
+
+    match /banned/{uid} {
+      allow read: if true;
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(['reason', 'by', 'at'])
+        && request.resource.data.by == request.auth.uid
+        && request.resource.data.at == request.time
+        && request.resource.data.reason is string && request.resource.data.reason.size() <= 120;
+      allow update: if false;
+      allow delete: if isAdmin();
     }
 
     match /admins/{uid} {
