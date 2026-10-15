@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RapScore MX">
 <meta property="og:title" content="RapScore MX — El ranking del rap mexicano lo decides tú">
-<meta property="og:description" content="Una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Todos arrancan en 50: tu voto mueve el ranking.">
+<meta property="og:description" content="Una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Califica a tus raperos del 1 al 10: tu voto mueve el ranking.">
 <meta property="og:url" content="https://www.rapscoremx.com/">
 <meta property="og:image" content="https://www.rapscoremx.com/images/rapscore-logo.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -1016,18 +1016,19 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rate-title { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--text); }
 .rate-badge { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--accent2); border:1px solid rgba(255,204,0,.35); padding:2px 8px; }
 .rate-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; }
-.rate-row { display:grid; grid-template-columns:88px 1fr 34px; align-items:center; gap:10px; cursor:pointer; }
+.rate-row { display:flex; flex-direction:column; gap:6px; padding:4px 0; }
+.rate-row-head { display:flex; justify-content:space-between; align-items:baseline; }
+.rate-scale { display:grid; grid-template-columns:repeat(10, 1fr); gap:3px; }
+.rate-n { min-height:40px; padding:0; background:var(--surface, #111); border:1px solid var(--border); color:#cfc9bf; font-family:'Bebas Neue',sans-serif; font-size:19px; cursor:pointer; }
+.rate-n:hover { border-color:#555; color:var(--text); }
+.rate-n.on { background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
+.rate-n:focus-visible { outline:1px solid var(--accent2); outline-offset:2px; }
+.rate-row.missing .rate-n { border-color:rgba(255,60,0,.6); }
+.rate-row.missing .rate-cat { color:var(--accent); }
 .rate-cat { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
 .rate-val { font-family:'Bebas Neue',sans-serif; font-size:20px; text-align:right; color:var(--text); }
-/* Barra con área de toque alta (antes medía 4px y los taps no la movían). --p = valor en %, pinta la parte llena */
-.rate-row input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:40px; background:transparent; outline:none; margin:0; cursor:pointer; touch-action:pan-y; }
-.rate-row input[type=range]::-webkit-slider-runnable-track { height:6px; background:linear-gradient(to right, var(--accent) var(--p, 50%), var(--border) var(--p, 50%)); }
-.rate-row input[type=range]::-moz-range-track { height:6px; background:var(--border); }
-.rate-row input[type=range]::-moz-range-progress { height:6px; background:var(--accent); }
-.rate-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; height:24px; margin-top:-9px; background:var(--accent); border:2px solid #0a0a0a; box-shadow:0 0 0 1px var(--accent); cursor:pointer; }
-.rate-row input[type=range]::-moz-range-thumb { width:22px; height:22px; background:var(--accent); border:2px solid #0a0a0a; border-radius:0; cursor:pointer; }
 .rate-hint { font-size:10px; color:var(--muted); margin:-4px 0 10px; }
-/* Avatares: foto (Commons) o graffiti generado; llenan su recuadro */
+/* Avatares: foto (Commons) o iniciales generadas; llenan su recuadro */
 .avatar, .vp-av, .vs-av, .poster-av, .la-avatar { overflow:hidden; padding:0; }
 .avatar > img, .vp-av > img, .vs-av > img, .poster-av > img, .la-avatar > img, .expanded-photo > img,
 .avatar > svg, .vp-av > svg, .vs-av > svg, .poster-av > svg, .la-avatar > svg { width:100%; height:100%; object-fit:cover; display:block; }
@@ -1058,7 +1059,6 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .sug-box-close { position:absolute; top:6px; right:6px; width:40px; height:40px; background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; }
 .sug-tab { position:fixed; right:0; bottom:120px; z-index:290; display:none; background:var(--accent); color:#000; border:none; padding:12px 10px; font-family:'Space Mono',monospace; font-weight:700; font-size:11px; letter-spacing:1px; text-transform:uppercase; writing-mode:vertical-rl; transform:rotate(180deg); cursor:pointer; }
 .sug-tab.show { display:block; }
-.rate-row input[type=range]:focus-visible { outline:1px solid var(--accent2); outline-offset:4px; }
 .rate-actions { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:14px; }
 .rate-submit { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:10px 18px; background:var(--accent); color:#fff; border:none; cursor:pointer; }
 .rate-submit:hover { filter:brightness(1.1); }
@@ -1801,7 +1801,7 @@ body .pop-list li { font-size: 15px; }
   <div class="nh-hero-inner">
     <span class="nh-kicker">Lo decidimos todos</span>
     <h1 class="nh-title">El ranking<br><em>del rap mexicano.</em></h1>
-    <p class="nh-sub">La comunidad decide la calle. Califica a tus MCs en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Todos arrancan en 50 y el promedio de la comunidad manda.</p>
+    <p class="nh-sub">Califica a tus MCs del 1 al 10 en Flow, Lírica, Contenido, Versatilidad, Hooks e Impacto. Sin jurado ni favoritos: el ranking sale de los votos de la gente.</p>
     <div class="nh-ctas">
       <button type="button" class="nh-btn" data-track="hero_ver_ranking" onclick="scrollToRanking()">Ver ranking <span aria-hidden="true">›</span></button>
       <button type="button" class="nh-btn ghost" data-track="hero_como_funciona" onclick="document.getElementById('welcomeModal').classList.add('open')">Cómo funciona</button>
@@ -1964,7 +1964,7 @@ body .pop-list li { font-size: 15px; }
     <button class="modal-close" onclick="closeWelcome('ranking')" aria-label="Cerrar">✕</button>
     <div class="pop-label">Bienvenido a RapScore MX</div>
     <div class="pop-title" id="welcomeTitle">EL RANKING<br>LO DECIDES <em>TÚ</em></div>
-    <p class="pop-text">Somos una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Aquí no hay jurado: todos los raperos arrancan en <strong>50</strong> y cada voto mueve el ranking.</p>
+    <p class="pop-text">Somos una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Aquí no hay jurado: calificas a cada rapero del <strong>1 al 10</strong> y cada voto mueve el ranking.</p>
     <p class="pop-text pop-note">Estamos arrancando: el ranking <strong>se va ajustando</strong> con cada calificación. Si ves a alguien fuera de lugar, tu voto lo acomoda.</p>
     <ul class="pop-list">
       <li>Califica a tus raperos en 6 categorías</li>
@@ -1985,7 +1985,7 @@ body .pop-list li { font-size: 15px; }
     <button class="modal-close" onclick="closeAjuste()" aria-label="Cerrar">✕</button>
     <div class="pop-label">Ranking en proceso de ajuste</div>
     <div class="pop-title" id="ajusteTitle">EL RANKING SE<br>ESTÁ <em>AJUSTANDO</em></div>
-    <p class="pop-text">Estamos arrancando. Todos los raperos empezaron en <strong>50</strong> y el ranking se va ajustando con cada calificación de la comunidad.</p>
+    <p class="pop-text">Estamos arrancando. Muchos raperos todavía no tienen votos y el ranking se va ajustando con cada calificación de la comunidad.</p>
     <p class="pop-text">Entre más gente vote, <strong>mejor y más real es el promedio</strong>. Si ves a alguien muy arriba o muy abajo, tu voto lo pone en su lugar.</p>
     <div class="ajuste-stat" id="ajusteStat"></div>
     <div class="pop-actions">
@@ -2045,7 +2045,7 @@ body .pop-list li { font-size: 15px; }
     </div>
   </div>
   <p class="sf-legal"><strong>Aviso legal:</strong> RapScore MX respeta los derechos de propiedad intelectual y de imagen de los artistas. El contenido visual y musical de terceros se muestra mediante las herramientas de inserción oficiales de cada plataforma (como Spotify, YouTube o Instagram) o con fotografías bajo licencias libres (Creative Commons) con crédito a sus autores; no alojamos imágenes ni grabaciones no autorizadas. Si eres artista o titular de derechos y deseas que retiremos o corrijamos algún contenido, <a href="privacidad.html#derechos">contáctanos</a>.</p>
-  <details class="sf-credits"><summary>Créditos de fotos</summary><p>Fotos de Wikimedia Commons bajo licencias Creative Commons. Los demás artistas se muestran con un avatar de graffiti generado por RapScore MX.</p><ul id="photoCredits"></ul></details>
+  <details class="sf-credits"><summary>Créditos de fotos</summary><p>Fotos de Wikimedia Commons bajo licencias Creative Commons. Los demás artistas se muestran con sus iniciales en un avatar generado por RapScore MX.</p><ul id="photoCredits"></ul></details>
   <div class="sf-copy">© 2026 RapScore MX · Hecho en la comunidad, para la comunidad · Usamos Google Analytics y Microsoft Clarity para mejorar el sitio. <a href="privacidad.html" style="color:inherit">Aviso de privacidad</a></div>
 </footer>
 
@@ -2073,12 +2073,15 @@ function avgScores(scores) {
 }
 
 // ─── VOTACIÓN ───────────────────────────────────────────────
-// Todos los artistas arrancan en BASE_SCORE (nivel medio) en cada categoría.
-// Score por categoría = (K × BASE + n × promedio de usuarios) / (K + n)
-// K = cuántos "votos neutrales" tiene cada artista de inicio. Evita que 1 o 2 votos
-// manden a alguien al #1; con muchos votos manda el promedio de la comunidad.
-const BASE_SCORE = 50;
-const COMMUNITY_WEIGHT_K = 5;
+// Escala que ve el usuario: del 1 al 10 con un decimal (como en la escuela). Por dentro se guarda en 10–100
+// (votar 8 = 80), así los votos viejos siguen valiendo (86 → 8.6) y las reglas de Firebase no cambian.
+// Score por categoría = (K × PRIOR + n × promedio de usuarios) / (K + n)
+// PRIOR = promedio real de todos los votos de la comunidad (no un 5 fijo, que en México se lee como reprobado).
+// K = 2 "votos promedio" de inicio: evita que 1 voto mande a alguien al #1 sin hundir los números.
+// Sin votos no se muestra número: "Sin calificar" (y va después de los calificados).
+const BASE_SCORE = 65;            // respaldo del PRIOR mientras no hay votos
+const COMMUNITY_WEIGHT_K = 2;
+let PRIOR_SCORE = BASE_SCORE;
 
 // Puntos de contribuyente (deben coincidir con firestore.rules)
 const POINTS_RATING = 10;     // por cada artista que calificas por primera vez
@@ -2096,7 +2099,13 @@ function levelFor(points) {
   LEVELS.forEach((l, k) => { if (points >= l.min) i = k; });
   return { ...LEVELS[i], index: i, next: LEVELS[i + 1] || null };
 }
-function fmtTotal(t) { return Number(t).toFixed(1); }
+function fmtTotal(t) { return (Number(t) / 10).toFixed(1); }               // 86.5 → "8.7"
+function fmtScore(t, votes) { return votes ? fmtTotal(t) : '—'; }           // sin votos no hay número
+// Orden del ranking: primero los que tienen votos, luego por score, votos y nombre
+function rankCmp(a, b) {
+  return ((b.votes > 0) - (a.votes > 0)) || (b.total - a.total) || (b.votes - a.votes)
+    || ((a.order ?? 0) - (b.order ?? 0)) || a.name.localeCompare(b.name, 'es');
+}
 window.LEVELS = LEVELS; window.levelFor = levelFor;
 window.POINTS_RATING = POINTS_RATING; window.POINTS_PROPOSAL = POINTS_PROPOSAL;
 window._communityStats = window._communityStats || {};
@@ -2104,7 +2113,7 @@ window._communityStats = window._communityStats || {};
 // Datos verificados el 6 de octubre de 2026 (origen, estado, trayectoria).
 // estado: nombre exacto del estado (coincide con ESTADOS) o '' si no está verificado.
 // female: true para el filtro "Artistas femeninas".
-// Sin puntuación editorial: todos arrancan en BASE_SCORE y la comunidad decide.
+// Sin puntuación editorial: el score sale solo de los votos de la comunidad.
 const RAW_ARTISTS = [
   { name: 'Santa Fe Klan', tier: 'active', estado: 'Guanajuato', tags: ['Guanajuato','Rap Melódico','Cumbia Rap'],
     bio: 'Ángel Quezada, originario de la ciudad de Guanajuato. Uno de los exponentes más influyentes del rap mexicano contemporáneo. Mezcla rap con cumbia, regional mexicano y trap.' },
@@ -2327,7 +2336,7 @@ function blendScores(stat) {
   const exact = {}, scores = {}, comm = {};
   CATEGORIES.forEach(c => {
     comm[c] = n ? (stat.sum?.[c] || 0) / n : 0;
-    exact[c] = (COMMUNITY_WEIGHT_K * BASE_SCORE + n * comm[c]) / (COMMUNITY_WEIGHT_K + n);
+    exact[c] = (COMMUNITY_WEIGHT_K * PRIOR_SCORE + n * comm[c]) / (COMMUNITY_WEIGHT_K + n);
     scores[c] = Math.round(exact[c]);
   });
   const mean = CATEGORIES.reduce((s, c) => s + exact[c], 0) / CATEGORIES.length;
@@ -2345,6 +2354,14 @@ function blendArtist(a, stat) {
 
 window.applyCommunityStats = function(stats) {
   if (stats) window._communityStats = stats;
+  // PRIOR = promedio real de todos los votos (todas las categorías)
+  let pSum = 0, pN = 0;
+  Object.values(window._communityStats || {}).forEach(st => {
+    if (!st || !st.count) return;
+    CATEGORIES.forEach(c => { pSum += st.sum?.[c] || 0; });
+    pN += st.count * CATEGORIES.length;
+  });
+  PRIOR_SCORE = pN ? pSum / pN : BASE_SCORE;
   ARTISTS.forEach(a => blendArtist(a, window._communityStats[a.slug]));
   refreshTable();
   if (typeof buildTicker === 'function') buildTicker();
@@ -2372,9 +2389,8 @@ function refreshTable() {
     const t = currentSearch.toLowerCase();
     list = list.filter(a => a.name.toLowerCase().includes(t) || (a.tags||[]).some(x => x.toLowerCase().includes(t)));
   }
-  list.sort((a,b) => (currentSort === 'total' ? b.total - a.total
-    : (b.scores[currentSort] - a.scores[currentSort]) || (b.total - a.total))
-    || (b.votes - a.votes) || a.name.localeCompare(b.name, 'es'));
+  list.sort((a,b) => currentSort === 'total' ? rankCmp(a, b)
+    : ((b.votes > 0) - (a.votes > 0)) || (b.scores[currentSort] - a.scores[currentSort]) || rankCmp(a, b));
   // El ranking muestra solo el Top 50 (por score total); el resto queda "En la fila"
   const top = rankedSet();
   currentData = list.filter(a => top.has(a.slug));
@@ -2387,7 +2403,7 @@ const RANKING_SIZE = 50;
 // Entran los 50 con mejor total; en empate, más votos y luego el orden del roster.
 function rankedSet() {
   return new Set([...ARTISTS]
-    .sort((a,b) => b.total - a.total || b.votes - a.votes || a.order - b.order)
+    .sort(rankCmp)
     .slice(0, RANKING_SIZE).map(a => a.slug));
 }
 function renderWaiting(list, offset) {
@@ -2422,27 +2438,22 @@ const ARTIST_PHOTOS = {
   'cartel-de-santa': { pos: '50% 30%', autor: 'Rafael Rdzz', lic: 'CC BY-SA 3.0', licUrl: 'https://creativecommons.org/licenses/by-sa/3.0/', page: 'https://commons.wikimedia.org/wiki/File:Cartel%2BDe%2BSanta%2B1862_carteldesanta.jpg' },
 };
 
-// Avatar de graffiti para quien no tiene foto: sus iniciales en marcador con goteo, colores fijos por artista.
-// No intenta parecerse a nadie (sin riesgo de derechos de imagen). Corona = leyenda, estrella = emergente.
-const AV_BG = ['#1c1c1c', '#24160e', '#0e1a24', '#14210f', '#251019', '#1c1428', '#23200c'];
-const AV_INK = ['#ff3c00', '#ffcc00', '#39c0ff', '#00e676', '#ff4fa3', '#b98cff', '#f0ede6'];
+// Avatar para quien no tiene foto: sus iniciales en Bebas Neue sobre fondo oscuro, sobrio.
+// No intenta parecerse a nadie (sin riesgo de derechos de imagen). Línea de abajo: dorada = leyenda,
+// verde = emergente, naranja = activo.
 function hashStr(s) { let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
 function graffitiAvatar(name, tier) {
-  const h = hashStr(name), bg = AV_BG[h % AV_BG.length], ink = AV_INK[(h >>> 3) % AV_INK.length];
-  const rot = ((h >>> 6) % 13) - 6, d1 = 30 + (h >>> 9) % 14, d2 = 52 + (h >>> 12) % 14, l1 = 12 + (h >>> 15) % 16, l2 = 8 + (h >>> 18) % 14;
-  const crown = tier === 'legend' ? '<path d="M70 8l5 6 5-8 5 8 5-6v12H70z" fill="#ffcc00"/>' : '';
-  const star = tier === 'emerging' ? '<path d="M84 6l2.6 6.4 6.4 2.6-6.4 2.6L84 24l-2.6-6.4L75 15l6.4-2.6z" fill="#00e676"/>' : '';
+  const h = hashStr(name), shade = ['#161616', '#181512', '#121518', '#141614'][h % 4];
+  const line = tier === 'legend' ? '#ffcc00' : tier === 'emerging' ? '#00e676' : '#ff3c00';
+  const ini = esc(getInitials(name));
   return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <rect width="100" height="100" fill="${bg}"/>
-    <path d="M0 33h100M0 66h100M33 0v33M66 33v33M33 66v34" stroke="#ffffff" stroke-opacity=".05" stroke-width="2"/>
-    <g transform="rotate(${rot} 50 50)">
-      <rect x="${d1}" y="58" width="4" height="${l1}" rx="2" fill="${ink}"/>
-      <rect x="${d2}" y="58" width="3" height="${l2}" rx="1.5" fill="${ink}"/>
-      <text x="50" y="62" text-anchor="middle" font-family="Saira Stencil One, Bebas Neue, sans-serif" font-size="38" fill="${ink}" stroke="#0a0a0a" stroke-width="2.5" paint-order="stroke">${esc(getInitials(name))}</text>
-    </g>${crown}${star}
+    <rect width="100" height="100" fill="${shade}"/>
+    <rect x="1" y="1" width="98" height="98" fill="none" stroke="#ffffff" stroke-opacity=".07" stroke-width="2"/>
+    <text x="50" y="${ini.length > 2 ? 63 : 66}" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="${ini.length > 2 ? 36 : 46}" letter-spacing="1" fill="#f0ede6">${ini}</text>
+    <rect x="34" y="78" width="32" height="3" fill="${line}"/>
   </svg>`;
 }
-// Contenido de cualquier recuadro de avatar: foto si tiene, si no el graffiti
+// Contenido de cualquier recuadro de avatar: foto si tiene, si no sus iniciales
 function artistAvatar(a) {
   const slug = a.slug || slugify(a.name), p = ARTIST_PHOTOS[slug];
   if (p) return `<img src="images/artistas/${slug}.jpg" alt="Foto de ${esc(a.name)}" loading="lazy" decoding="async" style="object-position:${p.pos}" title="Foto: ${esc(p.autor)} · ${p.lic}">`;
@@ -2485,26 +2496,26 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
           </div>
         </div>
         <div class="score-cell">
-          <span class="score-val">${artist.scores.flow}</span>
-          <div class="score-bar"><div class="score-fill" style="width:${artist.scores.flow}%"></div></div>
+          <span class="score-val">${fmtScore(artist.scores.flow, artist.votes)}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${artist.votes ? artist.scores.flow : 0}%"></div></div>
         </div>
         <div class="score-cell">
-          <span class="score-val">${artist.scores.lirica}</span>
-          <div class="score-bar"><div class="score-fill" style="width:${artist.scores.lirica}%"></div></div>
+          <span class="score-val">${fmtScore(artist.scores.lirica, artist.votes)}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${artist.votes ? artist.scores.lirica : 0}%"></div></div>
         </div>
         <div class="score-cell">
-          <span class="score-val">${artist.scores.contenido}</span>
-          <div class="score-bar"><div class="score-fill" style="width:${artist.scores.contenido}%"></div></div>
+          <span class="score-val">${fmtScore(artist.scores.contenido, artist.votes)}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${artist.votes ? artist.scores.contenido : 0}%"></div></div>
         </div>
         <div class="score-cell">
-          <span class="score-val">${artist.scores.versatilidad}</span>
-          <div class="score-bar"><div class="score-fill" style="width:${artist.scores.versatilidad}%"></div></div>
+          <span class="score-val">${fmtScore(artist.scores.versatilidad, artist.votes)}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${artist.votes ? artist.scores.versatilidad : 0}%"></div></div>
         </div>
         <div class="score-cell">
-          <span class="score-val">${artist.scores.hooks}</span>
-          <div class="score-bar"><div class="score-fill" style="width:${artist.scores.hooks}%"></div></div>
+          <span class="score-val">${fmtScore(artist.scores.hooks, artist.votes)}</span>
+          <div class="score-bar"><div class="score-fill" style="width:${artist.votes ? artist.scores.hooks : 0}%"></div></div>
         </div>
-        <div class="total-cell"><span class="total-score">${fmtTotal(artist.total)}</span><span class="total-votes">${artist.votes ? artist.votes + ' voto' + (artist.votes===1?'':'s') : 'sin votos'}</span></div>
+        <div class="total-cell"><span class="total-score">${fmtScore(artist.total, artist.votes)}</span><span class="total-votes">${artist.votes ? artist.votes + ' voto' + (artist.votes===1?'':'s') : 'sin calificar'}</span></div>
         <div class="action-cell">
           <button class="expand-btn" data-name="${artist.name}" onclick="toggleExpand(event,'${artist.name}')">▾</button>
         </div>
@@ -2612,27 +2623,40 @@ function loadSpotifyPlayer(btn, id, name) {
   rsTrack('listen_click', { artist_name: name, platform: 'spotify_player' });
 }
 
-function buildRateBox(slug, name, baseScores) {
+// Calificación por toques: 10 botones por categoría, ninguno marcado de inicio (así nadie deja un valor por flojera).
+// Se guarda ×10 (8 → 80) para que valga igual que los votos viejos de 1–100.
+const toTen = v => Math.min(10, Math.max(1, Math.round(v / 10)));
+function rateButtons(c, val) {
+  return Array.from({ length: 10 }, (_, k) => k + 1).map(n =>
+    `<button type="button" class="rate-n${val === n ? ' on' : ''}" aria-pressed="${val === n}" aria-label="${CAT_LABELS[c]} ${n}" onclick="ratePick(this, ${n})">${n}</button>`).join('');
+}
+function ratePick(btn, n) {
+  const row = btn.closest('.rate-row');
+  row.querySelectorAll('.rate-n').forEach(b => { const on = b === btn; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  row.dataset.val = n; row.classList.remove('missing');
+  row.querySelector('.rate-val').textContent = n;
+}
+function buildRateBox(slug, name) {
   const mine = typeof window.getMyRating === 'function' ? window.getMyRating(slug) : null;
-  const start = mine || baseScores;
-  const sliders = CATEGORIES.map(c => `
-    <label class="rate-row">
-      <span class="rate-cat">${CAT_LABELS[c]}</span>
-      <input type="range" min="1" max="100" step="1" value="${start[c]}" data-cat="${c}" style="--p:${(start[c] - 1) / 99 * 100}%"
-        oninput="this.nextElementSibling.textContent=this.value;this.style.setProperty('--p',(this.value-1)/99*100+'%')">
-      <output class="rate-val">${start[c]}</output>
-    </label>`).join('');
+  const sliders = CATEGORIES.map(c => {
+    const val = mine ? toTen(mine[c]) : 0;
+    return `
+    <div class="rate-row" data-cat="${c}" data-val="${val || ''}">
+      <div class="rate-row-head"><span class="rate-cat">${CAT_LABELS[c]}</span><output class="rate-val">${val || '–'}</output></div>
+      <div class="rate-scale" role="group" aria-label="${CAT_LABELS[c]}">${rateButtons(c, val)}</div>
+    </div>`;
+  }).join('');
   return `
     <div class="rate-box" data-slug="${esc(slug)}" data-name="${esc(name)}">
       <div class="rate-head">
         <span class="rate-title">${mine ? 'Tu calificación' : 'Califica a ' + esc(name)}</span>
         ${mine ? '<span class="rate-badge">Ya votaste · puedes cambiarla</span>' : ''}
       </div>
-      <div class="rate-hint">Toca o desliza cada barra: izquierda = flojo, derecha = élite.</div>
+      <div class="rate-hint">Toca un número en cada categoría: 1 = flojo · 10 = élite.</div>
       <div class="rate-grid">${sliders}</div>
       <div class="rate-actions">
         <button class="rate-submit" onclick="window.submitRating ? submitRating(this) : showToast('La votación no está disponible en este momento')">${mine ? 'Actualizar calificación' : 'Guardar calificación'}</button>
-        <span class="rate-note">1 = flojo · 100 = élite. Un voto por cuenta; puedes cambiarlo cuando quieras.</span>
+        <span class="rate-note">Un voto por cuenta; puedes cambiarlo cuando quieras.</span>
       </div>
     </div>`;
 }
@@ -2641,8 +2665,8 @@ function buildPanel(artist) {
   const cats = CATEGORIES.map(c => `
     <div class="cat-item">
       <div class="cat-name">${CAT_LABELS[c]}</div>
-      <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:${artist.scores[c]}%"></div></div>
-      <div class="cat-val">${artist.scores[c]}</div>
+      <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:${artist.votes ? artist.scores[c] : 0}%"></div></div>
+      <div class="cat-val">${fmtScore(artist.scores[c], artist.votes)}</div>
     </div>
   `).join('');
   const comm = artist.community;
@@ -2653,13 +2677,13 @@ function buildPanel(artist) {
       <p class="expanded-bio">${esc(artist.bio)}</p>
       ${listenLinks(artist)}
       <div class="score-split">
-        <div class="ss-item"><span class="ss-label">Score RapScore</span><span class="ss-val ss-final">${fmtTotal(artist.total)}</span></div>
+        <div class="ss-item"><span class="ss-label">Score RapScore</span><span class="ss-val ss-final">${fmtScore(artist.total, artist.votes)}</span></div>
         <div class="ss-item"><span class="ss-label">Promedio usuarios</span><span class="ss-val">${comm ? fmtTotal(comm.total) : '—'}</span></div>
         <div class="ss-item"><span class="ss-label">Votos</span><span class="ss-val">${artist.votes}</span><span class="ss-sub">${artist.votes ? 'de la comunidad' : 'Sé el primero'}</span></div>
       </div>
       <div class="cats-grid">${cats}</div>
-      <p class="ss-note">Todos arrancan en ${BASE_SCORE}. Cada voto acerca el score al promedio de la comunidad.</p>
-      ${buildRateBox(artist.slug, artist.name, baseScores())}
+      <p class="ss-note">Escala del 1 al 10. Con pocos votos el score se acerca al promedio de todos los votos del sitio, para que un solo voto no lo mande al #1; mientras más votos tiene, más pesa lo que vota la gente.</p>
+      ${buildRateBox(artist.slug, artist.name)}
       <div class="vote-section">
       </div>
     </div>
@@ -3278,7 +3302,7 @@ function renderVotar() {
         <div class="votar-hero">
           <div class="hero-label">Hecho por y para la comunidad</div>
           <h2>VOTA Y <em>MUEVE</em><br>EL RANKING</h2>
-          <p class="votar-desc">RapScore MX es una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Todos los raperos arrancan en <strong>${BASE_SCORE}</strong>. Cada calificación que das mueve su score hacia el promedio de la comunidad. Califica, suma puntos y sube en el ranking de contribuyentes.</p>
+          <p class="votar-desc">RapScore MX es una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Calificas a cada rapero del <strong>1 al 10</strong> en 6 categorías. Cada calificación que das mueve su score hacia el promedio de la comunidad. Califica, suma puntos y sube en el ranking de contribuyentes.</p>
           <div class="votar-steps">
             <button type="button" onclick="votarGoTo('votarList')"><span>1</span>Elige un artista</button>
             <button type="button" onclick="votarGoTo('votarStage')"><span>2</span>Califícalo en 6 categorías</button>
@@ -3407,12 +3431,12 @@ function renderVotarStage() {
         <div class="vs-name">${esc(a.name)}${getTierBadge(a.tier)}</div>
         <div class="vs-sub">${esc((a.tags||[]).join(' · '))}</div>
       </div>
-      <div class="vs-score"><span>${fmtTotal(a.total)}</span><small>${a.votes} voto${a.votes===1?'':'s'}</small></div>
+      <div class="vs-score"><span>${fmtScore(a.total, a.votes)}</span><small>${a.votes ? a.votes + ' voto' + (a.votes===1?'':'s') : 'sin calificar'}</small></div>
     </div>
     ${photoCredit(a)}
     <p class="vs-bio">${esc(a.bio)}</p>
     ${listenLinks(a)}
-    ${buildRateBox(a.slug, a.name, baseScores())}`;
+    ${buildRateBox(a.slug, a.name)}`;
 }
 
 // Cola fija para la sesión: el orden no cambia cuando cambian los votos,
@@ -3503,7 +3527,7 @@ function buildTicker() {
   if (!voted.length) {
     items = [
       ['VOTA', 'TÚ DECIDES EL RANKING'],
-      ['TODOS ARRANCAN EN ' + BASE_SCORE, 'LA COMUNIDAD MUEVE EL SCORE'],
+      ['DEL 1 AL 10', 'CALIFICA EN 6 CATEGORÍAS'],
       ['+' + POINTS_RATING + ' PTS', 'POR CADA ARTISTA QUE CALIFICAS'],
       ['RAPSCOREMX.COM/VOTAR', 'ENTRA Y CALIFICA'],
     ];
@@ -3537,14 +3561,14 @@ function rateFromHome(slug) {
 function renderTopPosters() {
   const el = document.getElementById('topPosters');
   if (!el) return;
-  const top = [...ARTISTS].sort((a,b) => b.total - a.total || b.votes - a.votes || a.name.localeCompare(b.name,'es')).slice(0,5);
+  const top = [...ARTISTS].sort(rankCmp).slice(0,5);
   el.innerHTML = top.map((a,i) => `
     <article class="poster">
       <div class="poster-n">${String(i+1).padStart(2,'0')}</div>
       <div class="poster-av" aria-hidden="true">${artistAvatar(a)}</div>
       <div class="poster-name">${esc(a.name)}</div>
       <div class="poster-tag">${esc((a.tags||[])[0]||a.estado||'')}${a.tier==='legend'?' · Leyenda':a.tier==='emerging'?' · Emergente':''}</div>
-      <div class="poster-score"><b>${a.total.toFixed(1)}</b><span>${a.votes} voto${a.votes===1?'':'s'}</span></div>
+      <div class="poster-score"><b>${fmtScore(a.total, a.votes)}</b><span>${a.votes ? a.votes + ' voto' + (a.votes===1?'':'s') : 'sin calificar'}</span></div>
       <button type="button" class="poster-cta" data-track="top5_calificar" onclick="rateFromHome('${a.slug}')">Calificar →</button>
     </article>`).join('');
   const st = document.getElementById('streetStats');
@@ -4141,7 +4165,7 @@ const ZERO_SCORES = { flow:0, lirica:0, contenido:0, versatilidad:0, hooks:0, im
 function refreshEstados() {
   ESTADOS.forEach(e => {
     e.artists = ARTISTS.filter(a => a.estado === e.name)
-      .map(a => ({ name: a.name, genre: a.tags[1] || '', score: a.total, national: true }));
+      .map(a => ({ name: a.name, genre: a.tags[1] || '', score: a.total, votes: a.votes, national: true }));
     e.proposed = PROPOSALS.filter(p => p.estado === e.id).map(p => {
       const r = blendScores(window._communityStats[p.slug]);
       return { ...p, votes: r.n, scores: r.scores, total: r.total };
@@ -4167,14 +4191,15 @@ let selectedEstado = null;
 let estView = 'map'; // 'map' | 'list'
 
 // find lowest-scoring national artist to compare against
+function nationalPool() { const v = ARTISTS.filter(a => a.votes > 0); return v.length ? v : ARTISTS; }
 function getNationalFloor() {
-  const sorted = [...ARTISTS].sort((a,b)=>a.total-b.total);
+  const sorted = [...nationalPool()].sort((a,b)=>a.total-b.total);
   return sorted[0]; // lowest in national ranking
 }
 
 function getUpgradeTarget(score) {
   // find the lowest national artist that this local artist beats
-  const sorted = [...ARTISTS].sort((a,b)=>a.total-b.total);
+  const sorted = [...nationalPool()].sort((a,b)=>a.total-b.total);
   return sorted.find(a => score > a.total) || null;
 }
 
@@ -4557,7 +4582,7 @@ function renderStatePanel(estado) {
 
   let nationalsHtml = '';
   if (estado.artists.length > 0) {
-    const sorted = [...estado.artists].sort((a,b)=>b.score-a.score);
+    const sorted = [...estado.artists].sort((a,b)=>((b.votes > 0) - (a.votes > 0)) || b.score-a.score);
     nationalsHtml = `
       <div class="state-card">
         <div class="state-card-header">
@@ -4576,7 +4601,7 @@ function renderStatePanel(estado) {
               <div class="la-sub">${a.genre}</div>
             </div>
             <div style="text-align:right">
-              <div class="la-score">${a.score}</div>
+              <div class="la-score">${fmtScore(a.score, a.votes)}</div>
               <div class="la-votes">Nacional ↗</div>
             </div>
           </div>
@@ -4738,10 +4763,10 @@ function openLocalArtist(estadoId, propId) {
     upgradeHtml = `
       <div class="upgrade-check">
         <div class="uc-title">¿Puede subir al ranking nacional?</div>
-        <div class="uc-row"><span class="uc-label">Puntuación de ${artistName}</span><span class="uc-val win">${artist.total}</span></div>
-        <div class="uc-row"><span class="uc-label">Artista más bajo en nacional (${upgradeTarget.name})</span><span class="uc-val lose">${upgradeTarget.total}</span></div>
+        <div class="uc-row"><span class="uc-label">Puntuación de ${artistName}</span><span class="uc-val win">${fmtTotal(artist.total)}</span></div>
+        <div class="uc-row"><span class="uc-label">Artista más bajo en nacional (${upgradeTarget.name})</span><span class="uc-val lose">${fmtTotal(upgradeTarget.total)}</span></div>
         <div class="uc-verdict" style="color:var(--green)">
-          ✓ <strong>${artistName}</strong> supera en puntuación a <strong>${upgradeTarget.name}</strong> (${upgradeTarget.total} pts).
+          ✓ <strong>${artistName}</strong> supera en puntuación a <strong>${upgradeTarget.name}</strong> (${fmtTotal(upgradeTarget.total)}).
           Con 50 votos válidos puede ser promovido al ranking nacional. Actualmente tiene ${artist.votes} votos.
           ${artist.votes < 50 ? `Faltan ${50 - artist.votes} votos para activar la revisión.` : 'Ya cumple el mínimo de votos. Pendiente de revisión del equipo.'}
         </div>
@@ -4751,7 +4776,7 @@ function openLocalArtist(estadoId, propId) {
     upgradeHtml = `
       <div class="upgrade-check">
         <div class="uc-title">¿Puede subir al ranking nacional?</div>
-        <div class="uc-row"><span class="uc-label">Puntuación actual</span><span class="uc-val lose">${artist.votes ? artist.total : '—'}</span></div>
+        <div class="uc-row"><span class="uc-label">Puntuación actual</span><span class="uc-val lose">${fmtScore(artist.total, artist.votes)}</span></div>
         <div class="uc-row"><span class="uc-label">Para entrar al nacional necesita más de</span><span class="uc-val">${fmtTotal(floor.total)}</span></div>
         <div class="uc-verdict" style="color:var(--muted)">
           Aún no supera en puntuación a ningún artista del ranking nacional. Necesita más votos y calificaciones para que su score suba.
@@ -4778,7 +4803,7 @@ function openLocalArtist(estadoId, propId) {
       `).join('')}
     </div>
     ${upgradeHtml}
-    ${buildRateBox(artist.slug, artist.name, baseScores())}
+    ${buildRateBox(artist.slug, artist.name)}
   `;
   document.getElementById('laModal').classList.add('open');
 }
@@ -5381,9 +5406,10 @@ function refreshOpenRateBoxes() {
     const slug = box.dataset.slug, name = box.dataset.name;
     const mine = myRatings[slug];
     if (!mine) return;
-    box.querySelectorAll('input[type="range"]').forEach(inp => {
-      inp.value = mine[inp.dataset.cat]; inp.nextElementSibling.textContent = inp.value;
-      inp.style.setProperty('--p', (inp.value - 1) / 99 * 100 + '%');
+    box.querySelectorAll('.rate-row').forEach(row => {
+      const n = Math.min(10, Math.max(1, Math.round(mine[row.dataset.cat] / 10)));
+      const btn = row.querySelectorAll('.rate-n')[n - 1];
+      if (btn && window.ratePick) window.ratePick(btn, n);
     });
     const t = box.querySelector(".rate-title"); if (t) t.textContent = "Tu calificación";
     const btn = box.querySelector(".rate-submit"); if (btn) btn.textContent = "Actualizar calificación";
@@ -5446,12 +5472,20 @@ window.submitRating = async function(btn) {
   const box = btn.closest(".rate-box");
   const slug = box?.dataset.slug, name = box?.dataset.name;
   if (!slug) return;
-  if (!(await ensureVerified())) return;
-  const scores = {};
+  const scores = {}, missing = [];
   CATS.forEach(c => {
-    const v = parseInt(box.querySelector(`input[data-cat="${c}"]`).value, 10);
-    scores[c] = Math.min(100, Math.max(1, isNaN(v) ? 50 : v));
+    const row = box.querySelector(`.rate-row[data-cat="${c}"]`);
+    const v = parseInt(row?.dataset.val, 10);
+    if (isNaN(v)) { missing.push(row); return; }
+    scores[c] = Math.min(10, Math.max(1, v)) * 10;      // se guarda ×10 (escala interna 10–100)
   });
+  if (missing.length) {
+    missing.forEach(r => r && r.classList.add('missing'));
+    missing[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast(missing.length === 1 ? 'Te falta 1 categoría por calificar' : `Te faltan ${missing.length} categorías por calificar`);
+    return;
+  }
+  if (!(await ensureVerified())) return;
   const user = auth.currentUser, uid = user.uid;
   const rRef = doc(db, "ratings", `${uid}_${slug}`);
   const sRef = doc(db, "artistStats", slug);
@@ -5487,7 +5521,7 @@ window.submitRating = async function(btn) {
     rsTrack("rate_artist", {
       artist_slug: slug, artist_name: String(name).slice(0, 80),
       is_new: res.isNew ? "yes" : "no", is_proposal: slug.startsWith("prop-") ? "yes" : "no",
-      score: Math.round(CATS.reduce((t, c) => t + scores[c], 0) / CATS.length)
+      score: Math.round(CATS.reduce((t, c) => t + scores[c], 0) / CATS.length) / 10
     });
     showToast(res.isNew ? `Calificación guardada ✓  +${P_RATING} pts` : "Calificación actualizada ✓");
     if (window.onRated) window.onRated(slug, res.isNew);
@@ -5669,14 +5703,14 @@ function renderNewHome() {
   }
   const top = document.getElementById('nhTop');
   if (top) {
-    const list = [...ARTISTS].sort((a, b) => b.total - a.total || b.votes - a.votes || a.name.localeCompare(b.name, 'es')).slice(0, 5);
+    const list = [...ARTISTS].sort(rankCmp).slice(0, 5);
     top.innerHTML = list.map((a, i) => `
       <button type="button" class="nh-card ${i === 0 ? 'first' : ''}" data-track="top5_calificar" onclick="rateFromHome('${a.slug}')" aria-label="${esc(a.name)}, lugar ${i + 1}. Calificar">
         <span class="nh-card-n">${String(i + 1).padStart(2, '0')}</span>
         <div class="nh-card-img">${artistAvatar(a)}</div>
         <div class="nh-card-name">${esc(a.name)}</div>
         <div class="nh-card-loc">${NH_PIN}${esc((a.tags || [])[0] || a.estado || 'México')}</div>
-        <div class="nh-card-score"><b>${a.total.toFixed(1)}</b><span>${a.votes.toLocaleString('es-MX')}<br>voto${a.votes === 1 ? '' : 's'}</span></div>
+        <div class="nh-card-score"><b>${fmtScore(a.total, a.votes)}</b><span>${a.votes ? a.votes.toLocaleString('es-MX') + '<br>voto' + (a.votes === 1 ? '' : 's') : 'sin<br>calificar'}</span></div>
       </button>`).join('');
   }
   renderNhExplore();
