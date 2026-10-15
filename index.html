@@ -59,7 +59,7 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
   }, true);
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Saira+Stencil+One&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Saira+Stencil+One&family=Space+Mono:wght@400;700&family=Barlow:wght@400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0a;
@@ -79,7 +79,8 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Space Mono', monospace;
+  /* Texto corrido en Barlow (redonda y legible). Space Mono queda solo para etiquetas, botones y datos. */
+  font-family: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   overflow-x: clip; /* clip no rompe position: sticky (hidden sí); hidden queda para navegadores viejos */
@@ -1755,6 +1756,12 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
   .lt-line { grid-template-columns: 26px 1fr 26px; padding: 0 6px; }
   .lt-sec { padding-left: 32px; }
 }
+
+/* ── Párrafos: tamaño legible en celular (Barlow se ve más chica que Space Mono al mismo tamaño) ── */
+body .nh-sub, body .estados-hero-desc, body .votar-desc, body .lt-intro, body .pop-text, body .vcard-text, body .expanded-bio, body .vs-bio { font-size: 16px; line-height: 1.6; }
+body .nh-head-sub, body .nh-feature span, body .rule-item span, body .wait-note, body .ss-note, body .sug-box-text, body .fl-note, body .fl-tag, body .fl-hist, body .lt-tip, body .lt-share-note, body .pop-note, body .auth-switch, body .lt-legend, body .lt-metrics small { font-size: 14px; line-height: 1.55; }
+body .sf-legal { font-size: 12px; line-height: 1.55; }
+body .pop-list li { font-size: 15px; }
 </style>
 </head>
 <body>
@@ -3558,7 +3565,7 @@ window.addEventListener('load', maybeWelcome);
 <!-- ═══ ESTADOS STYLES ═══ -->
 <style>
 /* ── section shell ── */
-#section-estados { font-family: 'Space Mono', monospace; }
+#section-estados { font-family: 'Barlow', system-ui, sans-serif; }
 
 /* ── estados hero ── */
 .estados-hero {
