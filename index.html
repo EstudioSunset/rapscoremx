@@ -1576,7 +1576,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 <script src="letras.js?v=20261011" defer></script>
 <script src="letras-share.js?v=20261017" defer></script>
 <script src="freestyle.js?v=20261011" defer></script>
-<script src="freestyle-ui.js?v=20261014" defer></script>
+<script src="freestyle-ui.js?v=20261017b" defer></script>
 <style>
 /* ═══ FREESTYLE LAB ═══ */
 .fl-wrap { max-width: 980px; margin: 0 auto; padding: 26px 24px 80px; }
@@ -1632,11 +1632,22 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .fl-reto.on { border: 1px solid var(--accent2); }
 .fl-reto b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 22px; color: var(--accent2); }
 .fl-reto small { font-size: 11px; color: #9a9a9a; }
-.fl-livebar { display: none; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #cfc9bf; }
+.fl-livebar { display: none; flex-direction: column; gap: 8px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #cfc9bf; }
 .fl-link { background: none; border: none; color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; cursor: pointer; min-height: 40px; }
 /* Durante la improvisación se esconden los ajustes: la palabra y el ritmo mandan */
 #section-freestyle.fl-live .fl-setup { display: none; }
-#section-freestyle.fl-live .fl-livebar { display: flex; }
+#section-freestyle.fl-live.fl-setup-open .fl-setup { display: block; }
+#section-freestyle.fl-live .fl-livebar { display: flex; position: sticky; top: 60px; z-index: 5; box-shadow: 0 8px 18px rgba(0,0,0,.45); }
+@media (max-width: 768px) { #section-freestyle.fl-live .fl-livebar { top: 52px; } }
+.fl-livetop { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+/* Beats a la mano durante la sesión: se cambian sin pausar */
+.fl-quick { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -14px; padding: 0 14px 2px; scroll-behavior: smooth; }
+.fl-quick::-webkit-scrollbar { display: none; }
+.fl-qchip { flex: none; min-height: 40px; padding: 0 12px; background: #161616; border: 1px solid #333; color: var(--text); font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: .5px; text-transform: none; cursor: pointer; white-space: nowrap; }
+.fl-qchip small { margin-left: 6px; font-family: 'Space Mono', monospace; font-size: 10px; color: #8a8a8a; }
+.fl-qchip.on { background: var(--accent); border-color: var(--accent); color: #0a0a0a; }
+.fl-qchip.on small { color: #3a1200; }
+.fl-qchip.locked { color: #6d6d6d; }
 .fl-stage { position: relative; margin-top: 14px; padding: 18px 18px 22px; background:
   radial-gradient(ellipse at 50% 40%, rgba(255,60,0,.06), transparent 60%), #121212; border: 1px solid #262626; overflow: hidden; }
 .fl-top { display: flex; justify-content: space-between; align-items: flex-start; }

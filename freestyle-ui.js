@@ -70,8 +70,8 @@
       </div>
 
       <div class="fl-livebar" id="flLiveBar">
-        <span id="flLiveInfo"></span>
-        <button type="button" class="fl-link" id="flAjustes">Ajustes</button>
+        <div class="fl-livetop"><span id="flLiveInfo"></span><button type="button" class="fl-link" id="flAjustes" aria-expanded="false">Más ajustes</button></div>
+        <div class="fl-quick" id="flQuick" role="group" aria-label="Cambiar beat sin parar"></div>
       </div>
 
       <section class="fl-stage" id="flStage" aria-live="polite">
@@ -134,8 +134,24 @@
     if (cta) cta.onclick = () => { if (window.RS_USER) window.goTo && goTo('votar'); else if (window.openAuthModal) openAuthModal('login'); };
   }
 
+  // Lista rápida de beats arriba del escenario: cambia el beat en el siguiente compás, sin pausar ni reiniciar
+  function buildQuick() {
+    // primero los que puede usar; los bloqueados al final
+    const list = F.STYLES.filter(unlocked).concat(F.STYLES.filter(st => !unlocked(st)));
+    $('flQuick').innerHTML = list.map(st => {
+      const lock = !unlocked(st);
+      return `<button type="button" class="fl-qchip${lock ? ' locked' : ''}" data-style="${st.id}"${lock ? ` aria-label="${escH(st.name)}: bloqueado"` : ''}>${lock ? '🔒 ' : ''}${escH(st.name)}<small>${Math.round(st.bpm)}</small></button>`;
+    }).join('');
+  }
+
+  function scrollQuick() {
+    const q = $('flQuick'), on = q && q.querySelector('.fl-qchip.on');
+    if (on && q.scrollWidth > q.clientWidth) q.scrollLeft = on.offsetLeft - q.offsetLeft - 14;
+  }
+
   function buildSetup() {
     buildBeats();
+    buildQuick();
     $('flLevels').innerHTML = [1, 2, 3].map(l => {
       const L = F.LEVELS[l];
       return `<button type="button" class="fl-level" data-level="${l}"><span class="fl-stars">${'★'.repeat(L.stars)}</span><b>${L.name}</b><small>${L.desc}</small></button>`;
@@ -151,7 +167,8 @@
     document.querySelectorAll('.fl-panel').forEach(p => p.hidden = p.dataset.panel !== prefs.tab);
     const reto = prefs.mode === 'reto';
     const st = reto ? retoStyle() : usableStyle(prefs.style);
-    document.querySelectorAll('.fl-beat').forEach(b => b.classList.toggle('on', b.dataset.style === st.id));
+    document.querySelectorAll('.fl-beat, .fl-qchip').forEach(b => b.classList.toggle('on', b.dataset.style === st.id));
+    scrollQuick();
     document.querySelectorAll('.fl-level').forEach(b => b.classList.toggle('on', +b.dataset.level === prefs.level));
     document.querySelectorAll('[data-dur]').forEach(b => b.classList.toggle('on', !reto && +b.dataset.dur === prefs.dur));
     document.querySelectorAll('[data-theme]').forEach(b => b.classList.toggle('on', !reto && b.dataset.theme === prefs.theme));
@@ -176,8 +193,15 @@
       if (b.dataset.tab) { prefs.tab = b.dataset.tab; savePrefs(); syncSetup(); return; }
       if (b.dataset.style) {
         const st = styleOf(b.dataset.style);
-        if (!unlocked(st)) { toast(`Califica ${Math.max(0, st.unlock - myRatings())} raperos más para usar este beat`); $('flHouse').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
-        if (prefs.mode === 'reto') prefs.mode = 'ronda'; prefs.style = b.dataset.style; savePrefs(); applyLive('style'); syncSetup(); return;
+        if (!unlocked(st)) {
+          toast(`Califica ${Math.max(0, st.unlock - myRatings())} raperos más para usar este beat`);
+          if (!sec.classList.contains('fl-live')) $('flHouse').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
+        }
+        if (prefs.style === b.dataset.style && prefs.mode !== 'reto') return;
+        if (prefs.mode === 'reto') prefs.mode = 'ronda'; prefs.style = b.dataset.style; savePrefs(); applyLive('style'); syncSetup();
+        if (S && b.classList.contains('fl-qchip')) { toast('Cambiando a ' + st.name + ' en el siguiente compás'); track('freestyle_beat_change', { style: st.id, where: 'barra' }); }
+        return;
       }
       if (b.dataset.level) { prefs.level = +b.dataset.level; savePrefs(); applyLive('level'); syncSetup(); return; }
       if (b.dataset.dur !== undefined) { prefs.dur = +b.dataset.dur; prefs.mode = prefs.dur ? 'ronda' : 'libre'; savePrefs(); syncSetup(); return; }
@@ -191,7 +215,11 @@
     $('flRestart').addEventListener('click', () => { if (S) restart(); else togglePlay(); });
     $('flSkip').addEventListener('click', skipWord);
     $('flEnd').addEventListener('click', () => finish(true));
-    $('flAjustes').addEventListener('click', () => { if (S && !S.paused) togglePlay(); sec.classList.remove('fl-live'); });
+    $('flAjustes').addEventListener('click', () => {
+      const open = sec.classList.toggle('fl-setup-open');
+      $('flAjustes').textContent = open ? 'Ocultar ajustes' : 'Más ajustes';
+      $('flAjustes').setAttribute('aria-expanded', open);
+    });
     document.addEventListener('visibilitychange', () => { if (document.hidden && S && !S.paused) togglePlay(); });
     document.addEventListener('keydown', e => {
       if (sec.style.display === 'none' || /input|textarea|select/i.test(e.target.tagName)) return;
@@ -252,6 +280,7 @@
     S.next = gen.next();
     $('flSummary').hidden = true;
     $('section-freestyle').classList.add('fl-live');
+    requestAnimationFrame(scrollQuick); setTimeout(scrollQuick, 60);
     eng.start(true);
     setPlayIcon(true); keepAwake(true); startViz();
     $('flRoundLbl').textContent = (S.reto ? 'Reto del día' : 'Ronda ' + S.round);
@@ -364,7 +393,8 @@
     S.ended = true;
     const secs = S.musicStart != null ? Math.max(0, eng.now - S.musicStart) : 0;
     eng.stop(); keepAwake(false); setPlayIcon(false); stopViz(true);
-    $('section-freestyle').classList.remove('fl-live');
+    $('section-freestyle').classList.remove('fl-live', 'fl-setup-open');
+    $('flAjustes').textContent = 'Más ajustes'; $('flAjustes').setAttribute('aria-expanded', 'false');
     if (secs >= 15) {
       const h = ls.get('rs_fl_hist', { sessions: 0, seconds: 0, days: [] });
       h.sessions++; h.seconds += Math.round(secs);
@@ -455,7 +485,7 @@
   // Si sales de la sección, pausa el beat
   window.freestylePause = () => { if (S && !S.paused && !S.ended) togglePlay(); };
   // Se llama al iniciar/cerrar sesión y al guardar una calificación (desbloqueo en vivo)
-  window.freestyleRefresh = () => { if (rendered) { buildBeats(); syncSetup(); } };
+  window.freestyleRefresh = () => { if (rendered) { buildBeats(); buildQuick(); syncSetup(); } };
   window.renderFreestyle = () => { render(); syncSetup(); setTimeout(fitWord, 50); };
   window.addEventListener('resize', () => { if (rendered) { fitWord(); if (!vizRaf) drawViz(false); } });
 })();
