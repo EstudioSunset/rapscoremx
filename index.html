@@ -1574,7 +1574,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 }
 </style>
 <script src="letras.js?v=20261011" defer></script>
-<script src="letras-share.js?v=20261011" defer></script>
+<script src="letras-share.js?v=20261017" defer></script>
 <script src="freestyle.js?v=20261011" defer></script>
 <script src="freestyle-ui.js?v=20261014" defer></script>
 <style>
@@ -2426,11 +2426,21 @@ function refreshTable() {
   }
   list.sort((a,b) => currentSort === 'total' ? rankCmp(a, b)
     : ((b.votes > 0) - (a.votes > 0)) || (b.scores[currentSort] - a.scores[currentSort]) || rankCmp(a, b));
-  // El ranking muestra solo el Top 50 (por score total); el resto queda "En la fila"
-  const top = rankedSet();
-  currentData = list.filter(a => top.has(a.slug));
-  renderTable(currentData);
-  renderWaiting(list.filter(a => !top.has(a.slug)), currentData.length);
+  // Sin filtro ni búsqueda: el ranking muestra el Top 50 y el resto queda "En la fila".
+  // Con filtro o búsqueda se muestran TODOS los que coinciden en la tabla (antes, si ninguno estaba en el
+  // Top 50 —p. ej. "Artistas femeninas" sin votos— la tabla salía vacía y todos quedaban escondidos en la fila).
+  if (currentTier !== 'all' || currentSearch) {
+    currentData = list;
+    renderTable(currentData);
+    renderWaiting([], 0);
+  } else {
+    const top = rankedSet();
+    currentData = list.filter(a => top.has(a.slug));
+    renderTable(currentData);
+    renderWaiting(list.filter(a => !top.has(a.slug)), currentData.length);
+  }
+  const tb = document.getElementById('artistTable');
+  if (tb && !currentData.length) tb.innerHTML = `<div class="vp-empty" style="padding:24px 16px">No encontramos artistas con ese nombre o filtro.</div>`;
 }
 
 // ─── TOP 50 + "EN LA FILA" ──────────────────────────────────

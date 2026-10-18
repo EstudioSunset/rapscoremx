@@ -32,7 +32,7 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - Promedio bayesiano hacia `PRIOR_SCORE` = promedio real de todos los votos (respaldo `BASE_SCORE = 65`) con `COMMUNITY_WEIGHT_K = 2`. **Sin votos no hay número** ("Sin calificar") y van después de los calificados (`rankCmp`). 6 categorías: flow, lírica, contenido, versatilidad, hooks, impacto.
 - Votar = 10 botones por categoría (`buildRateBox`, `ratePick`), ninguno marcado de inicio; no deja guardar hasta calificar las 6 (antes, con barras, el 22% de las calificaciones se quedaban en el 50 por defecto).
 - Avatares sin foto: iniciales en Bebas Neue sobre fondo oscuro con una línea (dorada = leyenda, verde = emergente, naranja = activo). Adn quitó el graffiti con goteo por verse poco serio.
-- El ranking muestra el **Top 50** (`RANKING_SIZE`, orden `rankCmp`: primero con votos, luego score). El resto aparece en **"En la fila"**. Desempate: más votos y luego el orden en `RAW_ARTISTS`.
+- El ranking muestra el **Top 50** (`RANKING_SIZE`, orden `rankCmp`: primero con votos, luego score). El resto aparece en **"En la fila"**. Con un filtro (Leyendas, Femeninas…) o una búsqueda se muestran todos los que coinciden en la tabla, sin corte de Top 50. Desempate: más votos y luego el orden en `RAW_ARTISTS`.
 - Puntos de contribuyente: +10 por cada artista calificado por primera vez, +20 por cada propuesta aprobada. Estas cifras están validadas también en `firestore.rules`.
 - Admin = existe el doc `admins/{uid}` (se crea a mano en la consola) y el correo está verificado.
 - Las bios deben ser **verificables**: sin calificaciones inventadas ni datos sin fuente. La investigación del roster está en el proyecto de claude.ai ("investigacion-roster-oct-2026").

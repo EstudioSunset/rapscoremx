@@ -17,7 +17,7 @@
   }
   async function loadFonts() {
     try {
-      await Promise.all(['400 100px "Bebas Neue"', '400 30px "Space Mono"', '700 30px "Space Mono"', '400 40px "Saira Stencil One"'].map(f => document.fonts.load(f)));
+      await Promise.all(['400 100px "Bebas Neue"', '500 34px "Barlow"', '600 34px "Barlow"', '700 34px "Barlow"', '400 40px "Saira Stencil One"'].map(f => document.fonts.load(f)));
     } catch (e) {}
   }
 
@@ -53,9 +53,9 @@
     // logo + encabezado
     let y = PAD;
     if (logo) { const lw = 330, lh = lw * logo.height / logo.width; g.drawImage(logo, PAD, y, lw, lh); }
-    g.textAlign = 'right'; g.fillStyle = '#cfc9bf'; g.font = '400 24px "Space Mono", monospace';
+    g.textAlign = 'right'; g.fillStyle = '#cfc9bf'; g.font = '600 26px "Barlow", sans-serif'; g.letterSpacing = '3px';
     g.fillText('ANÁLISIS DE BARRAS', W - PAD, y + 34);
-    g.textAlign = 'left';
+    g.textAlign = 'left'; g.letterSpacing = '0px';
     y += 150;
     if (mcName) {
       g.fillStyle = '#f0ede6'; g.font = '400 64px "Saira Stencil One", "Bebas Neue", sans-serif';
@@ -84,12 +84,13 @@
       g.fillStyle = '#141414'; roundRect(g, x, yy, tw, th, 10); g.fill();
       g.strokeStyle = '#2a2a2a'; g.lineWidth = 2; g.stroke();
       g.fillStyle = '#f0ede6'; g.font = '400 66px "Bebas Neue", sans-serif'; g.fillText(v, x + 24, yy + 72);
-      g.fillStyle = '#9a9a9a'; g.font = '400 20px "Space Mono", monospace'; g.fillText(l.toUpperCase(), x + 24, yy + 106);
+      g.fillStyle = '#a8a8a8'; g.font = '600 21px "Barlow", sans-serif'; g.letterSpacing = '1.5px'; g.fillText(l.toUpperCase(), x + 24, yy + 106);
+      g.letterSpacing = '0px';
     });
     y += th * 2 + 18 + 46;
     // multisilábica más larga
     if (m.longestMultiText) {
-      g.fillStyle = '#ffcc00'; g.font = '700 26px "Space Mono", monospace';
+      g.fillStyle = '#ffcc00'; g.font = '700 30px "Barlow", sans-serif';
       const txt = '“' + m.longestMultiText + '”';
       wrapText(g, txt, PAD, y, W - PAD * 2, 36, 2);
       y += g.measureText(txt).width > W - PAD * 2 ? 62 : 32;
@@ -99,14 +100,16 @@
     g.fillStyle = '#121212'; roundRect(g, PAD, boxY, W - PAD * 2, boxH, 12); g.fill();
     g.strokeStyle = '#262626'; g.lineWidth = 2; g.stroke();
     const lineH = 50, maxLines = Math.floor((boxH - 40) / lineH);
-    g.font = '400 30px "Space Mono", monospace';
+    const LYR = '34px "Barlow", sans-serif';
+    g.font = '500 ' + LYR;
     let ly = boxY + 52, lines = 0;
     const left = PAD + 28, right = W - PAD - 28;
     for (const v of bestExcerpt(r, 7)) {
       if (lines >= maxLines) break;
       let x = left;
       for (const t of v.tokens) {
-        if (t.space) { x += g.measureText(' ').width; continue; }
+        if (t.space) { x += g.measureText(' ').width + 8; continue; }   // +8: que los recuadros de color no se peguen
+        g.font = (t.multi ? '700 ' : '500 ') + LYR;   // medir con el mismo grosor con que se dibuja
         const w = g.measureText(t.raw).width;
         if (x + w > right && x > left) { lines++; if (lines >= maxLines) break; ly += lineH; x = left + 30; }
         if (t.fam >= 0) {
@@ -114,9 +117,9 @@
           g.globalAlpha = t.multi ? 0.42 : 0.28; g.fillStyle = col; roundRect(g, x - 4, ly - 32, w + 8, 42, 6); g.fill();
           g.globalAlpha = 1; g.fillRect(x - 4, ly + 6, w + 8, t.multi ? 6 : 3);
         }
-        g.fillStyle = '#f0ede6'; g.font = (t.multi ? '700' : '400') + ' 30px "Space Mono", monospace';
+        g.fillStyle = '#f0ede6';
         g.fillText(t.raw, x, ly);
-        g.font = '400 30px "Space Mono", monospace';
+        g.font = '500 ' + LYR;
         x += w;
       }
       lines++; ly += lineH;
@@ -125,7 +128,7 @@
     g.fillStyle = '#ff3c00'; g.fillRect(PAD, H - 118, 90, 6);
     g.fillStyle = '#f0ede6'; g.font = '400 40px "Bebas Neue", sans-serif';
     g.fillText('ANALIZA TU LETRA GRATIS: RAPSCOREMX.COM', PAD, H - 72);
-    g.fillStyle = '#6d6d6d'; g.font = '400 18px "Space Mono", monospace';
+    g.fillStyle = '#8a8a8a'; g.font = '500 20px "Barlow", sans-serif';
     g.fillText('Índice automático: rima, multisilábicas y vocabulario. No mide flow ni contenido.', PAD, H - 40);
     return c;
   }
