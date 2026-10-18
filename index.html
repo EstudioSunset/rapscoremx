@@ -283,6 +283,8 @@ h1 em { color: var(--accent); font-style: normal; }
   letter-spacing: 1px;
 }
 .search-input::placeholder { color: var(--muted); }
+input[type=search].search-input { -webkit-appearance: none; appearance: none; }
+input[type=search].search-input::-webkit-search-decoration { -webkit-appearance: none; }
 .search-icon {
   position: absolute;
   left: 10px;
@@ -1878,7 +1880,7 @@ body .pop-list li { font-size: 15px; }
     <button class="filter-btn" onclick="filterTier('female', this)">Artistas femeninas</button>
     <div class="search-wrap" style="padding: 12px 0 12px 20px;">
       <span class="search-icon">⌕</span>
-      <input type="text" class="search-input" id="searchInput" name="rs-buscar" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Buscar artista..." oninput="searchArtists(this.value)">
+      <input type="search" class="search-input" id="searchInput" name="rs-q-artista" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Buscar artista..." readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore oninput="searchArtists(this.value)">
     </div>
   </div>
 </div>
@@ -2845,7 +2847,15 @@ function filterTier(tier, btn) {
 }
 
 let _searchTimer = null;
+// El navegador a veces rellena el buscador con el correo guardado (cree que es el campo de usuario del login)
+// y la lista sale vacía. Un nombre de artista nunca lleva "@": si lo trae, lo borramos y no filtramos.
+function looksAutofill(input) {
+  if (input && /@/.test(input.value)) { input.value = ''; return true; }
+  return false;
+}
 function searchArtists(q) {
+  const inp = document.getElementById('searchInput');
+  if (/@/.test(q)) { if (inp) inp.value = ''; q = ''; }
   currentSearch = q.trim();
   refreshTable();
   clearTimeout(_searchTimer);
@@ -3487,7 +3497,7 @@ function renderVotar() {
                 <div class="vp-progress" id="votarProgress"></div>
               </div>
               <div class="vp-tools">
-                <input class="search-input vp-search" id="votarSearch" name="rs-votar-buscar" autocomplete="off" spellcheck="false" placeholder="Buscar artista o ciudad..." oninput="votarSearch=this.value.trim().toLowerCase();renderVotarList()">
+                <input type="search" class="search-input vp-search" id="votarSearch" name="rs-q-votar" autocomplete="off" spellcheck="false" placeholder="Buscar artista o ciudad..." readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore oninput="if(looksAutofill(this))return;votarSearch=this.value.trim().toLowerCase();renderVotarList()">
                 <div class="vp-chips">
                   <button class="vp-chip" data-f="pending" onclick="setVotarFilter('pending')">Pendientes</button>
                   <button class="vp-chip" data-f="done" onclick="setVotarFilter('done')">Calificados</button>
