@@ -1580,6 +1580,9 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 <style>
 /* ═══ FREESTYLE LAB ═══ */
 .fl-wrap { max-width: 980px; margin: 0 auto; padding: 26px 24px 80px; }
+/* .fl-head es un <header>: anula el estilo del header del sitio (sticky, z-index 100), que lo dejaba pegado
+   ENCIMA del menú al hacer scroll y no dejaba tocar las pestañas */
+header.fl-head { position: static; z-index: auto; height: auto; padding: 0; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
 .fl-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 18px; }
 .fl-title { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(54px, 11vw, 104px); line-height: .85; letter-spacing: 1px; }
 .fl-title em { font-style: normal; color: var(--accent); font-family: 'Saira Stencil One', 'Bebas Neue', sans-serif; font-size: .9em; margin-left: 6px; }
