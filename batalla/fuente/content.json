@@ -1,0 +1,218 @@
+{
+  "practica": [
+    {
+      "id": "P1", "pie": "Yo me formé rimando en la", "ref": "calle",
+      "verso": ["y aquí no hay rival que me", ""],
+      "ops": [
+        {"w": "acalle", "t": "c", "ok": true, "why": "\"acallar\" es hacer callar: nadie me hace callar"},
+        {"w": "valle", "t": "c", "ok": false, "why": "\"valle\" es un sustantivo; \"que me valle\" no existe"},
+        {"w": "aguante", "t": "a", "ok": true, "why": "nadie me aguanta; solo coinciden las vocales a-e"},
+        {"w": "parque", "t": "a", "ok": false, "why": "\"que me parque\" no significa nada"}
+      ]
+    },
+    {
+      "id": "P2", "pie": "Esto no es de chiripa, es lo que trae mi", "ref": "mente",
+      "verso": ["por eso en esta plaza me respeta la", ""],
+      "ops": [
+        {"w": "gente", "t": "c", "ok": true, "why": "el público respeta al que rima"},
+        {"w": "fuente", "t": "c", "ok": false, "why": "una fuente no respeta a nadie"},
+        {"w": "plebe", "t": "a", "ok": true, "why": "en el norte, \"la plebe\" es la banda; solo coinciden e-e"},
+        {"w": "leche", "t": "a", "ok": false, "why": "\"me respeta la leche\" no tiene sentido"}
+      ]
+    },
+    {
+      "id": "P3", "pie": "Nadie me regaló nada, yo me abrí", "ref": "camino",
+      "verso": ["y con cada verso voy escribiendo mi", ""],
+      "ops": [
+        {"w": "destino", "t": "c", "ok": true, "why": "escribir mi destino: forjar mi futuro"},
+        {"w": "comino", "t": "c", "ok": false, "why": "\"escribir mi comino\" no significa nada"},
+        {"w": "libro", "t": "a", "ok": true, "why": "cada verso es parte de mi libro; solo coinciden i-o"},
+        {"w": "higo", "t": "a", "ok": false, "why": "\"escribir mi higo\" no tiene sentido"}
+      ]
+    },
+    {
+      "id": "P4", "pie": "Pon mucha atención a lo que suelta mi", "ref": "verso",
+      "verso": ["mis rimas llegan más lejos que el", ""],
+      "ops": [
+        {"w": "universo", "t": "c", "ok": true, "why": "más lejos que el universo: no tienen límite"},
+        {"w": "terso", "t": "c", "ok": false, "why": "\"terso\" es un adjetivo (liso); aquí no cabe"},
+        {"w": "cielo", "t": "a", "ok": true, "why": "más lejos que el cielo; solo coinciden e-o"},
+        {"w": "queso", "t": "a", "ok": false, "why": "\"más lejos que el queso\" no tiene sentido"}
+      ]
+    }
+  ],
+  "novato": [
+    [
+      {
+        "id": "N1", "pie": "Mi estilo de la calle te suena", "ref": "pesado",
+        "verso": ["y tú con tus rimas te quedaste en el", ""],
+        "ops": [
+          {"w": "pasado", "t": "c", "ok": true, "why": "te quedaste en el pasado: ya no estás vigente"},
+          {"w": "pescado", "t": "c", "ok": false, "why": "\"te quedaste en el pescado\" no significa nada"},
+          {"w": "fango", "t": "a", "ok": true, "why": "te quedaste atascado; solo coinciden a-o"},
+          {"w": "mango", "t": "a", "ok": false, "why": "\"te quedaste en el mango\" no tiene sentido"}
+        ]
+      },
+      {
+        "id": "N2", "pie": "Cada barra que suelto va bien", "ref": "medida",
+        "verso": ["y tú con ese flow ya estás de", ""],
+        "ops": [
+          {"w": "salida", "t": "c", "ok": true, "why": "estás de salida: ya te vas"},
+          {"w": "comida", "t": "c", "ok": false, "why": "\"estás de comida\" no significa nada"},
+          {"w": "visita", "t": "a", "ok": true, "why": "solo vienes de visita, no eres de aquí; coinciden i-a"},
+          {"w": "tinta", "t": "a", "ok": false, "why": "\"estás de tinta\" no tiene sentido"}
+        ]
+      },
+      {
+        "id": "N3", "pie": "Llego a la tarima con un flow", "ref": "elegante",
+        "verso": ["y tú con esas rimas no das un paso", ""],
+        "ops": [
+          {"w": "adelante", "t": "c", "ok": true, "why": "no avanzas nada"},
+          {"w": "elefante", "t": "c", "ok": false, "why": "\"un paso elefante\" no tiene sentido"},
+          {"w": "grande", "t": "a", "ok": true, "why": "no das un paso grande; solo coinciden a-e"},
+          {"w": "calle", "t": "a", "ok": false, "why": "\"un paso calle\" no significa nada"}
+        ]
+      },
+      {
+        "id": "N4", "pie": "Rimo de noche y rimo de", "ref": "día",
+        "verso": ["porque lo que traigo es pura", ""],
+        "ops": [
+          {"w": "poesía", "t": "c", "ok": true, "why": "lo que traigo es pura poesía"},
+          {"w": "sandía", "t": "c", "ok": false, "why": "\"pura sandía\" no tiene sentido aquí"},
+          {"w": "vida", "t": "a", "ok": true, "why": "pura vida: pura energía; solo coinciden i-a"},
+          {"w": "piña", "t": "a", "ok": false, "why": "\"pura piña\" no significa nada aquí"}
+        ]
+      }
+    ],
+    [
+      {
+        "id": "N5", "pie": "Mi rima no se compra, mi rima es de", "ref": "verdad",
+        "verso": ["y tú que te la robas no tienes", ""],
+        "ops": [
+          {"w": "dignidad", "t": "c", "ok": true, "why": "robar rimas es no tener dignidad"},
+          {"w": "Navidad", "t": "c", "ok": false, "why": "\"no tienes Navidad\" no viene al caso"},
+          {"w": "lugar", "t": "a", "ok": true, "why": "no tienes lugar aquí; en las agudas solo cuenta la última vocal: a"},
+          {"w": "collar", "t": "a", "ok": false, "why": "\"no tienes collar\" no tiene sentido"}
+        ]
+      },
+      {
+        "id": "N6", "pie": "Mi rima te ilumina, mi rima es puro", "ref": "sol",
+        "verso": ["y tú con esas rimas metiste un", ""],
+        "ops": [
+          {"w": "autogol", "t": "c", "ok": true, "why": "te fallaste solo, como un gol en tu propia portería"},
+          {"w": "girasol", "t": "c", "ok": false, "why": "\"metiste un girasol\" no significa nada"},
+          {"w": "error", "t": "a", "ok": true, "why": "metiste un error; en las agudas solo cuenta la última vocal: o"},
+          {"w": "ratón", "t": "a", "ok": false, "why": "\"metiste un ratón\" no tiene sentido"}
+        ]
+      },
+      {
+        "id": "N7", "pie": "Rimo con el puño y con el", "ref": "corazón",
+        "verso": ["y cada palabra que suelto lleva", ""],
+        "ops": [
+          {"w": "intención", "t": "c", "ok": true, "why": "cada palabra va con intención"},
+          {"w": "balcón", "t": "c", "ok": false, "why": "una palabra no lleva balcón"},
+          {"w": "valor", "t": "a", "ok": true, "why": "lleva valor; en las agudas solo cuenta la última vocal: o"},
+          {"w": "tenedor", "t": "a", "ok": false, "why": "\"lleva tenedor\" no tiene sentido"}
+        ]
+      },
+      {
+        "id": "N8", "pie": "Traigo las palabras cargadas de", "ref": "fuego",
+        "verso": ["contigo ni me esfuerzo, para mí esto es un", ""],
+        "ops": [
+          {"w": "juego", "t": "c", "ok": true, "why": "esto es un juego: es fácil. En \"fue-go\" la u no cuenta"},
+          {"w": "riego", "t": "c", "ok": false, "why": "\"esto es un riego\" no tiene que ver"},
+          {"w": "paseo", "t": "a", "ok": true, "why": "es un paseo: es fácil; solo coinciden e-o"},
+          {"w": "cerebro", "t": "a", "ok": false, "why": "\"esto es un cerebro\" no significa nada aquí"}
+        ]
+      }
+    ],
+    [
+      {
+        "id": "N9", "pie": "Mi rima llega alto, la mando hasta el", "ref": "cielo",
+        "verso": ["y tú con esa rima te vas directo al", ""],
+        "ops": [
+          {"w": "suelo", "t": "c", "ok": true, "why": "te vas directo al suelo: caes"},
+          {"w": "pañuelo", "t": "c", "ok": false, "why": "\"te vas directo al pañuelo\" no tiene sentido"},
+          {"w": "infierno", "t": "a", "ok": true, "why": "yo al cielo, tú al infierno; solo coinciden e-o"},
+          {"w": "texto", "t": "a", "ok": false, "why": "\"te vas directo al texto\" no significa nada"}
+        ]
+      },
+      {
+        "id": "N10", "pie": "Yo traigo un estilo que suena bien", "ref": "nuevo",
+        "verso": ["y tú ya estás pasado, te toca el", ""],
+        "ops": [
+          {"w": "relevo", "t": "c", "ok": true, "why": "te toca el relevo: alguien toma tu lugar"},
+          {"w": "llevo", "t": "c", "ok": false, "why": "\"llevo\" es un verbo; \"te toca el llevo\" no existe"},
+          {"w": "descenso", "t": "a", "ok": true, "why": "te toca bajar de categoría; solo coinciden e-o"},
+          {"w": "cerdo", "t": "a", "ok": false, "why": "\"te toca el cerdo\" no tiene sentido"}
+        ]
+      },
+      {
+        "id": "N11", "pie": "En cada batalla te enseño una", "ref": "lección",
+        "verso": ["y tú sales corriendo sin decir", ""],
+        "ops": [
+          {"w": "perdón", "t": "c", "ok": true, "why": "te vas sin pedir perdón"},
+          {"w": "camión", "t": "c", "ok": false, "why": "\"sin decir camión\" no significa nada"},
+          {"w": "adiós", "t": "a", "ok": true, "why": "te vas sin despedirte; en las agudas solo cuenta la última vocal: o"},
+          {"w": "reloj", "t": "a", "ok": false, "why": "\"sin decir reloj\" no tiene sentido"}
+        ]
+      },
+      {
+        "id": "N12", "pie": "Desde que llegaste ya te eché el", "ref": "ojo",
+        "verso": ["y tú cuando pierdes te pones bien", ""],
+        "ops": [
+          {"w": "rojo", "t": "c", "ok": true, "why": "te pones rojo de vergüenza"},
+          {"w": "cerrojo", "t": "c", "ok": false, "why": "\"te pones bien cerrojo\" no significa nada"},
+          {"w": "nervioso", "t": "a", "ok": true, "why": "te pones nervioso; solo coinciden o-o"},
+          {"w": "pozo", "t": "a", "ok": false, "why": "\"te pones bien pozo\" no tiene sentido"}
+        ]
+      }
+    ]
+  ],
+  "replica": [
+    {
+      "id": "X1", "pie": "Seguimos en la plaza, esto no ha", "ref": "terminado",
+      "verso": ["y tú con tus rimas ya estás", ""],
+      "ops": [
+        {"w": "cansado", "t": "c", "ok": true, "why": "ya no te da el aire"},
+        {"w": "cuñado", "t": "c", "ok": false, "why": "\"ya estás cuñado\" no significa nada"},
+        {"w": "temblando", "t": "a", "ok": true, "why": "ya tienes miedo; solo coinciden a-o"},
+        {"w": "zapato", "t": "a", "ok": false, "why": "\"ya estás zapato\" no tiene sentido"}
+      ]
+    },
+    {
+      "id": "X2", "pie": "Llegó la réplica y aquí está mi", "ref": "talento",
+      "verso": ["y tú te quedas mudo, te falta el", ""],
+      "ops": [
+        {"w": "aliento", "t": "c", "ok": true, "why": "te falta el aliento: ya no puedes ni hablar"},
+        {"w": "cemento", "t": "c", "ok": false, "why": "\"te falta el cemento\" no significa nada"},
+        {"w": "cerebro", "t": "a", "ok": true, "why": "te falta cerebro; solo coinciden e-o"},
+        {"w": "beso", "t": "a", "ok": false, "why": "\"te falta el beso\" no tiene sentido aquí"}
+      ]
+    }
+  ],
+  "rival": [
+    [
+      {"pie": "Te veo muy tranquilo, quitado de la", "ref": "pena", "verso": "pero esta noche, carnal, yo me robo la", "w": "escena", "t": "c", "ok": true},
+      {"pie": "Traigo rimas nuevas, las traigo de a", "ref": "montón", "verso": "y contigo en la tarima me siento", "w": "jabón", "t": "c", "ok": false},
+      {"pie": "Vengo desde el barrio, me conocen en la", "ref": "esquina", "verso": "y contigo yo rimo bien", "w": "cocina", "t": "c", "ok": false},
+      {"pie": "Me subo a la tarima con todo mi", "ref": "poder", "verso": "y tú mejor ni vengas, te voy a", "w": "vencer", "t": "c", "ok": true}
+    ],
+    [
+      {"pie": "Te tiemblan las piernas, se te nota el", "ref": "miedo", "verso": "y yo con esta rima te dejo", "w": "enredo", "t": "c", "ok": false},
+      {"pie": "Esa gorra roja ya pasó de", "ref": "moda", "verso": "y tú con esas rimas pareces de", "w": "broma", "t": "a", "ok": true},
+      {"pie": "Yo traigo la lírica, yo traigo el", "ref": "sabor", "verso": "y tú con esa rima me das", "w": "tractor", "t": "c", "ok": false},
+      {"pie": "Aquí en mi colonia yo soy el", "ref": "campeón", "verso": "y tú vas a salir llorando del", "w": "salón", "t": "c", "ok": true}
+    ],
+    [
+      {"pie": "Te voy a dar una clase, te voy a", "ref": "enseñar", "verso": "que yo en esta plaza me voy a", "w": "planchar", "t": "c", "ok": false},
+      {"pie": "Mi rima es tan fina como un buen", "ref": "reloj", "verso": "y tú te quedas quieto mirando un", "w": "arroz", "t": "a", "ok": false},
+      {"pie": "Esta batalla es mía, ya la tengo", "ref": "ganada", "verso": "y tú te vas a casa sin decir", "w": "nada", "t": "c", "ok": true},
+      {"pie": "Yo nunca me rindo, yo nunca me", "ref": "canso", "verso": "y tú cuando rimas pareces un", "w": "ganso", "t": "c", "ok": true}
+    ]
+  ],
+  "rivalReplica": [
+    {"pie": "Pensaste que ganabas pero sigo", "ref": "prendido", "verso": "y tú en esta réplica ya estás", "w": "perdido", "t": "c", "ok": true},
+    {"pie": "Esta réplica es mía, la gano sin", "ref": "bronca", "verso": "y tú con esas rimas te llamas", "w": "concha", "t": "a", "ok": false}
+  ]
+}

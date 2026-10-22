@@ -1,0 +1,924 @@
+<title>Batalla de Freestyle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@500;600;700;800;900&display=swap">
+<style>
+/* Una columna de celular: marcador arriba, tarima con personajes, tarjeta del verso y opciones al alcance del pulgar. Un solo look oscuro de batalla, a propósito. */
+:root {
+  --bg: #0A0A0A;
+  --panel: #161514;
+  --panel-2: #23211F;
+  --ink: #F2EDE4;
+  --ink-2: #A8A29A;
+  --ink-3: #6B665F;
+  --ref: #FF3C00;
+  --slot: #FFCC00;
+  --gold: #FFC21A;
+  --err: #E11D2E;
+  --line: #000000;
+  --f-display: "Bebas Neue", "Oswald", Impact, "Arial Narrow", sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; touch-action: manipulation; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--slot); outline-offset: 3px; }
+.app {
+  height: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
+}
+.screen { height: 100%; display: flex; flex-direction: column; }
+.scroll { overflow-y: auto; padding-block: 18px 28px; gap: 18px; }
+
+/* ---------- piezas comunes ---------- */
+.btn {
+  border: 3px solid var(--line);
+  border-radius: 12px;
+  background: var(--slot);
+  color: #111;
+  font-family: var(--f-display);
+  font-size: 28px;
+  letter-spacing: .04em;
+  padding: 12px 18px 8px;
+  box-shadow: 0 5px 0 var(--line);
+  transition: transform .06s;
+}
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--line); }
+.btn.sec { background: var(--panel-2); color: var(--ink); font-size: 22px; }
+.icon { width: 1em; height: 1em; flex: none; }
+.tag {
+  font-family: var(--f-display); font-size: 18px; letter-spacing: .06em;
+  background: var(--ink); color: #111; padding: 3px 10px 1px; border-radius: 4px;
+  display: inline-block; transform: rotate(-2deg);
+}
+
+/* ---------- menú ---------- */
+.logo { text-align: center; padding-top: 6px; }
+.logo h1 {
+  margin: 0; font-family: var(--f-display); font-weight: 400;
+  font-size: clamp(54px, 17vw, 76px); line-height: .86; letter-spacing: .01em;
+  text-wrap: balance;
+}
+.logo h1 span { color: var(--slot); display: block; }
+.logo p { margin: 10px auto 0; color: var(--ink-2); font-size: 15px; line-height: 1.45; max-width: 30ch; }
+.niveles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.nivel {
+  position: relative; overflow: hidden; text-align: left;
+  border: 3px solid var(--line); border-radius: 14px; background: var(--panel);
+  box-shadow: 0 5px 0 var(--line); padding: 0; min-height: 190px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.nivel:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 var(--line); }
+.nivel img { position: absolute; inset: 6px 0 auto; height: 128px; width: 100%; object-fit: contain; object-position: center bottom; }
+.nivel .pie-n { position: relative; background: linear-gradient(transparent, var(--panel) 30%); padding: 34px 12px 10px; }
+.nivel b { font-family: var(--f-display); font-weight: 400; font-size: 26px; letter-spacing: .03em; display: block; line-height: 1; }
+.nivel small { color: var(--ink-2); font-size: 12.5px; display: block; margin-top: 3px; }
+.nivel .stars { margin-top: 6px; }
+.nivel:disabled { cursor: default; }
+.nivel:disabled img { filter: grayscale(1) brightness(.45); }
+.nivel:disabled b { color: var(--ink-3); }
+.lock { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; color: var(--ink-2); }
+.nivel.p1 { background: radial-gradient(120% 80% at 50% 0%, #3a2a10, var(--panel) 70%); }
+.nivel.p2 { background: radial-gradient(120% 80% at 50% 0%, #2a1a44, var(--panel) 70%); }
+.stars { display: flex; gap: 3px; }
+.stars svg { width: 18px; height: 18px; }
+.reglas { border: 3px solid var(--line); border-radius: 14px; background: var(--panel); padding: 14px; display: grid; gap: 10px; }
+.reglas h2 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 22px; letter-spacing: .05em; color: var(--ink-2); }
+.regla { display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 10px; font-size: 14.5px; line-height: 1.35; }
+.regla .icon { width: 30px; height: 30px; }
+.regla em { font-style: normal; font-family: var(--f-display); font-size: 24px; font-variant-numeric: tabular-nums; }
+.menu-pie { display: flex; justify-content: space-between; align-items: center; color: var(--ink-3); font-size: 13px; gap: 12px; }
+.chip-btn { border: 2px solid #333; background: transparent; border-radius: 999px; padding: 6px 12px; color: var(--ink-2); font-size: 13px; font-weight: 600; }
+
+/* ---------- juego ---------- */
+.top {
+  display: grid; grid-template-columns: 44px auto 1fr; align-items: center; gap: 10px;
+  padding-top: 10px; flex: none;
+}
+.icon-btn { width: 44px; height: 40px; border: 3px solid var(--line); border-radius: 10px; background: var(--panel-2); display: grid; place-items: center; }
+.icon-btn svg { width: 20px; height: 20px; }
+.ronda-tag { font-family: var(--f-display); font-size: 22px; background: var(--ink); color: #111; padding: 2px 9px 0; border-radius: 6px; transform: rotate(-2deg); }
+.marcador { justify-self: end; font-family: var(--f-display); font-size: 25px; letter-spacing: .03em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.marcador .yo { color: var(--slot); }
+.marcador .sep { color: var(--ink-3); padding: 0 4px; }
+
+.tarima {
+  position: relative; flex: none; height: clamp(120px, 24vh, 210px); margin-top: 6px;
+  background:
+    radial-gradient(60% 70% at 22% 100%, rgba(255,60,0,.22), transparent 70%),
+    radial-gradient(60% 70% at 78% 100%, rgba(90,60,200,.25), transparent 70%),
+    radial-gradient(90% 60% at 50% 0%, rgba(255,204,0,.08), transparent 70%);
+  border-bottom: 3px solid var(--line);
+  transition: height .35s ease;
+}
+.tarima::after { content: ""; position: absolute; inset: auto -16px 0; height: 10px; background: linear-gradient(transparent, rgba(0,0,0,.6)); }
+.pj { position: absolute; bottom: 0; height: 100%; transition: transform .3s ease, opacity .3s; }
+.pj img { height: 100%; width: auto; display: block; }
+.pj.yo { left: 2%; }
+.pj.riv { right: 2%; }
+.pj.bump img { animation: bump .25s ease-out; }
+@keyframes bump { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-4px) scale(1.03); } 100% { transform: none; } }
+.vs {
+  position: absolute; left: 50%; top: 42%; translate: -50% -50%;
+  width: 64px; height: 64px; display: grid; place-items: center;
+  background: var(--slot); color: #111; font-family: var(--f-display); font-size: 30px; line-height: 1;
+  clip-path: polygon(50% 0%, 61% 30%, 95% 20%, 72% 46%, 100% 62%, 66% 66%, 72% 100%, 50% 76%, 26% 98%, 32% 66%, 0% 64%, 28% 46%, 6% 18%, 40% 30%);
+  transition: scale .1s;
+}
+.solo .vs, .solo .pj.riv { display: none; }
+.solo .pj.yo { left: 50%; translate: -50% 0; }
+.turno-rival .tarima { height: clamp(150px, 30vh, 250px); }
+.turno-rival .pj.riv { transform: scale(1.08); transform-origin: bottom right; }
+.turno-rival .pj.yo { opacity: .55; }
+.beat .vs { scale: 1.12; }
+
+.tarjeta {
+  position: relative; margin-top: 12px; flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column; gap: 12px;
+  background: var(--panel); border: 3px solid var(--line); border-radius: 16px;
+  box-shadow: 0 6px 0 var(--line); padding: 16px 16px 14px;
+}
+.pie { margin: 0; color: var(--ink-2); font-size: 16px; font-weight: 600; line-height: 1.35; }
+.refw { color: var(--ref); font-weight: 900; letter-spacing: .02em; }
+.refw u { text-decoration: none; border-bottom: 3px solid var(--ref); padding-bottom: 1px; }
+.verso { margin: 0; font-weight: 800; font-size: clamp(23px, 6.6vw, 30px); line-height: 1.25; text-wrap: balance; }
+.hueco {
+  display: inline-block; min-width: 4.4em; height: 1.18em; vertical-align: -0.2em;
+  border: 3px dashed var(--slot); border-radius: 9px; box-sizing: border-box;
+  background: rgba(255,204,0,.07); transition: transform .08s;
+}
+.beat .hueco.vivo { transform: scale(1.05); background: rgba(255,204,0,.16); }
+.lleno { display: inline-block; padding: 0 8px; border: 3px solid var(--ink); border-radius: 9px; animation: cae .28s cubic-bezier(.2,1.6,.4,1); }
+.lleno.k-c { border-color: var(--gold); box-shadow: 0 0 18px rgba(255,194,26,.45); }
+.lleno.k-a { border-color: var(--ink); }
+.lleno.k-f { border-color: var(--err); color: var(--err); text-decoration: line-through; text-decoration-thickness: 3px; }
+.lleno.k-t { border-color: var(--ink-3); color: var(--ink-3); min-width: 4.4em; }
+@keyframes cae { from { transform: translateY(-14px) scale(1.25); opacity: .2; } to { transform: none; opacity: 1; } }
+mark { background: none; color: inherit; }
+mark.m-c { color: var(--gold); text-decoration: underline 3px; text-underline-offset: 4px; }
+mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 3px; text-decoration: underline 3px; text-underline-offset: 4px; }
+.refw mark.m-c { color: var(--gold); }
+
+.puntos { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.puntos i { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); transition: background .15s, transform .15s; }
+.puntos i.rojo { background: var(--err); }
+.puntos i.off { background: #2c2a28; }
+.puntos i.rojo.off { background: #3a1216; }
+.puntos.quieto i { background: #2c2a28; }
+
+.opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+.op {
+  min-height: 60px; border: 3px solid var(--line); border-radius: 12px; background: var(--panel-2);
+  font-weight: 800; font-size: clamp(19px, 5.4vw, 22px); box-shadow: 0 4px 0 var(--line), inset 0 0 0 1px #3a3734;
+  transition: transform .06s, border-color .15s, opacity .2s;
+}
+.op:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 var(--line), inset 0 0 0 1px #3a3734; }
+.op:disabled { cursor: default; }
+.opciones.cerrado .op { opacity: .45; }
+.opciones.cerrado .op.elegida { opacity: 1; }
+.op.elegida.k-c { border-color: var(--gold); color: var(--gold); }
+.op.elegida.k-a { border-color: var(--ink); }
+.op.elegida.k-f { border-color: var(--err); color: var(--err); text-decoration: line-through; }
+.op.mejor { opacity: 1 !important; border-color: var(--gold); border-style: dashed; }
+
+.cinta {
+  align-self: center; margin: 4px 0 2px;
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
+  font-family: var(--f-display); font-size: 28px; letter-spacing: .04em; line-height: 1;
+  padding: 7px 14px 4px; border: 3px solid var(--line); border-radius: 6px;
+  box-shadow: 0 4px 0 var(--line); transform: rotate(-3deg);
+  animation: pega .3s cubic-bezier(.2,1.6,.4,1);
+}
+.cinta .icon { width: 26px; height: 26px; margin-top: -3px; }
+.cinta.k-c { background: var(--gold); color: #111; }
+.cinta.k-a { background: var(--ink); color: #111; }
+.cinta.k-f { background: var(--err); color: #fff; }
+.cinta.k-t { background: #3a3734; color: var(--ink); }
+@keyframes pega { from { transform: rotate(-3deg) scale(1.6); opacity: 0; } to { transform: rotate(-3deg) scale(1); opacity: 1; } }
+
+.explica { background: var(--panel-2); border-radius: 10px; padding: 10px 12px; font-size: 15px; line-height: 1.45; display: grid; gap: 10px; }
+.explica .btn { font-size: 22px; padding: 9px 14px 6px; justify-self: end; }
+
+.aviso {
+  margin: auto 0; text-align: center; display: grid; gap: 12px; justify-items: center; padding: 10px 0;
+}
+.aviso h2 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 54px; line-height: .9; letter-spacing: .02em; }
+.aviso p { margin: 0; color: var(--ink-2); font-size: 16px; line-height: 1.45; max-width: 30ch; }
+
+/* turno del rival */
+.rival-head { display: flex; justify-content: space-between; align-items: center; }
+.rival-head .tag { background: var(--slot); }
+.saltar { border: 0; background: none; color: var(--ink-2); font-weight: 700; font-size: 14px; padding: 6px 2px; }
+.rival-versos { display: grid; gap: 8px; }
+.rv-pie { margin: 0; color: var(--ink-2); font-size: 16px; font-weight: 600; line-height: 1.35; }
+.rv-verso { margin: 0; font-weight: 800; font-size: clamp(21px, 6vw, 26px); line-height: 1.25; min-height: 1.25em; }
+.rv-label { display: inline-flex; align-items: center; gap: 5px; font-family: var(--f-display); font-size: 17px; letter-spacing: .04em; padding: 3px 7px 1px; border-radius: 4px; vertical-align: 3px; margin-left: 6px; animation: pega .3s; }
+.rv-label .icon { width: 16px; height: 16px; margin-top: -2px; }
+.rv-label.k-c { background: var(--gold); color: #111; }
+.rv-label.k-a { background: var(--ink); color: #111; }
+.rv-label.k-f { background: var(--err); color: #fff; }
+.fichas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: auto; }
+.fichas.dos { grid-template-columns: repeat(2, 1fr); }
+.ficha {
+  height: 50px; border: 3px solid var(--line); border-radius: 10px; background: var(--panel-2);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-family: var(--f-display); font-size: 24px; font-variant-numeric: tabular-nums;
+}
+.ficha .icon { width: 24px; height: 24px; }
+.ficha.vacia { color: var(--ink-3); border-style: dashed; border-color: #333; }
+
+/* ---------- fin de ronda / final ---------- */
+.veredicto { text-align: center; display: grid; gap: 6px; }
+.veredicto .tag { justify-self: center; }
+.veredicto h2 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(52px, 15vw, 68px); line-height: .9; text-wrap: balance; }
+.veredicto h2.gana { color: var(--slot); }
+.duelo { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; }
+.lado { background: var(--panel); border: 3px solid var(--line); border-radius: 14px; padding: 12px 10px; display: grid; gap: 8px; justify-items: center; text-align: center; }
+.lado h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 20px; letter-spacing: .06em; color: var(--ink-2); }
+.lado .num { font-family: var(--f-display); font-size: 56px; line-height: .9; font-variant-numeric: tabular-nums; }
+.lado.yo .num { color: var(--slot); }
+.lado .iconos { display: flex; gap: 4px; }
+.lado .iconos .icon { width: 24px; height: 24px; }
+.lado small { color: var(--ink-2); font-size: 12.5px; line-height: 1.3; }
+.duelo .mini-vs { align-self: center; font-family: var(--f-display); font-size: 26px; color: var(--ink-3); }
+.repaso { display: grid; gap: 10px; }
+.repaso h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 24px; letter-spacing: .05em; }
+.rp { background: var(--panel); border: 3px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 8px; }
+.rp .lineas { font-size: 15px; line-height: 1.4; color: var(--ink-2); font-weight: 600; }
+.rp .lineas b { color: var(--ink); font-weight: 800; }
+.rp .res { display: flex; gap: 8px; align-items: flex-start; font-size: 14.5px; line-height: 1.4; }
+.rp .res .icon { width: 22px; height: 22px; margin-top: 1px; }
+.rp .res strong { font-family: var(--f-display); font-weight: 400; font-size: 19px; letter-spacing: .04em; margin-right: 4px; }
+.acciones { display: grid; gap: 12px; }
+.final-pj { height: clamp(170px, 30vh, 260px); display: flex; justify-content: center; align-items: flex-end; gap: 0;
+  background: radial-gradient(60% 80% at 50% 100%, rgba(255,204,0,.18), transparent 70%); border-bottom: 3px solid var(--line); }
+.final-pj img { height: 100%; width: auto; }
+.final-pj.dos img { height: 88%; }
+.stars.grande { justify-content: center; gap: 8px; }
+.stars.grande svg { width: 40px; height: 40px; }
+.total { font-family: var(--f-display); font-size: 30px; text-align: center; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.total .yo { color: var(--slot); }
+
+/* pausa */
+.sitio-top { display: flex; justify-content: center; }
+.sitio-top img { height: 30px; width: auto; }
+.menu-legal { text-align: center; color: var(--ink-3); font-size: 12.5px; line-height: 1.5; }
+.menu-legal a { color: var(--ink-2); }
+.opinion { border: 3px solid var(--line); border-radius: 14px; background: var(--panel); padding: 14px; display: grid; gap: 12px; }
+.opinion h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 26px; letter-spacing: .04em; }
+.opinion p { margin: 0; color: var(--ink-2); font-size: 14.5px; line-height: 1.45; }
+.notas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.nota { border: 3px solid var(--line); border-radius: 10px; background: var(--panel-2); padding: 8px 2px 6px; display: grid; gap: 2px; justify-items: center; }
+.nota b { font-family: var(--f-display); font-weight: 400; font-size: 26px; line-height: 1; }
+.nota small { font-size: 11px; color: var(--ink-2); font-weight: 600; }
+.nota[aria-pressed="true"] { border-color: var(--slot); background: rgba(255,204,0,.14); }
+.nota[aria-pressed="true"] b { color: var(--slot); }
+.opinion label { font-size: 13.5px; font-weight: 700; color: var(--ink-2); display: grid; gap: 6px; }
+.opinion textarea, .opinion input[type=text] { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 2px solid #3a3734; border-radius: 10px; padding: 10px 12px; resize: vertical; }
+.opinion textarea:focus, .opinion input:focus { outline: none; border-color: var(--slot); }
+.opinion .btn { font-size: 24px; }
+.opinion .estado { font-size: 14px; color: var(--ink-2); min-height: 1em; }
+.opinion .estado.err { color: #ff6b78; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.capa { position: absolute; inset: 0; background: rgba(10,10,10,.92); display: grid; place-items: center; z-index: 20; }
+.capa .caja { display: grid; gap: 12px; width: min(320px, 100%); text-align: center; }
+.capa h2 { margin: 0 0 4px; font-family: var(--f-display); font-weight: 400; font-size: 48px; }
+
+@media (max-height: 640px) {
+  .tarima { height: 104px; }
+  .turno-rival .tarima { height: 128px; }
+  .tarjeta { padding: 12px 12px 10px; gap: 9px; }
+  .op { min-height: 52px; }
+  .verso { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .beat .vs, .beat .hueco.vivo { scale: 1; transform: none; }
+}
+</style>
+
+<div class="app" id="app">
+
+  <!-- MENÚ -->
+  <section class="screen scroll" id="s-menu">
+    <a class="sitio-top" href="/" data-sitio hidden aria-label="Ir a RapScore MX"><img src="../images/rapscore-logo-transparente.png" alt="RapScore MX"></a>
+    <header class="logo">
+      <h1>Batalla de <span>Freestyle</span></h1>
+      <p>Completa el verso con la palabra que rima y tiene sentido, antes de que se acabe el beat.</p>
+    </header>
+    <div class="niveles">
+      <button class="nivel p1" id="nv-practica" type="button">
+        <img src="img/jugador-celebra.webp" alt="">
+        <div class="pie-n"><b>Práctica</b><small>Sin rival · 8 compases</small><div class="stars" data-stars="practica"></div></div>
+      </button>
+      <button class="nivel p2" id="nv-novato" type="button">
+        <img src="img/novato-neutral.webp" alt="">
+        <div class="pie-n"><b>Rival novato</b><small>3 rondas · 4 compases</small><div class="stars" data-stars="novato"></div></div>
+      </button>
+      <button class="nivel" type="button" disabled>
+        <img src="img/medio-neutral.webp" alt="">
+        <svg class="lock" data-icon="lock"></svg>
+        <div class="pie-n"><b>Rival medio</b><small>Próximamente</small></div>
+      </button>
+      <button class="nivel" type="button" disabled>
+        <img src="img/jefe-neutral.webp" alt="">
+        <svg class="lock" data-icon="lock"></svg>
+        <div class="pie-n"><b>Jefe</b><small>Próximamente · doble rima</small></div>
+      </button>
+    </div>
+    <section class="reglas" aria-label="Cómo se puntúa">
+      <h2>Cómo se puntúa</h2>
+      <div class="regla"><svg class="icon" data-icon="cg"></svg><span>Rima consonante y la frase tiene sentido</span><em>+1</em></div>
+      <div class="regla"><svg class="icon" data-icon="cb"></svg><span>Rima asonante y la frase tiene sentido</span><em>+0,5</em></div>
+      <div class="regla"><svg class="icon" data-icon="x"></svg><span>No tiene sentido o se acabó el tiempo</span><em>0</em></div>
+    </section>
+    <div class="menu-pie">
+      <span>Sube el volumen: el tiempo corre al ritmo del beat.</span>
+      <button class="chip-btn" id="btn-sonido" type="button">Sonido: sí</button>
+    </div>
+    <p class="menu-legal" data-sitio hidden>Versión de prueba. <a href="/">Ir a RapScore MX</a> · <a href="../privacidad.html">Aviso de privacidad</a></p>
+  </section>
+
+  <!-- JUEGO -->
+  <section class="screen" id="s-juego" hidden>
+    <div class="top">
+      <button class="icon-btn" id="btn-pausa" type="button" aria-label="Pausa"><svg data-icon="pausa"></svg></button>
+      <span class="ronda-tag" id="ronda">R1/3</span>
+      <div class="marcador" id="marcador"></div>
+    </div>
+    <div class="tarima">
+      <div class="pj yo"><img id="img-yo" src="img/jugador-neutral.webp" alt="Tu personaje"></div>
+      <div class="vs" aria-hidden="true">VS</div>
+      <div class="pj riv"><img id="img-riv" src="img/novato-neutral.webp" alt="Rival novato"></div>
+    </div>
+    <div class="tarjeta" id="tarjeta"></div>
+  </section>
+
+  <!-- FIN DE RONDA -->
+  <section class="screen scroll" id="s-ronda" hidden></section>
+
+  <!-- FINAL -->
+  <section class="screen scroll" id="s-final" hidden></section>
+
+  <div class="capa" id="capa-pausa" hidden>
+    <div class="caja">
+      <h2>Pausa</h2>
+      <button class="btn" id="btn-seguir" type="button">Seguir</button>
+      <button class="btn sec" id="btn-sonido2" type="button">Sonido: sí</button>
+      <button class="btn sec" id="btn-salir" type="button">Salir al menú</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/*RIMA*/
+</script>
+<script>
+const CONTENIDO = /*CONTENT*/;
+
+/* ================= iconos ================= */
+const ICON = {
+  cg: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><path d="M4 23 L3 9 L10.5 15 L16 5 L21.5 15 L29 9 L28 23 Z" fill="#FFC21A" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/><rect x="4" y="23" width="24" height="5" rx="1.5" fill="#FFC21A" stroke="#000" stroke-width="2.5"/><circle cx="16" cy="18" r="2.2" fill="#000"/></svg>',
+  cb: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><path d="M4 23 L3 9 L10.5 15 L16 5 L21.5 15 L29 9 L28 23 Z" fill="#F2EDE4" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/><rect x="4" y="23" width="24" height="5" rx="1.5" fill="#F2EDE4" stroke="#000" stroke-width="2.5"/><circle cx="16" cy="18" r="2.2" fill="#000"/></svg>',
+  x: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#E11D2E" stroke="#000" stroke-width="2.5"/><path d="M11 11 L21 21 M21 11 L11 21" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/></svg>',
+  t: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#3a3734" stroke="#000" stroke-width="2.5"/><path d="M16 9 V16 L21 19" stroke="#F2EDE4" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="#FFCC00" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+  star0: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="#2c2a28" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" class="lock" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2" fill="currentColor"/><path d="M8 10 V7 a4 4 0 0 1 8 0 V10" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>',
+  pausa: '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="3" width="4" height="14" rx="1" fill="#F2EDE4"/><rect x="12" y="3" width="4" height="14" rx="1" fill="#F2EDE4"/></svg>'
+};
+const iconK = k => ({ c: ICON.cg, a: ICON.cb, f: ICON.x, t: ICON.t })[k];
+document.querySelectorAll('svg[data-icon]').forEach(s => { s.outerHTML = ICON[s.dataset.icon]; });
+
+/* ================= medición (solo en el sitio) ================= */
+const SITIO = !!window.RS_SITIO;
+const track = (n, p) => { try { if (window.rsTrack) window.rsTrack(n, p || {}); } catch (e) {} };
+if (SITIO) document.querySelectorAll('[data-sitio]').forEach(el => { el.hidden = false; });
+
+/* ================= utilidades ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = n => (Math.round(n * 10) / 10).toString().replace('.', ',');
+const PTS = { c: 1, a: 0.5 };
+const LABEL = { c: '+1 CONSONANTE', a: '+0,5 ASONANTE', f: 'RIMA, PERO NO CUADRA', t: 'SE TE FUE EL BEAT' };
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('bf-' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('bf-' + k, JSON.stringify(v)); } catch (e) {} }
+};
+
+/* ================= audio y reloj ================= */
+const BPM = window.__bpm || 90, BEAT = 60 / BPM, BAR = BEAT * 4;
+const A = { ctx: null, master: null, beatBus: null, fxBus: null, noise: null, t0: 0, nextStep: 0, step: 0, timer: null, sonando: false, mudo: store.get('mudo', false), pausaFallback: null, offset: 0 };
+
+function clock() {
+  if (A.ctx) return A.ctx.currentTime;
+  const t = (A.pausaFallback ?? performance.now()) / 1000;
+  return t - A.offset;
+}
+function audioInit() {
+  if (A.ctx !== null || A.intentado) return;
+  A.intentado = true;
+  try {
+    A.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    A.master = A.ctx.createGain(); A.master.gain.value = A.mudo ? 0 : 0.9; A.master.connect(A.ctx.destination);
+    const comp = A.ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4; comp.connect(A.master);
+    A.beatBus = A.ctx.createGain(); A.beatBus.gain.value = 0.8; A.beatBus.connect(comp);
+    A.fxBus = A.ctx.createGain(); A.fxBus.gain.value = 0.9; A.fxBus.connect(comp);
+    const len = A.ctx.sampleRate; const buf = A.ctx.createBuffer(1, len, A.ctx.sampleRate); const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    A.noise = buf;
+  } catch (e) { A.ctx = null; }
+}
+function setMudo(m) {
+  A.mudo = m; store.set('mudo', m);
+  if (A.master) A.master.gain.setTargetAtTime(m ? 0 : 0.9, A.ctx.currentTime, 0.02);
+  const txt = 'Sonido: ' + (m ? 'no' : 'sí');
+  $('#btn-sonido').textContent = txt; $('#btn-sonido2').textContent = txt;
+}
+function env(g, t, peak, a, d) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + d); }
+function osc(type, f, t, dur, bus, peak, a = 0.005, filt) {
+  const o = A.ctx.createOscillator(), g = A.ctx.createGain(); o.type = type; o.frequency.setValueAtTime(f, t);
+  let n = o; if (filt) { const fl = A.ctx.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = filt; o.connect(fl); n = fl; }
+  n.connect(g); g.connect(bus); env(g, t, peak, a, dur); o.start(t); o.stop(t + a + dur + 0.05); return o;
+}
+function ruido(t, dur, bus, peak, type, f, q = 1, a = 0.002) {
+  const s = A.ctx.createBufferSource(); s.buffer = A.noise;
+  const fl = A.ctx.createBiquadFilter(); fl.type = type; fl.frequency.setValueAtTime(f, t); fl.Q.value = q;
+  const g = A.ctx.createGain(); s.connect(fl); fl.connect(g); g.connect(bus); env(g, t, peak, a, dur);
+  s.start(t, Math.random() * 0.5); s.stop(t + a + dur + 0.05); return fl;
+}
+// boom bap a 90 BPM, progresión menor de 4 compases
+const ACORDES = [[220, 261.63, 329.63, 392], [174.61, 220, 261.63, 329.63], [146.83, 174.61, 220, 261.63], [164.81, 196, 246.94, 293.66]];
+const BAJOS = [55, 43.65, 73.42, 82.41];
+function tocarPaso(i, t) {
+  const s = i % 16, bar = Math.floor(i / 16) % 4, B = A.beatBus;
+  if (s === 0 || s === 7 || s === 10) { const o = osc('sine', 150, t, 0.32, B, 1); o.frequency.exponentialRampToValueAtTime(42, t + 0.12); }
+  if (s === 4 || s === 12) { ruido(t, 0.17, B, 0.55, 'highpass', 1400); osc('triangle', 190, t, 0.09, B, 0.3); }
+  if (s % 2 === 0) ruido(t, 0.035, B, s % 4 === 0 ? 0.13 : 0.08, 'highpass', 8000);
+  if (s === 15) ruido(t, 0.03, B, 0.05, 'highpass', 9000);
+  if (s === 0) osc('triangle', BAJOS[bar], t, BEAT * 1.6, B, 0.42, 0.01, 380);
+  if (s === 10) osc('triangle', BAJOS[bar], t, BEAT * 0.7, B, 0.32, 0.01, 380);
+  if (s === 0) ACORDES[bar].forEach(f => osc('sine', f, t, BEAT * 3.4, B, 0.045, 0.03, 1800));
+  if (s === 6) ACORDES[bar].slice(1).forEach(f => osc('triangle', f * 2, t, BEAT * 0.4, B, 0.018, 0.005, 2600));
+}
+function beatStart() {
+  audioInit();
+  if (A.ctx && A.ctx.state === 'suspended') A.ctx.resume();
+  A.t0 = clock() + 0.12; A.nextStep = A.t0; A.step = 0; A.sonando = true;
+  if (A.beatBus) A.beatBus.gain.setValueAtTime(0.8, A.ctx.currentTime);
+  clearInterval(A.timer);
+  A.timer = setInterval(() => {
+    if (!A.ctx) return;
+    while (A.nextStep < A.ctx.currentTime + 0.12) { tocarPaso(A.step, A.nextStep); A.step++; A.nextStep += BEAT / 4; }
+  }, 25);
+}
+function beatStop() {
+  A.sonando = false; clearInterval(A.timer);
+  if (A.beatBus) A.beatBus.gain.setTargetAtTime(0, A.ctx.currentTime, 0.05);
+}
+const proxCompas = after => A.t0 + Math.ceil((after - A.t0) / BAR - 1e-6) * BAR;
+const proxOctavo = after => A.t0 + Math.ceil((after - A.t0) / (BEAT / 2) - 1e-6) * (BEAT / 2);
+const esperar = time => new Promise(r => { const f = () => { const q = time - clock(); if (q <= 0.004) r(); else setTimeout(f, Math.min(40, q * 1000)); }; f(); });
+
+const FX = {
+  c(t, suave) {
+    if (!A.ctx) return; const k = suave ? 0.45 : 1;
+    ruido(t, 1.1, A.fxBus, 0.35 * k, 'bandpass', 1600, 0.6, 0.12);
+    [466.16, 587.33, 698.46].forEach(f => { osc('sawtooth', f, t, 0.16, A.fxBus, 0.05 * k, 0.01, 2400); osc('sawtooth', f, t + 0.22, 0.3, A.fxBus, 0.05 * k, 0.01, 2400); });
+  },
+  a(t, suave) {
+    if (!A.ctx) return; const k = suave ? 0.5 : 1;
+    [220, 223.5].forEach(f => { const o = A.ctx.createOscillator(), fl = A.ctx.createBiquadFilter(), g = A.ctx.createGain();
+      o.type = 'sawtooth'; o.frequency.setValueAtTime(f, t); o.frequency.linearRampToValueAtTime(f * 0.86, t + 0.8);
+      fl.type = 'bandpass'; fl.frequency.value = 650; fl.Q.value = 3; o.connect(fl); fl.connect(g); g.connect(A.fxBus);
+      env(g, t, 0.22 * k, 0.12, 0.75); o.start(t); o.stop(t + 1); });
+    ruido(t, 0.7, A.fxBus, 0.08 * k, 'bandpass', 900, 0.8, 0.1);
+  },
+  f(t, suave) {
+    if (!A.ctx) return; const k = suave ? 0.5 : 1;
+    [0, 0.16].forEach(d => { const fl = ruido(t + d, 0.14, A.fxBus, 0.5 * k, 'bandpass', 500, 5, 0.005);
+      fl.frequency.exponentialRampToValueAtTime(3200, t + d + 0.07); fl.frequency.exponentialRampToValueAtTime(400, t + d + 0.14); });
+  },
+  t(t) {
+    if (!A.ctx) return;
+    const o = osc('sine', 320, t, 0.5, A.fxBus, 0.4); o.frequency.exponentialRampToValueAtTime(45, t + 0.5);
+    A.beatBus.gain.setTargetAtTime(0.05, t, 0.04); A.beatBus.gain.setTargetAtTime(0.8, t + BEAT * 1.2, 0.08);
+  },
+  tap() { if (A.ctx) osc('square', 880, A.ctx.currentTime, 0.03, A.fxBus, 0.08); }
+};
+
+/* ================= pantallas y pulso visual ================= */
+function pantalla(id) { ['menu', 'juego', 'ronda', 'final'].forEach(s => { const el = $('#s-' + s); el.hidden = s !== id; if (s === id) el.scrollTop = 0; }); window.scrollTo(0, 0); }
+let ultimoBeat = -1;
+function loop() {
+  if (A.sonando) {
+    const b = Math.floor((clock() - A.t0) / BEAT);
+    if (b !== ultimoBeat && b >= 0) { ultimoBeat = b; const app = $('#app'); app.classList.add('beat'); setTimeout(() => app.classList.remove('beat'), 110); }
+  }
+  if (G.dots) pintarPuntos();
+  requestAnimationFrame(loop);
+}
+
+/* ================= estado ================= */
+const G = { modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato' };
+const NIVEL = {
+  practica: { rondas: [CONTENIDO.practica], compases: () => 8, pista: () => 'term', rival: null },
+  novato: { rondas: CONTENIDO.novato, compases: r => (r === 2 ? 3 : 4), pista: () => 'tonic', rival: CONTENIDO.rival }
+};
+const INTRO = {
+  practica: ['Práctica', 'Elige la palabra que rima con la palabra naranja y que le da sentido a la frase. Tienes 8 compases para cada verso.'],
+  novato: [
+    ['Ronda 1', 'Primero rapea el rival. Fíjate en sus rimas: no todas tienen sentido.'],
+    ['Ronda 2', 'Ahora vienen palabras agudas y diptongos. En las agudas solo cuenta la última vocal: corazón rima en asonante con valor.'],
+    ['Ronda 3', 'Último round: tienes un compás menos para decidir.']
+  ],
+  replica: ['Réplica', 'Empate. Dos versos cada quien y gana el que sume más.']
+};
+['jugador', 'novato'].forEach(c => ['neutral', 'rapea', 'celebra', 'frustra'].forEach(p => { const i = new Image(); i.src = `img/${c}-${p}.webp`; }));
+function pose(quien, p) {
+  const img = quien === 'yo' ? $('#img-yo') : $('#img-riv');
+  const src = `img/${quien === 'yo' ? G.imgYo : G.imgRiv}-${p}.webp`;
+  if (!img.src.endsWith(src)) img.src = src;
+  img.parentElement.classList.remove('bump'); void img.offsetWidth; img.parentElement.classList.add('bump');
+}
+function marcador() {
+  $('#marcador').innerHTML = G.modo === 'practica'
+    ? `<span class="yo">TÚ ${fmt(G.yo)}</span>`
+    : `<span class="yo">TÚ ${fmt(G.yo)}</span><span class="sep">·</span>RIVAL ${fmt(G.riv)}`;
+}
+class Salida extends Error {}
+const vigente = tk => { if (tk !== G.token) throw new Salida(); };
+
+/* ================= palabras con marcas ================= */
+function refHTML(ref, pista) {
+  const w = ref.toUpperCase(), a = Rima.analyze(ref);
+  if (pista === 'term') return `<span class="refw">${esc(w.slice(0, a.tonic))}<u>${esc(w.slice(a.tonic))}</u></span>`;
+  if (pista === 'tonic') return `<span class="refw">${esc(w.slice(0, a.tonic))}<u>${esc(w[a.tonic])}</u>${esc(w.slice(a.tonic + 1))}</span>`;
+  return `<span class="refw">${esc(w)}</span>`;
+}
+function marcar(word, k, upper) {
+  const a = Rima.analyze(word); const w = upper ? word.toUpperCase() : word;
+  if (!a || (k !== 'c' && k !== 'a')) return esc(w);
+  if (k === 'c') return esc(w.slice(0, a.tonic)) + `<mark class="m-c">${esc(w.slice(a.tonic))}</mark>`;
+  let out = ''; for (let i = 0; i < w.length; i++) out += a.vowelPos.includes(i) ? `<mark class="m-a">${esc(w[i])}</mark>` : esc(w[i]);
+  return out;
+}
+const mejorDe = item => item.ops.find(o => o.ok && o.t === 'c');
+function explicacion(item, r) {
+  const best = mejorDe(item);
+  if (r.k === 't') return `Se acabó el tiempo. Mejor opción: «${best.w}».`;
+  if (r.k === 'c') return r.op.why.charAt(0).toUpperCase() + r.op.why.slice(1) + '.';
+  if (r.k === 'a') return r.op.why.charAt(0).toUpperCase() + r.op.why.slice(1) + `. La consonante era «${best.w}».`;
+  return r.op.why.charAt(0).toUpperCase() + r.op.why.slice(1) + `. Mejor opción: «${best.w}».`;
+}
+
+/* ================= temporizador en compases ================= */
+function prepararPuntos(inicio, beats) {
+  const n = beats <= 16 ? beats : beats / 2;
+  const el = $('#puntos'); el.innerHTML = Array.from({ length: n }, (_, i) => `<i class="${i >= n - 4 ? 'rojo' : ''}"></i>`).join('');
+  G.dots = { inicio, fin: inicio + beats * BEAT, n, el, items: [...el.children] };
+}
+function pintarPuntos() {
+  const d = G.dots; if (!d.el.isConnected) { G.dots = null; return; }
+  const now = clock();
+  d.el.classList.toggle('quieto', d.parado === true);
+  if (d.parado) return;
+  const pasados = now < d.inicio ? 0 : Math.min(d.n, Math.floor((now - d.inicio) / ((d.fin - d.inicio) / d.n)) + 1);
+  d.items.forEach((it, i) => it.classList.toggle('off', i < pasados));
+}
+
+/* ================= una decisión del jugador ================= */
+async function decision(item, beats, pista, tk, practica) {
+  const card = $('#tarjeta');
+  const ops = shuffle(item.ops);
+  card.innerHTML = `
+    <p class="pie">${esc(item.pie)} ${refHTML(item.ref, pista)}</p>
+    <p class="verso">${esc(item.verso[0])} <span class="hueco vivo" id="hueco"></span>${esc(item.verso[1] || '')}</p>
+    <div class="puntos" id="puntos" aria-hidden="true"></div>
+    <div class="opciones" id="opciones">${ops.map((o, i) => `<button class="op" type="button" data-i="${i}">${esc(o.w)}</button>`).join('')}</div>`;
+  pose('yo', 'neutral'); if (G.modo !== 'practica') pose('riv', 'neutral');
+  const inicio = proxCompas(clock() + 0.3);
+  prepararPuntos(inicio, beats);
+  const fin = inicio + beats * BEAT;
+  const r = await new Promise(res => {
+    let hecho = false;
+    card.querySelectorAll('.op').forEach(b => b.addEventListener('click', () => { if (hecho) return; hecho = true; FX.tap(); res({ op: ops[+b.dataset.i], btn: b }); }));
+    const vigilar = () => { if (hecho) return; if (G.token !== tk) { hecho = true; res(null); return; } if (clock() >= fin) { hecho = true; res({ op: null }); } else setTimeout(vigilar, 30); };
+    vigilar();
+  });
+  vigente(tk);
+  G.dots.parado = r.op === null ? true : false; G.dots.el.classList.add('quieto'); G.dots = null;
+  const k = r.op ? (r.op.ok ? r.op.t : 'f') : 't';
+  const pts = k === 'c' ? 1 : k === 'a' ? 0.5 : 0;
+  const opEl = $('#opciones'); opEl.classList.add('cerrado'); opEl.querySelectorAll('.op').forEach(b => b.disabled = true);
+  const hueco = $('#hueco');
+  hueco.outerHTML = `<span class="lleno k-${k}" id="hueco">${r.op ? marcar(r.op.w, k) : '&nbsp;'}</span>`;
+  if (r.btn) r.btn.classList.add('elegida', 'k-' + k);
+  if (k === 'f' || k === 't') { const best = mejorDe(item); const bb = [...opEl.children].find(b => b.textContent === best.w); bb && bb.classList.add('mejor'); }
+  if (k === 'c' || k === 'a') { const rf = card.querySelector('.refw'); rf.innerHTML = marcar(item.ref, k, true); }
+  const t = A.ctx ? proxOctavo(clock() + 0.02) : clock();
+  FX[k](t);
+  await esperar(t);
+  vigente(tk);
+  $('#puntos').insertAdjacentHTML('afterend', `<div class="cinta k-${k}" role="status">${iconK(k)}${LABEL[k]}</div>`);
+  G.yo += pts; marcador();
+  pose('yo', k === 'c' ? 'celebra' : k === 'a' ? 'rapea' : 'frustra');
+  if (G.modo !== 'practica') pose('riv', k === 'c' ? 'frustra' : k === 'a' ? 'neutral' : 'celebra');
+  const res = { item, op: r.op, k, pts };
+  if (practica) {
+    await esperar(clock() + 0.6); vigente(tk);
+    opEl.insertAdjacentHTML('beforebegin', `<div class="explica"><span>${esc(explicacion(item, res))}</span><button class="btn" type="button" id="btn-sig">Siguiente ›</button></div>`);
+    opEl.style.display = 'none';
+    $('#btn-sig').focus({ preventScroll: true });
+    await new Promise(ok => $('#btn-sig').addEventListener('click', () => { FX.tap(); ok(); }, { once: true }));
+    vigente(tk);
+  } else {
+    await esperar(clock() + 1.3); vigente(tk);
+  }
+  return res;
+}
+
+/* ================= turno del rival ================= */
+async function turnoRival(versos, tk) {
+  const app = $('#app'); app.classList.add('turno-rival');
+  const card = $('#tarjeta');
+  card.innerHTML = `
+    <div class="rival-head"><span class="tag">Turno del rival</span><button class="saltar" type="button" id="btn-saltar">Saltar ›</button></div>
+    <div class="rival-versos"><p class="rv-pie" id="rv-pie">&nbsp;</p><p class="rv-verso" id="rv-verso">&nbsp;</p></div>
+    <div class="fichas ${versos.length === 2 ? 'dos' : ''}" id="fichas">${versos.map(() => '<div class="ficha vacia">—</div>').join('')}</div>`;
+  let saltar = false;
+  $('#btn-saltar').addEventListener('click', () => { saltar = true; FX.tap(); });
+  const res = [];
+  const espera = async time => { while (!saltar && clock() < time) { await esperar(Math.min(time, clock() + 0.08)); vigente(tk); } };
+  let t = proxCompas(clock() + 0.2);
+  pose('yo', 'neutral');
+  for (let i = 0; i < versos.length; i++) {
+    const v = versos[i]; const k = v.ok ? v.t : 'f';
+    if (!saltar) {
+      await espera(t);
+      pose('riv', 'rapea');
+      $('#rv-pie').innerHTML = `${esc(v.pie)} ${refHTML(v.ref, 'none')}`;
+      $('#rv-verso').innerHTML = '&nbsp;';
+      await espera(t + BAR);
+      $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="hueco"></span>`;
+      await espera(t + BAR + BEAT * 2);
+      if (!saltar) {
+        $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="lleno k-${k}">${marcar(v.w, k === 'f' ? 'x' : k)}</span><span class="rv-label k-${k}">${iconK(k)}${LABEL[k]}</span>`;
+        if (k === 'c' || k === 'a') $('#rv-pie .refw').innerHTML = marcar(v.ref, k, true);
+        FX[k](clock(), true);
+        pose('riv', k === 'f' ? 'frustra' : 'celebra');
+        pose('yo', k === 'f' ? 'celebra' : 'frustra');
+      }
+      t += BAR * 2;
+    }
+    const pts = k === 'c' ? 1 : k === 'a' ? 0.5 : 0;
+    G.riv += pts; marcador();
+    $('#fichas').children[i].outerHTML = `<div class="ficha">${iconK(k)}${pts ? '+' + fmt(pts) : '0'}</div>`;
+    res.push({ v, k, pts });
+  }
+  if (!saltar) await espera(t);
+  vigente(tk);
+  app.classList.remove('turno-rival');
+  return res;
+}
+
+/* ================= avisos entre rondas ================= */
+async function aviso(titulo, texto, tk, compases = 2) {
+  $('#tarjeta').innerHTML = `<div class="aviso"><span class="tag">${esc(titulo)}</span><p>${esc(texto)}</p></div>`;
+  pose('yo', 'neutral');
+  await esperar(proxCompas(clock() + 0.2) + BAR * (compases - 1)); vigente(tk);
+}
+
+/* ================= fin de ronda ================= */
+function contar(lista) {
+  const c = lista.filter(r => r.k === 'c').length, a = lista.filter(r => r.k === 'a').length, f = lista.length - c - a;
+  const plural = (n, s, p) => `${n} ${n === 1 ? s : p}`;
+  return `${plural(c, 'consonante', 'consonantes')} · ${plural(a, 'asonante', 'asonantes')} · ${plural(f, 'fallo', 'fallos')}`;
+}
+function repasoHTML(lista) {
+  return lista.map(r => `
+    <div class="rp">
+      <div class="lineas">${esc(r.item.pie)} ${refHTML(r.item.ref, 'none')}<br><b>${esc(r.item.verso[0])} ${r.op ? marcar(r.op.w, r.k) : '___'}</b></div>
+      <div class="res">${iconK(r.k)}<span><strong>${LABEL[r.k]}</strong>${esc(explicacion(r.item, r))}</span></div>
+    </div>`).join('');
+}
+function finRonda(idx, total, tk) {
+  const s = $('#s-ronda');
+  const yo = G.rondaYo.reduce((x, r) => x + r.pts, 0), riv = G.rondaRiv.reduce((x, r) => x + r.pts, 0);
+  const practica = G.modo === 'practica';
+  const titulo = practica ? 'Repaso' : yo > riv ? 'Ronda para ti' : yo < riv ? 'Ronda para el rival' : 'Ronda pareja';
+  const ultima = idx === total - 1;
+  s.innerHTML = `
+    <div class="veredicto">
+      <span class="tag">${practica ? 'Práctica' : idx === 'R' ? 'Réplica' : `Ronda ${idx + 1} de ${total}`}</span>
+      <h2 class="${yo > riv || practica ? 'gana' : ''}">${titulo}</h2>
+    </div>
+    ${practica ? '' : `<div class="duelo">
+      <div class="lado yo"><h3>Tú</h3><div class="num">${fmt(yo)}</div><div class="iconos">${G.rondaYo.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaYo)}</small></div>
+      <div class="mini-vs">VS</div>
+      <div class="lado"><h3>Rival</h3><div class="num">${fmt(riv)}</div><div class="iconos">${G.rondaRiv.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaRiv)}</small></div>
+    </div>`}
+    <div class="repaso"><h3>Tus versos</h3>${repasoHTML(G.rondaYo)}</div>
+    <div class="acciones"><button class="btn" type="button" id="btn-continuar">${ultima || idx === 'R' || practica ? 'Ver resultado' : 'Siguiente ronda'}</button></div>`;
+  pantalla('ronda');
+  return new Promise(ok => $('#btn-continuar').addEventListener('click', () => { FX.tap(); vigente(tk); ok(); }, { once: true }));
+}
+
+/* ================= final ================= */
+function estrellas(modo, n) {
+  const prev = store.get('estrellas', {}); if ((prev[modo] || 0) < n) { prev[modo] = n; store.set('estrellas', prev); }
+  pintarEstrellasMenu();
+}
+function pintarEstrellasMenu() {
+  const e = store.get('estrellas', {});
+  document.querySelectorAll('[data-stars]').forEach(el => { const n = e[el.dataset.stars] || 0; el.innerHTML = [0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join(''); el.setAttribute('aria-label', `${n} de 3 estrellas`); });
+}
+function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true }) {
+  return `
+    <div class="final-pj ${poseRiv ? 'dos' : ''}"><img src="img/jugador-${poseYo}.webp" alt="">${poseRiv ? `<img src="img/novato-${poseRiv}.webp" alt="">` : ''}</div>
+    <div class="veredicto"><h2 class="${n > 0 ? 'gana' : ''}">${titulo}</h2></div>
+    <div class="total">${G.modo === 'practica' ? `<span class="yo">TÚ ${fmt(G.yo)}</span> de 4` : `<span class="yo">TÚ ${fmt(G.yo)}</span> · RIVAL ${fmt(G.riv)}`}</div>
+    <div class="stars grande" aria-label="${n} de 3 estrellas">${[0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join('')}</div>
+    <p style="margin:0;text-align:center;color:var(--ink-2);font-size:15px;line-height:1.45">${sub}</p>
+    <div class="acciones">${botones}</div>
+    ${conOpinion ? opinionHTML() : ''}`;
+}
+function resumenPartida(resultado) {
+  const c = G.todos.filter(r => r.k === 'c').length, a = G.todos.filter(r => r.k === 'a').length;
+  const t = G.todos.filter(r => r.k === 't').length, f = G.todos.length - c - a - t;
+  return { modo: G.modo, resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0 };
+}
+function opinionHTML() {
+  if (!SITIO) return '';
+  if (store.get('opinion', false)) return `<div class="opinion"><p>Gracias por mandar tu opinión. Si quieres agregar algo, escríbelo aquí abajo y se suma a la anterior.</p>${formOpinion(false)}</div>`;
+  return `<div class="opinion"><h3>¿Qué te pareció?</h3><p>Es una versión de prueba. Tu opinión llega directo a quien lo está haciendo.</p>${formOpinion(true)}</div>`;
+}
+function formOpinion(conNotas) {
+  const NOTAS = [['1', 'Malo'], ['2', 'Meh'], ['3', 'Bien'], ['4', 'Muy bien'], ['5', 'Brutal']];
+  return `<form id="f-opinion" novalidate>
+    ${conNotas ? `<div class="notas" role="group" aria-label="Calificación del 1 al 5">${NOTAS.map(([n, t]) => `<button class="nota" type="button" data-nota="${n}" aria-pressed="false"><b>${n}</b><small>${t}</small></button>`).join('')}</div>` : ''}
+    <label for="op-texto">¿Qué cambiarías o qué te gustó? <span style="font-weight:500">(opcional)</span>
+      <textarea id="op-texto" rows="3" maxlength="1500" placeholder="Ej.: el tiempo se me hizo corto, no entendí qué es asonante…"></textarea></label>
+    <label for="op-nombre">Tu nombre o apodo <span style="font-weight:500">(opcional)</span>
+      <input id="op-nombre" type="text" maxlength="60" autocomplete="nickname"></label>
+    <input class="hp" id="op-hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn" type="submit" id="op-enviar">Mandar opinión</button>
+    <div class="estado" id="op-estado" role="status"></div>
+  </form>`;
+}
+function activarOpinion(resumen) {
+  const f = $('#f-opinion'); if (!f) return;
+  let nota = '';
+  f.querySelectorAll('.nota').forEach(b => b.addEventListener('click', () => {
+    nota = b.dataset.nota; f.querySelectorAll('.nota').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  }));
+  f.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const texto = $('#op-texto').value.trim(), nombre = $('#op-nombre').value.trim(), est = $('#op-estado'), btn = $('#op-enviar');
+    if ($('#op-hp').value) return;
+    if (!nota && texto.length < 3) { est.className = 'estado err'; est.textContent = 'Elige una calificación o escribe tu comentario.'; return; }
+    btn.disabled = true; est.className = 'estado'; est.textContent = 'Enviando…';
+    try {
+      const res = await fetch('https://formspree.io/f/xoejengj', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Opinión del juego Batalla de Freestyle' + (nota ? ` (${nota}/5)` : ''),
+          calificacion: nota ? nota + '/5' : '(sin calificación)',
+          comentario: texto || '(sin comentario)',
+          nombre: nombre || '(anónimo)',
+          partida: `${resumen.modo === 'practica' ? 'Práctica' : 'Rival novato'} · ${resumen.resultado} · tú ${fmt(resumen.puntos)}${resumen.modo === 'practica' ? ' de 4' : ' · rival ' + fmt(resumen.rival)} · ${resumen.consonantes} consonantes, ${resumen.asonantes} asonantes, ${resumen.fallos} fallos, ${resumen.tiempos} sin responder`,
+          dispositivo: window.matchMedia('(max-width: 768px)').matches ? 'celular' : 'compu'
+        })
+      });
+      if (!res.ok) throw new Error('formspree ' + res.status);
+      store.set('opinion', true);
+      track('batalla_feedback', { nota: nota ? +nota : 0, con_texto: texto ? 1 : 0, modo: resumen.modo });
+      f.outerHTML = '<p style="margin:0;font-size:16px;color:var(--ink)"><b>¡Gracias!</b> Recibimos tu opinión.</p>';
+    } catch (e) {
+      btn.disabled = false; est.className = 'estado err'; est.textContent = 'No se pudo enviar. Revisa tu conexión e intenta otra vez.';
+    }
+  });
+}
+function calcEstrellas(maximo) { const p = G.yoBase / maximo; return 1 + (p >= 0.75 ? 1 : 0) + (p >= 0.9 ? 1 : 0); }
+
+/* ================= partidas ================= */
+async function jugar(modo) {
+  audioInit();
+  const tk = ++G.token;
+  G.modo = modo; G.yo = 0; G.riv = 0; G.todos = []; G.consRiv = 0; G.replicaHecha = false;
+  const N = NIVEL[modo];
+  $('#app').classList.toggle('solo', modo === 'practica');
+  pantalla('juego'); marcador();
+  beatStart();
+  track('batalla_start', { modo });
+  try {
+    for (let r = 0; r < N.rondas.length; r++) {
+      $('#ronda').textContent = modo === 'practica' ? 'PRÁCTICA' : `R${r + 1}/${N.rondas.length}`;
+      pantalla('juego');
+      const intro = modo === 'practica' ? INTRO.practica : INTRO.novato[r];
+      await aviso(intro[0], intro[1], tk);
+      G.rondaRiv = N.rival ? await turnoRival(N.rival[r], tk) : [];
+      G.rondaYo = [];
+      for (const item of N.rondas[r]) G.rondaYo.push(await decision(item, N.compases(r) * 4, N.pista(r), tk, modo === 'practica'));
+      G.todos.push(...G.rondaYo);
+      G.consRiv += G.rondaRiv.filter(x => x.k === 'c').length;
+      await finRonda(r, N.rondas.length, tk);
+    }
+    G.yoBase = G.yo;
+    mostrarFinal(tk);
+  } catch (e) { if (!(e instanceof Salida)) throw e; }
+}
+async function replica(tk) {
+  try {
+    $('#ronda').textContent = 'RÉPLICA';
+    pantalla('juego');
+    await aviso(INTRO.replica[0], INTRO.replica[1], tk);
+    G.rondaRiv = await turnoRival(CONTENIDO.rivalReplica, tk);
+    G.rondaYo = [];
+    for (const item of CONTENIDO.replica) G.rondaYo.push(await decision(item, 12, 'none', tk, false));
+    G.todos.push(...G.rondaYo);
+    G.consRiv += G.rondaRiv.filter(x => x.k === 'c').length;
+    G.replicaHecha = true;
+    await finRonda('R', 1, tk);
+    mostrarFinal(tk);
+  } catch (e) { if (!(e instanceof Salida)) throw e; }
+}
+function mostrarFinal(tk) {
+  const s = $('#s-final');
+  if (G.modo === 'practica') {
+    const n = calcEstrellas(4); estrellas('practica', n);
+    s.innerHTML = finalHTML({ titulo: 'Práctica completa', poseYo: 'celebra', n,
+      sub: n === 3 ? 'Ya distingues la rima consonante. Ve por el rival novato.' : 'Busca la palabra que comparte todas las letras desde la vocal fuerte: esa vale 1 punto.',
+      botones: `<button class="btn" type="button" id="f-1">Retar al rival novato</button><button class="btn sec" type="button" id="f-2">Practicar otra vez</button><button class="btn sec" type="button" id="f-3">Menú</button>` });
+    pantalla('final');
+    $('#f-1').onclick = () => jugar('novato'); $('#f-2').onclick = () => jugar('practica'); $('#f-3').onclick = menu;
+    const rs = resumenPartida('completa'); track('batalla_end', rs); activarOpinion(rs);
+    return;
+  }
+  let gana = G.yo > G.riv, empate = G.yo === G.riv;
+  let nota = '';
+  if (empate && G.replicaHecha) {
+    const cYo = G.todos.filter(r => r.k === 'c').length;
+    gana = cYo >= G.consRiv; empate = false;
+    nota = cYo > G.consRiv ? ' Desempate: más rimas consonantes.' : cYo === G.consRiv ? ' Desempate: mismas consonantes; gana el retador.' : ' Desempate: el rival tuvo más consonantes.';
+  }
+  if (empate) {
+    s.innerHTML = finalHTML({ titulo: '¡Es una réplica!', poseYo: 'rapea', poseRiv: 'rapea', n: 0,
+      sub: 'Empataron. Dos versos más para cada quien.', conOpinion: false, botones: `<button class="btn" type="button" id="f-1">¡A la réplica!</button><button class="btn sec" type="button" id="f-3">Menú</button>` });
+    pantalla('final');
+    $('#f-1').onclick = () => { FX.tap(); replica(tk); }; $('#f-3').onclick = menu;
+    return;
+  }
+  const n = gana ? calcEstrellas(12) : 0;
+  if (gana) estrellas('novato', n);
+  s.innerHTML = finalHTML({
+    titulo: gana ? '¡La calle es tuya!' : 'No fue tu batalla', poseYo: gana ? 'celebra' : 'frustra', poseRiv: gana ? 'frustra' : 'celebra', n,
+    sub: (gana ? (n === 3 ? 'Batalla perfecta o casi: puras consonantes.' : 'Le ganaste al novato. Busca más consonantes para sumar estrellas.') : 'Revisa el repaso: las consonantes valen el doble que las asonantes.') + nota,
+    botones: `<button class="btn" type="button" id="f-1">Jugar de nuevo</button><button class="btn sec" type="button" id="f-3">Menú</button>` });
+  pantalla('final');
+  $('#f-1').onclick = () => jugar('novato'); $('#f-3').onclick = menu;
+  const rs = resumenPartida(gana ? 'ganó' : 'perdió'); track('batalla_end', rs); activarOpinion(rs);
+}
+function menu() {
+  G.token++; G.dots = null; G.replicaHecha = false;
+  beatStop(); $('#capa-pausa').hidden = true; $('#app').classList.remove('turno-rival', 'solo');
+  pintarEstrellasMenu(); pantalla('menu');
+}
+
+/* ================= pausa ================= */
+function pausar() {
+  if (A.ctx) A.ctx.suspend(); else A.pausaFallback = performance.now();
+  $('#capa-pausa').hidden = false; $('#btn-seguir').focus();
+}
+function seguir() {
+  if (A.ctx) A.ctx.resume(); else if (A.pausaFallback !== null) { A.offset += (performance.now() - A.pausaFallback) / 1000; A.pausaFallback = null; }
+  $('#capa-pausa').hidden = true;
+}
+
+/* ================= arranque ================= */
+$('#nv-practica').addEventListener('click', () => jugar('practica'));
+$('#nv-novato').addEventListener('click', () => jugar('novato'));
+$('#btn-sonido').addEventListener('click', () => setMudo(!A.mudo));
+$('#btn-sonido2').addEventListener('click', () => setMudo(!A.mudo));
+$('#btn-pausa').addEventListener('click', pausar);
+$('#btn-seguir').addEventListener('click', seguir);
+$('#btn-salir').addEventListener('click', () => { if (A.ctx) A.ctx.resume(); A.pausaFallback = null; menu(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && !$('#s-juego').hidden && $('#capa-pausa').hidden) pausar(); });
+setMudo(A.mudo);
+pintarEstrellasMenu();
+requestAnimationFrame(loop);
+</script>
