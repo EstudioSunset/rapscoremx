@@ -273,6 +273,45 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
 .total .yo { color: var(--slot); }
 
 /* pausa */
+.nivel.ancho { grid-column: 1 / -1; min-height: 150px; }
+.nivel.ancho img { inset: 8px 4px auto auto; width: 44%; height: 138px; object-position: right bottom; }
+.nivel.ancho .pie-n { background: none; padding: 16px 12px 14px; max-width: 58%; }
+.nivel.ancho small { font-size: 13.5px; line-height: 1.35; margin-top: 6px; }
+.nivel.p3 { background: radial-gradient(90% 120% at 85% 100%, #10342a, var(--panel) 70%); }
+.beats { display: grid; gap: 10px; }
+.beats-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.beats h2 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: 24px; letter-spacing: .05em; }
+.beat-lista { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x proximity; }
+.beat {
+  flex: none; scroll-snap-align: start; text-align: left; min-width: 132px; max-width: 160px;
+  border: 3px solid var(--line); border-radius: 12px; background: var(--panel); padding: 10px 12px 9px;
+  display: grid; gap: 3px; box-shadow: 0 4px 0 var(--line);
+}
+.beat b { font-family: var(--f-display); font-weight: 400; font-size: 21px; line-height: 1; letter-spacing: .02em; }
+.beat small { color: var(--ink-2); font-size: 12px; line-height: 1.3; }
+.beat .casa { justify-self: start; font-family: var(--f-display); font-size: 13px; letter-spacing: .06em; background: var(--slot); color: #111; padding: 2px 6px 0; border-radius: 3px; }
+.beat .bpm { font-variant-numeric: tabular-nums; }
+.beat[aria-checked="true"] { border-color: var(--slot); background: #221d0c; }
+.beat[aria-checked="true"] b { color: var(--slot); }
+.beat-nota { margin: 0; color: var(--ink-3); font-size: 12.5px; line-height: 1.45; }
+.cal { display: grid; gap: 10px; text-align: center; margin: auto 0; }
+.cal-prompt { margin: 0; color: var(--ink-2); font-size: 15px; font-weight: 700; letter-spacing: .02em; }
+.cal-palabra { font-family: var(--f-display); font-size: clamp(54px, 17vw, 84px); line-height: .95; color: var(--slot); text-wrap: balance; overflow-wrap: anywhere; }
+.cal-palabra i { font-style: normal; color: var(--ink-3); padding: 0 .15em; }
+.cal-palabra.pop { animation: cae .3s cubic-bezier(.2,1.6,.4,1); }
+.cal-palabra[data-type="tema"] { font-size: clamp(38px, 11vw, 56px); color: var(--ink); }
+.cal-sub { margin: 0; color: var(--ink-2); font-size: 14px; min-height: 1.2em; }
+.cal-seg { display: flex; gap: 5px; justify-content: center; }
+.cal-seg i { height: 8px; flex: 0 1 46px; border-radius: 4px; background: var(--ink); }
+.cal-seg i.off { background: #2c2a28; }
+.cal-sig { margin: 0; color: var(--ink-3); font-size: 14px; }
+.cal-sig b { color: var(--ink-2); }
+.cal-niveles { display: grid; gap: 8px; text-align: left; }
+.cal-nivel { border: 3px solid var(--line); border-radius: 12px; background: var(--panel-2); padding: 10px 12px; display: grid; gap: 2px; box-shadow: 0 4px 0 var(--line); }
+.cal-nivel b { font-family: var(--f-display); font-weight: 400; font-size: 24px; line-height: 1; }
+.cal-nivel small { color: var(--ink-2); font-size: 13px; }
+.palabras-usadas { display: flex; flex-wrap: wrap; gap: 6px; }
+.palabras-usadas span { background: var(--panel-2); border: 2px solid #33302d; border-radius: 999px; padding: 4px 10px; font-size: 14px; font-weight: 700; }
 .sitio-top { display: flex; justify-content: center; }
 .sitio-top img { height: 30px; width: auto; }
 .menu-legal { text-align: center; color: var(--ink-3); font-size: 12.5px; line-height: 1.5; }
@@ -320,6 +359,10 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
       <p>Completa el verso con la palabra que rima y tiene sentido, antes de que se acabe el beat.</p>
     </header>
     <div class="niveles">
+      <button class="nivel ancho p3" id="nv-calentamiento" type="button" data-fs hidden>
+        <img src="img/jugador-rapea.webp" alt="">
+        <div class="pie-n"><b>Calentamiento libre</b><small>Improvisa en voz alta con palabras que cambian al compás. Sin puntos.</small></div>
+      </button>
       <button class="nivel p1" id="nv-practica" type="button">
         <img src="img/jugador-celebra.webp" alt="">
         <div class="pie-n"><b>Práctica</b><small>Sin rival · 8 compases</small><div class="stars" data-stars="practica"></div></div>
@@ -339,6 +382,11 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
         <div class="pie-n"><b>Jefe</b><small>Próximamente · doble rima</small></div>
       </button>
     </div>
+    <section class="beats" data-fs hidden aria-labelledby="beats-titulo">
+      <div class="beats-head"><h2 id="beats-titulo">Beat</h2><button class="chip-btn" id="btn-escuchar" type="button">Escuchar</button></div>
+      <div class="beat-lista" id="beat-lista" role="radiogroup" aria-labelledby="beats-titulo"></div>
+      <p class="beat-nota">Los de la casa son beats originales de RapScore MX. En los beats rápidos el tiempo se cuenta a medio tiempo.</p>
+    </section>
     <section class="reglas" aria-label="Cómo se puntúa">
       <h2>Cómo se puntúa</h2>
       <div class="regla"><svg class="icon" data-icon="cg"></svg><span>Rima consonante y la frase tiene sentido</span><em>+1</em></div>
@@ -421,8 +469,19 @@ const store = {
 };
 
 /* ================= audio y reloj ================= */
-const BPM = window.__bpm || 90, BEAT = 60 / BPM, BAR = BEAT * 4;
-const A = { ctx: null, master: null, beatBus: null, fxBus: null, noise: null, t0: 0, nextStep: 0, step: 0, timer: null, sonando: false, mudo: store.get('mudo', false), pausaFallback: null, offset: 0 };
+// En el sitio carga freestyle.js: el beat lo toca el motor del Freestyle Lab (beats de la casa y estilos sintetizados).
+// Sin él (prototipo suelto) suena el boom bap sintetizado de abajo, a 90 BPM.
+const FS = window.Freestyle || null;
+const ENG = FS ? new FS.BeatEngine() : null;
+// Beats del Lab; los archivos viven en /beats, una carpeta arriba de esta página.
+const BEATS = FS ? FS.STYLES.map(b => b.file ? Object.assign({}, b, { file: '../' + b.file.replace(/^\.?\//, '') }) : b) : [];
+const beatElegido = () => BEATS.find(b => b.id === store.get('beat', 'vinyl-battle')) || BEATS[0];
+// Pulso del juego: en beats rápidos (trap) se cuenta a medio tiempo para que los compases no se hagan cortísimos.
+let BPM = 90, BEAT = 60 / BPM, BAR = BEAT * 4, BAR_REAL = BAR;
+function fijarTempo(bpmReal) {
+  BPM = bpmReal > 115 ? bpmReal / 2 : bpmReal; BEAT = 60 / BPM; BAR = BEAT * 4; BAR_REAL = 240 / bpmReal;
+}
+const A = { ctx: null, master: null, beatBus: null, beatBase: 0.8, fxBus: null, noise: null, t0: 0, nextStep: 0, step: 0, timer: null, sonando: false, mudo: store.get('mudo', false), pausaFallback: null, offset: 0 };
 
 function clock() {
   if (A.ctx) return A.ctx.currentTime;
@@ -433,10 +492,11 @@ function audioInit() {
   if (A.ctx !== null || A.intentado) return;
   A.intentado = true;
   try {
-    A.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ENG) { ENG.init(); A.ctx = ENG.ctx; } else A.ctx = new (window.AudioContext || window.webkitAudioContext)();
     A.master = A.ctx.createGain(); A.master.gain.value = A.mudo ? 0 : 0.9; A.master.connect(A.ctx.destination);
     const comp = A.ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4; comp.connect(A.master);
-    A.beatBus = A.ctx.createGain(); A.beatBus.gain.value = 0.8; A.beatBus.connect(comp);
+    if (ENG) { A.beatBus = ENG.bus; A.beatBase = 0.7; ENG.setVolume(A.mudo ? 0 : 0.8); }
+    else { A.beatBus = A.ctx.createGain(); A.beatBus.gain.value = 0.8; A.beatBus.connect(comp); }
     A.fxBus = A.ctx.createGain(); A.fxBus.gain.value = 0.9; A.fxBus.connect(comp);
     const len = A.ctx.sampleRate; const buf = A.ctx.createBuffer(1, len, A.ctx.sampleRate); const d = buf.getChannelData(0);
     for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
@@ -446,6 +506,7 @@ function audioInit() {
 function setMudo(m) {
   A.mudo = m; store.set('mudo', m);
   if (A.master) A.master.gain.setTargetAtTime(m ? 0 : 0.9, A.ctx.currentTime, 0.02);
+  if (ENG && ENG.ctx) ENG.setVolume(m ? 0 : 0.8);
   const txt = 'Sonido: ' + (m ? 'no' : 'sí');
   $('#btn-sonido').textContent = txt; $('#btn-sonido2').textContent = txt;
 }
@@ -461,7 +522,7 @@ function ruido(t, dur, bus, peak, type, f, q = 1, a = 0.002) {
   const g = A.ctx.createGain(); s.connect(fl); fl.connect(g); g.connect(bus); env(g, t, peak, a, dur);
   s.start(t, Math.random() * 0.5); s.stop(t + a + dur + 0.05); return fl;
 }
-// boom bap a 90 BPM, progresión menor de 4 compases
+// Respaldo sin freestyle.js: boom bap a 90 BPM, progresión menor de 4 compases
 const ACORDES = [[220, 261.63, 329.63, 392], [174.61, 220, 261.63, 329.63], [146.83, 174.61, 220, 261.63], [164.81, 196, 246.94, 293.66]];
 const BAJOS = [55, 43.65, 73.42, 82.41];
 function tocarPaso(i, t) {
@@ -475,22 +536,44 @@ function tocarPaso(i, t) {
   if (s === 0) ACORDES[bar].forEach(f => osc('sine', f, t, BEAT * 3.4, B, 0.045, 0.03, 1800));
   if (s === 6) ACORDES[bar].slice(1).forEach(f => osc('triangle', f * 2, t, BEAT * 0.4, B, 0.018, 0.005, 2600));
 }
-function beatStart() {
+// Arranca el beat elegido. Devuelve el beat que sonó (si un archivo no carga, cae al boom bap sintetizado).
+async function beatStart(alCargar) {
   audioInit();
-  if (A.ctx && A.ctx.state === 'suspended') A.ctx.resume();
-  A.t0 = clock() + 0.12; A.nextStep = A.t0; A.step = 0; A.sonando = true;
-  if (A.beatBus) A.beatBus.gain.setValueAtTime(0.8, A.ctx.currentTime);
-  clearInterval(A.timer);
-  A.timer = setInterval(() => {
-    if (!A.ctx) return;
-    while (A.nextStep < A.ctx.currentTime + 0.12) { tocarPaso(A.step, A.nextStep); A.step++; A.nextStep += BEAT / 4; }
-  }, 25);
+  A.sonando = false;
+  if (!ENG) {
+    fijarTempo(window.__bpm || 90);
+    if (A.ctx && A.ctx.state === 'suspended') A.ctx.resume();
+    A.t0 = clock() + 0.12; A.nextStep = A.t0; A.step = 0; A.sonando = true;
+    if (A.beatBus) A.beatBus.gain.setValueAtTime(0.8, A.ctx.currentTime);
+    clearInterval(A.timer);
+    A.timer = setInterval(() => {
+      if (!A.ctx) return;
+      while (A.nextStep < A.ctx.currentTime + 0.12) { tocarPaso(A.step, A.nextStep); A.step++; A.nextStep += BEAT / 4; }
+    }, 25);
+    return { id: 'boombap-90', name: 'Boom bap', bpm: 90 };
+  }
+  let st = window.__bpm ? BEATS.find(b => b.id === 'boombap') : beatElegido();
+  if (st.file && !(ENG.buffers && ENG.buffers[st.id])) {
+    if (alCargar) alCargar(st);
+    try { await ENG.load(st); } catch (e) { st = BEATS.find(b => b.id === 'boombap'); }
+  }
+  ENG.stop();
+  ENG.bpm = window.__bpm || st.bpm;
+  ENG.setStyle(st.id, true);
+  ENG.start(false);
+  A.t0 = ENG.events.length ? ENG.events[0].t : ENG.ctx.currentTime + 0.12;
+  fijarTempo(ENG.bpm);
+  A.sonando = true;
+  return st;
 }
 function beatStop() {
-  A.sonando = false; clearInterval(A.timer);
+  A.sonando = false;
+  if (ENG) { if (ENG.ctx) ENG.stop(); return; }
+  clearInterval(A.timer);
   if (A.beatBus) A.beatBus.gain.setTargetAtTime(0, A.ctx.currentTime, 0.05);
 }
 const proxCompas = after => A.t0 + Math.ceil((after - A.t0) / BAR - 1e-6) * BAR;
+const proxCompasReal = after => A.t0 + Math.ceil((after - A.t0) / BAR_REAL - 1e-6) * BAR_REAL;
 const proxOctavo = after => A.t0 + Math.ceil((after - A.t0) / (BEAT / 2) - 1e-6) * (BEAT / 2);
 const esperar = time => new Promise(r => { const f = () => { const q = time - clock(); if (q <= 0.004) r(); else setTimeout(f, Math.min(40, q * 1000)); }; f(); });
 
@@ -516,10 +599,30 @@ const FX = {
   t(t) {
     if (!A.ctx) return;
     const o = osc('sine', 320, t, 0.5, A.fxBus, 0.4); o.frequency.exponentialRampToValueAtTime(45, t + 0.5);
-    A.beatBus.gain.setTargetAtTime(0.05, t, 0.04); A.beatBus.gain.setTargetAtTime(0.8, t + BEAT * 1.2, 0.08);
+    A.beatBus.gain.setTargetAtTime(0.05, t, 0.04); A.beatBus.gain.setTargetAtTime(A.beatBase, t + BEAT * 1.2, 0.08);
   },
   tap() { if (A.ctx) osc('square', 880, A.ctx.currentTime, 0.03, A.fxBus, 0.08); }
 };
+
+/* ================= selector de beat ================= */
+let previa = false;
+function pintarBeats() {
+  if (!FS) return;
+  const sel = beatElegido();
+  $('#beat-lista').innerHTML = BEATS.map(b => `<button class="beat" type="button" role="radio" aria-checked="${b.id === sel.id}" data-beat="${esc(b.id)}">
+    ${b.house ? '<span class="casa">De la casa</span>' : ''}<b>${esc(b.name)}</b><small>${esc(b.sub)} · <span class="bpm">${b.bpm} BPM</span></small></button>`).join('');
+  $('#btn-escuchar').textContent = previa ? 'Detener' : 'Escuchar';
+}
+async function alternarPrevia(forzar) {
+  previa = forzar !== undefined ? forzar : !previa;
+  pintarBeats();
+  if (!previa) { beatStop(); return; }
+  const tk = ++G.token;
+  $('#btn-escuchar').textContent = 'Cargando…';
+  await beatStart();
+  if (tk !== G.token || !previa) { if (tk === G.token) beatStop(); return; }
+  pintarBeats();
+}
 
 /* ================= pantallas y pulso visual ================= */
 function pantalla(id) { ['menu', 'juego', 'ronda', 'final'].forEach(s => { const el = $('#s-' + s); el.hidden = s !== id; if (s === id) el.scrollTop = 0; }); window.scrollTo(0, 0); }
@@ -534,7 +637,7 @@ function loop() {
 }
 
 /* ================= estado ================= */
-const G = { modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato' };
+const G = { beat: null, modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato' };
 const NIVEL = {
   practica: { rondas: [CONTENIDO.practica], compases: () => 8, pista: () => 'term', rival: null },
   novato: { rondas: CONTENIDO.novato, compases: r => (r === 2 ? 3 : 4), pista: () => 'tonic', rival: CONTENIDO.rival }
@@ -760,7 +863,7 @@ function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true
 function resumenPartida(resultado) {
   const c = G.todos.filter(r => r.k === 'c').length, a = G.todos.filter(r => r.k === 'a').length;
   const t = G.todos.filter(r => r.k === 't').length, f = G.todos.length - c - a - t;
-  return { modo: G.modo, resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0 };
+  return { modo: G.modo, beat: G.beat ? G.beat.id : '', resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0 };
 }
 function opinionHTML() {
   if (!SITIO) return '';
@@ -800,7 +903,8 @@ function activarOpinion(resumen) {
           calificacion: nota ? nota + '/5' : '(sin calificación)',
           comentario: texto || '(sin comentario)',
           nombre: nombre || '(anónimo)',
-          partida: `${resumen.modo === 'practica' ? 'Práctica' : 'Rival novato'} · ${resumen.resultado} · tú ${fmt(resumen.puntos)}${resumen.modo === 'practica' ? ' de 4' : ' · rival ' + fmt(resumen.rival)} · ${resumen.consonantes} consonantes, ${resumen.asonantes} asonantes, ${resumen.fallos} fallos, ${resumen.tiempos} sin responder`,
+          partida: resumen.texto || `${resumen.modo === 'practica' ? 'Práctica' : 'Rival novato'} · ${resumen.resultado} · tú ${fmt(resumen.puntos)}${resumen.modo === 'practica' ? ' de 4' : ' · rival ' + fmt(resumen.rival)} · ${resumen.consonantes} consonantes, ${resumen.asonantes} asonantes, ${resumen.fallos} fallos, ${resumen.tiempos} sin responder`,
+          beat: resumen.beatNombre || (G.beat ? G.beat.name : ''),
           dispositivo: window.matchMedia('(max-width: 768px)').matches ? 'celular' : 'compu'
         })
       });
@@ -823,8 +927,10 @@ async function jugar(modo) {
   const N = NIVEL[modo];
   $('#app').classList.toggle('solo', modo === 'practica');
   pantalla('juego'); marcador();
-  beatStart();
-  track('batalla_start', { modo });
+  previa = false;
+  G.beat = await beatStart(st => { $('#tarjeta').innerHTML = `<div class="aviso"><span class="tag">Cargando beat</span><p>${esc(st.name)} · ${st.bpm} BPM</p></div>`; });
+  if (tk !== G.token) return;
+  track('batalla_start', { modo, beat: G.beat.id });
   try {
     for (let r = 0; r < N.rondas.length; r++) {
       $('#ronda').textContent = modo === 'practica' ? 'PRÁCTICA' : `R${r + 1}/${N.rondas.length}`;
@@ -893,30 +999,134 @@ function mostrarFinal(tk) {
   $('#f-1').onclick = () => jugar('novato'); $('#f-3').onclick = menu;
   const rs = resumenPartida(gana ? 'ganó' : 'perdió'); track('batalla_end', rs); activarOpinion(rs);
 }
+/* ================= calentamiento libre (palabras del Freestyle Lab) ================= */
+const CAL_SEG = 60;
+async function calentar(nivelElegido) {
+  audioInit();
+  const tk = ++G.token;
+  G.modo = 'calentamiento'; G.todos = []; previa = false;
+  $('#app').classList.add('solo'); $('#app').classList.remove('turno-rival');
+  $('#ronda').textContent = 'CALENTAMIENTO'; $('#marcador').innerHTML = '';
+  pantalla('juego'); pose('yo', 'neutral');
+  try {
+    let nivel = nivelElegido;
+    if (!nivel) {
+      const L = FS.LEVELS;
+      $('#tarjeta').innerHTML = `<div class="aviso" style="margin:0"><span class="tag">Calentamiento libre</span><p>Rapea en voz alta con lo que salga. Cambia solo al compás y la ronda dura 1 minuto. Elige tu nivel:</p></div>
+        <div class="cal-niveles">${[1, 2, 3].map(n => `<button class="cal-nivel" type="button" data-n="${n}"><b>${esc(L[n].name)}</b><small>${esc(L[n].desc)}</small></button>`).join('')}</div>`;
+      nivel = await new Promise(ok => $('#tarjeta').querySelectorAll('.cal-nivel').forEach(b => b.addEventListener('click', () => { FX.tap(); ok(+b.dataset.n); })));
+      vigente(tk);
+    }
+    store.set('nivel-cal', nivel);
+    G.beat = await beatStart(st => { $('#tarjeta').innerHTML = `<div class="aviso"><span class="tag">Cargando beat</span><p>${esc(st.name)} · ${st.bpm} BPM</p></div>`; });
+    vigente(tk);
+    track('batalla_start', { modo: 'calentamiento', beat: G.beat.id, nivel });
+    const gen = FS.createGenerator({ level: nivel });
+    const bpmReal = ENG ? ENG.bpm : 90;
+    const compasesDe = c => { const b = FS.barsFor(nivel, bpmReal); return c.type === 'word' ? b : Math.min(8, b * 2); };
+    const P = { word: 'Improvisa con esta palabra', pair: 'Conecta estas dos palabras', end: 'Cierra tus versos con', tema: 'Cambia de tema' };
+    $('#tarjeta').innerHTML = `<div class="cal">
+        <p class="cal-prompt" id="cal-prompt">Prepárate…</p>
+        <div class="cal-palabra" id="cal-palabra">&nbsp;</div>
+        <p class="cal-sub" id="cal-sub"></p>
+        <div class="cal-seg" id="cal-seg" aria-hidden="true"></div>
+        <p class="cal-sig">Sigue: <b id="cal-sig">…</b></p>
+      </div>
+      <button class="btn sec" type="button" id="cal-fin">Terminar</button>`;
+    let terminar = false;
+    $('#cal-fin').addEventListener('click', () => { FX.tap(); terminar = true; });
+    let card = gen.next(), next = gen.next(), enCarta = 0, nCarta = compasesDe(card), compases = 0;
+    const usadas = [];
+    const segs = () => { $('#cal-seg').innerHTML = Array.from({ length: nCarta }, (_, i) => `<i class="${i < enCarta ? 'off' : ''}"></i>`).join(''); };
+    const mostrar = () => {
+      usadas.push(card.type === 'pair' ? card.words.join(' + ') : card.text);
+      $('#cal-prompt').textContent = P[card.type];
+      const w = $('#cal-palabra'); w.dataset.type = card.type;
+      w.innerHTML = card.type === 'pair' ? `${esc(card.words[0])}<i>+</i>${esc(card.words[1])}` : esc(card.text);
+      w.classList.remove('pop'); void w.offsetWidth; w.classList.add('pop');
+      $('#cal-sub').textContent = card.hint || '';
+      $('#cal-sig').textContent = next.type === 'pair' ? next.words.join(' + ') : next.text;
+      segs(); pose('yo', 'rapea');
+    };
+    const espera = async time => { while (!terminar && clock() < time) { await esperar(Math.min(time, clock() + 0.1)); vigente(tk); } };
+    let t = proxCompasReal(clock() + 0.15);
+    await espera(t); vigente(tk);
+    const inicio = t;
+    const reloj = setInterval(() => {
+      if (G.token !== tk) { clearInterval(reloj); return; }
+      const q = Math.max(0, Math.ceil(CAL_SEG - (clock() - inicio)));
+      $('#marcador').innerHTML = `<span class="yo">${Math.floor(q / 60)}:${String(q % 60).padStart(2, '0')}</span>`;
+    }, 200);
+    if (!terminar) mostrar();
+    while (!terminar) {
+      t += BAR_REAL; await espera(t); vigente(tk);
+      if (terminar) break;
+      compases++;
+      if (t - inicio >= CAL_SEG - 0.05) break;
+      enCarta++;
+      if (enCarta >= nCarta) { card = next; next = gen.next(); enCarta = 0; nCarta = compasesDe(card); mostrar(); }
+      else { segs(); pose('yo', compases % 2 ? 'neutral' : 'rapea'); }
+    }
+    clearInterval(reloj);
+    const segundos = Math.round(Math.min(CAL_SEG, Math.max(0, clock() - inicio)));
+    const resumen = { modo: 'calentamiento', beat: G.beat.id, nivel, palabras: usadas.length, compases, segundos,
+      texto: `Calentamiento · nivel ${FS.LEVELS[nivel].name} · ${usadas.length} palabras en ${segundos} s`, beatNombre: G.beat.name };
+    track('batalla_end', { modo: 'calentamiento', beat: G.beat.id, nivel, palabras: usadas.length, segundos });
+    const sr = $('#s-ronda');
+    sr.innerHTML = `
+      <div class="veredicto"><span class="tag">Calentamiento · ${esc(FS.LEVELS[nivel].name)}</span><h2 class="gana">${segundos >= CAL_SEG - 1 ? '¡Listo para la batalla!' : 'Calentamiento terminado'}</h2></div>
+      <div class="duelo">
+        <div class="lado yo"><h3>Palabras</h3><div class="num">${usadas.length}</div></div>
+        <div class="mini-vs">·</div>
+        <div class="lado"><h3>Compases</h3><div class="num">${compases}</div></div>
+      </div>
+      <div class="repaso"><h3>Lo que te salió</h3><div class="palabras-usadas">${usadas.map(w => `<span>${esc(w)}</span>`).join('')}</div></div>
+      <div class="acciones">
+        <button class="btn" type="button" id="c-1">Otra ronda</button>
+        <button class="btn sec" type="button" id="c-2">Ir a la práctica</button>
+        <button class="btn sec" type="button" id="c-3">Retar al rival novato</button>
+        <button class="btn sec" type="button" id="c-4">Menú</button>
+      </div>
+      ${opinionHTML()}`;
+    pantalla('ronda');
+    $('#c-1').onclick = () => calentar(nivel); $('#c-2').onclick = () => jugar('practica');
+    $('#c-3').onclick = () => jugar('novato'); $('#c-4').onclick = menu;
+    activarOpinion(resumen);
+  } catch (e) { if (!(e instanceof Salida)) throw e; }
+}
 function menu() {
-  G.token++; G.dots = null; G.replicaHecha = false;
+  G.token++; G.dots = null; G.replicaHecha = false; previa = false; pintarBeats();
   beatStop(); $('#capa-pausa').hidden = true; $('#app').classList.remove('turno-rival', 'solo');
   pintarEstrellasMenu(); pantalla('menu');
 }
 
 /* ================= pausa ================= */
 function pausar() {
-  if (A.ctx) A.ctx.suspend(); else A.pausaFallback = performance.now();
+  if (ENG && ENG.ctx) ENG.pause(); else if (A.ctx) A.ctx.suspend(); else A.pausaFallback = performance.now();
   $('#capa-pausa').hidden = false; $('#btn-seguir').focus();
 }
 function seguir() {
-  if (A.ctx) A.ctx.resume(); else if (A.pausaFallback !== null) { A.offset += (performance.now() - A.pausaFallback) / 1000; A.pausaFallback = null; }
+  if (ENG && ENG.ctx) ENG.resume(); else if (A.ctx) A.ctx.resume(); else if (A.pausaFallback !== null) { A.offset += (performance.now() - A.pausaFallback) / 1000; A.pausaFallback = null; }
   $('#capa-pausa').hidden = true;
 }
 
 /* ================= arranque ================= */
 $('#nv-practica').addEventListener('click', () => jugar('practica'));
 $('#nv-novato').addEventListener('click', () => jugar('novato'));
+$('#nv-calentamiento').addEventListener('click', () => calentar());
+$('#btn-escuchar').addEventListener('click', () => { audioInit(); alternarPrevia(); });
+$('#beat-lista').addEventListener('click', e => {
+  const b = e.target.closest('[data-beat]'); if (!b) return;
+  store.set('beat', b.dataset.beat); audioInit();
+  if (previa) alternarPrevia(true); else pintarBeats();
+});
+if (FS) document.querySelectorAll('[data-fs]').forEach(el => { el.hidden = false; });
+pintarBeats();
 $('#btn-sonido').addEventListener('click', () => setMudo(!A.mudo));
 $('#btn-sonido2').addEventListener('click', () => setMudo(!A.mudo));
 $('#btn-pausa').addEventListener('click', pausar);
 $('#btn-seguir').addEventListener('click', seguir);
-$('#btn-salir').addEventListener('click', () => { if (A.ctx) A.ctx.resume(); A.pausaFallback = null; menu(); });
+$('#btn-salir').addEventListener('click', () => { if (!ENG && A.ctx) A.ctx.resume(); A.pausaFallback = null; menu(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden && !$('#s-juego').hidden && $('#capa-pausa').hidden) pausar(); });
 setMudo(A.mudo);
 pintarEstrellasMenu();

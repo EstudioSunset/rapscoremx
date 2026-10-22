@@ -92,6 +92,8 @@ try {
   window._rsReady((name, params) => logEvent(analytics, name, params));
 } catch (e) {}
 </script>
+<!-- Motor de beats, beats de la casa y banco de palabras del Freestyle Lab (mismo archivo que usa index.html) -->
+<script src="../freestyle.js?v=20261011"></script>
 ${cabeza.trim()}
 </head>
 <body>
