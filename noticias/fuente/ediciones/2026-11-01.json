@@ -1,0 +1,49 @@
+{
+  "fecha": "2026-11-01",
+  "slug": "rap-mexicano-semana-26-octubre-1-noviembre-2026",
+  "semana": { "desde": "2026-10-26", "hasta": "2026-11-01" },
+  "titulo": "Rap mexicano esta semana: Santa Fe Klan, FMS México y Yoss Bones",
+  "descripcion": "Santa Fe Klan festejó a San Judas en Guanajuato, arrancó FMS México 2026/27 con Rapder arriba y Yoss Bones estrenó con Mario Bautista.",
+  "intro": "Primera edición de Rap News. Santa Fe Klan armó fiesta gratis en su barrio de Guanajuato, la nueva temporada de FMS México arrancó en Ecatepec con cuatro MCs empatados arriba y Yoss Bones se fue al reggaetón con Mario Bautista. Esto es lo que pasó.",
+  "notas": [
+    {
+      "titulo": "Santa Fe Klan festejó a San Judas Tadeo con concierto gratis en Guanajuato",
+      "fecha": "2026-10-28",
+      "tipo": "concierto",
+      "texto": "Santa Fe Klan organizó el 28 de octubre su fiesta por San Judas Tadeo en Guanajuato capital. La idea original era hacerla en la calle La Bufa, en su barrio Santa Fe, pero el municipio no dio el permiso y sugirió un lugar más amplio; al final se hizo en el estacionamiento de la Plaza de Toros. La entrada fue libre y el programa corrió del mediodía hasta la madrugada del jueves, con grupos de regional, sonidero y rap, entre ellos Under Side 821. El propio Santa Fe Klan cantó y luego agradeció en redes a artistas, público y autoridades.",
+      "artistas": ["Santa Fe Klan", "Under Side 821"],
+      "fuentes": [
+        { "nombre": "La Silla Rota", "url": "https://lasillarota.com/guanajuato/vida/2026/10/30/santa-fe-klan-agradece-a-san-judas-tadeo-tras-fiesta-en-guanajuato-535283.html" },
+        { "nombre": "Excélsior", "url": "https://www.excelsior.com.mx/espectaculos/santa-fe-klan-cambia-sede-fiesta-guanajuato-horarios-y-detalles-evento-gratis" },
+        { "nombre": "Periódico AM", "url": "https://www.am.com.mx/guanajuato-capital/2026/10/27/fiesta-de-santa-fe-klan-en-guanajuato-aun-no-tiene-permiso-evaluan-cambiar-de-sede-1859653.html" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Arrancó FMS México 2026/27 en Ecatepec: Rapder, entre los cuatro líderes",
+      "fecha": "2026-10-24",
+      "tipo": "batalla",
+      "texto": "La séptima temporada de FMS México abrió el sábado 24 de octubre en el Centro Cívico de Ecatepec, con Serko Fu y Dante Jaimes como presentadores. Tras la primera jornada, Chuty, Skone, Rapder y Lobo Estepario quedaron empatados arriba con 6 puntos, al ganar sus dos batallas. Les siguen Azuky, Nota Roja y Jony Beltrán con 3; Xhavez, Kodigo y Dalia Castella se fueron en ceros. Chuty fue nombrado MVP de la fecha. Las tablas y resultados se publicaron entre el 25 y el 26 de octubre.",
+      "artistas": ["Rapder", "Serko Fu"],
+      "fuentes": [
+        { "nombre": "Récord", "url": "https://www.record.com.mx/historia/fms-mexico-2026-asi-quedo-la-tabla-de-posiciones-tras-la-jornada-1-en-ecatepec-2026102619214096184" },
+        { "nombre": "Mundo Freestyle", "url": "https://mundofreestyle.com/resultados-y-tabla-de-la-jornada-1-de-fms-mexico-2026/" },
+        { "nombre": "UrbanStreet", "url": "https://urbanstreet.com.pe/fms-mexico/fms-mexico-serko-fu-sera-el-host/" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Yoss Bones estrena “$in Kon-trato” con Mario Bautista",
+      "fecha": "2026-10-30",
+      "tipo": "colaboracion",
+      "texto": "Yoss Bones, originaria de Salamanca, Guanajuato, lanzó “$in Kon-trato” junto a Mario Bautista, quien compuso y produjo el tema. Es un reggaetón melódico sobre dos personas que se atraen pero no se prometen nada. La canción salió bajo el sello Alzada Records y ya está en plataformas. Según el comunicado del lanzamiento, Yoss Bones suma casi 4 millones de oyentes mensuales en Spotify y más de 100 sencillos desde 2018.",
+      "artistas": ["Yoss Bones"],
+      "fuentes": [
+        { "nombre": "Edomex Al Día", "url": "https://edomexaldia.com/yoss-bones-y-mario-bautista-rompen-las-reglas-del-amor-con-in-kon-trato/" },
+        { "nombre": "En Exclusiva Magazine", "url": "https://www.enexclusivamagazine.com/post/yoss-bones-y-mario-bautista-rompen-las-reglas-del-amor-con-in-kon-trato" }
+      ],
+      "delicado": false
+    }
+  ],
+  "cierre": "¿Quién de esta semana merece subir en el ranking? Califícalo en RapScore MX."
+}

@@ -6,5 +6,12 @@
   <atom:link href="https://www.rapscoremx.com/noticias/feed.xml" rel="self" type="application/rss+xml"/>
   <description>Resumen semanal de noticias del rap mexicano.</description>
   <language>es-mx</language>
+  <item>
+    <title>Rap mexicano esta semana: Santa Fe Klan, FMS México y Yoss Bones</title>
+    <link>https://www.rapscoremx.com/noticias/rap-mexicano-semana-26-octubre-1-noviembre-2026/</link>
+    <guid isPermaLink="true">https://www.rapscoremx.com/noticias/rap-mexicano-semana-26-octubre-1-noviembre-2026/</guid>
+    <pubDate>Sun, 01 Nov 2026 15:00:00 GMT</pubDate>
+    <description>Santa Fe Klan festejó a San Judas en Guanajuato, arrancó FMS México 2026/27 con Rapder arriba y Yoss Bones estrenó con Mario Bautista.</description>
+  </item>
 </channel>
 </rss>
