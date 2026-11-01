@@ -87,8 +87,11 @@ git checkout -b noticias/AAAA-MM-DD
 git add noticias sitemap.xml
 git commit -m "Rap News: semana del <rango>"
 git push -u origin noticias/AAAA-MM-DD
-gh pr create --base main --title "Rap News: semana del <rango>" --body-file <archivo>
+# Abrir el PR con la API REST (gh pr create usa GraphQL y no funciona desde las sesiones de Claude):
+gh api repos/EstudioSunset/rapscoremx/pulls -f title="Rap News: semana del <rango>" \
+  -f head="noticias/AAAA-MM-DD" -f base="main" -F body=@<archivo-del-cuerpo.md> --jq .html_url
 ```
+Si la rama ya existe (corrida repetida el mismo día), usa `noticias/AAAA-MM-DD-2`.
 
 El cuerpo del PR (en español, para Adn) debe tener:
 - Una línea: "Revisa y dale **Merge** para publicar, o **Close** para descartar."
