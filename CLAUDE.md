@@ -54,6 +54,10 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - El contador "Calificaciones de la comunidad" de la portada muestra "…" hasta que llegan los datos de Firestore (`RS_STATS_LOADED`); antes salía "0" y el sitio parecía vacío en conexiones lentas.
 - Si cambia qué datos se recopilan, actualiza `privacidad.html`.
 
+## SEO (Google Search Console)
+- Oct 2026 (GSC, 10–30 oct): 584 impresiones, 6 clics (CTR 1%), posición media 7. Todo cae en la portada: Google no indexa las secciones con `#` (`#estados`, `#letras`…), así que para posicionar búsquedas como "raperos de monterrey" harían falta páginas reales (p. ej. `/estados/nuevo-leon/`). Búsqueda principal: "raperos mexicanos" (posición ~9).
+- Nov 2026: título de portada con "Raperos mexicanos", descripción nueva, `canonical`, JSON-LD (WebSite + Organization con Facebook/TikTok), `robots.txt` y `sitemap.xml` (portada, batalla, privacidad). Al crear una página nueva, agrégala a `sitemap.xml`. `artista.html` lleva `noindex` (datos inventados); `votar.html` y `versus.html` también (son redirecciones).
+
 ## Cómo trabajar
 - Edita los archivos y **pruébalo antes de subirlo** (abre la página y revisa la consola). No rompas el flujo de votar ni el de login.
 - Commits en español y descriptivos. Push directo a `main`, salvo que Adn pida rama o PR.
