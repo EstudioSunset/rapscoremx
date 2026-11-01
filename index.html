@@ -144,6 +144,10 @@ nav a {
 }
 nav a:hover, nav a.active { color: var(--text); }
 nav a.active { border-bottom: 2px solid var(--accent); }
+/* Pantallas medianas: con 8 pestañas el menú se apretaba ("Por estado" en dos líneas) */
+@media (min-width: 901px) and (max-width: 1180px) {
+  nav a { padding: 8px 9px; white-space: nowrap; letter-spacing: .5px; }
+}
 
 .header-actions { display: flex; gap: 10px; align-items: center; }
 .btn-sm {
@@ -5094,6 +5098,10 @@ function goTo(target) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 window.addEventListener('load', () => {
+  // Link directo para calificar a un artista: index.html?calificar=<slug> (lo usan las noticias).
+  let qa = null;
+  try { qa = new URLSearchParams(location.search).get('calificar'); } catch (e) {}
+  if (qa && ARTISTS.some(a => a.slug === qa)) { rateFromHome(qa); return; }
   const h = location.hash.replace('#','');
   if (['votar','admin','estados','emergentes','letras','freestyle'].includes(h)) goTo(h);
 });

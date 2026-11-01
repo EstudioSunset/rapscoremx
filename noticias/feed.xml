@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Rap News · RapScore MX</title>
+  <link>https://www.rapscoremx.com/noticias/</link>
+  <atom:link href="https://www.rapscoremx.com/noticias/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Resumen semanal de noticias del rap mexicano.</description>
+  <language>es-mx</language>
+</channel>
+</rss>
