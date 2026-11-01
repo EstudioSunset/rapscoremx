@@ -1,0 +1,47 @@
+{
+  "fecha": "2026-11-01",
+  "slug": "rap-mexicano-semana-24-octubre-1-noviembre-2026",
+  "semana": { "desde": "2026-10-24", "hasta": "2026-11-01" },
+  "titulo": "Rap mexicano esta semana: FMS México, Santa Fe Klan y Eptos Uno",
+  "descripcion": "Primera edición de Rap News: arrancó la FMS México en Ecatepec, Santa Fe Klan festejó a San Judas en Guanajuato y Eptos Uno se metió al hardcore.",
+  "intro": "Arranca Rap News, el resumen semanal de RapScore MX con lo que se movió en el rap mexicano. En esta primera edición: la liga de freestyle más grande del país ya está en marcha, Santa Fe Klan volvió a reunir a su barrio y un excampeón de batallas se cruzó al terreno del metal.",
+  "notas": [
+    {
+      "titulo": "La FMS México 2026 arrancó en Ecatepec y Rapder ya está en la cima",
+      "fecha": "2026-10-24",
+      "tipo": "batalla",
+      "texto": "La nueva temporada de la FMS México abrió el sábado 24 de octubre en el Centro Cívico de Ecatepec, Estado de México, con 11 batallas. Después de la primera jornada, cuatro competidores comparten el primer lugar con 6 puntos: Chuty, Lobo Estepario, Skone y Rapder, que ganó sus dos batallas por 5-0. Chuty fue el mejor de la fecha. En la parte baja de la tabla quedaron Xhavez, Kodigo y Dalia Castella, todavía sin puntos.",
+      "artistas": ["Rapder"],
+      "fuentes": [
+        { "nombre": "Récord", "url": "https://www.record.com.mx/historia/fms-mexico-2026-asi-quedo-la-tabla-de-posiciones-tras-la-jornada-1-en-ecatepec-2026102619214096184" },
+        { "nombre": "Mundo Freestyle", "url": "https://mundofreestyle.com/resultados-y-tabla-de-la-jornada-1-de-fms-mexico-2026/" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Santa Fe Klan celebró a San Judas Tadeo con fiesta gratis en Guanajuato",
+      "fecha": "2026-10-28",
+      "tipo": "concierto",
+      "texto": "El 28 de octubre, Santa Fe Klan organizó su festejo a San Judas Tadeo en la ciudad de Guanajuato. La sede cambió de la calle La Bufa al estacionamiento de la Plaza de Toros, en acuerdo con las autoridades municipales, para tener más espacio y seguridad. La entrada fue libre y la música siguió del mediodía del miércoles hasta la madrugada del jueves, con un cartel que mezcló rap y regional: Under Side 821, Víctor Mendívil, Los Huracanes del Norte y Único Grado, entre otros. Al día siguiente, el rapero agradeció en Instagram a su equipo y a las autoridades porque todo salió sin contratiempos.",
+      "artistas": ["Santa Fe Klan", "Under Side 821"],
+      "fuentes": [
+        { "nombre": "La Silla Rota", "url": "https://lasillarota.com/guanajuato/vida/2026/10/30/santa-fe-klan-agradece-a-san-judas-tadeo-tras-fiesta-en-guanajuato-535283.html" },
+        { "nombre": "Plano Informativo", "url": "https://planoinformativo.com/1178298/santa-fe-klan-prepara-festejo-masivo-para-san-judas-tadeo" },
+        { "nombre": "Excélsior", "url": "https://www.excelsior.com.mx/espectaculos/santa-fe-klan-anuncia-fiesta-gratis-guanajuato-fecha-y-artistas-invitados" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Eptos Uno se cruza al hardcore con Todos los Muertos",
+      "fecha": "2026-10-28",
+      "tipo": "colaboracion",
+      "texto": "El sonorense Eptos Uno, campeón nacional de Red Bull Batalla en 2007, se unió a la banda mexicana Todos los Muertos en “Para Morir Nacimos”, un tema que mezcla hardcore, nu metal y rap. La canción ya está en plataformas digitales y se tocó en vivo por primera vez el 24 de octubre en el Punk Rock Fest. Según la banda, habla de aceptar quién eres, del duelo colectivo y de las presiones sociales. La colaboración salió de la amistad del rapero con DJ Paxil, el tornamesista del grupo.",
+      "artistas": ["Eptos Uno"],
+      "fuentes": [
+        { "nombre": "Infobae", "url": "https://www.infobae.com/mexico/2026/10/28/para-morir-nacimos-todos-los-muertos-presenta-su-colaboracion-con-eptos-uno-referente-del-freestyle-mexicano/" }
+      ],
+      "delicado": false
+    }
+  ],
+  "cierre": "¿Quién se está rifando más este año? Entra a RapScore y califica a Rapder, Santa Fe Klan, Eptos Uno y a quien tú creas que merece el 10."
+}
