@@ -27,15 +27,20 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
     if (m) localStorage.setItem('rs_internal', m[1]);
     window.RS_INTERNAL = localStorage.getItem('rs_internal') === '1';
   } catch (e) { window.RS_INTERNAL = false; }
+  // Pruebas en tu compu (localhost / archivo) y navegadores automáticos (robots, pruebas con
+  // Playwright/Lighthouse) no son visitas reales: en Clarity salían como sesiones de 1–20 s sin clics.
+  var host = location.hostname;
+  window.RS_LOCAL = location.protocol === 'file:' || host === 'localhost' || host === '[::1]' || /^127\.|^0\.0\.0\.0$|^192\.168\.|\.local$/.test(host);
+  window.RS_AUTOMATED = !!navigator.webdriver || /HeadlessChrome|Lighthouse|PageSpeed|bot\b|crawler|spider|Prerender/i.test(navigator.userAgent || '');
+  if (window.RS_LOCAL || window.RS_AUTOMATED) window.RS_INTERNAL = true; // GA4 lo marca como interno
 
-  // Microsoft Clarity
-  if (window.RS_CLARITY_ID) {
+  // Microsoft Clarity: solo graba visitas reales (tú, tus pruebas y los robots ya no entran).
+  if (window.RS_CLARITY_ID && !window.RS_INTERNAL) {
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
       t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
       y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, 'clarity', 'script', window.RS_CLARITY_ID);
-    if (window.RS_INTERNAL) clarity('set', 'traffic_type', 'internal');
   }
 
   // rsTrack(nombre, params): un solo punto para mandar eventos a GA4 y a Clarity.
@@ -2405,7 +2410,7 @@ function blendArtist(a, stat) {
 }
 
 window.applyCommunityStats = function(stats) {
-  if (stats) window._communityStats = stats;
+  if (stats) { window._communityStats = stats; window.RS_STATS_LOADED = true; }
   // PRIOR = promedio real de todos los votos (todas las categorías)
   let pSum = 0, pN = 0;
   Object.values(window._communityStats || {}).forEach(st => {
@@ -5953,7 +5958,7 @@ function renderNewHome() {
     const states = new Set(ARTISTS.map(a => a.estado).filter(Boolean)).size;
     stats.innerHTML = `
       <div class="nh-stat"><b>${ARTISTS.length}</b><span>Artistas en el ranking</span></div>
-      <div class="nh-stat"><b>${votes.toLocaleString('es-MX')}</b><span>Calificaciones de la comunidad</span></div>
+      <div class="nh-stat"><b>${window.RS_STATS_LOADED ? votes.toLocaleString('es-MX') : '…'}</b><span>Calificaciones de la comunidad</span></div>
       <div class="nh-stat"><b>${states}</b><span>Estados representados</span></div>
       <div class="nh-stat live"><span>Actualizado</span><b>En vivo</b></div>`;
   }

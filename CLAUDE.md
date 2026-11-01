@@ -50,7 +50,8 @@ El dueño es Adn. Escríbele **en español**, claro y sin tecnicismos, y explica
 - **GA4** vía Firebase Analytics (`G-D6QMGC5N67`) y **Microsoft Clarity** (`yvosalsr5z`, en `window.RS_CLARITY_ID`).
 - Para medir algo nuevo usa `rsTrack('nombre_evento', { ... })` (manda a GA4 y Clarity, con cola hasta que carga Firebase), o pon `data-track="nombre"` en un botón para mandar un `cta_click`.
 - Eventos actuales: `rate_artist`, `sign_up`, `login`, `propose_artist`, `share` (estos cuatro son eventos clave), `section_view`, `view_artist`, `search`, `filter_ranking`, `popup_view`, `cta_click`, `listen_click` (YouTube/Spotify), `send_suggestion`, `analyze_lyrics` (solo versos, palabras y densidad; nunca el texto), `freestyle_start` / `freestyle_end` (beat, BPM, nivel, modo, segundos, palabras), `batalla_start` / `batalla_end` (modo, beat, resultado, puntos, rival, consonantes, asonantes, fallos, tiempos, réplica; en calentamiento: nivel, palabras, segundos) y `batalla_feedback` (nota 1–5, si escribió comentario).
-- Tráfico interno: `?rs_internal=1` o sesión de admin → `traffic_type=internal`.
+- Tráfico interno: `?rs_internal=1` o sesión de admin → `traffic_type=internal` en GA4. Desde nov 2026 **Clarity ni siquiera carga** para tráfico interno, pruebas locales (`RS_LOCAL`: localhost, 127.x, 192.168.x, `file:`) ni navegadores automáticos (`RS_AUTOMATED`: `navigator.webdriver`, HeadlessChrome, Lighthouse, bots); esos dos últimos también se marcan internos en GA4. Motivo: en el reporte de Clarity de oct 2026, ~28 de 51 grabaciones eran de Adn, de localhost o de robots Linux de 1–20 s sin clics. Si Adn quiere verse a sí mismo en Clarity: `?rs_internal=0`.
+- El contador "Calificaciones de la comunidad" de la portada muestra "…" hasta que llegan los datos de Firestore (`RS_STATS_LOADED`); antes salía "0" y el sitio parecía vacío en conexiones lentas.
 - Si cambia qué datos se recopilan, actualiza `privacidad.html`.
 
 ## Cómo trabajar

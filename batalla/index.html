@@ -35,14 +35,18 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
     if (m) localStorage.setItem('rs_internal', m[1]);
     window.RS_INTERNAL = localStorage.getItem('rs_internal') === '1';
   } catch (e) { window.RS_INTERNAL = false; }
-  if (window.RS_CLARITY_ID) {
+  // Igual que index.html: pruebas locales y navegadores automáticos no cuentan como visitas.
+  var host = location.hostname;
+  window.RS_LOCAL = location.protocol === 'file:' || host === 'localhost' || host === '[::1]' || /^127\.|^0\.0\.0\.0$|^192\.168\.|\.local$/.test(host);
+  window.RS_AUTOMATED = !!navigator.webdriver || /HeadlessChrome|Lighthouse|PageSpeed|bot\b|crawler|spider|Prerender/i.test(navigator.userAgent || '');
+  if (window.RS_LOCAL || window.RS_AUTOMATED) window.RS_INTERNAL = true;
+  if (window.RS_CLARITY_ID && !window.RS_INTERNAL) {
     (function (c, l, a, r, i, t, y) {
       c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
       t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
       y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, 'clarity', 'script', window.RS_CLARITY_ID);
     clarity('set', 'section', 'batalla');
-    if (window.RS_INTERNAL) clarity('set', 'traffic_type', 'internal');
   }
   var queue = [];
   window.rsTrack = function (name, params) {
