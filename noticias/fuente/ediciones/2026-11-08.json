@@ -1,0 +1,48 @@
+{
+  "fecha": "2026-11-08",
+  "slug": "rap-mexicano-semana-2-8-noviembre-2026",
+  "semana": { "desde": "2026-11-02", "hasta": "2026-11-08" },
+  "titulo": "Rap mexicano esta semana: Aczino, Los Pinos y Milkman",
+  "descripcion": "Aczino cerró el reto récord de Gazir, Los Pinos prepara un día de rap en lenguas originarias y C. Tangana le dedicó canción al regio Milkman.",
+  "intro": "Semana tranquila en estrenos, pero con movimiento. Aczino fue el último rival en un récord Guinness de freestyle, la CDMX alista un día completo de rap en lenguas originarias con entrada libre y un tema nuevo desde España recordó a un productor regiomontano.",
+  "notas": [
+    {
+      "titulo": "Aczino cerró las 200 batallas del récord Guinness de Gazir",
+      "fecha": "2026-11-07",
+      "tipo": "batalla",
+      "texto": "El sábado 7 de noviembre, el español Gazir rompió un récord Guinness en Gijón, España: 200 batallas de freestyle en 12 horas, dentro del evento Gazir contra Todos de Red Bull. Terminó con 197 victorias y 3 derrotas, ante Babi, Skone y Bnet. El mexicano Aczino fue uno de los rivales de cierre de bloque y le tocó la última batalla de la noche. Las notas no detallan cómo se decidió ese duelo final.",
+      "artistas": ["Aczino"],
+      "fuentes": [
+        { "nombre": "Telecinco", "url": "https://www.telecinco.es/noticias/cultura/20261108/rapero-gazir-bate-gijon-asturias-record-guinness-batallas-freestyle_18_020651908.html" },
+        { "nombre": "Red Bull", "url": "https://www.redbull.com/mx-es/gazir-contra-todos-guinness-world-records" },
+        { "nombre": "Que.es", "url": "https://www.que.es/2026/11/08/gazir-record-guinness-freestyle/" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Rap en mixe, zapoteco y totonaco gratis en Los Pinos",
+      "fecha": "2026-11-04",
+      "tipo": "concierto",
+      "texto": "El Festival Música Original llega al Complejo Cultural Los Pinos, en la CDMX, del 12 al 15 de noviembre, con entrada libre. El jueves 12 está dedicado al hip hop: Mixe Represent, de Tamazulápam, Oaxaca, que rapea en ayuujk; Juchirap, de Juchitán, en zapoteco y español; MI$HA, de la Ciudad de México, y Juan Sant, de la Sierra Norte de Puebla, en totonaco y español. El domingo 15 cierra Belle \"La Malixita\", que mezcla hip hop con lengua maya.",
+      "artistas": [],
+      "fuentes": [
+        { "nombre": "Infobae", "url": "https://www.infobae.com/mexico/2026/11/04/de-rap-en-zapoteco-a-rock-en-tsotsil-asi-sera-el-festival-musica-original-gratis-en-los-pinos/" },
+        { "nombre": "Infobae", "url": "https://www.infobae.com/mexico/2026/11/06/gobierno-de-mexico-anuncia-festival-original-2026-con-talleres-pasarelas-y-musica-en-vivo-cuando-y-donde-sera/" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "C. Tangana regresa al rap con un homenaje al regio Milkman",
+      "fecha": "2026-11-03",
+      "tipo": "lanzamiento",
+      "texto": "El 3 de noviembre, el español C. Tangana estrenó \"Milko Freestyle\" junto a Agorazein, el colectivo con el que empezó. Es su primer sencillo en más de tres años y está dedicado a Milkman, rapero y productor de Monterrey que colaboró varias veces con él y que falleció en febrero de 2026. Agorazein dará cuatro conciertos en el Movistar Arena de Madrid del 15 al 18 de noviembre, por los diez años de su disco Siempre.",
+      "artistas": [],
+      "fuentes": [
+        { "nombre": "Infobae", "url": "https://www.infobae.com/espana/cultura/2026/11/04/c-tangana-vuelve-a-lo-grande-con-milko-freestyle-su-regreso-al-rap-con-un-homenaje-muy-especial-mi-nino-ha-nacido-y-mi-vida-ha-cambiado/" },
+        { "nombre": "Sopitas", "url": "https://www.sopitas.com/musica/c-tangana-milko-freestyle-cancion-milkman-el-madrileno/" }
+      ],
+      "delicado": true
+    }
+  ],
+  "cierre": "¿Aczino sigue siendo el más grande del freestyle mexicano? Entra a RapScore y califícalo, junto a los raperos que tú creas que merecen el 10."
+}
