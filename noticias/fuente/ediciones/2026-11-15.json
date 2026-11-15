@@ -1,0 +1,59 @@
+{
+  "fecha": "2026-11-15",
+  "slug": "rap-mexicano-semana-9-15-noviembre-2026",
+  "semana": { "desde": "2026-11-09", "hasta": "2026-11-15" },
+  "titulo": "Rap mexicano esta semana: Aczino, Red Bull Batalla y Cartel de Santa",
+  "descripcion": "Aczino sumó dos victorias en la FMS Colombia, la Red Bull Batalla México ya tiene jueces y Cartel de Santa fija fecha para cerrar el Volumen 8.",
+  "intro": "Semana de freestyle y de cuentas regresivas. Aczino siguió invicto en Colombia, la final nacional de Red Bull Batalla ya tiene a sus 16 MCs y a sus jueces, Cartel de Santa puso fecha al cierre de su disco y Santa Fe Klan pasó por Acapulco con un proyecto de box para su barrio.",
+  "notas": [
+    {
+      "titulo": "Aczino ganó sus dos batallas en la segunda jornada de FMS Colombia",
+      "fecha": "2026-11-14",
+      "tipo": "batalla",
+      "texto": "El sábado 14 de noviembre, la FMS Colombia tuvo su segunda jornada en el Teatro Calima de Cali. Aczino cerró la noche contra Reverse, el primer cubano en la liga, y le ganó; antes también venció a Pandora. Con eso suma 12 puntos y quedó segundo de la tabla, detrás de Puppy, que se llevó el MVP de la jornada. Valles-T es tercero. En la primera fecha el mexicano había ganado sus dos batallas 5-0.",
+      "artistas": ["Aczino"],
+      "fuentes": [
+        { "nombre": "Mundo Freestyle", "url": "https://mundofreestyle.com/resultados-y-tabla-de-la-jornada-2-de-fms-colombia-2026/" },
+        { "nombre": "UrbanStreet", "url": "https://urbanstreet.com.pe/fms-colombia/ms-colombia-jornada-2-hoy-aczino/" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Red Bull Batalla México: 16 MCs y jueces confirmados para la final del 21 de noviembre",
+      "fecha": "2026-11-13",
+      "tipo": "batalla",
+      "texto": "La Final Nacional de Red Bull Batalla México será el sábado 21 de noviembre en La Maravilla Studios, en la colonia Atlampa de la CDMX. Compiten 16 MCs: Fat Tony, campeón defensor, Rapder, Drixer, Ari Carrillo, Azuky, RC, Potencia, Cabrera, Kira, Artil, Garza, SGU, Milo, Jocra, Once y Teniente DXN. Esta semana se confirmó que los jueces serán Skiper, Lobo Estepario y Yoiker.",
+      "artistas": ["Rapder"],
+      "fuentes": [
+        { "nombre": "UrbanStreet", "url": "https://urbanstreet.com.pe/red-bull-batalla/red-bull-batalla-mexico-2026-skiper-lobo-estepario-yoiker-jueces-final-nacional/" },
+        { "nombre": "Grita Radio", "url": "https://gritaradio.com/red-bull-batalla-mexico-2026-rapder-fat-tony-y-los-16-freestylers-que-competiran-por-la-corona/" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Cartel de Santa pone fecha al cierre del Volumen 8: 19 de noviembre",
+      "fecha": "2026-11-10",
+      "tipo": "lanzamiento",
+      "texto": "Cartel de Santa arrancó la cuenta regresiva para completar Volumen 8, el disco que ha ido soltando por partes. Según UrbanStreet, las canciones que faltan salen el jueves 19 de noviembre y con eso el álbum queda completo. Babo dio a conocer la fecha en el video de \"Tómala Cochino\". La primera entrega tuvo seis temas, y en un podcast Babo dijo que grabó más de 20 canciones para el proyecto, aunque el total final no está confirmado.",
+      "artistas": ["Cartel de Santa"],
+      "fuentes": [
+        { "nombre": "UrbanStreet", "url": "https://urbanstreet.com.pe/rap/cartel-de-santa-volumen-8-completo-19-noviembre/" },
+        { "nombre": "UrbanStreet", "url": "https://urbanstreet.com.pe/rap/babo-fecha-tercera-parte-volumen-8/" }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Santa Fe Klan quiere llevar el box a los chavos de su barrio",
+      "fecha": "2026-11-12",
+      "tipo": "otro",
+      "texto": "Santa Fe Klan estuvo en Acapulco durante la convención anual del Consejo Mundial de Boxeo. Ahí contó que prepara, con la campeona mundial Camila Zamorano, un proyecto para acercar el boxeo a jóvenes de su barrio como una salida distinta a la calle. Zamorano trabaja en armar su propia promotora. En la visita, el rapero también convivió con un niño paciente del Instituto Estatal de Cancerología de Guerrero. Ese fin de semana estaba anunciado en el Tonic Fest, en Playa Tamarindos.",
+      "artistas": ["Santa Fe Klan"],
+      "fuentes": [
+        { "nombre": "El Gráfico", "url": "https://www.elgrafico.mx/espectaculos/2026/11/12/santa-fe-klan-quiere-cambiar-el-destino-de-los-morros-de-su-barrio-con-guantes-de-boxeo/" },
+        { "nombre": "Periódico AM", "url": "https://www.am.com.mx/espectaculos/2026/11/08/santa-fe-klan-tonic-fest-acapulco-cartel-fechas-1864164.html" }
+      ],
+      "delicado": false
+    }
+  ],
+  "cierre": "¿Aczino, Rapder o Santa Fe Klan? Entra a RapScore y califica a los que tú creas que merecen el 10."
+}
