@@ -4,20 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Batalla de Freestyle · RapScore MX</title>
-<meta name="description" content="Completa el verso con la rima que tiene sentido antes de que se acabe el beat. Practica o rétale al rival novato. Versión de prueba de RapScore MX.">
+<meta name="description" content="Juego de freestyle gratis: completa el verso con la rima que tiene sentido antes de que se acabe el beat. Vence al novato, al rival medio y al Jefe. Beats originales de RapScore MX.">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="canonical" href="https://www.rapscoremx.com/batalla/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RapScore MX">
 <meta property="og:locale" content="es_MX">
-<meta property="og:title" content="Batalla de Freestyle: ¿le ganas al rival novato?">
-<meta property="og:description" content="Completa el verso con la rima correcta antes de que se acabe el beat. Juego de prueba de RapScore MX.">
+<meta property="og:title" content="Batalla de Freestyle: ¿le ganas al Jefe?">
+<meta property="og:description" content="Completa el verso con la rima correcta antes de que se acabe el beat. Tres rivales, remates que valen doble y un comodín. Juega gratis en RapScore MX.">
 <meta property="og:url" content="https://www.rapscoremx.com/batalla/">
 <meta property="og:image" content="https://www.rapscoremx.com/batalla/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Dos raperos de caricatura frente a frente con el título Batalla de Freestyle">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Batalla de Freestyle","url":"https://www.rapscoremx.com/batalla/",
+ "description":"Juego de freestyle en español: completa el verso con la palabra que rima y tiene sentido antes de que se acabe el beat. Tres rivales: novato, medio y el Jefe.",
+ "inLanguage":"es-MX","genre":["Música","Ritmo","Palabras"],"gamePlatform":"Navegador web","applicationCategory":"Game","operatingSystem":"Cualquiera",
+ "image":"https://www.rapscoremx.com/batalla/og.jpg","isAccessibleForFree":true,
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"MXN"},
+ "publisher":{"@type":"Organization","name":"RapScore MX","url":"https://www.rapscoremx.com/"}}
+</script>
 <link rel="icon" type="image/png" href="../images/rs-favicon.png">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: border-box; height: 100%; }
@@ -174,6 +182,17 @@ button:focus-visible { outline: 3px solid var(--slot); outline-offset: 3px; }
 .lock { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; color: var(--ink-2); }
 .nivel.p1 { background: radial-gradient(120% 80% at 50% 0%, #3a2a10, var(--panel) 70%); }
 .nivel.p2 { background: radial-gradient(120% 80% at 50% 0%, #2a1a44, var(--panel) 70%); }
+.nivel.p4 { background: radial-gradient(120% 80% at 50% 0%, #10343a, var(--panel) 70%); }
+.nivel.p5 { background: radial-gradient(120% 80% at 50% 0%, #4a1010, var(--panel) 70%); }
+.lock-w[hidden] { display: none; }
+.regla b { color: var(--ink); }
+.remate-tag { align-self: flex-start; font-family: var(--f-display); font-size: 20px; letter-spacing: .05em; background: var(--ref); color: #fff; padding: 2px 10px 0; border-radius: 6px; transform: rotate(-2deg); box-shadow: 0 3px 0 var(--line); }
+.comodin { align-self: center; border: 3px dashed var(--gold); background: rgba(255,194,26,.08); color: var(--gold); border-radius: 999px; padding: 6px 14px; font-weight: 800; font-size: 14px; display: inline-flex; gap: 6px; align-items: center; }
+.comodin svg { width: 20px; height: 20px; }
+.op.tachada { opacity: .28; text-decoration: line-through; text-decoration-thickness: 3px; }
+.cta-votar { border: 3px solid var(--line); border-radius: 14px; background: linear-gradient(135deg, #2a1300, var(--panel) 70%); padding: 14px; display: grid; gap: 6px; text-decoration: none; color: var(--ink); }
+.cta-votar b { font-family: var(--f-display); font-weight: 400; font-size: 26px; letter-spacing: .03em; color: var(--slot); }
+.cta-votar span { color: var(--ink-2); font-size: 14.5px; line-height: 1.4; }
 .stars { display: flex; gap: 3px; }
 .stars svg { width: 18px; height: 18px; }
 .reglas { border: 3px solid var(--line); border-radius: 14px; background: var(--panel); padding: 14px; display: grid; gap: 10px; }
@@ -453,15 +472,15 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
         <img src="img/novato-neutral.webp" alt="">
         <div class="pie-n"><b>Rival novato</b><small>3 rondas · 4 compases</small><div class="stars" data-stars="novato"></div></div>
       </button>
-      <button class="nivel" type="button" disabled>
+      <button class="nivel p4" id="nv-medio" type="button" data-sub="Remates ×2 · 1 comodín" disabled>
         <img src="img/medio-neutral.webp" alt="">
-        <svg class="lock" data-icon="lock"></svg>
-        <div class="pie-n"><b>Rival medio</b><small>Próximamente</small></div>
+        <span class="lock-w"><svg class="lock" data-icon="lock"></svg></span>
+        <div class="pie-n"><b>Rival medio</b><small data-sub>Gánale al novato para desbloquearlo</small><div class="stars" data-stars="medio" hidden></div></div>
       </button>
-      <button class="nivel" type="button" disabled>
+      <button class="nivel p5" id="nv-jefe" type="button" data-sub="Sin pistas · 2–3 compases" disabled>
         <img src="img/jefe-neutral.webp" alt="">
-        <svg class="lock" data-icon="lock"></svg>
-        <div class="pie-n"><b>Jefe</b><small>Próximamente · doble rima</small></div>
+        <span class="lock-w"><svg class="lock" data-icon="lock"></svg></span>
+        <div class="pie-n"><b>El Jefe</b><small data-sub>Gánale al rival medio para desbloquearlo</small><div class="stars" data-stars="jefe" hidden></div></div>
       </button>
     </div>
     <section class="beats" data-fs hidden aria-labelledby="beats-titulo">
@@ -474,12 +493,14 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
       <div class="regla"><svg class="icon" data-icon="cg"></svg><span>Rima consonante y la frase tiene sentido</span><em>+1</em></div>
       <div class="regla"><svg class="icon" data-icon="cb"></svg><span>Rima asonante y la frase tiene sentido</span><em>+0,5</em></div>
       <div class="regla"><svg class="icon" data-icon="x"></svg><span>No tiene sentido o se acabó el tiempo</span><em>0</em></div>
+      <div class="regla"><svg class="icon" data-icon="rayo"></svg><span><b>Remate</b>: contra el medio y el Jefe, el último verso de cada ronda vale doble (también el del rival)</span><em>×2</em></div>
+      <div class="regla"><svg class="icon" data-icon="carta"></svg><span><b>Comodín</b>: una vez por batalla quita las 2 opciones que no tienen sentido. Guárdalo para un remate</span><em>×1</em></div>
     </section>
     <div class="menu-pie">
       <span>Sube el volumen: el tiempo corre al ritmo del beat.</span>
       <button class="chip-btn" id="btn-sonido" type="button">Sonido: sí</button>
     </div>
-    <p class="menu-legal" data-sitio hidden>Versión de prueba. <a href="/">Ir a RapScore MX</a> · <a href="../privacidad.html">Aviso de privacidad</a></p>
+    <nav class="menu-legal" data-sitio hidden aria-label="RapScore MX"><a href="/">Ranking</a> · <a href="/?utm_source=batalla&amp;utm_medium=menu#votar" data-cta="batalla_menu_votar">Votar</a> · <a href="/#freestyle">Freestyle Lab</a> · <a href="/noticias/">Rap News</a> · <a href="../privacidad.html">Aviso de privacidad</a></nav>
   </section>
 
   <!-- JUEGO -->
@@ -590,7 +611,7 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
 
 </script>
 <script>
-const CONTENIDO = {"practica":[{"id":"P1","pie":"Yo me formé rimando en la","ref":"calle","verso":["y aquí no hay rival que me",""],"ops":[{"w":"acalle","t":"c","ok":true,"why":"\"acallar\" es hacer callar: nadie me hace callar"},{"w":"valle","t":"c","ok":false,"why":"\"valle\" es un sustantivo; \"que me valle\" no existe"},{"w":"aguante","t":"a","ok":true,"why":"nadie me aguanta; solo coinciden las vocales a-e"},{"w":"parque","t":"a","ok":false,"why":"\"que me parque\" no significa nada"}]},{"id":"P2","pie":"Esto no es de chiripa, es lo que trae mi","ref":"mente","verso":["por eso en esta plaza me respeta la",""],"ops":[{"w":"gente","t":"c","ok":true,"why":"el público respeta al que rima"},{"w":"fuente","t":"c","ok":false,"why":"una fuente no respeta a nadie"},{"w":"plebe","t":"a","ok":true,"why":"en el norte, \"la plebe\" es la banda; solo coinciden e-e"},{"w":"leche","t":"a","ok":false,"why":"\"me respeta la leche\" no tiene sentido"}]},{"id":"P3","pie":"Nadie me regaló nada, yo me abrí","ref":"camino","verso":["y con cada verso voy escribiendo mi",""],"ops":[{"w":"destino","t":"c","ok":true,"why":"escribir mi destino: forjar mi futuro"},{"w":"comino","t":"c","ok":false,"why":"\"escribir mi comino\" no significa nada"},{"w":"libro","t":"a","ok":true,"why":"cada verso es parte de mi libro; solo coinciden i-o"},{"w":"higo","t":"a","ok":false,"why":"\"escribir mi higo\" no tiene sentido"}]},{"id":"P4","pie":"Pon mucha atención a lo que suelta mi","ref":"verso","verso":["mis rimas llegan más lejos que el",""],"ops":[{"w":"universo","t":"c","ok":true,"why":"más lejos que el universo: no tienen límite"},{"w":"terso","t":"c","ok":false,"why":"\"terso\" es un adjetivo (liso); aquí no cabe"},{"w":"cielo","t":"a","ok":true,"why":"más lejos que el cielo; solo coinciden e-o"},{"w":"queso","t":"a","ok":false,"why":"\"más lejos que el queso\" no tiene sentido"}]}],"novato":[[{"id":"N1","pie":"Mi estilo de la calle te suena","ref":"pesado","verso":["y tú con tus rimas te quedaste en el",""],"ops":[{"w":"pasado","t":"c","ok":true,"why":"te quedaste en el pasado: ya no estás vigente"},{"w":"pescado","t":"c","ok":false,"why":"\"te quedaste en el pescado\" no significa nada"},{"w":"fango","t":"a","ok":true,"why":"te quedaste atascado; solo coinciden a-o"},{"w":"mango","t":"a","ok":false,"why":"\"te quedaste en el mango\" no tiene sentido"}]},{"id":"N2","pie":"Cada barra que suelto va bien","ref":"medida","verso":["y tú con ese flow ya estás de",""],"ops":[{"w":"salida","t":"c","ok":true,"why":"estás de salida: ya te vas"},{"w":"comida","t":"c","ok":false,"why":"\"estás de comida\" no significa nada"},{"w":"visita","t":"a","ok":true,"why":"solo vienes de visita, no eres de aquí; coinciden i-a"},{"w":"tinta","t":"a","ok":false,"why":"\"estás de tinta\" no tiene sentido"}]},{"id":"N3","pie":"Llego a la tarima con un flow","ref":"elegante","verso":["y tú con esas rimas no das un paso",""],"ops":[{"w":"adelante","t":"c","ok":true,"why":"no avanzas nada"},{"w":"elefante","t":"c","ok":false,"why":"\"un paso elefante\" no tiene sentido"},{"w":"grande","t":"a","ok":true,"why":"no das un paso grande; solo coinciden a-e"},{"w":"calle","t":"a","ok":false,"why":"\"un paso calle\" no significa nada"}]},{"id":"N4","pie":"Rimo de noche y rimo de","ref":"día","verso":["porque lo que traigo es pura",""],"ops":[{"w":"poesía","t":"c","ok":true,"why":"lo que traigo es pura poesía"},{"w":"sandía","t":"c","ok":false,"why":"\"pura sandía\" no tiene sentido aquí"},{"w":"vida","t":"a","ok":true,"why":"pura vida: pura energía; solo coinciden i-a"},{"w":"piña","t":"a","ok":false,"why":"\"pura piña\" no significa nada aquí"}]}],[{"id":"N5","pie":"Mi rima no se compra, mi rima es de","ref":"verdad","verso":["y tú que te la robas no tienes",""],"ops":[{"w":"dignidad","t":"c","ok":true,"why":"robar rimas es no tener dignidad"},{"w":"Navidad","t":"c","ok":false,"why":"\"no tienes Navidad\" no viene al caso"},{"w":"lugar","t":"a","ok":true,"why":"no tienes lugar aquí; en las agudas solo cuenta la última vocal: a"},{"w":"collar","t":"a","ok":false,"why":"\"no tienes collar\" no tiene sentido"}]},{"id":"N6","pie":"Mi rima te ilumina, mi rima es puro","ref":"sol","verso":["y tú con esas rimas metiste un",""],"ops":[{"w":"autogol","t":"c","ok":true,"why":"te fallaste solo, como un gol en tu propia portería"},{"w":"girasol","t":"c","ok":false,"why":"\"metiste un girasol\" no significa nada"},{"w":"error","t":"a","ok":true,"why":"metiste un error; en las agudas solo cuenta la última vocal: o"},{"w":"ratón","t":"a","ok":false,"why":"\"metiste un ratón\" no tiene sentido"}]},{"id":"N7","pie":"Rimo con el puño y con el","ref":"corazón","verso":["y cada palabra que suelto lleva",""],"ops":[{"w":"intención","t":"c","ok":true,"why":"cada palabra va con intención"},{"w":"balcón","t":"c","ok":false,"why":"una palabra no lleva balcón"},{"w":"valor","t":"a","ok":true,"why":"lleva valor; en las agudas solo cuenta la última vocal: o"},{"w":"tenedor","t":"a","ok":false,"why":"\"lleva tenedor\" no tiene sentido"}]},{"id":"N8","pie":"Traigo las palabras cargadas de","ref":"fuego","verso":["contigo ni me esfuerzo, para mí esto es un",""],"ops":[{"w":"juego","t":"c","ok":true,"why":"esto es un juego: es fácil. En \"fue-go\" la u no cuenta"},{"w":"riego","t":"c","ok":false,"why":"\"esto es un riego\" no tiene que ver"},{"w":"paseo","t":"a","ok":true,"why":"es un paseo: es fácil; solo coinciden e-o"},{"w":"cerebro","t":"a","ok":false,"why":"\"esto es un cerebro\" no significa nada aquí"}]}],[{"id":"N9","pie":"Mi rima llega alto, la mando hasta el","ref":"cielo","verso":["y tú con esa rima te vas directo al",""],"ops":[{"w":"suelo","t":"c","ok":true,"why":"te vas directo al suelo: caes"},{"w":"pañuelo","t":"c","ok":false,"why":"\"te vas directo al pañuelo\" no tiene sentido"},{"w":"infierno","t":"a","ok":true,"why":"yo al cielo, tú al infierno; solo coinciden e-o"},{"w":"texto","t":"a","ok":false,"why":"\"te vas directo al texto\" no significa nada"}]},{"id":"N10","pie":"Yo traigo un estilo que suena bien","ref":"nuevo","verso":["y tú ya estás pasado, te toca el",""],"ops":[{"w":"relevo","t":"c","ok":true,"why":"te toca el relevo: alguien toma tu lugar"},{"w":"llevo","t":"c","ok":false,"why":"\"llevo\" es un verbo; \"te toca el llevo\" no existe"},{"w":"descenso","t":"a","ok":true,"why":"te toca bajar de categoría; solo coinciden e-o"},{"w":"cerdo","t":"a","ok":false,"why":"\"te toca el cerdo\" no tiene sentido"}]},{"id":"N11","pie":"En cada batalla te enseño una","ref":"lección","verso":["y tú sales corriendo sin decir",""],"ops":[{"w":"perdón","t":"c","ok":true,"why":"te vas sin pedir perdón"},{"w":"camión","t":"c","ok":false,"why":"\"sin decir camión\" no significa nada"},{"w":"adiós","t":"a","ok":true,"why":"te vas sin despedirte; en las agudas solo cuenta la última vocal: o"},{"w":"reloj","t":"a","ok":false,"why":"\"sin decir reloj\" no tiene sentido"}]},{"id":"N12","pie":"Desde que llegaste ya te eché el","ref":"ojo","verso":["y tú cuando pierdes te pones bien",""],"ops":[{"w":"rojo","t":"c","ok":true,"why":"te pones rojo de vergüenza"},{"w":"cerrojo","t":"c","ok":false,"why":"\"te pones bien cerrojo\" no significa nada"},{"w":"nervioso","t":"a","ok":true,"why":"te pones nervioso; solo coinciden o-o"},{"w":"pozo","t":"a","ok":false,"why":"\"te pones bien pozo\" no tiene sentido"}]}]],"replica":[{"id":"X1","pie":"Seguimos en la plaza, esto no ha","ref":"terminado","verso":["y tú con tus rimas ya estás",""],"ops":[{"w":"cansado","t":"c","ok":true,"why":"ya no te da el aire"},{"w":"cuñado","t":"c","ok":false,"why":"\"ya estás cuñado\" no significa nada"},{"w":"temblando","t":"a","ok":true,"why":"ya tienes miedo; solo coinciden a-o"},{"w":"zapato","t":"a","ok":false,"why":"\"ya estás zapato\" no tiene sentido"}]},{"id":"X2","pie":"Llegó la réplica y aquí está mi","ref":"talento","verso":["y tú te quedas mudo, te falta el",""],"ops":[{"w":"aliento","t":"c","ok":true,"why":"te falta el aliento: ya no puedes ni hablar"},{"w":"cemento","t":"c","ok":false,"why":"\"te falta el cemento\" no significa nada"},{"w":"cerebro","t":"a","ok":true,"why":"te falta cerebro; solo coinciden e-o"},{"w":"beso","t":"a","ok":false,"why":"\"te falta el beso\" no tiene sentido aquí"}]}],"rival":[[{"pie":"Te veo muy tranquilo, quitado de la","ref":"pena","verso":"pero esta noche, carnal, yo me robo la","w":"escena","t":"c","ok":true},{"pie":"Traigo rimas nuevas, las traigo de a","ref":"montón","verso":"y contigo en la tarima me siento","w":"jabón","t":"c","ok":false},{"pie":"Vengo desde el barrio, me conocen en la","ref":"esquina","verso":"y contigo yo rimo bien","w":"cocina","t":"c","ok":false},{"pie":"Me subo a la tarima con todo mi","ref":"poder","verso":"y tú mejor ni vengas, te voy a","w":"vencer","t":"c","ok":true}],[{"pie":"Te tiemblan las piernas, se te nota el","ref":"miedo","verso":"y yo con esta rima te dejo","w":"enredo","t":"c","ok":false},{"pie":"Esa gorra roja ya pasó de","ref":"moda","verso":"y tú con esas rimas pareces de","w":"broma","t":"a","ok":true},{"pie":"Yo traigo la lírica, yo traigo el","ref":"sabor","verso":"y tú con esa rima me das","w":"tractor","t":"c","ok":false},{"pie":"Aquí en mi colonia yo soy el","ref":"campeón","verso":"y tú vas a salir llorando del","w":"salón","t":"c","ok":true}],[{"pie":"Te voy a dar una clase, te voy a","ref":"enseñar","verso":"que yo en esta plaza me voy a","w":"planchar","t":"c","ok":false},{"pie":"Mi rima es tan fina como un buen","ref":"reloj","verso":"y tú te quedas quieto mirando un","w":"arroz","t":"a","ok":false},{"pie":"Esta batalla es mía, ya la tengo","ref":"ganada","verso":"y tú te vas a casa sin decir","w":"nada","t":"c","ok":true},{"pie":"Yo nunca me rindo, yo nunca me","ref":"canso","verso":"y tú cuando rimas pareces un","w":"ganso","t":"c","ok":true}]],"rivalReplica":[{"pie":"Pensaste que ganabas pero sigo","ref":"prendido","verso":"y tú en esta réplica ya estás","w":"perdido","t":"c","ok":true},{"pie":"Esta réplica es mía, la gano sin","ref":"bronca","verso":"y tú con esas rimas te llamas","w":"concha","t":"a","ok":false}]};
+const CONTENIDO = {"practica":[{"id":"P1","pie":"Yo me formé rimando en la","ref":"calle","verso":["y aquí no hay rival que me",""],"ops":[{"w":"acalle","t":"c","ok":true,"why":"\"acallar\" es hacer callar: nadie me hace callar"},{"w":"valle","t":"c","ok":false,"why":"\"valle\" es un sustantivo; \"que me valle\" no existe"},{"w":"aguante","t":"a","ok":true,"why":"nadie me aguanta; solo coinciden las vocales a-e"},{"w":"parque","t":"a","ok":false,"why":"\"que me parque\" no significa nada"}]},{"id":"P2","pie":"Esto no es de chiripa, es lo que trae mi","ref":"mente","verso":["por eso en esta plaza me respeta la",""],"ops":[{"w":"gente","t":"c","ok":true,"why":"el público respeta al que rima"},{"w":"fuente","t":"c","ok":false,"why":"una fuente no respeta a nadie"},{"w":"plebe","t":"a","ok":true,"why":"en el norte, \"la plebe\" es la banda; solo coinciden e-e"},{"w":"leche","t":"a","ok":false,"why":"\"me respeta la leche\" no tiene sentido"}]},{"id":"P3","pie":"Nadie me regaló nada, yo me abrí","ref":"camino","verso":["y con cada verso voy escribiendo mi",""],"ops":[{"w":"destino","t":"c","ok":true,"why":"escribir mi destino: forjar mi futuro"},{"w":"comino","t":"c","ok":false,"why":"\"escribir mi comino\" no significa nada"},{"w":"libro","t":"a","ok":true,"why":"cada verso es parte de mi libro; solo coinciden i-o"},{"w":"higo","t":"a","ok":false,"why":"\"escribir mi higo\" no tiene sentido"}]},{"id":"P4","pie":"Pon mucha atención a lo que suelta mi","ref":"verso","verso":["mis rimas llegan más lejos que el",""],"ops":[{"w":"universo","t":"c","ok":true,"why":"más lejos que el universo: no tienen límite"},{"w":"terso","t":"c","ok":false,"why":"\"terso\" es un adjetivo (liso); aquí no cabe"},{"w":"cielo","t":"a","ok":true,"why":"más lejos que el cielo; solo coinciden e-o"},{"w":"queso","t":"a","ok":false,"why":"\"más lejos que el queso\" no tiene sentido"}]}],"novato":[[{"id":"N1","pie":"Mi estilo de la calle te suena","ref":"pesado","verso":["y tú con tus rimas te quedaste en el",""],"ops":[{"w":"pasado","t":"c","ok":true,"why":"te quedaste en el pasado: ya no estás vigente"},{"w":"pescado","t":"c","ok":false,"why":"\"te quedaste en el pescado\" no significa nada"},{"w":"fango","t":"a","ok":true,"why":"te quedaste atascado; solo coinciden a-o"},{"w":"mango","t":"a","ok":false,"why":"\"te quedaste en el mango\" no tiene sentido"}]},{"id":"N2","pie":"Cada barra que suelto va bien","ref":"medida","verso":["y tú con ese flow ya estás de",""],"ops":[{"w":"salida","t":"c","ok":true,"why":"estás de salida: ya te vas"},{"w":"comida","t":"c","ok":false,"why":"\"estás de comida\" no significa nada"},{"w":"visita","t":"a","ok":true,"why":"solo vienes de visita, no eres de aquí; coinciden i-a"},{"w":"tinta","t":"a","ok":false,"why":"\"estás de tinta\" no tiene sentido"}]},{"id":"N3","pie":"Llego a la tarima con un flow","ref":"elegante","verso":["y tú con esas rimas no das un paso",""],"ops":[{"w":"adelante","t":"c","ok":true,"why":"no avanzas nada"},{"w":"elefante","t":"c","ok":false,"why":"\"un paso elefante\" no tiene sentido"},{"w":"grande","t":"a","ok":true,"why":"no das un paso grande; solo coinciden a-e"},{"w":"calle","t":"a","ok":false,"why":"\"un paso calle\" no significa nada"}]},{"id":"N4","pie":"Rimo de noche y rimo de","ref":"día","verso":["porque lo que traigo es pura",""],"ops":[{"w":"poesía","t":"c","ok":true,"why":"lo que traigo es pura poesía"},{"w":"sandía","t":"c","ok":false,"why":"\"pura sandía\" no tiene sentido aquí"},{"w":"vida","t":"a","ok":true,"why":"pura vida: pura energía; solo coinciden i-a"},{"w":"piña","t":"a","ok":false,"why":"\"pura piña\" no significa nada aquí"}]}],[{"id":"N5","pie":"Mi rima no se compra, mi rima es de","ref":"verdad","verso":["y tú que te la robas no tienes",""],"ops":[{"w":"dignidad","t":"c","ok":true,"why":"robar rimas es no tener dignidad"},{"w":"Navidad","t":"c","ok":false,"why":"\"no tienes Navidad\" no viene al caso"},{"w":"lugar","t":"a","ok":true,"why":"no tienes lugar aquí; en las agudas solo cuenta la última vocal: a"},{"w":"collar","t":"a","ok":false,"why":"\"no tienes collar\" no tiene sentido"}]},{"id":"N6","pie":"Mi rima te ilumina, mi rima es puro","ref":"sol","verso":["y tú con esas rimas metiste un",""],"ops":[{"w":"autogol","t":"c","ok":true,"why":"te fallaste solo, como un gol en tu propia portería"},{"w":"girasol","t":"c","ok":false,"why":"\"metiste un girasol\" no significa nada"},{"w":"error","t":"a","ok":true,"why":"metiste un error; en las agudas solo cuenta la última vocal: o"},{"w":"ratón","t":"a","ok":false,"why":"\"metiste un ratón\" no tiene sentido"}]},{"id":"N7","pie":"Rimo con el puño y con el","ref":"corazón","verso":["y cada palabra que suelto lleva",""],"ops":[{"w":"intención","t":"c","ok":true,"why":"cada palabra va con intención"},{"w":"balcón","t":"c","ok":false,"why":"una palabra no lleva balcón"},{"w":"valor","t":"a","ok":true,"why":"lleva valor; en las agudas solo cuenta la última vocal: o"},{"w":"tenedor","t":"a","ok":false,"why":"\"lleva tenedor\" no tiene sentido"}]},{"id":"N8","pie":"Traigo las palabras cargadas de","ref":"fuego","verso":["contigo ni me esfuerzo, para mí esto es un",""],"ops":[{"w":"juego","t":"c","ok":true,"why":"esto es un juego: es fácil. En \"fue-go\" la u no cuenta"},{"w":"riego","t":"c","ok":false,"why":"\"esto es un riego\" no tiene que ver"},{"w":"paseo","t":"a","ok":true,"why":"es un paseo: es fácil; solo coinciden e-o"},{"w":"cerebro","t":"a","ok":false,"why":"\"esto es un cerebro\" no significa nada aquí"}]}],[{"id":"N9","pie":"Mi rima llega alto, la mando hasta el","ref":"cielo","verso":["y tú con esa rima te vas directo al",""],"ops":[{"w":"suelo","t":"c","ok":true,"why":"te vas directo al suelo: caes"},{"w":"pañuelo","t":"c","ok":false,"why":"\"te vas directo al pañuelo\" no tiene sentido"},{"w":"infierno","t":"a","ok":true,"why":"yo al cielo, tú al infierno; solo coinciden e-o"},{"w":"texto","t":"a","ok":false,"why":"\"te vas directo al texto\" no significa nada"}]},{"id":"N10","pie":"Yo traigo un estilo que suena bien","ref":"nuevo","verso":["y tú ya estás pasado, te toca el",""],"ops":[{"w":"relevo","t":"c","ok":true,"why":"te toca el relevo: alguien toma tu lugar"},{"w":"llevo","t":"c","ok":false,"why":"\"llevo\" es un verbo; \"te toca el llevo\" no existe"},{"w":"descenso","t":"a","ok":true,"why":"te toca bajar de categoría; solo coinciden e-o"},{"w":"cerdo","t":"a","ok":false,"why":"\"te toca el cerdo\" no tiene sentido"}]},{"id":"N11","pie":"En cada batalla te enseño una","ref":"lección","verso":["y tú sales corriendo sin decir",""],"ops":[{"w":"perdón","t":"c","ok":true,"why":"te vas sin pedir perdón"},{"w":"camión","t":"c","ok":false,"why":"\"sin decir camión\" no significa nada"},{"w":"adiós","t":"a","ok":true,"why":"te vas sin despedirte; en las agudas solo cuenta la última vocal: o"},{"w":"reloj","t":"a","ok":false,"why":"\"sin decir reloj\" no tiene sentido"}]},{"id":"N12","pie":"Desde que llegaste ya te eché el","ref":"ojo","verso":["y tú cuando pierdes te pones bien",""],"ops":[{"w":"rojo","t":"c","ok":true,"why":"te pones rojo de vergüenza"},{"w":"cerrojo","t":"c","ok":false,"why":"\"te pones bien cerrojo\" no significa nada"},{"w":"nervioso","t":"a","ok":true,"why":"te pones nervioso; solo coinciden o-o"},{"w":"pozo","t":"a","ok":false,"why":"\"te pones bien pozo\" no tiene sentido"}]}]],"replica":[{"id":"X1","pie":"Seguimos en la plaza, esto no ha","ref":"terminado","verso":["y tú con tus rimas ya estás",""],"ops":[{"w":"cansado","t":"c","ok":true,"why":"ya no te da el aire"},{"w":"cuñado","t":"c","ok":false,"why":"\"ya estás cuñado\" no significa nada"},{"w":"temblando","t":"a","ok":true,"why":"ya tienes miedo; solo coinciden a-o"},{"w":"zapato","t":"a","ok":false,"why":"\"ya estás zapato\" no tiene sentido"}]},{"id":"X2","pie":"Llegó la réplica y aquí está mi","ref":"talento","verso":["y tú te quedas mudo, te falta el",""],"ops":[{"w":"aliento","t":"c","ok":true,"why":"te falta el aliento: ya no puedes ni hablar"},{"w":"cemento","t":"c","ok":false,"why":"\"te falta el cemento\" no significa nada"},{"w":"cerebro","t":"a","ok":true,"why":"te falta cerebro; solo coinciden e-o"},{"w":"beso","t":"a","ok":false,"why":"\"te falta el beso\" no tiene sentido aquí"}]}],"rival":[[{"pie":"Te veo muy tranquilo, quitado de la","ref":"pena","verso":"pero esta noche, carnal, yo me robo la","w":"escena","t":"c","ok":true},{"pie":"Traigo rimas nuevas, las traigo de a","ref":"montón","verso":"y contigo en la tarima me siento","w":"jabón","t":"c","ok":false},{"pie":"Vengo desde el barrio, me conocen en la","ref":"esquina","verso":"y contigo yo rimo bien","w":"cocina","t":"c","ok":false},{"pie":"Me subo a la tarima con todo mi","ref":"poder","verso":"y tú mejor ni vengas, te voy a","w":"vencer","t":"c","ok":true}],[{"pie":"Te tiemblan las piernas, se te nota el","ref":"miedo","verso":"y yo con esta rima te dejo","w":"enredo","t":"c","ok":false},{"pie":"Esa gorra roja ya pasó de","ref":"moda","verso":"y tú con esas rimas pareces de","w":"broma","t":"a","ok":true},{"pie":"Yo traigo la lírica, yo traigo el","ref":"sabor","verso":"y tú con esa rima me das","w":"tractor","t":"c","ok":false},{"pie":"Aquí en mi colonia yo soy el","ref":"campeón","verso":"y tú vas a salir llorando del","w":"salón","t":"c","ok":true}],[{"pie":"Te voy a dar una clase, te voy a","ref":"enseñar","verso":"que yo en esta plaza me voy a","w":"planchar","t":"c","ok":false},{"pie":"Mi rima es tan fina como un buen","ref":"reloj","verso":"y tú te quedas quieto mirando un","w":"arroz","t":"a","ok":false},{"pie":"Esta batalla es mía, ya la tengo","ref":"ganada","verso":"y tú te vas a casa sin decir","w":"nada","t":"c","ok":true},{"pie":"Yo nunca me rindo, yo nunca me","ref":"canso","verso":"y tú cuando rimas pareces un","w":"ganso","t":"c","ok":true}]],"rivalReplica":[{"pie":"Pensaste que ganabas pero sigo","ref":"prendido","verso":"y tú en esta réplica ya estás","w":"perdido","t":"c","ok":true},{"pie":"Esta réplica es mía, la gano sin","ref":"bronca","verso":"y tú con esas rimas te llamas","w":"concha","t":"a","ok":false}],"medio":[[{"id":"M1","pie":"Te traigo una rima que te deja","ref":"preso","verso":["y tú en esta plaza no tienes ningún",""],"ops":[{"w":"peso","t":"c","ok":true,"why":"no tener peso es no importar: aquí no cuentas"},{"w":"queso","t":"c","ok":false,"why":"\"no tienes ningún queso\" no viene al caso"},{"w":"respeto","t":"a","ok":true,"why":"en la plaza nadie te respeta; solo coinciden las vocales e-o"},{"w":"termo","t":"a","ok":false,"why":"\"no tienes ningún termo\" no significa nada"}]},{"id":"M2","pie":"Llegaste a la plaza pidiendo","ref":"permiso","verso":["y yo con esta rima te mando directo al",""],"ops":[{"w":"piso","t":"c","ok":true,"why":"mandarte al piso es tumbarte"},{"w":"aviso","t":"c","ok":false,"why":"\"te mando directo al aviso\" no tiene sentido"},{"w":"olvido","t":"a","ok":true,"why":"nadie se va a acordar de ti; solo coinciden i-o"},{"w":"silbido","t":"a","ok":false,"why":"\"te mando al silbido\" no significa nada"}]},{"id":"M3","pie":"Hablas de dinero, de lujo y de","ref":"cadena","verso":["pero aquí lo que cuenta es la rima que",""],"ops":[{"w":"suena","t":"c","ok":true,"why":"en la batalla vale la rima que suena, no la cadena"},{"w":"cena","t":"c","ok":false,"why":"\"la rima que cena\" no tiene sentido"},{"w":"pesa","t":"a","ok":true,"why":"una rima que pesa es una rima con fuerza; solo coinciden e-a"},{"w":"seca","t":"a","ok":false,"why":"\"la rima que seca\" no viene al caso"}]},{"id":"M4","pie":"Me dicen el rey y aquí traigo","ref":"corona","verso":["y tú en esta batalla te quedas en la",""],"ops":[{"w":"lona","t":"c","ok":true,"why":"quedarse en la lona es caer noqueado, como en el box"},{"w":"dona","t":"c","ok":false,"why":"\"te quedas en la dona\" no significa nada"},{"w":"cola","t":"a","ok":true,"why":"te quedas hasta atrás de la fila; solo coinciden o-a"},{"w":"sopa","t":"a","ok":false,"why":"\"te quedas en la sopa\" no tiene sentido"}]}],[{"id":"M5","pie":"Tú hablas y hablas pero sin","ref":"razón","verso":["y en esta batalla yo soy el",""],"ops":[{"w":"patrón","t":"c","ok":true,"why":"el patrón es el que manda"},{"w":"melón","t":"c","ok":false,"why":"\"yo soy el melón\" no viene al caso"},{"w":"señor","t":"a","ok":true,"why":"el señor de la plaza; en las agudas solo cuenta la última vocal: o"},{"w":"tambor","t":"a","ok":false,"why":"\"yo soy el tambor\" no significa nada"}]},{"id":"M6","pie":"Tú le rezas a la virgen pidiendo","ref":"suerte","verso":["pero yo no la necesito porque soy más",""],"ops":[{"w":"fuerte","t":"c","ok":true,"why":"el fuerte no necesita suerte"},{"w":"muerte","t":"c","ok":false,"why":"\"soy más muerte\" no tiene sentido"},{"w":"valiente","t":"a","ok":true,"why":"el valiente no depende de la suerte; en el diptongo \"ie\" cuenta la e"},{"w":"nieve","t":"a","ok":false,"why":"\"soy más nieve\" no significa nada"}]},{"id":"M7","pie":"Yo vine a esta plaza a escribir mi","ref":"historia","verso":["y tú ni con suerte me quitas la",""],"ops":[{"w":"victoria","t":"c","ok":true,"why":"no me vas a ganar"},{"w":"zanahoria","t":"c","ok":false,"why":"\"me quitas la zanahoria\" no viene al caso"},{"w":"corona","t":"a","ok":true,"why":"no me quitas el primer lugar; en \"historia\" la \"ia\" suena como a"},{"w":"momia","t":"a","ok":false,"why":"\"me quitas la momia\" no significa nada"}]},{"id":"M8","pie":"Esta es mi colonia, este es mi","ref":"lugar","verso":["y si vienes a retarme te quedas sin",""],"ops":[{"w":"hogar","t":"c","ok":true,"why":"te corro de mi colonia"},{"w":"pajar","t":"c","ok":false,"why":"\"te quedas sin pajar\" no tiene sentido"},{"w":"capital","t":"a","ok":true,"why":"te quedas sin dinero; en las agudas solo cuenta la última vocal: a"},{"w":"coral","t":"a","ok":false,"why":"\"te quedas sin coral\" no significa nada"}]}],[{"id":"M9","pie":"Yo aprendí en la calle, no en una","ref":"escuela","verso":["y tus rimas son tan viejas que las rapea tu",""],"ops":[{"w":"abuela","t":"c","ok":true,"why":"tus rimas son de otra época"},{"w":"canela","t":"c","ok":false,"why":"\"las rapea tu canela\" no significa nada"},{"w":"maestra","t":"a","ok":true,"why":"tus rimas parecen de la escuela; solo coinciden e-a"},{"w":"mesa","t":"a","ok":false,"why":"\"las rapea tu mesa\" no tiene sentido"}]},{"id":"M10","pie":"Yo salgo a la tarima y le saco","ref":"brillo","verso":["y tú contra mí eres un rival muy",""],"ops":[{"w":"sencillo","t":"c","ok":true,"why":"eres un rival fácil"},{"w":"amarillo","t":"c","ok":false,"why":"\"un rival muy amarillo\" no viene al caso"},{"w":"chico","t":"a","ok":true,"why":"eres poca cosa; solo coinciden i-o"},{"w":"pico","t":"a","ok":false,"why":"\"un rival muy pico\" no significa nada"}]},{"id":"M11","pie":"Esto lo traigo adentro, me sale de la","ref":"garganta","verso":["y a ti con esas rimas ni tu madre te",""],"ops":[{"w":"aguanta","t":"c","ok":true,"why":"nadie te soporta, ni tu mamá"},{"w":"manta","t":"c","ok":false,"why":"\"ni tu madre te manta\" no existe"},{"w":"habla","t":"a","ok":true,"why":"ni tu mamá te dirige la palabra; solo coinciden a-a"},{"w":"casa","t":"a","ok":false,"why":"\"ni tu madre te casa\" no tiene sentido"}]},{"id":"M12","pie":"Tú quieres competir, pero no estás a mi","ref":"nivel","verso":["y tú con esas rimas te quedas en el",""],"ops":[{"w":"papel","t":"c","ok":true,"why":"quedarse en el papel es quedarse en la teoría: no lo cumples"},{"w":"pastel","t":"c","ok":false,"why":"\"te quedas en el pastel\" no significa nada"},{"w":"ayer","t":"a","ok":true,"why":"te quedaste en el pasado; en las agudas solo cuenta la última vocal: e"},{"w":"bebé","t":"a","ok":false,"why":"\"te quedas en el bebé\" no tiene sentido"}]}]],"jefe":[[{"id":"J1","pie":"Tú te crees muy bueno, te sientes","ref":"fantástico","verso":["pero ese flow que traes suena bien",""],"ops":[{"w":"plástico","t":"c","ok":true,"why":"suena falso, de plástico"},{"w":"gimnástico","t":"c","ok":false,"why":"\"suena bien gimnástico\" no significa nada"},{"w":"trágico","t":"a","ok":true,"why":"suena fatal; en las esdrújulas cuentan las vocales a-i-o"},{"w":"náutico","t":"a","ok":false,"why":"\"suena bien náutico\" no viene al caso"}]},{"id":"J2","pie":"Te subes a la tarima y te abuchea la","ref":"tribuna","verso":["tú no naciste pa' esto, te faltó la",""],"ops":[{"w":"fortuna","t":"c","ok":true,"why":"no tuviste la suerte de nacer con talento"},{"w":"aceituna","t":"c","ok":false,"why":"\"te faltó la aceituna\" no viene al caso"},{"w":"cultura","t":"a","ok":true,"why":"te falta saber de hip hop; solo coinciden u-a"},{"w":"pulga","t":"a","ok":false,"why":"\"te faltó la pulga\" no significa nada"}]},{"id":"J3","pie":"Te quedas congelado con una sola","ref":"mirada","verso":["y cuando te toca rimar no se te ocurre",""],"ops":[{"w":"nada","t":"c","ok":true,"why":"te quedas en blanco"},{"w":"granada","t":"c","ok":false,"why":"\"no se te ocurre granada\" no tiene sentido"},{"w":"palabra","t":"a","ok":true,"why":"no te sale ni una palabra; solo coinciden a-a"},{"w":"plancha","t":"a","ok":false,"why":"\"no se te ocurre plancha\" no significa nada"}]},{"id":"J4","pie":"Mi nombre en la plaza ya se volvió","ref":"leyenda","verso":["y tú ni en tus sueños entras en esta",""],"ops":[{"w":"contienda","t":"c","ok":true,"why":"no estás a la altura de esta competencia"},{"w":"merienda","t":"c","ok":false,"why":"\"entras en esta merienda\" no viene al caso"},{"w":"pelea","t":"a","ok":true,"why":"no te alcanza para esta pelea; solo coinciden e-a"},{"w":"cereza","t":"a","ok":false,"why":"\"entras en esta cereza\" no significa nada"}]}],[{"id":"J5","pie":"En esta batalla yo voy a ser tu","ref":"verdugo","verso":["y te voy a exprimir hasta sacarte el",""],"ops":[{"w":"jugo","t":"c","ok":true,"why":"sacarle el jugo a algo es exprimirlo hasta el final"},{"w":"tarugo","t":"c","ok":false,"why":"\"sacarte el tarugo\" no tiene sentido"},{"w":"orgullo","t":"a","ok":true,"why":"te quito el orgullo; solo coinciden u-o"},{"w":"burro","t":"a","ok":false,"why":"\"sacarte el burro\" no significa nada"}]},{"id":"J6","pie":"Mi rima nunca muere, mi rima es","ref":"inmortal","verso":["y tú con esas barras terminas en el",""],"ops":[{"w":"hospital","t":"c","ok":true,"why":"te dejo tan mal que terminas internado"},{"w":"portal","t":"c","ok":false,"why":"\"terminas en el portal\" no viene al caso"},{"w":"diván","t":"a","ok":true,"why":"terminas en el diván del psicólogo; en las agudas solo cuenta la última vocal: a"},{"w":"volcán","t":"a","ok":false,"why":"\"terminas en el volcán\" no tiene sentido"}]},{"id":"J7","pie":"Cada palabra mía la escupo con","ref":"veneno","verso":["y tú en esta plaza nomás eres",""],"ops":[{"w":"relleno","t":"c","ok":true,"why":"eres de relleno: estás de más"},{"w":"trueno","t":"c","ok":false,"why":"\"nomás eres trueno\" no significa nada"},{"w":"eco","t":"a","ok":true,"why":"solo repites lo que otros dicen; solo coinciden e-o"},{"w":"queso","t":"a","ok":false,"why":"\"nomás eres queso\" no viene al caso"}]},{"id":"J8","pie":"Yo vengo a la plaza a reclamar mi","ref":"trono","verso":["y tú cuando rimas te sales del",""],"ops":[{"w":"tono","t":"c","ok":true,"why":"salirse del tono es desafinar"},{"w":"mono","t":"c","ok":false,"why":"\"te sales del mono\" no tiene sentido"},{"w":"coro","t":"a","ok":true,"why":"te sales del coro: desentonas; solo coinciden o-o"},{"w":"codo","t":"a","ok":false,"why":"\"te sales del codo\" no significa nada"}]}],[{"id":"J9","pie":"Yo rimo con el alma y rimo con","ref":"conciencia","verso":["y tú con esas barras le faltas el respeto a la",""],"ops":[{"w":"audiencia","t":"c","ok":true,"why":"tus barras son una falta de respeto para el público"},{"w":"decadencia","t":"c","ok":false,"why":"\"le faltas el respeto a la decadencia\" no tiene sentido"},{"w":"escena","t":"a","ok":true,"why":"le faltas el respeto a la escena del rap; solo coinciden e-a"},{"w":"cerveza","t":"a","ok":false,"why":"\"le faltas el respeto a la cerveza\" no viene al caso"}]},{"id":"J10","pie":"Represento a mi barrio y a mi","ref":"bandera","verso":["y a ti ni te dejan pasar de la",""],"ops":[{"w":"frontera","t":"c","ok":true,"why":"no te dejan ni entrar a la plaza"},{"w":"pradera","t":"c","ok":false,"why":"\"pasar de la pradera\" no viene al caso"},{"w":"puerta","t":"a","ok":true,"why":"no te dejan ni entrar; en el diptongo \"ue\" cuenta la e"},{"w":"selva","t":"a","ok":false,"why":"\"pasar de la selva\" no tiene sentido"}]},{"id":"J11","pie":"Donde piso la tarima siempre dejo","ref":"huella","verso":["y tú por más que brillas nunca vas a ser",""],"ops":[{"w":"estrella","t":"c","ok":true,"why":"nunca vas a destacar"},{"w":"botella","t":"c","ok":false,"why":"\"nunca vas a ser botella\" no significa nada"},{"w":"leyenda","t":"a","ok":true,"why":"nunca te van a recordar; solo coinciden e-a"},{"w":"lenteja","t":"a","ok":false,"why":"\"nunca vas a ser lenteja\" no viene al caso"}]},{"id":"J12","pie":"Esto se acabó, compa, te llegó tu","ref":"final","verso":["y aquí se termina tu carrera",""],"ops":[{"w":"musical","t":"c","ok":true,"why":"se acabó tu carrera en la música"},{"w":"tropical","t":"c","ok":false,"why":"\"tu carrera tropical\" no tiene sentido"},{"w":"fugaz","t":"a","ok":true,"why":"tu carrera duró un suspiro; en las agudas solo cuenta la última vocal: a"},{"w":"capaz","t":"a","ok":false,"why":"\"tu carrera capaz\" no significa nada"}]}]],"rivalMedio":[[{"pie":"Llegaste temblando, se te nota en la","ref":"cara","verso":"y yo con una rima te dejo sin","w":"nada","t":"a","ok":true},{"pie":"Yo soy del barrio bravo, yo vengo del","ref":"Bajío","verso":"y tú en la tarima te quedas bien","w":"frío","t":"c","ok":true},{"pie":"Mi flow es pesado, mi flow es de","ref":"acero","verso":"y tú con tus rimas pareces","w":"sombrero","t":"c","ok":false},{"pie":"Te lo digo de frente y te lo digo","ref":"claro","verso":"contra mí no hay chance, aquí yo soy el más","w":"sabio","t":"a","ok":true}],[{"pie":"Dices que eres grande y yo no te","ref":"creo","verso":"lo único que tienes es un flow bien","w":"feo","t":"c","ok":true},{"pie":"Traigo esta pelea bien","ref":"controlada","verso":"y tú en la tarima pareces","w":"ensalada","t":"c","ok":false},{"pie":"Esto es freestyle, no es","ref":"recitado","verso":"y tú te la aprendiste, te traes","w":"pescado","t":"c","ok":false},{"pie":"En esta plaza todos saben quién es el","ref":"mejor","verso":"y tú cuando me escuchas te mueres de","w":"dolor","t":"c","ok":true}],[{"pie":"Ya se acabó el tiempo, ya te toca","ref":"perder","verso":"y yo me llevo el premio, lo vas a","w":"ver","t":"c","ok":true},{"pie":"Tú nunca has ganado ni una sola","ref":"vez","verso":"y hoy otra vez te vas con la cara de","w":"nuez","t":"c","ok":false},{"pie":"Yo vengo a ganar y a dejarte","ref":"callado","verso":"y tú vas a salir de aquí bien","w":"manso","t":"a","ok":true},{"pie":"Con esta te despido, te mando a","ref":"dormir","verso":"y mañana en el barrio nadie te va a","w":"seguir","t":"c","ok":true}]],"rivalJefe":[[{"pie":"Vienes muy valiente, pero te falta","ref":"experiencia","verso":"y yo te voy a dar una clase de","w":"paciencia","t":"c","ok":true},{"pie":"Te miro de frente y te veo","ref":"nervioso","verso":"yo soy el más fino, el más","w":"peligroso","t":"c","ok":true},{"pie":"Mi rima es un rayo que cae sin","ref":"aviso","verso":"y tú en la tarima te quedas","w":"fijo","t":"a","ok":true},{"pie":"Esta es mi plaza y aquí soy el","ref":"dueño","verso":"y tú con esas barras me provocas","w":"sueño","t":"c","ok":true}],[{"pie":"Cada que yo rimo se calienta el","ref":"ambiente","verso":"y tú cuando rimas se duerme la","w":"gente","t":"c","ok":true},{"pie":"Tengo más barras que una","ref":"cárcel","verso":"y tú con tus rimas no sales del","w":"parque","t":"a","ok":true},{"pie":"Yo no improviso, yo hago","ref":"arte","verso":"y tú con esas rimas no das ni una","w":"parte","t":"c","ok":false},{"pie":"Mi flow te atropella como un","ref":"tren","verso":"y tú en esta plaza no te ves ni","w":"bien","t":"c","ok":true}],[{"pie":"Se te acaba el tiempo, se te acaba la","ref":"cuerda","verso":"y tú te enredas solo, se te va la","w":"letra","t":"a","ok":true},{"pie":"Yo vengo del barrio donde nadie se","ref":"raja","verso":"y tú en la batalla pareces","w":"navaja","t":"c","ok":false},{"pie":"Mi rima es de oro y la tuya de","ref":"cartón","verso":"y aquí en la plaza yo soy el","w":"patrón","t":"c","ok":true},{"pie":"Te gané en el barrio y te gano en la","ref":"cancha","verso":"y a ti te dejo nomás la","w":"revancha","t":"c","ok":true}]],"rivalReplicaMedio":[{"pie":"Esto no se acaba hasta que yo lo","ref":"diga","verso":"y tú en esta réplica te quedas sin","w":"vida","t":"a","ok":true},{"pie":"Me sobra la fuerza, me sobra la","ref":"energía","verso":"y tú te vas a casa sin tu","w":"alegría","t":"c","ok":true}],"rivalReplicaJefe":[{"pie":"Llegamos a la réplica y estoy","ref":"invicto","verso":"y a ti te sentencio, te dicto el","w":"veredicto","t":"c","ok":true},{"pie":"Te gano en la réplica y te gano","ref":"entero","verso":"y tú te vas a casa sin un solo","w":"peso","t":"a","ok":true}]};
 
 /* ================= iconos ================= */
 const ICON = {
@@ -601,9 +622,13 @@ const ICON = {
   star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="#FFCC00" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   star0: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="#2c2a28" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   lock: '<svg viewBox="0 0 24 24" class="lock" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2" fill="currentColor"/><path d="M8 10 V7 a4 4 0 0 1 8 0 V10" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>',
+  rayo: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><path d="M18 2 L6 18 H15 L12 30 L26 12 H17 Z" fill="#FF3C00" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/></svg>',
+  carta: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><rect x="7" y="3" width="18" height="26" rx="3" fill="#FFC21A" stroke="#000" stroke-width="2.5"/><path d="M12.5 12a3.5 3.5 0 1 1 5 3.2c-1 .5-1.5 1.2-1.5 2.3V19" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="23.5" r="1.7" fill="#000"/></svg>',
   pausa: '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="3" width="4" height="14" rx="1" fill="#F2EDE4"/><rect x="12" y="3" width="4" height="14" rx="1" fill="#F2EDE4"/></svg>'
 };
 const iconK = k => ({ c: ICON.cg, a: ICON.cb, f: ICON.x, t: ICON.t })[k];
+// Etiqueta con el multiplicador del remate (+2 CONSONANTE · REMATE…)
+const etiqueta = (k, mult = 1) => mult > 1 && (k === 'c' || k === 'a') ? `+${fmt(PTS[k] * mult)} ${k === 'c' ? 'CONSONANTE' : 'ASONANTE'} · REMATE` : LABEL[k];
 document.querySelectorAll('svg[data-icon]').forEach(s => { s.outerHTML = ICON[s.dataset.icon]; });
 
 /* ================= medición (solo en el sitio) ================= */
@@ -792,10 +817,17 @@ function loop() {
 }
 
 /* ================= estado ================= */
-const G = { beat: null, modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato' };
+const G = { beat: null, modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato', comodin: 0, comodinUsado: 0 };
+// max = puntos máximos del jugador (con remates ×2: 3 rondas × (3 + 2) = 15).
+// requiere = nivel que hay que ganar (al menos 1 estrella) para desbloquearlo; sig = el que sigue.
 const NIVEL = {
-  practica: { rondas: [CONTENIDO.practica], compases: () => 8, pista: () => 'term', rival: null },
-  novato: { rondas: CONTENIDO.novato, compases: r => (r === 2 ? 3 : 4), pista: () => 'tonic', rival: CONTENIDO.rival }
+  practica: { rondas: [CONTENIDO.practica], compases: () => 8, pista: () => 'term', rival: null, max: 4 },
+  novato: { rondas: CONTENIDO.novato, compases: r => (r === 2 ? 3 : 4), pista: () => 'tonic', rival: CONTENIDO.rival,
+    img: 'novato', nombre: 'Rival novato', el: 'El rival novato', al: 'al rival novato', replicaRival: CONTENIDO.rivalReplica, replicaBeats: 12, max: 12, sig: 'medio' },
+  medio: { rondas: CONTENIDO.medio, compases: r => (r === 0 ? 4 : 3), pista: r => (r === 0 ? 'tonic' : 'none'), rival: CONTENIDO.rivalMedio,
+    img: 'medio', nombre: 'Rival medio', el: 'El rival medio', al: 'al rival medio', remate: true, comodines: 1, replicaRival: CONTENIDO.rivalReplicaMedio, replicaBeats: 12, max: 15, requiere: 'novato', sig: 'jefe' },
+  jefe: { rondas: CONTENIDO.jefe, compases: r => (r === 2 ? 2 : 3), pista: () => 'none', rival: CONTENIDO.rivalJefe,
+    img: 'jefe', nombre: 'El Jefe', el: 'El Jefe', al: 'al Jefe', remate: true, comodines: 1, replicaRival: CONTENIDO.rivalReplicaJefe, replicaBeats: 8, max: 15, requiere: 'medio' }
 };
 const INTRO = {
   practica: ['Práctica', 'Elige la palabra que rima con la palabra naranja y que le da sentido a la frase. Tienes 8 compases para cada verso.'],
@@ -804,9 +836,19 @@ const INTRO = {
     ['Ronda 2', 'Ahora vienen palabras agudas y diptongos. En las agudas solo cuenta la última vocal: corazón rima en asonante con valor.'],
     ['Ronda 3', 'Último round: tienes un compás menos para decidir.']
   ],
+  medio: [
+    ['Ronda 1', 'El rival medio no regala nada. El último verso de cada ronda es REMATE y vale doble. Tienes 1 comodín para toda la batalla: piensa cuándo usarlo.'],
+    ['Ronda 2', 'Se acabaron las pistas: ya no te marcamos la vocal fuerte. Tienes 3 compases por verso.'],
+    ['Ronda 3', 'Última ronda. Si guardaste el comodín, el remate es buen momento.']
+  ],
+  jefe: [
+    ['Ronda 1', 'El Jefe casi no falla. Sin pistas, 3 compases y remates ×2. Tienes 1 comodín.'],
+    ['Ronda 2', 'Esdrújulas y agudas: escucha dónde cae el golpe de voz antes de elegir.'],
+    ['Ronda 3', 'Solo 2 compases por verso. Aquí se gana o se pierde la plaza.']
+  ],
   replica: ['Réplica', 'Empate. Dos versos cada quien y gana el que sume más.']
 };
-['jugador', 'novato'].forEach(c => ['neutral', 'rapea', 'celebra', 'frustra'].forEach(p => { const i = new Image(); i.src = `img/${c}-${p}.webp`; }));
+['jugador', 'novato', 'medio', 'jefe'].forEach(c => ['neutral', 'rapea', 'celebra', 'frustra'].forEach(p => { const i = new Image(); i.src = `img/${c}-${p}.webp`; }));
 function pose(quien, p) {
   const img = quien === 'yo' ? $('#img-yo') : $('#img-riv');
   const src = `img/${quien === 'yo' ? G.imgYo : G.imgRiv}-${p}.webp`;
@@ -860,14 +902,23 @@ function pintarPuntos() {
 }
 
 /* ================= una decisión del jugador ================= */
-async function decision(item, beats, pista, tk, practica) {
+async function decision(item, beats, pista, tk, practica, mult = 1) {
   const card = $('#tarjeta');
   const ops = shuffle(item.ops);
   card.innerHTML = `
+    ${mult > 1 ? '<span class="remate-tag">Remate · vale doble</span>' : ''}
     <p class="pie">${esc(item.pie)} ${refHTML(item.ref, pista)}</p>
     <p class="verso">${esc(item.verso[0])} <span class="hueco vivo" id="hueco"></span>${esc(item.verso[1] || '')}</p>
     <div class="puntos" id="puntos" aria-hidden="true"></div>
-    <div class="opciones" id="opciones">${ops.map((o, i) => `<button class="op" type="button" data-i="${i}">${esc(o.w)}</button>`).join('')}</div>`;
+    <div class="opciones" id="opciones">${ops.map((o, i) => `<button class="op" type="button" data-i="${i}">${esc(o.w)}</button>`).join('')}</div>
+    ${G.comodin > 0 ? `<button class="comodin" type="button" id="btn-comodin">${ICON.carta}Usar comodín: quita 2 opciones</button>` : ''}`;
+  const bc = $('#btn-comodin');
+  if (bc) bc.addEventListener('click', () => {
+    if (G.comodin <= 0) return;
+    G.comodin--; G.comodinUsado++; FX.tap();
+    card.querySelectorAll('.op').forEach(b => { if (!ops[+b.dataset.i].ok) { b.disabled = true; b.classList.add('tachada'); } });
+    bc.remove();
+  }, { once: true });
   pose('yo', 'neutral'); if (G.modo !== 'practica') pose('riv', 'neutral');
   const inicio = proxCompas(clock() + 0.3);
   prepararPuntos(inicio, beats);
@@ -881,7 +932,8 @@ async function decision(item, beats, pista, tk, practica) {
   vigente(tk);
   G.dots.parado = r.op === null ? true : false; G.dots.el.classList.add('quieto'); G.dots = null;
   const k = r.op ? (r.op.ok ? r.op.t : 'f') : 't';
-  const pts = k === 'c' ? 1 : k === 'a' ? 0.5 : 0;
+  const pts = (k === 'c' ? 1 : k === 'a' ? 0.5 : 0) * mult;
+  $('#btn-comodin')?.remove();
   const opEl = $('#opciones'); opEl.classList.add('cerrado'); opEl.querySelectorAll('.op').forEach(b => b.disabled = true);
   const hueco = $('#hueco');
   hueco.outerHTML = `<span class="lleno k-${k}" id="hueco">${r.op ? marcar(r.op.w, k) : '&nbsp;'}</span>`;
@@ -892,11 +944,11 @@ async function decision(item, beats, pista, tk, practica) {
   FX[k](t);
   await esperar(t);
   vigente(tk);
-  $('#puntos').insertAdjacentHTML('afterend', `<div class="cinta k-${k}" role="status">${iconK(k)}${LABEL[k]}</div>`);
+  $('#puntos').insertAdjacentHTML('afterend', `<div class="cinta k-${k}" role="status">${iconK(k)}${etiqueta(k, mult)}</div>`);
   G.yo += pts; marcador();
   pose('yo', k === 'c' ? 'celebra' : k === 'a' ? 'rapea' : 'frustra');
   if (G.modo !== 'practica') pose('riv', k === 'c' ? 'frustra' : k === 'a' ? 'neutral' : 'celebra');
-  const res = { item, op: r.op, k, pts };
+  const res = { item, op: r.op, k, pts, mult };
   if (practica) {
     await esperar(clock() + 0.6); vigente(tk);
     opEl.insertAdjacentHTML('beforebegin', `<div class="explica"><span>${esc(explicacion(item, res))}</span><button class="btn" type="button" id="btn-sig">Siguiente ›</button></div>`);
@@ -911,7 +963,7 @@ async function decision(item, beats, pista, tk, practica) {
 }
 
 /* ================= turno del rival ================= */
-async function turnoRival(versos, tk) {
+async function turnoRival(versos, tk, remate = false) {
   const app = $('#app'); app.classList.add('turno-rival');
   const card = $('#tarjeta');
   card.innerHTML = `
@@ -926,6 +978,8 @@ async function turnoRival(versos, tk) {
   pose('yo', 'neutral');
   for (let i = 0; i < versos.length; i++) {
     const v = versos[i]; const k = v.ok ? v.t : 'f';
+    const mult = remate && i === versos.length - 1 ? 2 : 1;
+    if (mult > 1) $('.rival-head .tag').textContent = 'Remate del rival · ×2';
     if (!saltar) {
       await espera(t);
       pose('riv', 'rapea');
@@ -935,7 +989,7 @@ async function turnoRival(versos, tk) {
       $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="hueco"></span>`;
       await espera(t + BAR + BEAT * 2);
       if (!saltar) {
-        $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="lleno k-${k}">${marcar(v.w, k === 'f' ? 'x' : k)}</span><span class="rv-label k-${k}">${iconK(k)}${LABEL[k]}</span>`;
+        $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="lleno k-${k}">${marcar(v.w, k === 'f' ? 'x' : k)}</span><span class="rv-label k-${k}">${iconK(k)}${etiqueta(k, mult)}</span>`;
         if (k === 'c' || k === 'a') $('#rv-pie .refw').innerHTML = marcar(v.ref, k, true);
         FX[k](clock(), true);
         pose('riv', k === 'f' ? 'frustra' : 'celebra');
@@ -943,7 +997,7 @@ async function turnoRival(versos, tk) {
       }
       t += BAR * 2;
     }
-    const pts = k === 'c' ? 1 : k === 'a' ? 0.5 : 0;
+    const pts = (k === 'c' ? 1 : k === 'a' ? 0.5 : 0) * mult;
     G.riv += pts; marcador();
     $('#fichas').children[i].outerHTML = `<div class="ficha">${iconK(k)}${pts ? '+' + fmt(pts) : '0'}</div>`;
     res.push({ v, k, pts });
@@ -971,7 +1025,7 @@ function repasoHTML(lista) {
   return lista.map(r => `
     <div class="rp">
       <div class="lineas">${esc(r.item.pie)} ${refHTML(r.item.ref, 'none')}<br><b>${esc(r.item.verso[0])} ${r.op ? marcar(r.op.w, r.k) : '___'}</b></div>
-      <div class="res">${iconK(r.k)}<span><strong>${LABEL[r.k]}</strong>${esc(explicacion(r.item, r))}</span></div>
+      <div class="res">${iconK(r.k)}<span><strong>${etiqueta(r.k, r.mult)}</strong>${esc(explicacion(r.item, r))}</span></div>
     </div>`).join('');
 }
 function finRonda(idx, total, tk) {
@@ -988,7 +1042,7 @@ function finRonda(idx, total, tk) {
     ${practica ? '' : `<div class="duelo">
       <div class="lado yo"><h3>Tú</h3><div class="num">${fmt(yo)}</div><div class="iconos">${G.rondaYo.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaYo)}</small></div>
       <div class="mini-vs">VS</div>
-      <div class="lado"><h3>Rival</h3><div class="num">${fmt(riv)}</div><div class="iconos">${G.rondaRiv.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaRiv)}</small></div>
+      <div class="lado"><h3>${esc((NIVEL[G.modo] && NIVEL[G.modo].nombre) || 'Rival')}</h3><div class="num">${fmt(riv)}</div><div class="iconos">${G.rondaRiv.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaRiv)}</small></div>
     </div>`}
     <div class="repaso"><h3>Tus versos</h3>${repasoHTML(G.rondaYo)}</div>
     <div class="acciones"><button class="btn" type="button" id="btn-continuar">${ultima || idx === 'R' || practica ? 'Ver resultado' : 'Siguiente ronda'}</button></div>`;
@@ -1004,10 +1058,11 @@ function estrellas(modo, n) {
 function pintarEstrellasMenu() {
   const e = store.get('estrellas', {});
   document.querySelectorAll('[data-stars]').forEach(el => { const n = e[el.dataset.stars] || 0; el.innerHTML = [0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join(''); el.setAttribute('aria-label', `${n} de 3 estrellas`); });
+  pintarBloqueos();
 }
 function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true }) {
   return `
-    <div class="final-pj ${poseRiv ? 'dos' : ''}"><img src="img/jugador-${poseYo}.webp" alt="">${poseRiv ? `<img src="img/novato-${poseRiv}.webp" alt="">` : ''}</div>
+    <div class="final-pj ${poseRiv ? 'dos' : ''}"><img src="img/jugador-${poseYo}.webp" alt="">${poseRiv ? `<img src="img/${G.imgRiv}-${poseRiv}.webp" alt="">` : ''}</div>
     <div class="veredicto"><h2 class="${n > 0 ? 'gana' : ''}">${titulo}</h2></div>
     <div class="total">${G.modo === 'practica' ? `<span class="yo">TÚ ${fmt(G.yo)}</span> de 4` : `<span class="yo">TÚ ${fmt(G.yo)}</span> · RIVAL ${fmt(G.riv)}`}</div>
     <div class="stars grande" aria-label="${n} de 3 estrellas">${[0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join('')}</div>
@@ -1018,12 +1073,12 @@ function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true
 function resumenPartida(resultado) {
   const c = G.todos.filter(r => r.k === 'c').length, a = G.todos.filter(r => r.k === 'a').length;
   const t = G.todos.filter(r => r.k === 't').length, f = G.todos.length - c - a - t;
-  return { modo: G.modo, beat: G.beat ? G.beat.id : '', resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0 };
+  return { modo: G.modo, beat: G.beat ? G.beat.id : '', resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0, comodin: G.comodinUsado };
 }
 function opinionHTML() {
   if (!SITIO) return '';
   if (store.get('opinion', false)) return `<div class="opinion"><p>Gracias por mandar tu opinión. Si quieres agregar algo, escríbelo aquí abajo y se suma a la anterior.</p>${formOpinion(false)}</div>`;
-  return `<div class="opinion"><h3>¿Qué te pareció?</h3><p>Es una versión de prueba. Tu opinión llega directo a quien lo está haciendo.</p>${formOpinion(true)}</div>`;
+  return `<div class="opinion"><h3>¿Qué te pareció?</h3><p>Tu opinión llega directo a quien hace el juego. Así decidimos qué rivales y beats siguen.</p>${formOpinion(true)}</div>`;
 }
 function formOpinion(conNotas) {
   const NOTAS = [['1', 'Malo'], ['2', 'Meh'], ['3', 'Bien'], ['4', 'Muy bien'], ['5', 'Brutal']];
@@ -1058,7 +1113,7 @@ function activarOpinion(resumen) {
           calificacion: nota ? nota + '/5' : '(sin calificación)',
           comentario: texto || '(sin comentario)',
           nombre: nombre || '(anónimo)',
-          partida: resumen.texto || `${resumen.modo === 'practica' ? 'Práctica' : 'Rival novato'} · ${resumen.resultado} · tú ${fmt(resumen.puntos)}${resumen.modo === 'practica' ? ' de 4' : ' · rival ' + fmt(resumen.rival)} · ${resumen.consonantes} consonantes, ${resumen.asonantes} asonantes, ${resumen.fallos} fallos, ${resumen.tiempos} sin responder`,
+          partida: resumen.texto || `${resumen.modo === 'practica' ? 'Práctica' : (NIVEL[resumen.modo] && NIVEL[resumen.modo].nombre) || resumen.modo} · ${resumen.resultado} · tú ${fmt(resumen.puntos)}${resumen.modo === 'practica' ? ' de 4' : ' · rival ' + fmt(resumen.rival)} · ${resumen.consonantes} consonantes, ${resumen.asonantes} asonantes, ${resumen.fallos} fallos, ${resumen.tiempos} sin responder`,
           beat: resumen.beatNombre || (G.beat ? G.beat.name : ''),
           dispositivo: window.matchMedia('(max-width: 768px)').matches ? 'celular' : 'compu'
         })
@@ -1072,14 +1127,44 @@ function activarOpinion(resumen) {
     }
   });
 }
+// Compartir el resultado (menú de compartir del celular; en compu, WhatsApp Web). El link trae UTM para medirlo en GA4.
+async function compartirResultado(gana, n) {
+  const N = NIVEL[G.modo];
+  const est = n ? ' ' + '⭐'.repeat(n) : '';
+  const texto = gana
+    ? `Le gané ${N.al} en la Batalla de Freestyle de RapScore MX, ${fmt(G.yo)} a ${fmt(G.riv)}${est}. ¿Tú puedes?`
+    : `${N.el} me ganó ${fmt(G.riv)} a ${fmt(G.yo)} en la Batalla de Freestyle de RapScore MX. ¿Tú le ganas?`;
+  const metodo = navigator.share ? 'native' : 'whatsapp';
+  const url = `https://www.rapscoremx.com/batalla/?utm_source=${metodo}&utm_medium=share&utm_campaign=batalla_${G.modo}`;
+  track('share', { method: metodo, content_type: 'batalla', item_id: G.modo, resultado: gana ? 'gano' : 'perdio' });
+  if (navigator.share) { try { await navigator.share({ title: 'Batalla de Freestyle · RapScore MX', text: texto, url }); } catch (e) {} }
+  else window.open('https://wa.me/?text=' + encodeURIComponent(texto + ' ' + url), '_blank', 'noopener');
+}
+// Invitación a calificar raperos en el ranking (solo dentro del sitio)
+const ctaVotarHTML = () => SITIO ? `<a class="cta-votar" href="/?utm_source=batalla&amp;utm_medium=cta&amp;utm_campaign=final#votar" data-cta="batalla_final_votar"><b>¿Y tus raperos favoritos? →</b><span>En RapScore MX la comunidad decide el ranking del rap mexicano. Califícalos del 1 al 10.</span></a>` : '';
+document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('[data-cta]'); if (a) track('cta_click', { cta: a.dataset.cta }); });
+function pintarBloqueos() {
+  const e = store.get('estrellas', {});
+  ['medio', 'jefe'].forEach(m => {
+    const b = $('#nv-' + m); if (!b) return;
+    const libre = (e[NIVEL[m].requiere] || 0) > 0;
+    b.disabled = !libre;
+    b.querySelector('.lock-w').hidden = libre;
+    b.querySelector('.stars').hidden = !libre;
+    if (libre) b.querySelector('[data-sub]').textContent = b.dataset.sub;
+  });
+}
 function calcEstrellas(maximo) { const p = G.yoBase / maximo; return 1 + (p >= 0.75 ? 1 : 0) + (p >= 0.9 ? 1 : 0); }
 
 /* ================= partidas ================= */
 async function jugar(modo) {
+  const N = NIVEL[modo];
+  if (N.requiere && !((store.get('estrellas', {})[N.requiere] || 0) > 0)) { menu(); return; }
   audioInit();
   const tk = ++G.token;
   G.modo = modo; G.yo = 0; G.riv = 0; G.todos = []; G.consRiv = 0; G.replicaHecha = false;
-  const N = NIVEL[modo];
+  G.imgRiv = N.img || 'novato'; G.comodin = N.comodines || 0; G.comodinUsado = 0;
+  $('#img-riv').src = `img/${G.imgRiv}-neutral.webp`; $('#img-riv').alt = N.nombre || 'Rival';
   $('#app').classList.toggle('solo', modo === 'practica');
   pantalla('juego'); marcador();
   previa = false;
@@ -1090,11 +1175,16 @@ async function jugar(modo) {
     for (let r = 0; r < N.rondas.length; r++) {
       $('#ronda').textContent = modo === 'practica' ? 'PRÁCTICA' : `R${r + 1}/${N.rondas.length}`;
       pantalla('juego');
-      const intro = modo === 'practica' ? INTRO.practica : INTRO.novato[r];
+      const intro = modo === 'practica' ? INTRO.practica : INTRO[modo][r];
       await aviso(intro[0], intro[1], tk);
-      G.rondaRiv = N.rival ? await turnoRival(N.rival[r], tk) : [];
+      G.rondaRiv = N.rival ? await turnoRival(N.rival[r], tk, !!N.remate) : [];
       G.rondaYo = [];
-      for (const item of N.rondas[r]) G.rondaYo.push(await decision(item, N.compases(r) * 4, N.pista(r), tk, modo === 'practica'));
+      // En batalla los versos salen en otro orden cada vez (el último de la ronda es el remate).
+      const items = modo === 'practica' ? N.rondas[r] : shuffle(N.rondas[r]);
+      for (let i = 0; i < items.length; i++) {
+        const mult = N.remate && i === items.length - 1 ? 2 : 1;
+        G.rondaYo.push(await decision(items[i], N.compases(r) * 4, N.pista(r), tk, modo === 'practica', mult));
+      }
       G.todos.push(...G.rondaYo);
       G.consRiv += G.rondaRiv.filter(x => x.k === 'c').length;
       await finRonda(r, N.rondas.length, tk);
@@ -1108,9 +1198,10 @@ async function replica(tk) {
     $('#ronda').textContent = 'RÉPLICA';
     pantalla('juego');
     await aviso(INTRO.replica[0], INTRO.replica[1], tk);
-    G.rondaRiv = await turnoRival(CONTENIDO.rivalReplica, tk);
+    const N = NIVEL[G.modo];
+    G.rondaRiv = await turnoRival(N.replicaRival, tk);
     G.rondaYo = [];
-    for (const item of CONTENIDO.replica) G.rondaYo.push(await decision(item, 12, 'none', tk, false));
+    for (const item of shuffle(CONTENIDO.replica)) G.rondaYo.push(await decision(item, N.replicaBeats, 'none', tk, false));
     G.todos.push(...G.rondaYo);
     G.consRiv += G.rondaRiv.filter(x => x.k === 'c').length;
     G.replicaHecha = true;
@@ -1124,7 +1215,7 @@ function mostrarFinal(tk) {
     const n = calcEstrellas(4); estrellas('practica', n);
     s.innerHTML = finalHTML({ titulo: 'Práctica completa', poseYo: 'celebra', n,
       sub: n === 3 ? 'Ya distingues la rima consonante. Ve por el rival novato.' : 'Busca la palabra que comparte todas las letras desde la vocal fuerte: esa vale 1 punto.',
-      botones: `<button class="btn" type="button" id="f-1">Retar al rival novato</button><button class="btn sec" type="button" id="f-2">Practicar otra vez</button><button class="btn sec" type="button" id="f-3">Menú</button>` });
+      botones: `<button class="btn" type="button" id="f-1">Retar al rival novato</button><button class="btn sec" type="button" id="f-2">Practicar otra vez</button><button class="btn sec" type="button" id="f-3">Menú</button>${ctaVotarHTML()}` });
     pantalla('final');
     $('#f-1').onclick = () => jugar('novato'); $('#f-2').onclick = () => jugar('practica'); $('#f-3').onclick = menu;
     const rs = resumenPartida('completa'); track('batalla_end', rs); activarOpinion(rs);
@@ -1144,14 +1235,28 @@ function mostrarFinal(tk) {
     $('#f-1').onclick = () => { FX.tap(); replica(tk); }; $('#f-3').onclick = menu;
     return;
   }
-  const n = gana ? calcEstrellas(12) : 0;
-  if (gana) estrellas('novato', n);
+  const N = NIVEL[G.modo];
+  const n = gana ? calcEstrellas(N.max) : 0;
+  const yaLibre = N.sig ? (store.get('estrellas', {})[G.modo] || 0) > 0 : true;
+  if (gana) estrellas(G.modo, n);
+  const sig = gana && N.sig ? NIVEL[N.sig] : null;
+  const consejo = N.remate
+    ? 'Revisa el repaso: la consonante vale el doble y los remates cuentan doble. Guarda el comodín para un remate.'
+    : 'Revisa el repaso: las consonantes valen el doble que las asonantes.';
   s.innerHTML = finalHTML({
-    titulo: gana ? '¡La calle es tuya!' : 'No fue tu batalla', poseYo: gana ? 'celebra' : 'frustra', poseRiv: gana ? 'frustra' : 'celebra', n,
-    sub: (gana ? (n === 3 ? 'Batalla perfecta o casi: puras consonantes.' : 'Le ganaste al novato. Busca más consonantes para sumar estrellas.') : 'Revisa el repaso: las consonantes valen el doble que las asonantes.') + nota,
-    botones: `<button class="btn" type="button" id="f-1">Jugar de nuevo</button><button class="btn sec" type="button" id="f-3">Menú</button>` });
+    titulo: gana ? (G.modo === 'jefe' ? '¡Eres el nuevo Jefe de la plaza!' : '¡La calle es tuya!') : 'No fue tu batalla',
+    poseYo: gana ? 'celebra' : 'frustra', poseRiv: gana ? 'frustra' : 'celebra', n,
+    sub: (gana ? (n === 3 ? 'Batalla perfecta o casi: puras consonantes.' : `Le ganaste ${N.al}. Busca más consonantes para sumar estrellas.`)
+      + (sig && !yaLibre ? ` Desbloqueaste: ${sig.nombre}.` : '') : consejo) + nota,
+    botones: `${sig ? `<button class="btn" type="button" id="f-sig">Retar ${sig.al}</button>` : ''}
+      <button class="btn ${sig ? 'sec' : ''}" type="button" id="f-1">${gana ? 'Jugar de nuevo' : 'Revancha'}</button>
+      <button class="btn sec" type="button" id="f-share">Compartir resultado</button>
+      <button class="btn sec" type="button" id="f-3">Menú</button>${ctaVotarHTML()}` });
   pantalla('final');
-  $('#f-1').onclick = () => jugar('novato'); $('#f-3').onclick = menu;
+  const modo = G.modo;
+  if (sig) $('#f-sig').onclick = () => jugar(N.sig);
+  $('#f-1').onclick = () => jugar(modo); $('#f-3').onclick = menu;
+  $('#f-share').onclick = () => compartirResultado(gana, n);
   const rs = resumenPartida(gana ? 'ganó' : 'perdió'); track('batalla_end', rs); activarOpinion(rs);
 }
 /* ================= calentamiento libre (palabras del Freestyle Lab) ================= */
@@ -1242,6 +1347,7 @@ async function calentar(nivelElegido) {
         <button class="btn sec" type="button" id="c-3">Retar al rival novato</button>
         <button class="btn sec" type="button" id="c-4">Menú</button>
       </div>
+      ${ctaVotarHTML()}
       ${opinionHTML()}`;
     pantalla('ronda');
     $('#c-1').onclick = () => calentar(nivel); $('#c-2').onclick = () => jugar('practica');
@@ -1268,6 +1374,8 @@ function seguir() {
 /* ================= arranque ================= */
 $('#nv-practica').addEventListener('click', () => jugar('practica'));
 $('#nv-novato').addEventListener('click', () => jugar('novato'));
+$('#nv-medio').addEventListener('click', () => jugar('medio'));
+$('#nv-jefe').addEventListener('click', () => jugar('jefe'));
 $('#nv-calentamiento').addEventListener('click', () => calentar());
 $('#btn-escuchar').addEventListener('click', () => { audioInit(); alternarPrevia(); });
 $('#beat-lista').addEventListener('click', e => {

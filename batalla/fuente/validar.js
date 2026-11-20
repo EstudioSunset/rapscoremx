@@ -42,9 +42,21 @@ function rival(v, id) {
 
 C.practica.forEach(ficha);
 C.novato.flat().forEach(ficha);
+C.medio.flat().forEach(ficha);
+C.jefe.flat().forEach(ficha);
 C.replica.forEach(ficha);
 C.rival.forEach((r, i) => r.forEach((v, j) => rival(v, `R${i + 1}.${j + 1}`)));
+C.rivalMedio.forEach((r, i) => r.forEach((v, j) => rival(v, `RM${i + 1}.${j + 1}`)));
+C.rivalJefe.forEach((r, i) => r.forEach((v, j) => rival(v, `RJ${i + 1}.${j + 1}`)));
 C.rivalReplica.forEach((v, j) => rival(v, `RX.${j + 1}`));
+C.rivalReplicaMedio.forEach((v, j) => rival(v, `RXM.${j + 1}`));
+C.rivalReplicaJefe.forEach((v, j) => rival(v, `RXJ.${j + 1}`));
+// Que ninguna palabra correcta se repita dentro del mismo nivel (si no, el jugador "se la sabe").
+for (const [nom, lvl] of [['novato', C.novato], ['medio', C.medio], ['jefe', C.jefe]]) {
+  const vistas = new Map();
+  lvl.flat().forEach(f => f.ops.forEach(o => { const k = o.w.toLowerCase(); if (vistas.has(k)) warn(f.id, `"${o.w}" ya sale en ${vistas.get(k)} (${nom})`); vistas.set(k, f.id); }));
+  if (lvl.length !== 3 || lvl.some(r => r.length !== 4)) err(nom, 'debe tener 3 rondas de 4 fichas');
+}
 
 // Casos de prueba del analizador
 const casos = [['canción', 'corazón', 'c'], ['calle', 'madre', 'a'], ['camino', 'destino', 'c'], ['vaso', 'bajo', 'a'],
@@ -53,5 +65,11 @@ for (const [a, b, t] of casos) { const r = R.classify(a, b); if (r !== t) err('T
 
 const puntos = l => l.reduce((s, v) => s + (v.ok ? (v.t === 'c' ? 1 : .5) : 0), 0);
 console.log('Puntos del rival por ronda:', C.rival.map(puntos), 'réplica:', puntos(C.rivalReplica));
+// Medio y Jefe: el 4.º verso de cada ronda es REMATE y vale doble (máximo del jugador: 15).
+const conRemate = l => l.reduce((s, v, i) => s + (v.ok ? (v.t === 'c' ? 1 : .5) : 0) * (i === l.length - 1 ? 2 : 1), 0);
+for (const [nom, r, rx] of [['medio', C.rivalMedio, C.rivalReplicaMedio], ['jefe', C.rivalJefe, C.rivalReplicaJefe]]) {
+  const rondas = r.map(conRemate);
+  console.log(`Rival ${nom} por ronda (con remate ×2):`, rondas, 'total', rondas.reduce((a, b) => a + b, 0), 'de 15 · réplica:', puntos(rx));
+}
 console.log(`\n${errores} errores, ${avisos} avisos`);
 process.exit(errores ? 1 : 0);

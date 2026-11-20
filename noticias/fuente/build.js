@@ -20,7 +20,7 @@ const ETIQUETAS = { lanzamiento: 'Lanzamiento', gira: 'Gira', concierto: 'Concie
 const PAGINAS_FIJAS = [
   { loc: '/', lastmod: hoy() },
   { loc: '/noticias/', lastmod: null },          // se llena con la fecha de la edición más nueva
-  { loc: '/batalla/', lastmod: '2026-11-01' },
+  { loc: '/batalla/', lastmod: '2026-11-19' },
   { loc: '/privacidad.html', lastmod: '2026-10-22' },
 ];
 

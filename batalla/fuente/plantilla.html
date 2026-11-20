@@ -93,6 +93,17 @@ button:focus-visible { outline: 3px solid var(--slot); outline-offset: 3px; }
 .lock { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; color: var(--ink-2); }
 .nivel.p1 { background: radial-gradient(120% 80% at 50% 0%, #3a2a10, var(--panel) 70%); }
 .nivel.p2 { background: radial-gradient(120% 80% at 50% 0%, #2a1a44, var(--panel) 70%); }
+.nivel.p4 { background: radial-gradient(120% 80% at 50% 0%, #10343a, var(--panel) 70%); }
+.nivel.p5 { background: radial-gradient(120% 80% at 50% 0%, #4a1010, var(--panel) 70%); }
+.lock-w[hidden] { display: none; }
+.regla b { color: var(--ink); }
+.remate-tag { align-self: flex-start; font-family: var(--f-display); font-size: 20px; letter-spacing: .05em; background: var(--ref); color: #fff; padding: 2px 10px 0; border-radius: 6px; transform: rotate(-2deg); box-shadow: 0 3px 0 var(--line); }
+.comodin { align-self: center; border: 3px dashed var(--gold); background: rgba(255,194,26,.08); color: var(--gold); border-radius: 999px; padding: 6px 14px; font-weight: 800; font-size: 14px; display: inline-flex; gap: 6px; align-items: center; }
+.comodin svg { width: 20px; height: 20px; }
+.op.tachada { opacity: .28; text-decoration: line-through; text-decoration-thickness: 3px; }
+.cta-votar { border: 3px solid var(--line); border-radius: 14px; background: linear-gradient(135deg, #2a1300, var(--panel) 70%); padding: 14px; display: grid; gap: 6px; text-decoration: none; color: var(--ink); }
+.cta-votar b { font-family: var(--f-display); font-weight: 400; font-size: 26px; letter-spacing: .03em; color: var(--slot); }
+.cta-votar span { color: var(--ink-2); font-size: 14.5px; line-height: 1.4; }
 .stars { display: flex; gap: 3px; }
 .stars svg { width: 18px; height: 18px; }
 .reglas { border: 3px solid var(--line); border-radius: 14px; background: var(--panel); padding: 14px; display: grid; gap: 10px; }
@@ -371,15 +382,15 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
         <img src="img/novato-neutral.webp" alt="">
         <div class="pie-n"><b>Rival novato</b><small>3 rondas · 4 compases</small><div class="stars" data-stars="novato"></div></div>
       </button>
-      <button class="nivel" type="button" disabled>
+      <button class="nivel p4" id="nv-medio" type="button" data-sub="Remates ×2 · 1 comodín" disabled>
         <img src="img/medio-neutral.webp" alt="">
-        <svg class="lock" data-icon="lock"></svg>
-        <div class="pie-n"><b>Rival medio</b><small>Próximamente</small></div>
+        <span class="lock-w"><svg class="lock" data-icon="lock"></svg></span>
+        <div class="pie-n"><b>Rival medio</b><small data-sub>Gánale al novato para desbloquearlo</small><div class="stars" data-stars="medio" hidden></div></div>
       </button>
-      <button class="nivel" type="button" disabled>
+      <button class="nivel p5" id="nv-jefe" type="button" data-sub="Sin pistas · 2–3 compases" disabled>
         <img src="img/jefe-neutral.webp" alt="">
-        <svg class="lock" data-icon="lock"></svg>
-        <div class="pie-n"><b>Jefe</b><small>Próximamente · doble rima</small></div>
+        <span class="lock-w"><svg class="lock" data-icon="lock"></svg></span>
+        <div class="pie-n"><b>El Jefe</b><small data-sub>Gánale al rival medio para desbloquearlo</small><div class="stars" data-stars="jefe" hidden></div></div>
       </button>
     </div>
     <section class="beats" data-fs hidden aria-labelledby="beats-titulo">
@@ -392,12 +403,14 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
       <div class="regla"><svg class="icon" data-icon="cg"></svg><span>Rima consonante y la frase tiene sentido</span><em>+1</em></div>
       <div class="regla"><svg class="icon" data-icon="cb"></svg><span>Rima asonante y la frase tiene sentido</span><em>+0,5</em></div>
       <div class="regla"><svg class="icon" data-icon="x"></svg><span>No tiene sentido o se acabó el tiempo</span><em>0</em></div>
+      <div class="regla"><svg class="icon" data-icon="rayo"></svg><span><b>Remate</b>: contra el medio y el Jefe, el último verso de cada ronda vale doble (también el del rival)</span><em>×2</em></div>
+      <div class="regla"><svg class="icon" data-icon="carta"></svg><span><b>Comodín</b>: una vez por batalla quita las 2 opciones que no tienen sentido. Guárdalo para un remate</span><em>×1</em></div>
     </section>
     <div class="menu-pie">
       <span>Sube el volumen: el tiempo corre al ritmo del beat.</span>
       <button class="chip-btn" id="btn-sonido" type="button">Sonido: sí</button>
     </div>
-    <p class="menu-legal" data-sitio hidden>Versión de prueba. <a href="/">Ir a RapScore MX</a> · <a href="../privacidad.html">Aviso de privacidad</a></p>
+    <nav class="menu-legal" data-sitio hidden aria-label="RapScore MX"><a href="/">Ranking</a> · <a href="/?utm_source=batalla&amp;utm_medium=menu#votar" data-cta="batalla_menu_votar">Votar</a> · <a href="/#freestyle">Freestyle Lab</a> · <a href="/noticias/">Rap News</a> · <a href="../privacidad.html">Aviso de privacidad</a></nav>
   </section>
 
   <!-- JUEGO -->
@@ -446,9 +459,13 @@ const ICON = {
   star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="#FFCC00" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   star0: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="#2c2a28" stroke="#000" stroke-width="1.8" stroke-linejoin="round"/></svg>',
   lock: '<svg viewBox="0 0 24 24" class="lock" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2" fill="currentColor"/><path d="M8 10 V7 a4 4 0 0 1 8 0 V10" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>',
+  rayo: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><path d="M18 2 L6 18 H15 L12 30 L26 12 H17 Z" fill="#FF3C00" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/></svg>',
+  carta: '<svg viewBox="0 0 32 32" class="icon" aria-hidden="true"><rect x="7" y="3" width="18" height="26" rx="3" fill="#FFC21A" stroke="#000" stroke-width="2.5"/><path d="M12.5 12a3.5 3.5 0 1 1 5 3.2c-1 .5-1.5 1.2-1.5 2.3V19" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="23.5" r="1.7" fill="#000"/></svg>',
   pausa: '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="3" width="4" height="14" rx="1" fill="#F2EDE4"/><rect x="12" y="3" width="4" height="14" rx="1" fill="#F2EDE4"/></svg>'
 };
 const iconK = k => ({ c: ICON.cg, a: ICON.cb, f: ICON.x, t: ICON.t })[k];
+// Etiqueta con el multiplicador del remate (+2 CONSONANTE · REMATE…)
+const etiqueta = (k, mult = 1) => mult > 1 && (k === 'c' || k === 'a') ? `+${fmt(PTS[k] * mult)} ${k === 'c' ? 'CONSONANTE' : 'ASONANTE'} · REMATE` : LABEL[k];
 document.querySelectorAll('svg[data-icon]').forEach(s => { s.outerHTML = ICON[s.dataset.icon]; });
 
 /* ================= medición (solo en el sitio) ================= */
@@ -637,10 +654,17 @@ function loop() {
 }
 
 /* ================= estado ================= */
-const G = { beat: null, modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato' };
+const G = { beat: null, modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato', comodin: 0, comodinUsado: 0 };
+// max = puntos máximos del jugador (con remates ×2: 3 rondas × (3 + 2) = 15).
+// requiere = nivel que hay que ganar (al menos 1 estrella) para desbloquearlo; sig = el que sigue.
 const NIVEL = {
-  practica: { rondas: [CONTENIDO.practica], compases: () => 8, pista: () => 'term', rival: null },
-  novato: { rondas: CONTENIDO.novato, compases: r => (r === 2 ? 3 : 4), pista: () => 'tonic', rival: CONTENIDO.rival }
+  practica: { rondas: [CONTENIDO.practica], compases: () => 8, pista: () => 'term', rival: null, max: 4 },
+  novato: { rondas: CONTENIDO.novato, compases: r => (r === 2 ? 3 : 4), pista: () => 'tonic', rival: CONTENIDO.rival,
+    img: 'novato', nombre: 'Rival novato', el: 'El rival novato', al: 'al rival novato', replicaRival: CONTENIDO.rivalReplica, replicaBeats: 12, max: 12, sig: 'medio' },
+  medio: { rondas: CONTENIDO.medio, compases: r => (r === 0 ? 4 : 3), pista: r => (r === 0 ? 'tonic' : 'none'), rival: CONTENIDO.rivalMedio,
+    img: 'medio', nombre: 'Rival medio', el: 'El rival medio', al: 'al rival medio', remate: true, comodines: 1, replicaRival: CONTENIDO.rivalReplicaMedio, replicaBeats: 12, max: 15, requiere: 'novato', sig: 'jefe' },
+  jefe: { rondas: CONTENIDO.jefe, compases: r => (r === 2 ? 2 : 3), pista: () => 'none', rival: CONTENIDO.rivalJefe,
+    img: 'jefe', nombre: 'El Jefe', el: 'El Jefe', al: 'al Jefe', remate: true, comodines: 1, replicaRival: CONTENIDO.rivalReplicaJefe, replicaBeats: 8, max: 15, requiere: 'medio' }
 };
 const INTRO = {
   practica: ['Práctica', 'Elige la palabra que rima con la palabra naranja y que le da sentido a la frase. Tienes 8 compases para cada verso.'],
@@ -649,9 +673,19 @@ const INTRO = {
     ['Ronda 2', 'Ahora vienen palabras agudas y diptongos. En las agudas solo cuenta la última vocal: corazón rima en asonante con valor.'],
     ['Ronda 3', 'Último round: tienes un compás menos para decidir.']
   ],
+  medio: [
+    ['Ronda 1', 'El rival medio no regala nada. El último verso de cada ronda es REMATE y vale doble. Tienes 1 comodín para toda la batalla: piensa cuándo usarlo.'],
+    ['Ronda 2', 'Se acabaron las pistas: ya no te marcamos la vocal fuerte. Tienes 3 compases por verso.'],
+    ['Ronda 3', 'Última ronda. Si guardaste el comodín, el remate es buen momento.']
+  ],
+  jefe: [
+    ['Ronda 1', 'El Jefe casi no falla. Sin pistas, 3 compases y remates ×2. Tienes 1 comodín.'],
+    ['Ronda 2', 'Esdrújulas y agudas: escucha dónde cae el golpe de voz antes de elegir.'],
+    ['Ronda 3', 'Solo 2 compases por verso. Aquí se gana o se pierde la plaza.']
+  ],
   replica: ['Réplica', 'Empate. Dos versos cada quien y gana el que sume más.']
 };
-['jugador', 'novato'].forEach(c => ['neutral', 'rapea', 'celebra', 'frustra'].forEach(p => { const i = new Image(); i.src = `img/${c}-${p}.webp`; }));
+['jugador', 'novato', 'medio', 'jefe'].forEach(c => ['neutral', 'rapea', 'celebra', 'frustra'].forEach(p => { const i = new Image(); i.src = `img/${c}-${p}.webp`; }));
 function pose(quien, p) {
   const img = quien === 'yo' ? $('#img-yo') : $('#img-riv');
   const src = `img/${quien === 'yo' ? G.imgYo : G.imgRiv}-${p}.webp`;
@@ -705,14 +739,23 @@ function pintarPuntos() {
 }
 
 /* ================= una decisión del jugador ================= */
-async function decision(item, beats, pista, tk, practica) {
+async function decision(item, beats, pista, tk, practica, mult = 1) {
   const card = $('#tarjeta');
   const ops = shuffle(item.ops);
   card.innerHTML = `
+    ${mult > 1 ? '<span class="remate-tag">Remate · vale doble</span>' : ''}
     <p class="pie">${esc(item.pie)} ${refHTML(item.ref, pista)}</p>
     <p class="verso">${esc(item.verso[0])} <span class="hueco vivo" id="hueco"></span>${esc(item.verso[1] || '')}</p>
     <div class="puntos" id="puntos" aria-hidden="true"></div>
-    <div class="opciones" id="opciones">${ops.map((o, i) => `<button class="op" type="button" data-i="${i}">${esc(o.w)}</button>`).join('')}</div>`;
+    <div class="opciones" id="opciones">${ops.map((o, i) => `<button class="op" type="button" data-i="${i}">${esc(o.w)}</button>`).join('')}</div>
+    ${G.comodin > 0 ? `<button class="comodin" type="button" id="btn-comodin">${ICON.carta}Usar comodín: quita 2 opciones</button>` : ''}`;
+  const bc = $('#btn-comodin');
+  if (bc) bc.addEventListener('click', () => {
+    if (G.comodin <= 0) return;
+    G.comodin--; G.comodinUsado++; FX.tap();
+    card.querySelectorAll('.op').forEach(b => { if (!ops[+b.dataset.i].ok) { b.disabled = true; b.classList.add('tachada'); } });
+    bc.remove();
+  }, { once: true });
   pose('yo', 'neutral'); if (G.modo !== 'practica') pose('riv', 'neutral');
   const inicio = proxCompas(clock() + 0.3);
   prepararPuntos(inicio, beats);
@@ -726,7 +769,8 @@ async function decision(item, beats, pista, tk, practica) {
   vigente(tk);
   G.dots.parado = r.op === null ? true : false; G.dots.el.classList.add('quieto'); G.dots = null;
   const k = r.op ? (r.op.ok ? r.op.t : 'f') : 't';
-  const pts = k === 'c' ? 1 : k === 'a' ? 0.5 : 0;
+  const pts = (k === 'c' ? 1 : k === 'a' ? 0.5 : 0) * mult;
+  $('#btn-comodin')?.remove();
   const opEl = $('#opciones'); opEl.classList.add('cerrado'); opEl.querySelectorAll('.op').forEach(b => b.disabled = true);
   const hueco = $('#hueco');
   hueco.outerHTML = `<span class="lleno k-${k}" id="hueco">${r.op ? marcar(r.op.w, k) : '&nbsp;'}</span>`;
@@ -737,11 +781,11 @@ async function decision(item, beats, pista, tk, practica) {
   FX[k](t);
   await esperar(t);
   vigente(tk);
-  $('#puntos').insertAdjacentHTML('afterend', `<div class="cinta k-${k}" role="status">${iconK(k)}${LABEL[k]}</div>`);
+  $('#puntos').insertAdjacentHTML('afterend', `<div class="cinta k-${k}" role="status">${iconK(k)}${etiqueta(k, mult)}</div>`);
   G.yo += pts; marcador();
   pose('yo', k === 'c' ? 'celebra' : k === 'a' ? 'rapea' : 'frustra');
   if (G.modo !== 'practica') pose('riv', k === 'c' ? 'frustra' : k === 'a' ? 'neutral' : 'celebra');
-  const res = { item, op: r.op, k, pts };
+  const res = { item, op: r.op, k, pts, mult };
   if (practica) {
     await esperar(clock() + 0.6); vigente(tk);
     opEl.insertAdjacentHTML('beforebegin', `<div class="explica"><span>${esc(explicacion(item, res))}</span><button class="btn" type="button" id="btn-sig">Siguiente ›</button></div>`);
@@ -756,7 +800,7 @@ async function decision(item, beats, pista, tk, practica) {
 }
 
 /* ================= turno del rival ================= */
-async function turnoRival(versos, tk) {
+async function turnoRival(versos, tk, remate = false) {
   const app = $('#app'); app.classList.add('turno-rival');
   const card = $('#tarjeta');
   card.innerHTML = `
@@ -771,6 +815,8 @@ async function turnoRival(versos, tk) {
   pose('yo', 'neutral');
   for (let i = 0; i < versos.length; i++) {
     const v = versos[i]; const k = v.ok ? v.t : 'f';
+    const mult = remate && i === versos.length - 1 ? 2 : 1;
+    if (mult > 1) $('.rival-head .tag').textContent = 'Remate del rival · ×2';
     if (!saltar) {
       await espera(t);
       pose('riv', 'rapea');
@@ -780,7 +826,7 @@ async function turnoRival(versos, tk) {
       $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="hueco"></span>`;
       await espera(t + BAR + BEAT * 2);
       if (!saltar) {
-        $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="lleno k-${k}">${marcar(v.w, k === 'f' ? 'x' : k)}</span><span class="rv-label k-${k}">${iconK(k)}${LABEL[k]}</span>`;
+        $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="lleno k-${k}">${marcar(v.w, k === 'f' ? 'x' : k)}</span><span class="rv-label k-${k}">${iconK(k)}${etiqueta(k, mult)}</span>`;
         if (k === 'c' || k === 'a') $('#rv-pie .refw').innerHTML = marcar(v.ref, k, true);
         FX[k](clock(), true);
         pose('riv', k === 'f' ? 'frustra' : 'celebra');
@@ -788,7 +834,7 @@ async function turnoRival(versos, tk) {
       }
       t += BAR * 2;
     }
-    const pts = k === 'c' ? 1 : k === 'a' ? 0.5 : 0;
+    const pts = (k === 'c' ? 1 : k === 'a' ? 0.5 : 0) * mult;
     G.riv += pts; marcador();
     $('#fichas').children[i].outerHTML = `<div class="ficha">${iconK(k)}${pts ? '+' + fmt(pts) : '0'}</div>`;
     res.push({ v, k, pts });
@@ -816,7 +862,7 @@ function repasoHTML(lista) {
   return lista.map(r => `
     <div class="rp">
       <div class="lineas">${esc(r.item.pie)} ${refHTML(r.item.ref, 'none')}<br><b>${esc(r.item.verso[0])} ${r.op ? marcar(r.op.w, r.k) : '___'}</b></div>
-      <div class="res">${iconK(r.k)}<span><strong>${LABEL[r.k]}</strong>${esc(explicacion(r.item, r))}</span></div>
+      <div class="res">${iconK(r.k)}<span><strong>${etiqueta(r.k, r.mult)}</strong>${esc(explicacion(r.item, r))}</span></div>
     </div>`).join('');
 }
 function finRonda(idx, total, tk) {
@@ -833,7 +879,7 @@ function finRonda(idx, total, tk) {
     ${practica ? '' : `<div class="duelo">
       <div class="lado yo"><h3>Tú</h3><div class="num">${fmt(yo)}</div><div class="iconos">${G.rondaYo.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaYo)}</small></div>
       <div class="mini-vs">VS</div>
-      <div class="lado"><h3>Rival</h3><div class="num">${fmt(riv)}</div><div class="iconos">${G.rondaRiv.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaRiv)}</small></div>
+      <div class="lado"><h3>${esc((NIVEL[G.modo] && NIVEL[G.modo].nombre) || 'Rival')}</h3><div class="num">${fmt(riv)}</div><div class="iconos">${G.rondaRiv.map(r => iconK(r.k)).join('')}</div><small>${contar(G.rondaRiv)}</small></div>
     </div>`}
     <div class="repaso"><h3>Tus versos</h3>${repasoHTML(G.rondaYo)}</div>
     <div class="acciones"><button class="btn" type="button" id="btn-continuar">${ultima || idx === 'R' || practica ? 'Ver resultado' : 'Siguiente ronda'}</button></div>`;
@@ -849,10 +895,11 @@ function estrellas(modo, n) {
 function pintarEstrellasMenu() {
   const e = store.get('estrellas', {});
   document.querySelectorAll('[data-stars]').forEach(el => { const n = e[el.dataset.stars] || 0; el.innerHTML = [0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join(''); el.setAttribute('aria-label', `${n} de 3 estrellas`); });
+  pintarBloqueos();
 }
 function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true }) {
   return `
-    <div class="final-pj ${poseRiv ? 'dos' : ''}"><img src="img/jugador-${poseYo}.webp" alt="">${poseRiv ? `<img src="img/novato-${poseRiv}.webp" alt="">` : ''}</div>
+    <div class="final-pj ${poseRiv ? 'dos' : ''}"><img src="img/jugador-${poseYo}.webp" alt="">${poseRiv ? `<img src="img/${G.imgRiv}-${poseRiv}.webp" alt="">` : ''}</div>
     <div class="veredicto"><h2 class="${n > 0 ? 'gana' : ''}">${titulo}</h2></div>
     <div class="total">${G.modo === 'practica' ? `<span class="yo">TÚ ${fmt(G.yo)}</span> de 4` : `<span class="yo">TÚ ${fmt(G.yo)}</span> · RIVAL ${fmt(G.riv)}`}</div>
     <div class="stars grande" aria-label="${n} de 3 estrellas">${[0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join('')}</div>
@@ -863,12 +910,12 @@ function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true
 function resumenPartida(resultado) {
   const c = G.todos.filter(r => r.k === 'c').length, a = G.todos.filter(r => r.k === 'a').length;
   const t = G.todos.filter(r => r.k === 't').length, f = G.todos.length - c - a - t;
-  return { modo: G.modo, beat: G.beat ? G.beat.id : '', resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0 };
+  return { modo: G.modo, beat: G.beat ? G.beat.id : '', resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0, comodin: G.comodinUsado };
 }
 function opinionHTML() {
   if (!SITIO) return '';
   if (store.get('opinion', false)) return `<div class="opinion"><p>Gracias por mandar tu opinión. Si quieres agregar algo, escríbelo aquí abajo y se suma a la anterior.</p>${formOpinion(false)}</div>`;
-  return `<div class="opinion"><h3>¿Qué te pareció?</h3><p>Es una versión de prueba. Tu opinión llega directo a quien lo está haciendo.</p>${formOpinion(true)}</div>`;
+  return `<div class="opinion"><h3>¿Qué te pareció?</h3><p>Tu opinión llega directo a quien hace el juego. Así decidimos qué rivales y beats siguen.</p>${formOpinion(true)}</div>`;
 }
 function formOpinion(conNotas) {
   const NOTAS = [['1', 'Malo'], ['2', 'Meh'], ['3', 'Bien'], ['4', 'Muy bien'], ['5', 'Brutal']];
@@ -903,7 +950,7 @@ function activarOpinion(resumen) {
           calificacion: nota ? nota + '/5' : '(sin calificación)',
           comentario: texto || '(sin comentario)',
           nombre: nombre || '(anónimo)',
-          partida: resumen.texto || `${resumen.modo === 'practica' ? 'Práctica' : 'Rival novato'} · ${resumen.resultado} · tú ${fmt(resumen.puntos)}${resumen.modo === 'practica' ? ' de 4' : ' · rival ' + fmt(resumen.rival)} · ${resumen.consonantes} consonantes, ${resumen.asonantes} asonantes, ${resumen.fallos} fallos, ${resumen.tiempos} sin responder`,
+          partida: resumen.texto || `${resumen.modo === 'practica' ? 'Práctica' : (NIVEL[resumen.modo] && NIVEL[resumen.modo].nombre) || resumen.modo} · ${resumen.resultado} · tú ${fmt(resumen.puntos)}${resumen.modo === 'practica' ? ' de 4' : ' · rival ' + fmt(resumen.rival)} · ${resumen.consonantes} consonantes, ${resumen.asonantes} asonantes, ${resumen.fallos} fallos, ${resumen.tiempos} sin responder`,
           beat: resumen.beatNombre || (G.beat ? G.beat.name : ''),
           dispositivo: window.matchMedia('(max-width: 768px)').matches ? 'celular' : 'compu'
         })
@@ -917,14 +964,44 @@ function activarOpinion(resumen) {
     }
   });
 }
+// Compartir el resultado (menú de compartir del celular; en compu, WhatsApp Web). El link trae UTM para medirlo en GA4.
+async function compartirResultado(gana, n) {
+  const N = NIVEL[G.modo];
+  const est = n ? ' ' + '⭐'.repeat(n) : '';
+  const texto = gana
+    ? `Le gané ${N.al} en la Batalla de Freestyle de RapScore MX, ${fmt(G.yo)} a ${fmt(G.riv)}${est}. ¿Tú puedes?`
+    : `${N.el} me ganó ${fmt(G.riv)} a ${fmt(G.yo)} en la Batalla de Freestyle de RapScore MX. ¿Tú le ganas?`;
+  const metodo = navigator.share ? 'native' : 'whatsapp';
+  const url = `https://www.rapscoremx.com/batalla/?utm_source=${metodo}&utm_medium=share&utm_campaign=batalla_${G.modo}`;
+  track('share', { method: metodo, content_type: 'batalla', item_id: G.modo, resultado: gana ? 'gano' : 'perdio' });
+  if (navigator.share) { try { await navigator.share({ title: 'Batalla de Freestyle · RapScore MX', text: texto, url }); } catch (e) {} }
+  else window.open('https://wa.me/?text=' + encodeURIComponent(texto + ' ' + url), '_blank', 'noopener');
+}
+// Invitación a calificar raperos en el ranking (solo dentro del sitio)
+const ctaVotarHTML = () => SITIO ? `<a class="cta-votar" href="/?utm_source=batalla&amp;utm_medium=cta&amp;utm_campaign=final#votar" data-cta="batalla_final_votar"><b>¿Y tus raperos favoritos? →</b><span>En RapScore MX la comunidad decide el ranking del rap mexicano. Califícalos del 1 al 10.</span></a>` : '';
+document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('[data-cta]'); if (a) track('cta_click', { cta: a.dataset.cta }); });
+function pintarBloqueos() {
+  const e = store.get('estrellas', {});
+  ['medio', 'jefe'].forEach(m => {
+    const b = $('#nv-' + m); if (!b) return;
+    const libre = (e[NIVEL[m].requiere] || 0) > 0;
+    b.disabled = !libre;
+    b.querySelector('.lock-w').hidden = libre;
+    b.querySelector('.stars').hidden = !libre;
+    if (libre) b.querySelector('[data-sub]').textContent = b.dataset.sub;
+  });
+}
 function calcEstrellas(maximo) { const p = G.yoBase / maximo; return 1 + (p >= 0.75 ? 1 : 0) + (p >= 0.9 ? 1 : 0); }
 
 /* ================= partidas ================= */
 async function jugar(modo) {
+  const N = NIVEL[modo];
+  if (N.requiere && !((store.get('estrellas', {})[N.requiere] || 0) > 0)) { menu(); return; }
   audioInit();
   const tk = ++G.token;
   G.modo = modo; G.yo = 0; G.riv = 0; G.todos = []; G.consRiv = 0; G.replicaHecha = false;
-  const N = NIVEL[modo];
+  G.imgRiv = N.img || 'novato'; G.comodin = N.comodines || 0; G.comodinUsado = 0;
+  $('#img-riv').src = `img/${G.imgRiv}-neutral.webp`; $('#img-riv').alt = N.nombre || 'Rival';
   $('#app').classList.toggle('solo', modo === 'practica');
   pantalla('juego'); marcador();
   previa = false;
@@ -935,11 +1012,16 @@ async function jugar(modo) {
     for (let r = 0; r < N.rondas.length; r++) {
       $('#ronda').textContent = modo === 'practica' ? 'PRÁCTICA' : `R${r + 1}/${N.rondas.length}`;
       pantalla('juego');
-      const intro = modo === 'practica' ? INTRO.practica : INTRO.novato[r];
+      const intro = modo === 'practica' ? INTRO.practica : INTRO[modo][r];
       await aviso(intro[0], intro[1], tk);
-      G.rondaRiv = N.rival ? await turnoRival(N.rival[r], tk) : [];
+      G.rondaRiv = N.rival ? await turnoRival(N.rival[r], tk, !!N.remate) : [];
       G.rondaYo = [];
-      for (const item of N.rondas[r]) G.rondaYo.push(await decision(item, N.compases(r) * 4, N.pista(r), tk, modo === 'practica'));
+      // En batalla los versos salen en otro orden cada vez (el último de la ronda es el remate).
+      const items = modo === 'practica' ? N.rondas[r] : shuffle(N.rondas[r]);
+      for (let i = 0; i < items.length; i++) {
+        const mult = N.remate && i === items.length - 1 ? 2 : 1;
+        G.rondaYo.push(await decision(items[i], N.compases(r) * 4, N.pista(r), tk, modo === 'practica', mult));
+      }
       G.todos.push(...G.rondaYo);
       G.consRiv += G.rondaRiv.filter(x => x.k === 'c').length;
       await finRonda(r, N.rondas.length, tk);
@@ -953,9 +1035,10 @@ async function replica(tk) {
     $('#ronda').textContent = 'RÉPLICA';
     pantalla('juego');
     await aviso(INTRO.replica[0], INTRO.replica[1], tk);
-    G.rondaRiv = await turnoRival(CONTENIDO.rivalReplica, tk);
+    const N = NIVEL[G.modo];
+    G.rondaRiv = await turnoRival(N.replicaRival, tk);
     G.rondaYo = [];
-    for (const item of CONTENIDO.replica) G.rondaYo.push(await decision(item, 12, 'none', tk, false));
+    for (const item of shuffle(CONTENIDO.replica)) G.rondaYo.push(await decision(item, N.replicaBeats, 'none', tk, false));
     G.todos.push(...G.rondaYo);
     G.consRiv += G.rondaRiv.filter(x => x.k === 'c').length;
     G.replicaHecha = true;
@@ -969,7 +1052,7 @@ function mostrarFinal(tk) {
     const n = calcEstrellas(4); estrellas('practica', n);
     s.innerHTML = finalHTML({ titulo: 'Práctica completa', poseYo: 'celebra', n,
       sub: n === 3 ? 'Ya distingues la rima consonante. Ve por el rival novato.' : 'Busca la palabra que comparte todas las letras desde la vocal fuerte: esa vale 1 punto.',
-      botones: `<button class="btn" type="button" id="f-1">Retar al rival novato</button><button class="btn sec" type="button" id="f-2">Practicar otra vez</button><button class="btn sec" type="button" id="f-3">Menú</button>` });
+      botones: `<button class="btn" type="button" id="f-1">Retar al rival novato</button><button class="btn sec" type="button" id="f-2">Practicar otra vez</button><button class="btn sec" type="button" id="f-3">Menú</button>${ctaVotarHTML()}` });
     pantalla('final');
     $('#f-1').onclick = () => jugar('novato'); $('#f-2').onclick = () => jugar('practica'); $('#f-3').onclick = menu;
     const rs = resumenPartida('completa'); track('batalla_end', rs); activarOpinion(rs);
@@ -989,14 +1072,28 @@ function mostrarFinal(tk) {
     $('#f-1').onclick = () => { FX.tap(); replica(tk); }; $('#f-3').onclick = menu;
     return;
   }
-  const n = gana ? calcEstrellas(12) : 0;
-  if (gana) estrellas('novato', n);
+  const N = NIVEL[G.modo];
+  const n = gana ? calcEstrellas(N.max) : 0;
+  const yaLibre = N.sig ? (store.get('estrellas', {})[G.modo] || 0) > 0 : true;
+  if (gana) estrellas(G.modo, n);
+  const sig = gana && N.sig ? NIVEL[N.sig] : null;
+  const consejo = N.remate
+    ? 'Revisa el repaso: la consonante vale el doble y los remates cuentan doble. Guarda el comodín para un remate.'
+    : 'Revisa el repaso: las consonantes valen el doble que las asonantes.';
   s.innerHTML = finalHTML({
-    titulo: gana ? '¡La calle es tuya!' : 'No fue tu batalla', poseYo: gana ? 'celebra' : 'frustra', poseRiv: gana ? 'frustra' : 'celebra', n,
-    sub: (gana ? (n === 3 ? 'Batalla perfecta o casi: puras consonantes.' : 'Le ganaste al novato. Busca más consonantes para sumar estrellas.') : 'Revisa el repaso: las consonantes valen el doble que las asonantes.') + nota,
-    botones: `<button class="btn" type="button" id="f-1">Jugar de nuevo</button><button class="btn sec" type="button" id="f-3">Menú</button>` });
+    titulo: gana ? (G.modo === 'jefe' ? '¡Eres el nuevo Jefe de la plaza!' : '¡La calle es tuya!') : 'No fue tu batalla',
+    poseYo: gana ? 'celebra' : 'frustra', poseRiv: gana ? 'frustra' : 'celebra', n,
+    sub: (gana ? (n === 3 ? 'Batalla perfecta o casi: puras consonantes.' : `Le ganaste ${N.al}. Busca más consonantes para sumar estrellas.`)
+      + (sig && !yaLibre ? ` Desbloqueaste: ${sig.nombre}.` : '') : consejo) + nota,
+    botones: `${sig ? `<button class="btn" type="button" id="f-sig">Retar ${sig.al}</button>` : ''}
+      <button class="btn ${sig ? 'sec' : ''}" type="button" id="f-1">${gana ? 'Jugar de nuevo' : 'Revancha'}</button>
+      <button class="btn sec" type="button" id="f-share">Compartir resultado</button>
+      <button class="btn sec" type="button" id="f-3">Menú</button>${ctaVotarHTML()}` });
   pantalla('final');
-  $('#f-1').onclick = () => jugar('novato'); $('#f-3').onclick = menu;
+  const modo = G.modo;
+  if (sig) $('#f-sig').onclick = () => jugar(N.sig);
+  $('#f-1').onclick = () => jugar(modo); $('#f-3').onclick = menu;
+  $('#f-share').onclick = () => compartirResultado(gana, n);
   const rs = resumenPartida(gana ? 'ganó' : 'perdió'); track('batalla_end', rs); activarOpinion(rs);
 }
 /* ================= calentamiento libre (palabras del Freestyle Lab) ================= */
@@ -1087,6 +1184,7 @@ async function calentar(nivelElegido) {
         <button class="btn sec" type="button" id="c-3">Retar al rival novato</button>
         <button class="btn sec" type="button" id="c-4">Menú</button>
       </div>
+      ${ctaVotarHTML()}
       ${opinionHTML()}`;
     pantalla('ronda');
     $('#c-1').onclick = () => calentar(nivel); $('#c-2').onclick = () => jugar('practica');
@@ -1113,6 +1211,8 @@ function seguir() {
 /* ================= arranque ================= */
 $('#nv-practica').addEventListener('click', () => jugar('practica'));
 $('#nv-novato').addEventListener('click', () => jugar('novato'));
+$('#nv-medio').addEventListener('click', () => jugar('medio'));
+$('#nv-jefe').addEventListener('click', () => jugar('jefe'));
 $('#nv-calentamiento').addEventListener('click', () => calentar());
 $('#btn-escuchar').addEventListener('click', () => { audioInit(); alternarPrevia(); });
 $('#beat-lista').addEventListener('click', e => {

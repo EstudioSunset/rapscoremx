@@ -214,5 +214,93 @@
   "rivalReplica": [
     {"pie": "Pensaste que ganabas pero sigo", "ref": "prendido", "verso": "y tú en esta réplica ya estás", "w": "perdido", "t": "c", "ok": true},
     {"pie": "Esta réplica es mía, la gano sin", "ref": "bronca", "verso": "y tú con esas rimas te llamas", "w": "concha", "t": "a", "ok": false}
+  ],
+  "medio": [
+    [
+      {"id":"M1","pie":"Te traigo una rima que te deja","ref":"preso","verso":["y tú en esta plaza no tienes ningún",""],"ops":[{"w":"peso","t":"c","ok":true,"why":"no tener peso es no importar: aquí no cuentas"},{"w":"queso","t":"c","ok":false,"why":"\"no tienes ningún queso\" no viene al caso"},{"w":"respeto","t":"a","ok":true,"why":"en la plaza nadie te respeta; solo coinciden las vocales e-o"},{"w":"termo","t":"a","ok":false,"why":"\"no tienes ningún termo\" no significa nada"}]},
+      {"id":"M2","pie":"Llegaste a la plaza pidiendo","ref":"permiso","verso":["y yo con esta rima te mando directo al",""],"ops":[{"w":"piso","t":"c","ok":true,"why":"mandarte al piso es tumbarte"},{"w":"aviso","t":"c","ok":false,"why":"\"te mando directo al aviso\" no tiene sentido"},{"w":"olvido","t":"a","ok":true,"why":"nadie se va a acordar de ti; solo coinciden i-o"},{"w":"silbido","t":"a","ok":false,"why":"\"te mando al silbido\" no significa nada"}]},
+      {"id":"M3","pie":"Hablas de dinero, de lujo y de","ref":"cadena","verso":["pero aquí lo que cuenta es la rima que",""],"ops":[{"w":"suena","t":"c","ok":true,"why":"en la batalla vale la rima que suena, no la cadena"},{"w":"cena","t":"c","ok":false,"why":"\"la rima que cena\" no tiene sentido"},{"w":"pesa","t":"a","ok":true,"why":"una rima que pesa es una rima con fuerza; solo coinciden e-a"},{"w":"seca","t":"a","ok":false,"why":"\"la rima que seca\" no viene al caso"}]},
+      {"id":"M4","pie":"Me dicen el rey y aquí traigo","ref":"corona","verso":["y tú en esta batalla te quedas en la",""],"ops":[{"w":"lona","t":"c","ok":true,"why":"quedarse en la lona es caer noqueado, como en el box"},{"w":"dona","t":"c","ok":false,"why":"\"te quedas en la dona\" no significa nada"},{"w":"cola","t":"a","ok":true,"why":"te quedas hasta atrás de la fila; solo coinciden o-a"},{"w":"sopa","t":"a","ok":false,"why":"\"te quedas en la sopa\" no tiene sentido"}]}
+    ],
+    [
+      {"id":"M5","pie":"Tú hablas y hablas pero sin","ref":"razón","verso":["y en esta batalla yo soy el",""],"ops":[{"w":"patrón","t":"c","ok":true,"why":"el patrón es el que manda"},{"w":"melón","t":"c","ok":false,"why":"\"yo soy el melón\" no viene al caso"},{"w":"señor","t":"a","ok":true,"why":"el señor de la plaza; en las agudas solo cuenta la última vocal: o"},{"w":"tambor","t":"a","ok":false,"why":"\"yo soy el tambor\" no significa nada"}]},
+      {"id":"M6","pie":"Tú le rezas a la virgen pidiendo","ref":"suerte","verso":["pero yo no la necesito porque soy más",""],"ops":[{"w":"fuerte","t":"c","ok":true,"why":"el fuerte no necesita suerte"},{"w":"muerte","t":"c","ok":false,"why":"\"soy más muerte\" no tiene sentido"},{"w":"valiente","t":"a","ok":true,"why":"el valiente no depende de la suerte; en el diptongo \"ie\" cuenta la e"},{"w":"nieve","t":"a","ok":false,"why":"\"soy más nieve\" no significa nada"}]},
+      {"id":"M7","pie":"Yo vine a esta plaza a escribir mi","ref":"historia","verso":["y tú ni con suerte me quitas la",""],"ops":[{"w":"victoria","t":"c","ok":true,"why":"no me vas a ganar"},{"w":"zanahoria","t":"c","ok":false,"why":"\"me quitas la zanahoria\" no viene al caso"},{"w":"corona","t":"a","ok":true,"why":"no me quitas el primer lugar; en \"historia\" la \"ia\" suena como a"},{"w":"momia","t":"a","ok":false,"why":"\"me quitas la momia\" no significa nada"}]},
+      {"id":"M8","pie":"Esta es mi colonia, este es mi","ref":"lugar","verso":["y si vienes a retarme te quedas sin",""],"ops":[{"w":"hogar","t":"c","ok":true,"why":"te corro de mi colonia"},{"w":"pajar","t":"c","ok":false,"why":"\"te quedas sin pajar\" no tiene sentido"},{"w":"capital","t":"a","ok":true,"why":"te quedas sin dinero; en las agudas solo cuenta la última vocal: a"},{"w":"coral","t":"a","ok":false,"why":"\"te quedas sin coral\" no significa nada"}]}
+    ],
+    [
+      {"id":"M9","pie":"Yo aprendí en la calle, no en una","ref":"escuela","verso":["y tus rimas son tan viejas que las rapea tu",""],"ops":[{"w":"abuela","t":"c","ok":true,"why":"tus rimas son de otra época"},{"w":"canela","t":"c","ok":false,"why":"\"las rapea tu canela\" no significa nada"},{"w":"maestra","t":"a","ok":true,"why":"tus rimas parecen de la escuela; solo coinciden e-a"},{"w":"mesa","t":"a","ok":false,"why":"\"las rapea tu mesa\" no tiene sentido"}]},
+      {"id":"M10","pie":"Yo salgo a la tarima y le saco","ref":"brillo","verso":["y tú contra mí eres un rival muy",""],"ops":[{"w":"sencillo","t":"c","ok":true,"why":"eres un rival fácil"},{"w":"amarillo","t":"c","ok":false,"why":"\"un rival muy amarillo\" no viene al caso"},{"w":"chico","t":"a","ok":true,"why":"eres poca cosa; solo coinciden i-o"},{"w":"pico","t":"a","ok":false,"why":"\"un rival muy pico\" no significa nada"}]},
+      {"id":"M11","pie":"Esto lo traigo adentro, me sale de la","ref":"garganta","verso":["y a ti con esas rimas ni tu madre te",""],"ops":[{"w":"aguanta","t":"c","ok":true,"why":"nadie te soporta, ni tu mamá"},{"w":"manta","t":"c","ok":false,"why":"\"ni tu madre te manta\" no existe"},{"w":"habla","t":"a","ok":true,"why":"ni tu mamá te dirige la palabra; solo coinciden a-a"},{"w":"casa","t":"a","ok":false,"why":"\"ni tu madre te casa\" no tiene sentido"}]},
+      {"id":"M12","pie":"Tú quieres competir, pero no estás a mi","ref":"nivel","verso":["y tú con esas rimas te quedas en el",""],"ops":[{"w":"papel","t":"c","ok":true,"why":"quedarse en el papel es quedarse en la teoría: no lo cumples"},{"w":"pastel","t":"c","ok":false,"why":"\"te quedas en el pastel\" no significa nada"},{"w":"ayer","t":"a","ok":true,"why":"te quedaste en el pasado; en las agudas solo cuenta la última vocal: e"},{"w":"bebé","t":"a","ok":false,"why":"\"te quedas en el bebé\" no tiene sentido"}]}
+    ]
+  ],
+  "jefe": [
+    [
+      {"id":"J1","pie":"Tú te crees muy bueno, te sientes","ref":"fantástico","verso":["pero ese flow que traes suena bien",""],"ops":[{"w":"plástico","t":"c","ok":true,"why":"suena falso, de plástico"},{"w":"gimnástico","t":"c","ok":false,"why":"\"suena bien gimnástico\" no significa nada"},{"w":"trágico","t":"a","ok":true,"why":"suena fatal; en las esdrújulas cuentan las vocales a-i-o"},{"w":"náutico","t":"a","ok":false,"why":"\"suena bien náutico\" no viene al caso"}]},
+      {"id":"J2","pie":"Te subes a la tarima y te abuchea la","ref":"tribuna","verso":["tú no naciste pa' esto, te faltó la",""],"ops":[{"w":"fortuna","t":"c","ok":true,"why":"no tuviste la suerte de nacer con talento"},{"w":"aceituna","t":"c","ok":false,"why":"\"te faltó la aceituna\" no viene al caso"},{"w":"cultura","t":"a","ok":true,"why":"te falta saber de hip hop; solo coinciden u-a"},{"w":"pulga","t":"a","ok":false,"why":"\"te faltó la pulga\" no significa nada"}]},
+      {"id":"J3","pie":"Te quedas congelado con una sola","ref":"mirada","verso":["y cuando te toca rimar no se te ocurre",""],"ops":[{"w":"nada","t":"c","ok":true,"why":"te quedas en blanco"},{"w":"granada","t":"c","ok":false,"why":"\"no se te ocurre granada\" no tiene sentido"},{"w":"palabra","t":"a","ok":true,"why":"no te sale ni una palabra; solo coinciden a-a"},{"w":"plancha","t":"a","ok":false,"why":"\"no se te ocurre plancha\" no significa nada"}]},
+      {"id":"J4","pie":"Mi nombre en la plaza ya se volvió","ref":"leyenda","verso":["y tú ni en tus sueños entras en esta",""],"ops":[{"w":"contienda","t":"c","ok":true,"why":"no estás a la altura de esta competencia"},{"w":"merienda","t":"c","ok":false,"why":"\"entras en esta merienda\" no viene al caso"},{"w":"pelea","t":"a","ok":true,"why":"no te alcanza para esta pelea; solo coinciden e-a"},{"w":"cereza","t":"a","ok":false,"why":"\"entras en esta cereza\" no significa nada"}]}
+    ],
+    [
+      {"id":"J5","pie":"En esta batalla yo voy a ser tu","ref":"verdugo","verso":["y te voy a exprimir hasta sacarte el",""],"ops":[{"w":"jugo","t":"c","ok":true,"why":"sacarle el jugo a algo es exprimirlo hasta el final"},{"w":"tarugo","t":"c","ok":false,"why":"\"sacarte el tarugo\" no tiene sentido"},{"w":"orgullo","t":"a","ok":true,"why":"te quito el orgullo; solo coinciden u-o"},{"w":"burro","t":"a","ok":false,"why":"\"sacarte el burro\" no significa nada"}]},
+      {"id":"J6","pie":"Mi rima nunca muere, mi rima es","ref":"inmortal","verso":["y tú con esas barras terminas en el",""],"ops":[{"w":"hospital","t":"c","ok":true,"why":"te dejo tan mal que terminas internado"},{"w":"portal","t":"c","ok":false,"why":"\"terminas en el portal\" no viene al caso"},{"w":"diván","t":"a","ok":true,"why":"terminas en el diván del psicólogo; en las agudas solo cuenta la última vocal: a"},{"w":"volcán","t":"a","ok":false,"why":"\"terminas en el volcán\" no tiene sentido"}]},
+      {"id":"J7","pie":"Cada palabra mía la escupo con","ref":"veneno","verso":["y tú en esta plaza nomás eres",""],"ops":[{"w":"relleno","t":"c","ok":true,"why":"eres de relleno: estás de más"},{"w":"trueno","t":"c","ok":false,"why":"\"nomás eres trueno\" no significa nada"},{"w":"eco","t":"a","ok":true,"why":"solo repites lo que otros dicen; solo coinciden e-o"},{"w":"queso","t":"a","ok":false,"why":"\"nomás eres queso\" no viene al caso"}]},
+      {"id":"J8","pie":"Yo vengo a la plaza a reclamar mi","ref":"trono","verso":["y tú cuando rimas te sales del",""],"ops":[{"w":"tono","t":"c","ok":true,"why":"salirse del tono es desafinar"},{"w":"mono","t":"c","ok":false,"why":"\"te sales del mono\" no tiene sentido"},{"w":"coro","t":"a","ok":true,"why":"te sales del coro: desentonas; solo coinciden o-o"},{"w":"codo","t":"a","ok":false,"why":"\"te sales del codo\" no significa nada"}]}
+    ],
+    [
+      {"id":"J9","pie":"Yo rimo con el alma y rimo con","ref":"conciencia","verso":["y tú con esas barras le faltas el respeto a la",""],"ops":[{"w":"audiencia","t":"c","ok":true,"why":"tus barras son una falta de respeto para el público"},{"w":"decadencia","t":"c","ok":false,"why":"\"le faltas el respeto a la decadencia\" no tiene sentido"},{"w":"escena","t":"a","ok":true,"why":"le faltas el respeto a la escena del rap; solo coinciden e-a"},{"w":"cerveza","t":"a","ok":false,"why":"\"le faltas el respeto a la cerveza\" no viene al caso"}]},
+      {"id":"J10","pie":"Represento a mi barrio y a mi","ref":"bandera","verso":["y a ti ni te dejan pasar de la",""],"ops":[{"w":"frontera","t":"c","ok":true,"why":"no te dejan ni entrar a la plaza"},{"w":"pradera","t":"c","ok":false,"why":"\"pasar de la pradera\" no viene al caso"},{"w":"puerta","t":"a","ok":true,"why":"no te dejan ni entrar; en el diptongo \"ue\" cuenta la e"},{"w":"selva","t":"a","ok":false,"why":"\"pasar de la selva\" no tiene sentido"}]},
+      {"id":"J11","pie":"Donde piso la tarima siempre dejo","ref":"huella","verso":["y tú por más que brillas nunca vas a ser",""],"ops":[{"w":"estrella","t":"c","ok":true,"why":"nunca vas a destacar"},{"w":"botella","t":"c","ok":false,"why":"\"nunca vas a ser botella\" no significa nada"},{"w":"leyenda","t":"a","ok":true,"why":"nunca te van a recordar; solo coinciden e-a"},{"w":"lenteja","t":"a","ok":false,"why":"\"nunca vas a ser lenteja\" no viene al caso"}]},
+      {"id":"J12","pie":"Esto se acabó, compa, te llegó tu","ref":"final","verso":["y aquí se termina tu carrera",""],"ops":[{"w":"musical","t":"c","ok":true,"why":"se acabó tu carrera en la música"},{"w":"tropical","t":"c","ok":false,"why":"\"tu carrera tropical\" no tiene sentido"},{"w":"fugaz","t":"a","ok":true,"why":"tu carrera duró un suspiro; en las agudas solo cuenta la última vocal: a"},{"w":"capaz","t":"a","ok":false,"why":"\"tu carrera capaz\" no significa nada"}]}
+    ]
+  ],
+  "rivalMedio": [
+    [
+      {"pie":"Llegaste temblando, se te nota en la","ref":"cara","verso":"y yo con una rima te dejo sin","w":"nada","t":"a","ok":true},
+      {"pie":"Yo soy del barrio bravo, yo vengo del","ref":"Bajío","verso":"y tú en la tarima te quedas bien","w":"frío","t":"c","ok":true},
+      {"pie":"Mi flow es pesado, mi flow es de","ref":"acero","verso":"y tú con tus rimas pareces","w":"sombrero","t":"c","ok":false},
+      {"pie":"Te lo digo de frente y te lo digo","ref":"claro","verso":"contra mí no hay chance, aquí yo soy el más","w":"sabio","t":"a","ok":true}
+    ],
+    [
+      {"pie":"Dices que eres grande y yo no te","ref":"creo","verso":"lo único que tienes es un flow bien","w":"feo","t":"c","ok":true},
+      {"pie":"Traigo esta pelea bien","ref":"controlada","verso":"y tú en la tarima pareces","w":"ensalada","t":"c","ok":false},
+      {"pie":"Esto es freestyle, no es","ref":"recitado","verso":"y tú te la aprendiste, te traes","w":"pescado","t":"c","ok":false},
+      {"pie":"En esta plaza todos saben quién es el","ref":"mejor","verso":"y tú cuando me escuchas te mueres de","w":"dolor","t":"c","ok":true}
+    ],
+    [
+      {"pie":"Ya se acabó el tiempo, ya te toca","ref":"perder","verso":"y yo me llevo el premio, lo vas a","w":"ver","t":"c","ok":true},
+      {"pie":"Tú nunca has ganado ni una sola","ref":"vez","verso":"y hoy otra vez te vas con la cara de","w":"nuez","t":"c","ok":false},
+      {"pie":"Yo vengo a ganar y a dejarte","ref":"callado","verso":"y tú vas a salir de aquí bien","w":"manso","t":"a","ok":true},
+      {"pie":"Con esta te despido, te mando a","ref":"dormir","verso":"y mañana en el barrio nadie te va a","w":"seguir","t":"c","ok":true}
+    ]
+  ],
+  "rivalJefe": [
+    [
+      {"pie":"Vienes muy valiente, pero te falta","ref":"experiencia","verso":"y yo te voy a dar una clase de","w":"paciencia","t":"c","ok":true},
+      {"pie":"Te miro de frente y te veo","ref":"nervioso","verso":"yo soy el más fino, el más","w":"peligroso","t":"c","ok":true},
+      {"pie":"Mi rima es un rayo que cae sin","ref":"aviso","verso":"y tú en la tarima te quedas","w":"fijo","t":"a","ok":true},
+      {"pie":"Esta es mi plaza y aquí soy el","ref":"dueño","verso":"y tú con esas barras me provocas","w":"sueño","t":"c","ok":true}
+    ],
+    [
+      {"pie":"Cada que yo rimo se calienta el","ref":"ambiente","verso":"y tú cuando rimas se duerme la","w":"gente","t":"c","ok":true},
+      {"pie":"Tengo más barras que una","ref":"cárcel","verso":"y tú con tus rimas no sales del","w":"parque","t":"a","ok":true},
+      {"pie":"Yo no improviso, yo hago","ref":"arte","verso":"y tú con esas rimas no das ni una","w":"parte","t":"c","ok":false},
+      {"pie":"Mi flow te atropella como un","ref":"tren","verso":"y tú en esta plaza no te ves ni","w":"bien","t":"c","ok":true}
+    ],
+    [
+      {"pie":"Se te acaba el tiempo, se te acaba la","ref":"cuerda","verso":"y tú te enredas solo, se te va la","w":"letra","t":"a","ok":true},
+      {"pie":"Yo vengo del barrio donde nadie se","ref":"raja","verso":"y tú en la batalla pareces","w":"navaja","t":"c","ok":false},
+      {"pie":"Mi rima es de oro y la tuya de","ref":"cartón","verso":"y aquí en la plaza yo soy el","w":"patrón","t":"c","ok":true},
+      {"pie":"Te gané en el barrio y te gano en la","ref":"cancha","verso":"y a ti te dejo nomás la","w":"revancha","t":"c","ok":true}
+    ]
+  ],
+  "rivalReplicaMedio": [
+    {"pie":"Esto no se acaba hasta que yo lo","ref":"diga","verso":"y tú en esta réplica te quedas sin","w":"vida","t":"a","ok":true},
+    {"pie":"Me sobra la fuerza, me sobra la","ref":"energía","verso":"y tú te vas a casa sin tu","w":"alegría","t":"c","ok":true}
+  ],
+  "rivalReplicaJefe": [
+    {"pie":"Llegamos a la réplica y estoy","ref":"invicto","verso":"y a ti te sentencio, te dicto el","w":"veredicto","t":"c","ok":true},
+    {"pie":"Te gano en la réplica y te gano","ref":"entero","verso":"y tú te vas a casa sin un solo","w":"peso","t":"a","ok":true}
   ]
 }

@@ -21,20 +21,28 @@ const html = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Batalla de Freestyle · RapScore MX</title>
-<meta name="description" content="Completa el verso con la rima que tiene sentido antes de que se acabe el beat. Practica o rétale al rival novato. Versión de prueba de RapScore MX.">
+<meta name="description" content="Juego de freestyle gratis: completa el verso con la rima que tiene sentido antes de que se acabe el beat. Vence al novato, al rival medio y al Jefe. Beats originales de RapScore MX.">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="canonical" href="https://www.rapscoremx.com/batalla/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RapScore MX">
 <meta property="og:locale" content="es_MX">
-<meta property="og:title" content="Batalla de Freestyle: ¿le ganas al rival novato?">
-<meta property="og:description" content="Completa el verso con la rima correcta antes de que se acabe el beat. Juego de prueba de RapScore MX.">
+<meta property="og:title" content="Batalla de Freestyle: ¿le ganas al Jefe?">
+<meta property="og:description" content="Completa el verso con la rima correcta antes de que se acabe el beat. Tres rivales, remates que valen doble y un comodín. Juega gratis en RapScore MX.">
 <meta property="og:url" content="https://www.rapscoremx.com/batalla/">
 <meta property="og:image" content="https://www.rapscoremx.com/batalla/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Dos raperos de caricatura frente a frente con el título Batalla de Freestyle">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Batalla de Freestyle","url":"https://www.rapscoremx.com/batalla/",
+ "description":"Juego de freestyle en español: completa el verso con la palabra que rima y tiene sentido antes de que se acabe el beat. Tres rivales: novato, medio y el Jefe.",
+ "inLanguage":"es-MX","genre":["Música","Ritmo","Palabras"],"gamePlatform":"Navegador web","applicationCategory":"Game","operatingSystem":"Cualquiera",
+ "image":"https://www.rapscoremx.com/batalla/og.jpg","isAccessibleForFree":true,
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"MXN"},
+ "publisher":{"@type":"Organization","name":"RapScore MX","url":"https://www.rapscoremx.com/"}}
+</script>
 <link rel="icon" type="image/png" href="../images/rs-favicon.png">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: border-box; height: 100%; }
