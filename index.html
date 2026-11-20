@@ -17,8 +17,15 @@
 <meta property="og:title" content="RapScore MX — El ranking del rap mexicano lo decides tú">
 <meta property="og:description" content="Una comunidad hecha por amantes de la música y la cultura hip hop mexicana. Califica a tus raperos del 1 al 10: tu voto mueve el ranking.">
 <meta property="og:url" content="https://www.rapscoremx.com/">
-<meta property="og:image" content="https://www.rapscoremx.com/images/rapscore-logo.png">
+<meta property="og:image" content="https://www.rapscoremx.com/images/og-rapscore.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="RapScore MX: el ranking del rap mexicano. Califica a tus raperos del 1 al 10.">
+<meta property="og:locale" content="es_MX">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RapScore MX — El ranking del rap mexicano lo decides tú">
+<meta name="twitter:image" content="https://www.rapscoremx.com/images/og-rapscore.jpg">
+<meta name="theme-color" content="#0a0a0a">
 <link rel="icon" type="image/png" href="images/rs-favicon.png">
 <!-- ═══ MEDICIÓN: GA4 (vía Firebase Analytics, G-D6QMGC5N67) + Microsoft Clarity ═══ -->
 <script>
@@ -71,7 +78,10 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
   }, true);
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Saira+Stencil+One&family=Space+Mono:wght@400;700&family=Barlow:wght@400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Solo los pesos que se usan (antes se bajaban 11 variantes; ahora 7) -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Saira+Stencil+One&family=Space+Mono:wght@400;700&family=Barlow:wght@400;700&family=Syne:wght@700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0a0a0a;
@@ -81,7 +91,7 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
   --accent: #ff3c00;
   --accent2: #ffcc00;
   --text: #f0ede6;
-  --muted: #666;
+  --muted: #8f8f8f; /* antes #666: no se leía en celular (contraste 3.4:1); ahora ~6:1 */
   --green: #00e676;
   --purple: #b388ff;
 }
@@ -372,6 +382,8 @@ input[type=search].search-input::-webkit-search-decoration { -webkit-appearance:
 .artist-table { width: 100%; }
 .wait-section { margin-top: 56px; padding-top: 28px; border-top: 2px dashed var(--border); }
 .wait-note { font-size: 12px; line-height: 1.8; color: var(--muted); margin: -4px 0 18px; max-width: 760px; }
+.rank-notice { margin: 14px 0 6px; }
+.rank-notice b { color: var(--text); }
 .wait-cta { background: none; border: none; color: var(--accent); font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; cursor: pointer; padding: 0 0 0 6px; text-decoration: underline; }
 .wait-table .artist-row { opacity: .82; }
 .wait-table .artist-row:hover { opacity: 1; }
@@ -1236,6 +1248,7 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 
   /* Section header */
   .section-header { padding: 20px 14px 14px; }
+  .wait-note { padding: 0 14px; }   /* antes el texto quedaba pegado a la orilla en celular */
   .section-title { font-size: 28px; }
 
   /* Sort row */
@@ -1910,6 +1923,7 @@ body .pop-list li { font-size: 15px; }
     <div class="section-title">Ranking General</div>
     <div class="section-count" id="countLabel">50 artistas</div>
   </div>
+  <p class="wait-note rank-notice" id="rankNotice" style="display:none"></p>
 
   <!-- SORT ROW -->
   <div class="sort-row">
@@ -2149,10 +2163,35 @@ function levelFor(points) {
 }
 function fmtTotal(t) { return (Number(t) / 10).toFixed(1); }               // 86.5 → "8.7"
 function fmtScore(t, votes) { return votes ? fmtTotal(t) : '—'; }           // sin votos no hay número
-// Orden del ranking: primero los que tienen votos, luego por score, votos y nombre
+// Posición FIRME = al menos MIN_VOTES_FIRM calificaciones. Con menos, la posición es PROVISIONAL:
+// con 1–4 votos una sola cuenta mueve el promedio 20% o más, así que no es "la opinión de la comunidad".
+// No cambia el cálculo del score: solo el orden (firmes > provisionales > sin calificar) y la etiqueta.
+const MIN_VOTES_FIRM = 5;
+function rankTier(a) { return a.votes >= MIN_VOTES_FIRM ? 2 : a.votes > 0 ? 1 : 0; }
+function votesLabel(v, sep = ' ') {
+  if (!v) return 'sin' + sep + 'calificar';
+  return v.toLocaleString('es-MX') + sep + 'voto' + (v === 1 ? '' : 's') + (v < MIN_VOTES_FIRM ? ' · provisional' : '');
+}
+// Orden del ranking: firmes, luego provisionales, luego sin votos; dentro de cada grupo por score, votos y nombre
 function rankCmp(a, b) {
-  return ((b.votes > 0) - (a.votes > 0)) || (b.total - a.total) || (b.votes - a.votes)
+  return (rankTier(b) - rankTier(a)) || (b.total - a.total) || (b.votes - a.votes)
     || ((a.order ?? 0) - (b.order ?? 0)) || a.name.localeCompare(b.name, 'es');
+}
+// Aviso honesto mientras el ranking arranca (menos de 5 artistas con posición firme).
+function rankingIsEarly() { return ARTISTS.filter(a => a.votes >= MIN_VOTES_FIRM).length < 5; }
+function updateRankNotice() {
+  const early = rankingIsEarly();
+  const rated = ARTISTS.filter(a => a.votes > 0).length;
+  const total = ARTISTS.reduce((s, a) => s + (a.votes || 0), 0);
+  const n = document.getElementById('rankNotice');
+  if (n) {
+    n.style.display = early && window.RS_STATS_LOADED ? '' : 'none';
+    n.innerHTML = `<b>Ranking en arranque.</b> Llevamos ${total.toLocaleString('es-MX')} calificaciones para ${rated} raperos. Con menos de ${MIN_VOTES_FIRM} votos la posición es <b>provisional</b>: tu calificación cuenta mucho.`;
+  }
+  const sub = document.querySelector('#nhTopTitle + .nh-head-sub');
+  if (sub) sub.textContent = early
+    ? `Posiciones provisionales: casi nadie llega a ${MIN_VOTES_FIRM} votos todavía. Tus votos las definen.`
+    : 'Los artistas mejor calificados. Tus votos los mueven.';
 }
 window.LEVELS = LEVELS; window.levelFor = levelFor;
 window.POINTS_RATING = POINTS_RATING; window.POINTS_PROPOSAL = POINTS_PROPOSAL;
@@ -2474,6 +2513,7 @@ function refreshTable() {
     renderTable(currentData);
     renderWaiting(list.filter(a => !top.has(a.slug)), currentData.length);
   }
+  updateRankNotice();
   const tb = document.getElementById('artistTable');
   if (tb && !currentData.length) tb.innerHTML = `<div class="vp-empty" style="padding:24px 16px">No encontramos artistas con ese nombre o filtro.</div>`;
 }
@@ -2595,7 +2635,7 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
           <span class="score-val">${fmtScore(artist.scores.hooks, artist.votes)}</span>
           <div class="score-bar"><div class="score-fill" style="width:${artist.votes ? artist.scores.hooks : 0}%"></div></div>
         </div>
-        <div class="total-cell"><span class="total-score">${fmtScore(artist.total, artist.votes)}</span><span class="total-votes">${artist.votes ? artist.votes + ' voto' + (artist.votes===1?'':'s') : 'sin calificar'}</span></div>
+        <div class="total-cell"><span class="total-score">${fmtScore(artist.total, artist.votes)}</span><span class="total-votes">${votesLabel(artist.votes)}</span></div>
         <div class="action-cell">
           <button class="expand-btn" data-name="${artist.name}" onclick="toggleExpand(event,'${artist.name}')">▾</button>
         </div>
@@ -2714,16 +2754,33 @@ function rateButtons(c, val) {
   return Array.from({ length: 10 }, (_, k) => k + 1).map(n =>
     `<button type="button" class="rate-n${val === n ? ' on' : ''}" aria-pressed="${val === n}" aria-label="${CAT_LABELS[c]} ${n}" onclick="ratePick(this, ${n})">${n}</button>`).join('');
 }
+// Borrador de calificación: lo que la persona va tocando se guarda en la sesión del navegador.
+// Así no se pierde cuando la caja se vuelve a dibujar (llegan los votos, inicia sesión, confirma su correo).
+// Solo vive en esta pestaña (sessionStorage) y se borra al guardar el voto.
+const RATE_DRAFT = (() => { try { return JSON.parse(sessionStorage.getItem('rs_rate_draft') || '{}') || {}; } catch (e) { return {}; } })();
+function saveRateDraft() { try { sessionStorage.setItem('rs_rate_draft', JSON.stringify(RATE_DRAFT)); } catch (e) {} }
+function clearRateDraft(slug) { delete RATE_DRAFT[slug]; saveRateDraft(); }
+window.clearRateDraft = clearRateDraft;
 function ratePick(btn, n) {
   const row = btn.closest('.rate-row');
   row.querySelectorAll('.rate-n').forEach(b => { const on = b === btn; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
   row.dataset.val = n; row.classList.remove('missing');
   row.querySelector('.rate-val').textContent = n;
+  const slug = btn.closest('.rate-box')?.dataset.slug;
+  if (slug) {
+    if (!RATE_DRAFT[slug]) {
+      RATE_DRAFT[slug] = {};
+      rsTrack('vote_start', { artist_slug: slug });
+    }
+    RATE_DRAFT[slug][row.dataset.cat] = n;
+    saveRateDraft();
+  }
 }
 function buildRateBox(slug, name) {
   const mine = typeof window.getMyRating === 'function' ? window.getMyRating(slug) : null;
+  const draft = RATE_DRAFT[slug] || {};
   const sliders = CATEGORIES.map(c => {
-    const val = mine ? toTen(mine[c]) : 0;
+    const val = draft[c] || (mine ? toTen(mine[c]) : 0);
     return `
     <div class="rate-row" data-cat="${c}" data-val="${val || ''}">
       <div class="rate-row-head"><span class="rate-cat">${CAT_LABELS[c]}</span><output class="rate-val">${val || '–'}</output></div>
@@ -2766,7 +2823,7 @@ function buildPanel(artist) {
         <div class="ss-item"><span class="ss-label">Votos</span><span class="ss-val">${artist.votes}</span><span class="ss-sub">${artist.votes ? 'de la comunidad' : 'Sé el primero'}</span></div>
       </div>
       <div class="cats-grid">${cats}</div>
-      <p class="ss-note">Escala del 1 al 10. Con pocos votos el score se acerca al promedio de todos los votos del sitio, para que un solo voto no lo mande al #1; mientras más votos tiene, más pesa lo que vota la gente.</p>
+      <p class="ss-note">Escala del 1 al 10. Con pocos votos el score se acerca al promedio de todos los votos del sitio, para que un solo voto no lo mande al #1; mientras más votos tiene, más pesa lo que vota la gente. Con menos de ${MIN_VOTES_FIRM} votos su lugar es provisional.</p>
       ${buildRateBox(artist.slug, artist.name)}
       <div class="vote-section">
       </div>
@@ -2882,12 +2939,12 @@ function searchArtists(q) {
 }
 
 // ─── TOAST ──────────────────────────────────────────────────
-function showToast(msg) {
+function showToast(msg, ms = 2500) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(t._timer);
-  t._timer = setTimeout(()=>t.classList.remove('show'), 2500);
+  t._timer = setTimeout(()=>t.classList.remove('show'), ms);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -3282,7 +3339,7 @@ let shareArtist = '', sessionNewVotes = 0;
 const SHARE_MILESTONES = [1, 5, 10, 25];
 function shareMessage() {
   return shareArtist
-    ? `Acabo de calificar a ${shareArtist} en RapScore MX 🎤 El ranking del rap mexicano lo decide la comunidad. Entra y defiende a tus raperos 👉`
+    ? `Acabo de calificar a ${shareArtist} en RapScore MX 🎤 ¿Tú cuánto le pones del 1 al 10? El ranking del rap mexicano lo decide la comunidad 👉`
     : `El ranking del rap mexicano lo decide la comunidad 🎤 Entra a RapScore MX y defiende a tus raperos 👉`;
 }
 function openShare(artistName, isNew) {
@@ -3297,8 +3354,25 @@ function openShare(artistName, isNew) {
   document.getElementById('shareModal').classList.add('open');
 }
 function closeShare() { document.getElementById('shareModal').classList.remove('open'); }
+// Tecla Esc cierra la ventana que esté abierta (accesibilidad y teclado en compu).
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const open = id => document.getElementById(id)?.classList.contains('open');
+  if (open('authModal') && window.closeAuthModal) window.closeAuthModal();
+  else if (open('shareModal')) closeShare();
+  else if (open('welcomeModal')) closeWelcome();
+  else if (open('ajusteModal')) closeAjuste();
+  else if (open('laModal')) closeLaModal();
+});
 async function shareTo(where) {
-  const text = shareMessage(), url = VOTE_URL;
+  // Si compartes después de calificar a alguien, el link abre directo a ese rapero para calificarlo.
+  // Los utm_* dejan ver en GA4 de qué red llegan las visitas compartidas.
+  const sSlug = shareArtist ? slugify(shareArtist) : '';
+  const utm = `utm_source=${encodeURIComponent(where)}&utm_medium=share&utm_campaign=${sSlug ? 'voto_artista' : 'sitio'}`;
+  const text = shareMessage();
+  const url = sSlug && ARTISTS.some(a => a.slug === sSlug)
+    ? `https://www.rapscoremx.com/?calificar=${encodeURIComponent(sSlug)}&${utm}`
+    : `${VOTE_URL}?${utm}`;
   rsTrack('share', { method: where, content_type: 'ranking', item_id: shareArtist ? slugify(shareArtist) : 'sitio' });
   const enc = encodeURIComponent;
   if (where === 'whatsapp') window.open('https://wa.me/?text=' + enc(text + ' ' + url), '_blank', 'noopener');
@@ -5446,6 +5520,7 @@ function setAuthMode(mode) {
 function openAuthModal(mode = "login") {
   setAuthMode(mode);
   document.getElementById("authModal").classList.add("open");
+  rsTrack("signup_start", { mode });   // abrió la ventana de entrar/registrarse (embudo: signup_start → sign_up / login)
 }
 function closeAuthModal() {
   document.getElementById("authModal").classList.remove("open");
@@ -5477,6 +5552,7 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
   try {
     if (authMode === "register") {
       if (isDisposableEmail(email)) { showToast("Usa un correo personal (Gmail, Outlook, iCloud…). No aceptamos correos temporales."); return; }
+      if (email.includes('+')) { showToast("Usa tu correo sin el signo + (por ejemplo nombre@gmail.com). Así evitamos cuentas repetidas.", 5000); return; }
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", cred.user.uid), {
         email, role: "user", createdAt: serverTimestamp()
@@ -5659,7 +5735,8 @@ loadCommunity();
 // ── CUENTA VERIFICADA ─────────────────────────────────────────
 async function ensureVerified() {
   if (!currentUser) {
-    showToast("Inicia sesión para votar");
+    showToast("Tu calificación queda apartada aquí. Entra (con Google es un toque) y vuelve a tocar Guardar.", 5000);
+    rsTrack("vote_blocked_auth", { reason: "anon" });
     openAuthModal("login");
     return false;
   }
@@ -5669,8 +5746,12 @@ async function ensureVerified() {
     await getIdToken(auth.currentUser, true); // refresca el token para las reglas
     return true;
   }
-  try { await sendEmailVerification(auth.currentUser); } catch (e) {}
-  showToast("Confirma tu correo para votar. Te enviamos el enlace (revisa spam).");
+  let sent = true;
+  try { await sendEmailVerification(auth.currentUser); } catch (e) { sent = false; }
+  rsTrack("vote_blocked_auth", { reason: "unverified" });
+  showToast(sent
+    ? "Confirma tu correo para votar: te mandamos el enlace (revisa spam). Tu calificación queda apartada; al confirmar, vuelve y toca Guardar."
+    : "Confirma tu correo con el enlace que te mandamos (revisa spam). Tu calificación queda apartada; al confirmar, vuelve y toca Guardar.", 7000);
   return false;
 }
 
@@ -5733,6 +5814,7 @@ window.submitRating = async function(btn) {
       return { stats: { count, sum }, isNew: !old, contrib };
     });
     myRatings[slug] = scores;
+    if (window.clearRateDraft) window.clearRateDraft(slug);
     window._communityStats[slug] = res.stats;
     if (res.contrib) window.RS_ME = res.contrib;
     if (window.applyCommunityStats) window.applyCommunityStats();
@@ -5748,7 +5830,9 @@ window.submitRating = async function(btn) {
     if (res.isNew) loadBoard();
   } catch (err) {
     console.error(err);
-    showToast(err.code === "permission-denied"
+    showToast(err.code === "permission-denied" && myRatings[slug]
+      ? "Acabas de cambiar esta calificación. Espera 30 segundos y vuelve a guardar."
+      : err.code === "permission-denied"
       ? "No pudimos guardar tu voto por este artista. Ya estamos enterados; intenta más tarde."
       : "Error al guardar la calificación");
   } finally {
@@ -5772,7 +5856,7 @@ window.saveProposal = async function(data, propId) {
   try {
     const batch = writeBatch(db);
     batch.set(doc(db, "proposals", propId), { ...data, status: "pending", createdBy: uid, createdAt: serverTimestamp() });
-    batch.set(lRef, { lastProposalAt: serverTimestamp() });
+    batch.set(lRef, { lastProposalAt: serverTimestamp(), lastProposalId: propId });
     await batch.commit();
     window.RS_MYPROPS = [{ id: propId, name: data.name, estado: data.estado, status: "pending" }, ...(window.RS_MYPROPS || [])];
     rsTrack("propose_artist", { estado: String(data.estado || "") });
@@ -5988,10 +6072,11 @@ function renderNewHome() {
         <div class="nh-card-img">${artistAvatar(a)}</div>
         <div class="nh-card-name">${esc(a.name)}</div>
         <div class="nh-card-loc">${NH_PIN}${esc((a.tags || [])[0] || a.estado || 'México')}</div>
-        <div class="nh-card-score"><b>${fmtScore(a.total, a.votes)}</b><span>${a.votes ? a.votes.toLocaleString('es-MX') + '<br>voto' + (a.votes === 1 ? '' : 's') : 'sin<br>calificar'}</span></div>
+        <div class="nh-card-score"><b>${fmtScore(a.total, a.votes)}</b><span>${votesLabel(a.votes, '<br>').replace(' · ', '<br>')}</span></div>
       </button>`).join('');
   }
   renderNhExplore();
+  updateRankNotice();
 }
 function nhExploreTab(mode, btn) {
   nhExploreMode = mode;

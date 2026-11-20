@@ -11,7 +11,7 @@ const path = require('path');
 const { RAIZ, slugify, esc, leerRoster, leerEdiciones, fechaLarga, rangoSemana } = require('./comun');
 
 const SITIO = 'https://www.rapscoremx.com';
-const OG_IMG = `${SITIO}/images/rapscore-logo.png`;
+const OG_IMG = `${SITIO}/images/og-rapscore.jpg`;   // 1200×630 (el logo solo se recortaba mal en Facebook)
 // Sin UTMs en links internos: en GA4 reinician la sesión y borran la fuente real (Google, Facebook…).
 // Los clics se miden con data-track (evento cta_click).
 const ETIQUETAS = { lanzamiento: 'Lanzamiento', gira: 'Gira', concierto: 'Concierto', batalla: 'Batallas', premio: 'Premios', colaboracion: 'Colaboración', video: 'Video', entrevista: 'Entrevista', industria: 'Industria', polemica: 'Polémica', otro: 'Escena' };

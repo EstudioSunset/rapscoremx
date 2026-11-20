@@ -28,12 +28,15 @@ service cloud.firestore {
       return request.auth.token.get('email', '').lower().matches('.*@([a-z0-9-]+\\.)*(mailinator\\.com|guerrillamail\\.com|guerrillamail\\.net|guerrillamail\\.org|sharklasers\\.com|grr\\.la|10minutemail\\.com|10minutemail\\.net|temp-mail\\.org|temp-mail\\.io|tempmail\\.com|tempmail\\.net|tempmailo\\.com|tempmail\\.plus|yopmail\\.com|yopmail\\.net|yopmail\\.fr|trashmail\\.com|trashmail\\.de|getnada\\.com|nada\\.email|dispostable\\.com|maildrop\\.cc|mailnesia\\.com|mintemail\\.com|mohmal\\.com|throwawaymail\\.com|fakeinbox\\.com|emailondeck\\.com|mailcatch\\.com|mytemp\\.email|tempr\\.email|discard\\.email|spamgourmet\\.com|burnermail\\.io|1secmail\\.com|1secmail\\.net|1secmail\\.org|mail\\.tm|mail\\.gw|moakt\\.com|tmpmail\\.org|tmpmail\\.net|tmail\\.ws|inboxkitten\\.com|mailpoof\\.com|emailfake\\.com|generator\\.email|fakemail\\.net|tempinbox\\.com|spambox\\.us|luxusmail\\.org|emltmp\\.com|cyclesat\\.com)$');
     }
     function banned() { return exists(/databases/$(database)/documents/banned/$(request.auth.uid)); }
-    function verified() { return signedIn() && request.auth.token.email_verified == true && !disposableEmail() && !banned(); }
+    // Correos con "+" (nombre+1@gmail.com…) llegan al mismo buzón: con eso una persona creaba muchas cuentas "verificadas".
+    function aliasEmail() { return request.auth.token.get('email', '').matches('^[^@]*[+][^@]*@.*$'); }
+    function verified() { return signedIn() && request.auth.token.email_verified == true && !disposableEmail() && !aliasEmail() && !banned(); }
     function isAdmin() { return verified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
     function limitDoc(uid) { return /databases/$(database)/documents/limits/$(uid); }
 
     function cats() { return ['flow', 'lirica', 'contenido', 'versatilidad', 'hooks', 'impacto']; }
-    function validScore(v) { return v is int && v >= 1 && v <= 100; }
+    // Escala 1–10 guardada ×10: solo 10, 20, … 100 (antes aceptaba 1–100 y alguien podía mandar 1 = "0.1").
+    function validScore(v) { return v is int && v >= 10 && v <= 100 && v % 10 == 0; }
     function validScores(s) {
       return s is map && s.keys().hasAll(cats()) && s.keys().hasOnly(cats())
         && validScore(s.flow) && validScore(s.lirica) && validScore(s.contenido)
@@ -112,6 +115,8 @@ service cloud.firestore {
         && request.resource.data.artist is string
         && request.resource.data.artist.size() > 0 && request.resource.data.artist.size() <= 80
         && request.resource.data.updatedAt == request.time
+        // Cambiar tu calificación: máximo una vez cada 30 s (evita que una cuenta sature las estadísticas del artista)
+        && (resource == null || request.time > resource.data.updatedAt + duration.value(30, 's'))
         && validScores(request.resource.data.scores)
         && statsConsistent(request.resource.data.artistSlug, request.resource.data.scores,
                            resource == null ? null : resource.data.scores);
@@ -172,6 +177,8 @@ service cloud.firestore {
         && proposalFieldsOk(request.resource.data)
         // anti-spam: 1 propuesta cada 10 minutos por cuenta
         && getAfter(limitDoc(request.auth.uid)).data.lastProposalAt == request.time
+        // el límite apunta a ESTA propuesta: así no se pueden meter varias propuestas en un solo lote
+        && getAfter(limitDoc(request.auth.uid)).data.get('lastProposalId', '') == id
         && (!exists(limitDoc(request.auth.uid))
             || request.time > get(limitDoc(request.auth.uid)).data.lastProposalAt + duration.value(10, 'm'));
       // Solo el admin aprueba, rechaza o corrige datos
@@ -189,7 +196,8 @@ service cloud.firestore {
     match /limits/{uid} {
       allow read: if signedIn() && request.auth.uid == uid;
       allow create, update: if verified() && request.auth.uid == uid
-        && request.resource.data.keys().hasOnly(['lastProposalAt'])
+        && request.resource.data.keys().hasOnly(['lastProposalAt', 'lastProposalId'])
+        && request.resource.data.lastProposalId is string
         && request.resource.data.lastProposalAt == request.time;
       allow delete: if false;
     }
