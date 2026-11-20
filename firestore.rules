@@ -65,7 +65,9 @@ service cloud.firestore {
       'tumba2-rr', 'manoso-fast', 'sucia-elegancia',
       'faruz-feet', 'mc-aese', 'big-metra', 'el-pinche-mara', 'mr-yosie-locote', 'tornillo', 'iluminatik', 'jauria-santa',
       'bory-rvh', 'frecuencia-callejera-3', 'aryez', 'dayner-mc', 'republica-antigua',
-      'coko-yamasaki', 'stilo', 'jay-romero', 'javier-kaze', 'hugo-alarcon'
+      'coko-yamasaki', 'stilo', 'jay-romero', 'javier-kaze', 'hugo-alarcon',
+      // Chiapas, 19 nov 2026
+      'lotus-dlc', 'big-joe-dlc', 'mikel-cruz', 'b-eye', 'dr-grave', 'dilo-doble-hotta', 'ey-son', 'rever-mictlan', 'locos-del-sureste', 'isiflexxx'
       ];
     }
     function proposalDoc(id) { return /databases/$(database)/documents/proposals/$(id); }
