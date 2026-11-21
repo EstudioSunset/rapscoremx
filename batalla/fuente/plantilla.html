@@ -347,6 +347,61 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
 .capa .caja { display: grid; gap: 12px; width: min(320px, 100%); text-align: center; }
 .capa h2 { margin: 0 0 4px; font-family: var(--f-display); font-weight: 400; font-size: 48px; }
 
+/* ---------- público, hype y racha (Fase 1, nov 2026) ---------- */
+.hype-fila { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; margin-top: 8px; flex: none; }
+.hype-txt { font-family: var(--f-display); font-size: 15px; letter-spacing: .08em; color: var(--ink-2); }
+.hype-barra { height: 10px; border: 2px solid var(--line); border-radius: 999px; background: #1d1b19; overflow: hidden; }
+.hype-barra i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #ffcc00, #ff3c00); transition: width .45s cubic-bezier(.2,1.4,.4,1); }
+.racha { font-family: var(--f-display); font-size: 18px; letter-spacing: .04em; color: var(--ink-3); min-width: 74px; text-align: right; font-variant-numeric: tabular-nums; }
+.racha.viva { color: var(--slot); }
+.racha.fuego { color: var(--ref); animation: late .5s ease-in-out infinite alternate; }
+@keyframes late { to { transform: scale(1.12); } }
+.sin-hype .hype-fila, .sin-hype .publico { display: none; }
+.publico { position: absolute; inset: auto 0 0; height: 46%; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 2%; pointer-events: none; z-index: 0; }
+.publico i { position: relative; width: 5.2%; height: var(--h); background: #1c1917; border-radius: 40% 40% 0 0; transform-origin: bottom; }
+.publico i::before { content: ""; position: absolute; left: 50%; top: -42%; width: 78%; aspect-ratio: 1; translate: -50% 0; border-radius: 50%; background: #1c1917; }
+.publico i.mano::after { content: ""; position: absolute; top: -78%; right: -18%; width: 22%; height: 70%; border-radius: 4px; background: #1c1917; rotate: 16deg; opacity: 0; transition: opacity .15s; }
+.publico.brinca i { animation: brinca .42s ease-out var(--d) 2; }
+.publico.brinca i.mano::after, .en-llamas .publico i.mano::after { opacity: 1; }
+.en-llamas .publico i { animation: brinca .5s ease-in-out var(--d) infinite alternate; }
+@keyframes brinca { 50% { transform: translateY(-16%); } }
+.pj { z-index: 1; }
+.en-llamas .tarima { background:
+    radial-gradient(70% 80% at 50% 100%, rgba(255,60,0,.45), transparent 70%),
+    radial-gradient(60% 70% at 78% 100%, rgba(90,60,200,.25), transparent 70%),
+    radial-gradient(90% 60% at 50% 0%, rgba(255,204,0,.14), transparent 70%); }
+.grito { position: absolute; left: 50%; top: 10%; z-index: 4; translate: -50% 0; pointer-events: none; white-space: nowrap;
+  font-family: var(--f-display); font-size: clamp(34px, 11vw, 52px); letter-spacing: .03em; line-height: 1;
+  color: var(--slot); -webkit-text-stroke: 2px #000; paint-order: stroke fill; text-shadow: 0 4px 0 #000; }
+.grito.k-f, .grito.k-t { color: #ff6b78; }
+.grito.k-riv { color: #c9b8ff; font-size: clamp(28px, 9vw, 40px); }
+.grito.sale { animation: grito 1.25s cubic-bezier(.2,1.5,.4,1) forwards; }
+@keyframes grito { 0% { opacity: 0; transform: scale(.4) rotate(-8deg); } 18% { opacity: 1; transform: scale(1.12) rotate(-4deg); } 30% { transform: scale(1) rotate(-4deg); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-18px) rotate(-4deg); } }
+.temblor { animation: temblor .38s linear; }
+@keyframes temblor { 20% { transform: translate(-5px, 2px); } 40% { transform: translate(5px, -2px); } 60% { transform: translate(-3px, 1px); } 80% { transform: translate(3px, 0); } }
+.globo { position: absolute; top: 4%; z-index: 5; max-width: 62%; pointer-events: none;
+  background: var(--ink); color: #111; font-weight: 800; font-size: 14.5px; line-height: 1.25;
+  padding: 7px 10px; border: 3px solid var(--line); border-radius: 12px; box-shadow: 0 3px 0 var(--line);
+  animation: globo .25s cubic-bezier(.2,1.6,.4,1); }
+.globo.riv { right: 4%; border-bottom-right-radius: 2px; }
+.globo.yo { left: 4%; border-bottom-left-radius: 2px; }
+.globo.fuera { opacity: 0; transition: opacity .25s; }
+@keyframes globo { from { transform: scale(.5); opacity: 0; } to { transform: none; opacity: 1; } }
+/* entrada tipo pelea: título que cae, cartel TÚ vs RIVAL y cuenta 3·2·1 al beat */
+.aviso h2.slam { animation: slam .42s cubic-bezier(.2,1.7,.4,1); color: var(--slot); }
+@keyframes slam { from { transform: scale(2.4) rotate(-6deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.cartel { display: flex; align-items: center; justify-content: center; gap: 12px; font-family: var(--f-display); font-size: 26px; letter-spacing: .04em; }
+.cartel span:first-child { color: var(--slot); }
+.cartel b { font-weight: 400; background: var(--ref); color: #fff; padding: 2px 8px 0; border-radius: 4px; transform: rotate(-4deg); border: 2px solid var(--line); }
+.cuenta { height: 64px; display: grid; place-items: center; font-family: var(--f-display); font-size: 64px; line-height: 1; color: var(--ink); }
+.cuenta b { font-weight: 400; animation: slam .3s cubic-bezier(.2,1.7,.4,1); }
+.cuenta b.ya { color: var(--ref); font-size: 58px; -webkit-text-stroke: 2px #000; paint-order: stroke fill; }
+.dicho { margin: 0; text-align: center; font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+.dicho small { display: block; color: var(--ink-3); font-weight: 600; font-size: 13px; margin-top: 2px; }
+.logros { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.logros span { border: 2px solid #3a3734; border-radius: 999px; padding: 5px 12px; font-size: 14px; font-weight: 800; color: var(--ink-2); }
+.logros span.record { border-color: var(--slot); color: var(--slot); }
+
 @media (max-height: 640px) {
   .tarima { height: 104px; }
   .turno-rival .tarima { height: 128px; }
@@ -404,6 +459,7 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
       <div class="regla"><svg class="icon" data-icon="cb"></svg><span>Rima asonante y la frase tiene sentido</span><em>+0,5</em></div>
       <div class="regla"><svg class="icon" data-icon="x"></svg><span>No tiene sentido o se acabó el tiempo</span><em>0</em></div>
       <div class="regla"><svg class="icon" data-icon="rayo"></svg><span><b>Remate</b>: contra el medio y el Jefe, el último verso de cada ronda vale doble (también el del rival)</span><em>×2</em></div>
+      <div class="regla"><svg class="icon" data-icon="cg"></svg><span><b>Racha</b>: cada consonante seguida prende al público. Un fallo la apaga. No da puntos, pero guarda tu récord</span><em>🔥</em></div>
       <div class="regla"><svg class="icon" data-icon="carta"></svg><span><b>Comodín</b>: una vez por batalla quita las 2 opciones que no tienen sentido. Guárdalo para un remate</span><em>×1</em></div>
     </section>
     <div class="menu-pie">
@@ -420,7 +476,14 @@ mark.m-a { color: var(--ink); background: rgba(242,237,228,.18); border-radius: 
       <span class="ronda-tag" id="ronda">R1/3</span>
       <div class="marcador" id="marcador"></div>
     </div>
-    <div class="tarima">
+    <div class="hype-fila" aria-hidden="true">
+      <span class="hype-txt">Público</span>
+      <div class="hype-barra"><i id="hype-i"></i></div>
+      <b class="racha" id="racha"></b>
+    </div>
+    <div class="tarima" id="tarima">
+      <div class="publico" id="publico" aria-hidden="true"></div>
+      <div class="grito" id="grito" aria-hidden="true"></div>
       <div class="pj yo"><img id="img-yo" src="img/jugador-neutral.webp" alt="Tu personaje"></div>
       <div class="vs" aria-hidden="true">VS</div>
       <div class="pj riv"><img id="img-riv" src="img/novato-neutral.webp" alt="Rival novato"></div>
@@ -618,8 +681,28 @@ const FX = {
     const o = osc('sine', 320, t, 0.5, A.fxBus, 0.4); o.frequency.exponentialRampToValueAtTime(45, t + 0.5);
     A.beatBus.gain.setTargetAtTime(0.05, t, 0.04); A.beatBus.gain.setTargetAtTime(A.beatBase, t + BEAT * 1.2, 0.08);
   },
-  tap() { if (A.ctx) osc('square', 880, A.ctx.currentTime, 0.03, A.fxBus, 0.08); }
+  tap() { if (A.ctx) osc('square', 880, A.ctx.currentTime, 0.03, A.fxBus, 0.08); },
+  // Público: 'grita' (ovación, más fuerte con la racha), 'abuchea' (uuuy), 'ooh' (cuando el rival la clava)
+  publico(tipo, fuerza = 1) {
+    if (!A.ctx) return; const t = A.ctx.currentTime + 0.02;
+    if (tipo === 'grita') {
+      ruido(t, 1.3, A.fxBus, 0.22 * fuerza, 'bandpass', 1100, 0.7, 0.18);
+      ruido(t + 0.05, 1.1, A.fxBus, 0.12 * fuerza, 'bandpass', 2300, 1.2, 0.2);
+      if (fuerza > 1.2) { const o = osc('sine', 1900, t + 0.1, 0.45, A.fxBus, 0.07, 0.02); o.frequency.linearRampToValueAtTime(2700, t + 0.35); o.frequency.linearRampToValueAtTime(2100, t + 0.55); }
+    } else if (tipo === 'abuchea') {
+      const fl = ruido(t, 0.9, A.fxBus, 0.18, 'bandpass', 700, 2.5, 0.12); fl.frequency.exponentialRampToValueAtTime(260, t + 0.9);
+    } else {
+      const fl = ruido(t, 0.8, A.fxBus, 0.12, 'bandpass', 520, 3, 0.15); fl.frequency.exponentialRampToValueAtTime(820, t + 0.5);
+    }
+  },
+  // Golpe de la cuenta 3·2·1 (el último más agudo)
+  golpe(t, fuerte) {
+    if (!A.ctx) return;
+    const o = osc('sine', fuerte ? 260 : 170, t, 0.22, A.fxBus, fuerte ? 0.55 : 0.4); o.frequency.exponentialRampToValueAtTime(48, t + 0.2);
+    ruido(t, 0.08, A.fxBus, fuerte ? 0.3 : 0.18, 'highpass', 2500);
+  }
 };
+const vibrar = p => { try { if (navigator.vibrate && !matchMedia('(prefers-reduced-motion: reduce)').matches) navigator.vibrate(p); } catch (e) {} };
 
 /* ================= selector de beat ================= */
 let previa = false;
@@ -654,7 +737,7 @@ function loop() {
 }
 
 /* ================= estado ================= */
-const G = { beat: null, modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato', comodin: 0, comodinUsado: 0 };
+const G = { beat: null, modo: null, token: 0, yo: 0, riv: 0, rondaYo: [], rondaRiv: [], dots: null, imgYo: 'jugador', imgRiv: 'novato', comodin: 0, comodinUsado: 0, hype: 0, hypeMax: 0, racha: 0, mejorRacha: 0 };
 // max = puntos máximos del jugador (con remates ×2: 3 rondas × (3 + 2) = 15).
 // requiere = nivel que hay que ganar (al menos 1 estrella) para desbloquearlo; sig = el que sigue.
 const NIVEL = {
@@ -685,6 +768,117 @@ const INTRO = {
   ],
   replica: ['Réplica', 'Empate. Dos versos cada quien y gana el que sume más.']
 };
+
+/* ================= banco de versos ================= */
+// Cada ronda es un banco de fichas: en cada batalla salen 4 al azar, primero las que menos has visto.
+// Así no se repiten hasta que ya saliera todo el banco de esa ronda.
+const POR_RONDA = 4;
+function tomar(lista, n) {
+  const vistos = store.get('vistos', {});
+  const elegidos = shuffle(lista).sort((a, b) => (vistos[a.id] || 0) - (vistos[b.id] || 0)).slice(0, n);
+  elegidos.forEach(f => { vistos[f.id] = (vistos[f.id] || 0) + 1; });
+  store.set('vistos', vistos);
+  return shuffle(elegidos);
+}
+// Los versos del rival vienen en juegos completos (mismo puntaje en cada juego, para no mover el balance).
+function juegoRival(juegos, clave) {
+  if (!Array.isArray(juegos[0])) return juegos;
+  const vistos = store.get('vistos-riv', {});
+  const orden = shuffle(juegos.map((_, i) => i)).sort((a, b) => (vistos[clave + a] || 0) - (vistos[clave + b] || 0));
+  vistos[clave + orden[0]] = (vistos[clave + orden[0]] || 0) + 1; store.set('vistos-riv', vistos);
+  return juegos[orden[0]];
+}
+
+/* ================= público, hype y racha ================= */
+// La racha cuenta consonantes seguidas (la asonante no la rompe; un fallo o el tiempo sí). No cambia los puntos.
+const PUBLICO_N = 16;
+$('#publico').innerHTML = Array.from({ length: PUBLICO_N }, (_, i) =>
+  `<i class="${i % 3 === 1 ? 'mano' : ''}" style="--h:${38 + ((i * 37) % 30)}%;--d:${(i % 5) * 45}ms"></i>`).join('');
+function pintarHype() {
+  $('#hype-i').style.width = G.hype + '%';
+  const r = $('#racha');
+  r.textContent = G.racha >= 2 ? `Racha ×${G.racha}` : '';
+  r.className = 'racha' + (G.racha >= 3 ? ' fuego' : G.racha >= 2 ? ' viva' : '');
+  $('#app').classList.toggle('en-llamas', G.hype >= 100);
+}
+function grito(texto, clase) {
+  const g = $('#grito'); g.textContent = texto; g.className = 'grito ' + (clase || '');
+  void g.offsetWidth; g.classList.add('sale');
+}
+// Al terminar la animación se limpia: si no, al volver a la pantalla de juego (tras el fin de ronda) se repetiría.
+$('#grito').addEventListener('animationend', e => { e.currentTarget.className = 'grito'; e.currentTarget.textContent = ''; });
+$('#tarima').addEventListener('animationend', e => { if (e.target.id === 'tarima') e.target.classList.remove('temblor'); });
+// Deja la tarima limpia al empezar o salir (si no, un grito de la batalla anterior se repite al volver)
+function limpiarEscena() {
+  $('#grito').className = 'grito'; $('#grito').textContent = '';
+  $('#publico').classList.remove('brinca'); $('#tarima').classList.remove('temblor');
+  document.querySelectorAll('.globo').forEach(g => g.remove());
+}
+function brincar() { const p = $('#publico'); p.classList.remove('brinca'); void p.offsetWidth; p.classList.add('brinca'); clearTimeout(p._t); p._t = setTimeout(() => p.classList.remove('brinca'), 1100); }
+function temblar() { const t = $('#tarima'); t.classList.remove('temblor'); void t.offsetWidth; t.classList.add('temblor'); }
+function reaccionar(k, mult = 1, quien = 'yo') {
+  if (quien === 'riv') {
+    if (k === 'c') { G.hype = Math.max(0, G.hype - 12); grito(mult > 1 ? '¡OOOH!' : 'Ooh…', 'k-riv'); FX.publico('ooh'); }
+    else if (k === 'f') { G.hype = Math.min(100, G.hype + 8); FX.publico('abuchea'); }
+    pintarHype(); return;
+  }
+  if (k === 'c') {
+    G.racha++; G.mejorRacha = Math.max(G.mejorRacha, G.racha);
+    G.hype = Math.min(100, G.hype + (mult > 1 ? 45 : 34));
+    const grande = G.racha >= 3 || mult > 1;
+    grito(mult > 1 ? '¡REMATE!' : G.racha >= 4 ? '¡IMPARABLE!' : G.racha === 3 ? '¡EN LLAMAS!' : G.racha === 2 ? '¡UUUH!' : '¡ESO!');
+    brincar(); FX.publico('grita', grande ? 1.5 : 1);
+    if (grande) { temblar(); vibrar([40, 30, 90]); } else vibrar(25);
+  } else if (k === 'a') {
+    G.hype = Math.min(100, G.hype + 14); grito('¡Va!'); FX.publico('grita', 0.5);
+  } else {
+    if (G.racha >= 3) grito('Se apagó la racha', 'k-f'); else grito(k === 't' ? '¡Se congeló!' : '¡Uuuy!', 'k-' + k);
+    G.racha = 0; G.hype = Math.max(0, G.hype - 30); FX.publico('abuchea'); vibrar([20, 40, 20]);
+  }
+  G.hypeMax = Math.max(G.hypeMax, G.hype);
+  pintarHype();
+}
+
+/* ================= lo que dice el rival ================= */
+const BURLAS = {
+  novato: {
+    intro: ['¿Tú eres mi rival? Esto va a estar fácil.', 'Ya traigo las rimas calientitas, carnal.', 'Hoy me estreno con una victoria.'],
+    gana: ['¡Te dije! Ni sudé.', 'Así se rapea, ¿o no, banda?'],
+    pierde: ['Fue suerte… tuya, no mía.', 'Ahorita me pongo serio, ¿eh?'],
+    parejo: ['Vamos tablas. Ahorita te paso.'],
+    fallo: ['¡Jaja! ¿Y eso qué fue?', '¿Se te trabó la lengua?', '¡Ni el beat te pela!'],
+    derrota: ['¡Revancha! Esa no cuenta.', 'Ok, ok… la próxima es mía.'],
+    victoria: ['¡Lo sabía! Vuelve cuando practiques.', 'El novato te dio clases, jaja.']
+  },
+  medio: {
+    intro: ['Llegaste a mi colonia. Aquí se respeta.', 'Aquí no regalo nada, compa.', 'A ver si aguantas el remate.'],
+    gana: ['La plaza ya sabe quién manda.', 'Sigue así y te vas en blanco.'],
+    pierde: ['No te emociones, falta lo bueno.', 'Uy, alguien vino en serio.'],
+    parejo: ['Parejos. Esto se define en el remate.'],
+    fallo: ['Eso no rimó ni en tu casa.', '¡Uuuy! El público ya se dio cuenta.', '¿Así vienes a mi plaza?'],
+    derrota: ['Bien ganada. Pero el Jefe no perdona.', 'Me ganaste en mi colonia. Respeto.'],
+    victoria: ['En mi colonia mando yo.', 'Regresa cuando aguantes un remate.']
+  },
+  jefe: {
+    intro: ['Muchos llegaron. Ninguno se quedó.', 'Esta plaza tiene dueño.', 'Respira. Va a ser rápido.'],
+    gana: ['Así se ve la diferencia.', 'Ni me despeiné.'],
+    pierde: ['Interesante. Por fin un rival.', 'Me estás haciendo trabajar.'],
+    parejo: ['Nadie me empata dos veces.'],
+    fallo: ['Silencio. Eso lo dice todo.', 'El beat no espera a nadie.', 'La plaza no perdona.'],
+    derrota: ['La plaza es tuya… por ahora.', 'Nadie me había ganado aquí. Te lo ganaste.'],
+    victoria: ['Esta plaza sigue teniendo dueño.', 'Vuelve cuando no te tiemble la voz.']
+  }
+};
+const alAzar = l => l[Math.floor(Math.random() * l.length)];
+function burla(tipo) { const B = BURLAS[G.modo]; return B && B[tipo] ? alAzar(B[tipo]) : ''; }
+function decir(quien, texto, seg = 2.8) {
+  if (!texto) return;
+  document.querySelectorAll('.globo').forEach(g => g.remove());
+  $('#tarima').insertAdjacentHTML('beforeend', `<div class="globo ${quien}" role="status">${esc(texto)}</div>`);
+  const g = $('#tarima .globo:last-child'), tk = G.token;
+  setTimeout(() => { g.classList.add('fuera'); setTimeout(() => g.remove(), 300); }, seg * 1000);
+  if (tk !== G.token) g.remove();
+}
 ['jugador', 'novato', 'medio', 'jefe'].forEach(c => ['neutral', 'rapea', 'celebra', 'frustra'].forEach(p => { const i = new Image(); i.src = `img/${c}-${p}.webp`; }));
 function pose(quien, p) {
   const img = quien === 'yo' ? $('#img-yo') : $('#img-riv');
@@ -783,6 +977,8 @@ async function decision(item, beats, pista, tk, practica, mult = 1) {
   vigente(tk);
   $('#puntos').insertAdjacentHTML('afterend', `<div class="cinta k-${k}" role="status">${iconK(k)}${etiqueta(k, mult)}</div>`);
   G.yo += pts; marcador();
+  reaccionar(k, mult);
+  if ((k === 'f' || k === 't') && !practica && G.modo !== 'practica' && Math.random() < 0.6) decir('riv', burla('fallo'), 2.2);
   pose('yo', k === 'c' ? 'celebra' : k === 'a' ? 'rapea' : 'frustra');
   if (G.modo !== 'practica') pose('riv', k === 'c' ? 'frustra' : k === 'a' ? 'neutral' : 'celebra');
   const res = { item, op: r.op, k, pts, mult };
@@ -829,6 +1025,7 @@ async function turnoRival(versos, tk, remate = false) {
         $('#rv-verso').innerHTML = `${esc(v.verso)} <span class="lleno k-${k}">${marcar(v.w, k === 'f' ? 'x' : k)}</span><span class="rv-label k-${k}">${iconK(k)}${etiqueta(k, mult)}</span>`;
         if (k === 'c' || k === 'a') $('#rv-pie .refw').innerHTML = marcar(v.ref, k, true);
         FX[k](clock(), true);
+        reaccionar(k, mult, 'riv');
         pose('riv', k === 'f' ? 'frustra' : 'celebra');
         pose('yo', k === 'f' ? 'celebra' : 'frustra');
       }
@@ -846,10 +1043,26 @@ async function turnoRival(versos, tk, remate = false) {
 }
 
 /* ================= avisos entre rondas ================= */
-async function aviso(titulo, texto, tk, compases = 2) {
-  $('#tarjeta').innerHTML = `<div class="aviso"><span class="tag">${esc(titulo)}</span><p>${esc(texto)}</p></div>`;
+// Entrada tipo pelea: el título cae, el rival suelta su burla y en el último compás se cuenta 3·2·1 al beat.
+async function aviso(titulo, texto, tk, compases = 2, extra = {}) {
+  const N = NIVEL[G.modo];
+  $('#tarjeta').innerHTML = `<div class="aviso">
+    ${extra.cartel && N && N.nombre ? `<div class="cartel"><span>Tú</span><b>VS</b><span>${esc(N.nombre)}</span></div>` : ''}
+    <h2 class="slam">${esc(titulo)}</h2><p>${esc(texto)}</p>
+    <div class="cuenta" id="cuenta" aria-hidden="true"></div></div>`;
   pose('yo', 'neutral');
-  await esperar(proxCompas(clock() + 0.2) + BAR * (compases - 1)); vigente(tk);
+  if (extra.burla) { pose('riv', 'rapea'); decir('riv', extra.burla, Math.min(3.2, BAR * compases * 0.6)); }
+  if (A.ctx) FX.golpe(A.ctx.currentTime + 0.02, true);
+  const fin = proxCompas(clock() + 0.2) + BAR * (compases - 1);
+  const cuenta = [['3', 3], ['2', 2], ['1', 1], [extra.ultimo || '¡Rima!', 0]];
+  for (const [txt, antes] of cuenta) {
+    const t = fin - antes * BEAT;
+    if (t < clock()) continue;
+    await esperar(t); vigente(tk);
+    $('#cuenta').innerHTML = `<b class="${antes ? '' : 'ya'}">${esc(txt)}</b>`;
+    FX.golpe(clock(), !antes);
+  }
+  await esperar(fin); vigente(tk);
 }
 
 /* ================= fin de ronda ================= */
@@ -897,12 +1110,21 @@ function pintarEstrellasMenu() {
   document.querySelectorAll('[data-stars]').forEach(el => { const n = e[el.dataset.stars] || 0; el.innerHTML = [0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join(''); el.setAttribute('aria-label', `${n} de 3 estrellas`); });
   pintarBloqueos();
 }
-function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true }) {
+// Racha y récord de la partida (el récord se guarda por modo en este celular)
+function logrosHTML() {
+  if (!G.mejorRacha) return '';
+  const recs = store.get('record-racha', {}); const nuevo = G.mejorRacha > (recs[G.modo] || 0);
+  if (nuevo) { recs[G.modo] = G.mejorRacha; store.set('record-racha', recs); }
+  return `<div class="logros"><span class="${nuevo && G.mejorRacha >= 2 ? 'record' : ''}">Mejor racha ×${G.mejorRacha}${nuevo && G.mejorRacha >= 2 ? ' · ¡Récord!' : ''}</span>${G.hypeMax >= 100 ? '<span class="record">Público en llamas</span>' : ''}</div>`;
+}
+function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true, dicho = '' }) {
   return `
     <div class="final-pj ${poseRiv ? 'dos' : ''}"><img src="img/jugador-${poseYo}.webp" alt="">${poseRiv ? `<img src="img/${G.imgRiv}-${poseRiv}.webp" alt="">` : ''}</div>
     <div class="veredicto"><h2 class="${n > 0 ? 'gana' : ''}">${titulo}</h2></div>
     <div class="total">${G.modo === 'practica' ? `<span class="yo">TÚ ${fmt(G.yo)}</span> de 4` : `<span class="yo">TÚ ${fmt(G.yo)}</span> · RIVAL ${fmt(G.riv)}`}</div>
     <div class="stars grande" aria-label="${n} de 3 estrellas">${[0, 1, 2].map(i => i < n ? ICON.star : ICON.star0).join('')}</div>
+    ${conOpinion ? logrosHTML() : '' /* la pantalla de "¡Es una réplica!" no es final todavía */}
+    ${dicho ? `<p class="dicho">“${esc(dicho)}”<small>${esc((NIVEL[G.modo] && NIVEL[G.modo].nombre) || 'Rival')}</small></p>` : ''}
     <p style="margin:0;text-align:center;color:var(--ink-2);font-size:15px;line-height:1.45">${sub}</p>
     <div class="acciones">${botones}</div>
     ${conOpinion ? opinionHTML() : ''}`;
@@ -910,7 +1132,7 @@ function finalHTML({ titulo, sub, poseYo, poseRiv, n, botones, conOpinion = true
 function resumenPartida(resultado) {
   const c = G.todos.filter(r => r.k === 'c').length, a = G.todos.filter(r => r.k === 'a').length;
   const t = G.todos.filter(r => r.k === 't').length, f = G.todos.length - c - a - t;
-  return { modo: G.modo, beat: G.beat ? G.beat.id : '', resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0, comodin: G.comodinUsado };
+  return { modo: G.modo, beat: G.beat ? G.beat.id : '', resultado, puntos: G.yo, rival: G.riv, consonantes: c, asonantes: a, fallos: f, tiempos: t, replica: G.replicaHecha ? 1 : 0, comodin: G.comodinUsado, racha: G.mejorRacha, hype: Math.round(G.hypeMax) };
 }
 function opinionHTML() {
   if (!SITIO) return '';
@@ -967,7 +1189,7 @@ function activarOpinion(resumen) {
 // Compartir el resultado (menú de compartir del celular; en compu, WhatsApp Web). El link trae UTM para medirlo en GA4.
 async function compartirResultado(gana, n) {
   const N = NIVEL[G.modo];
-  const est = n ? ' ' + '⭐'.repeat(n) : '';
+  const est = (n ? ' ' + '⭐'.repeat(n) : '') + (G.mejorRacha >= 3 ? ` 🔥 racha de ${G.mejorRacha}` : '');
   const texto = gana
     ? `Le gané ${N.al} en la Batalla de Freestyle de RapScore MX, ${fmt(G.yo)} a ${fmt(G.riv)}${est}. ¿Tú puedes?`
     : `${N.el} me ganó ${fmt(G.riv)} a ${fmt(G.yo)} en la Batalla de Freestyle de RapScore MX. ¿Tú le ganas?`;
@@ -1000,6 +1222,8 @@ async function jugar(modo) {
   audioInit();
   const tk = ++G.token;
   G.modo = modo; G.yo = 0; G.riv = 0; G.todos = []; G.consRiv = 0; G.replicaHecha = false;
+  G.hype = 0; G.hypeMax = 0; G.racha = 0; G.mejorRacha = 0; pintarHype(); limpiarEscena();
+  $('#app').classList.remove('sin-hype');
   G.imgRiv = N.img || 'novato'; G.comodin = N.comodines || 0; G.comodinUsado = 0;
   $('#img-riv').src = `img/${G.imgRiv}-neutral.webp`; $('#img-riv').alt = N.nombre || 'Rival';
   $('#app').classList.toggle('solo', modo === 'practica');
@@ -1013,11 +1237,12 @@ async function jugar(modo) {
       $('#ronda').textContent = modo === 'practica' ? 'PRÁCTICA' : `R${r + 1}/${N.rondas.length}`;
       pantalla('juego');
       const intro = modo === 'practica' ? INTRO.practica : INTRO[modo][r];
-      await aviso(intro[0], intro[1], tk);
-      G.rondaRiv = N.rival ? await turnoRival(N.rival[r], tk, !!N.remate) : [];
+      const dice = !N.rival ? '' : r === 0 ? burla('intro') : burla(G.riv > G.yo ? 'gana' : G.riv < G.yo ? 'pierde' : 'parejo');
+      await aviso(intro[0], intro[1], tk, 2, { cartel: r === 0 && !!N.rival, burla: dice, ultimo: N.rival ? '¡Rival!' : '¡Rima!' });
+      G.rondaRiv = N.rival ? await turnoRival(juegoRival(N.rival[r], `${modo}${r}-`), tk, !!N.remate) : [];
       G.rondaYo = [];
-      // En batalla los versos salen en otro orden cada vez (el último de la ronda es el remate).
-      const items = modo === 'practica' ? N.rondas[r] : shuffle(N.rondas[r]);
+      // Cada batalla saca 4 fichas del banco de la ronda, en otro orden (el último verso es el remate).
+      const items = tomar(N.rondas[r], POR_RONDA);
       for (let i = 0; i < items.length; i++) {
         const mult = N.remate && i === items.length - 1 ? 2 : 1;
         G.rondaYo.push(await decision(items[i], N.compases(r) * 4, N.pista(r), tk, modo === 'practica', mult));
@@ -1034,11 +1259,11 @@ async function replica(tk) {
   try {
     $('#ronda').textContent = 'RÉPLICA';
     pantalla('juego');
-    await aviso(INTRO.replica[0], INTRO.replica[1], tk);
+    await aviso(INTRO.replica[0], INTRO.replica[1], tk, 2, { burla: burla('parejo'), ultimo: '¡Rival!' });
     const N = NIVEL[G.modo];
-    G.rondaRiv = await turnoRival(N.replicaRival, tk);
+    G.rondaRiv = await turnoRival(juegoRival(N.replicaRival, `${G.modo}R-`), tk);
     G.rondaYo = [];
-    for (const item of shuffle(CONTENIDO.replica)) G.rondaYo.push(await decision(item, N.replicaBeats, 'none', tk, false));
+    for (const item of tomar(CONTENIDO.replica, 2)) G.rondaYo.push(await decision(item, N.replicaBeats, 'none', tk, false));
     G.todos.push(...G.rondaYo);
     G.consRiv += G.rondaRiv.filter(x => x.k === 'c').length;
     G.replicaHecha = true;
@@ -1082,7 +1307,7 @@ function mostrarFinal(tk) {
     : 'Revisa el repaso: las consonantes valen el doble que las asonantes.';
   s.innerHTML = finalHTML({
     titulo: gana ? (G.modo === 'jefe' ? '¡Eres el nuevo Jefe de la plaza!' : '¡La calle es tuya!') : 'No fue tu batalla',
-    poseYo: gana ? 'celebra' : 'frustra', poseRiv: gana ? 'frustra' : 'celebra', n,
+    poseYo: gana ? 'celebra' : 'frustra', poseRiv: gana ? 'frustra' : 'celebra', n, dicho: burla(gana ? 'derrota' : 'victoria'),
     sub: (gana ? (n === 3 ? 'Batalla perfecta o casi: puras consonantes.' : `Le ganaste ${N.al}. Busca más consonantes para sumar estrellas.`)
       + (sig && !yaLibre ? ` Desbloqueaste: ${sig.nombre}.` : '') : consejo) + nota,
     botones: `${sig ? `<button class="btn" type="button" id="f-sig">Retar ${sig.al}</button>` : ''}
@@ -1102,7 +1327,7 @@ async function calentar(nivelElegido) {
   audioInit();
   const tk = ++G.token;
   G.modo = 'calentamiento'; G.todos = []; previa = false;
-  $('#app').classList.add('solo'); $('#app').classList.remove('turno-rival');
+  $('#app').classList.add('solo', 'sin-hype'); $('#app').classList.remove('turno-rival', 'en-llamas'); limpiarEscena();
   $('#ronda').textContent = 'CALENTAMIENTO'; $('#marcador').innerHTML = '';
   pantalla('juego'); pose('yo', 'neutral');
   try {
@@ -1194,7 +1419,8 @@ async function calentar(nivelElegido) {
 }
 function menu() {
   G.token++; G.dots = null; G.replicaHecha = false; previa = false; pintarBeats();
-  beatStop(); $('#capa-pausa').hidden = true; $('#app').classList.remove('turno-rival', 'solo');
+  beatStop(); $('#capa-pausa').hidden = true; $('#app').classList.remove('turno-rival', 'solo', 'en-llamas', 'sin-hype');
+  limpiarEscena();
   pintarEstrellasMenu(); pantalla('menu');
 }
 

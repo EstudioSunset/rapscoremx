@@ -45,17 +45,20 @@ C.novato.flat().forEach(ficha);
 C.medio.flat().forEach(ficha);
 C.jefe.flat().forEach(ficha);
 C.replica.forEach(ficha);
-C.rival.forEach((r, i) => r.forEach((v, j) => rival(v, `R${i + 1}.${j + 1}`)));
-C.rivalMedio.forEach((r, i) => r.forEach((v, j) => rival(v, `RM${i + 1}.${j + 1}`)));
-C.rivalJefe.forEach((r, i) => r.forEach((v, j) => rival(v, `RJ${i + 1}.${j + 1}`)));
-C.rivalReplica.forEach((v, j) => rival(v, `RX.${j + 1}`));
-C.rivalReplicaMedio.forEach((v, j) => rival(v, `RXM.${j + 1}`));
-C.rivalReplicaJefe.forEach((v, j) => rival(v, `RXJ.${j + 1}`));
+// Rival: cada ronda es una lista de JUEGOS de 4 versos (la réplica, de 2). En cada batalla sale un juego completo.
+for (const [pre, rondas] of [['R', C.rival], ['RM', C.rivalMedio], ['RJ', C.rivalJefe]])
+  rondas.forEach((r, i) => r.forEach((juego, g) => juego.forEach((v, j) => rival(v, `${pre}${i + 1}${'abcdefgh'[g]}.${j + 1}`))));
+for (const [pre, juegos] of [['RX', C.rivalReplica], ['RXM', C.rivalReplicaMedio], ['RXJ', C.rivalReplicaJefe]])
+  juegos.forEach((juego, g) => juego.forEach((v, j) => rival(v, `${pre}${'abcdefgh'[g]}.${j + 1}`)));
+// Ids únicos (el juego recuerda qué fichas ya viste por id)
+{ const ids = new Set(); [C.practica, C.novato.flat(), C.medio.flat(), C.jefe.flat(), C.replica].flat().forEach(f => { if (ids.has(f.id)) err(f.id, 'id repetido'); ids.add(f.id); }); }
+if (C.practica.length < 4) err('practica', 'el banco necesita al menos 4 fichas');
+if (C.replica.length < 2) err('replica', 'el banco necesita al menos 2 fichas');
 // Que ninguna palabra correcta se repita dentro del mismo nivel (si no, el jugador "se la sabe").
 for (const [nom, lvl] of [['novato', C.novato], ['medio', C.medio], ['jefe', C.jefe]]) {
   const vistas = new Map();
   lvl.flat().forEach(f => f.ops.forEach(o => { const k = o.w.toLowerCase(); if (vistas.has(k)) warn(f.id, `"${o.w}" ya sale en ${vistas.get(k)} (${nom})`); vistas.set(k, f.id); }));
-  if (lvl.length !== 3 || lvl.some(r => r.length !== 4)) err(nom, 'debe tener 3 rondas de 4 fichas');
+  if (lvl.length !== 3 || lvl.some(r => r.length < 4)) err(nom, 'debe tener 3 rondas con al menos 4 fichas cada una (en cada batalla salen 4 al azar)');
 }
 
 // Casos de prueba del analizador
@@ -64,12 +67,19 @@ const casos = [['canción', 'corazón', 'c'], ['calle', 'madre', 'a'], ['camino'
 for (const [a, b, t] of casos) { const r = R.classify(a, b); if (r !== t) err('TEST', `${a}/${b} esperaba ${t} y dio ${r}`); }
 
 const puntos = l => l.reduce((s, v) => s + (v.ok ? (v.t === 'c' ? 1 : .5) : 0), 0);
-console.log('Puntos del rival por ronda:', C.rival.map(puntos), 'réplica:', puntos(C.rivalReplica));
 // Medio y Jefe: el 4.º verso de cada ronda es REMATE y vale doble (máximo del jugador: 15).
 const conRemate = l => l.reduce((s, v, i) => s + (v.ok ? (v.t === 'c' ? 1 : .5) : 0) * (i === l.length - 1 ? 2 : 1), 0);
+// Todos los juegos de una ronda deben dar los mismos puntos, si no el balance cambia según el juego que salga.
+const igual = (nom, juegos, fn) => { const p = juegos.map(fn); if (p.some(x => x !== p[0])) err(nom, `los juegos del rival dan puntos distintos: ${p.join(', ')}`); return p[0]; };
+const rondasNov = C.rival.map((r, i) => igual(`rival R${i + 1}`, r, puntos));
+console.log('Rival novato por ronda:', rondasNov, 'total', rondasNov.reduce((a, b) => a + b, 0), 'de 12 · réplica:', igual('rivalReplica', C.rivalReplica, puntos),
+  `· juegos por ronda: ${C.rival.map(r => r.length).join('/')}`);
 for (const [nom, r, rx] of [['medio', C.rivalMedio, C.rivalReplicaMedio], ['jefe', C.rivalJefe, C.rivalReplicaJefe]]) {
-  const rondas = r.map(conRemate);
-  console.log(`Rival ${nom} por ronda (con remate ×2):`, rondas, 'total', rondas.reduce((a, b) => a + b, 0), 'de 15 · réplica:', puntos(rx));
+  const rondas = r.map((j, i) => igual(`rival ${nom} R${i + 1}`, j, conRemate));
+  console.log(`Rival ${nom} por ronda (con remate ×2):`, rondas, 'total', rondas.reduce((a, b) => a + b, 0), 'de 15 · réplica:', igual(`réplica ${nom}`, rx, puntos),
+    `· juegos por ronda: ${r.map(x => x.length).join('/')}`);
 }
+const total = C.practica.length + C.replica.length + [C.novato, C.medio, C.jefe].reduce((s, l) => s + l.flat().length, 0);
+console.log(`Banco: ${total} fichas del jugador (práctica ${C.practica.length}, novato ${C.novato.map(r => r.length).join('/')}, medio ${C.medio.map(r => r.length).join('/')}, jefe ${C.jefe.map(r => r.length).join('/')}, réplica ${C.replica.length})`);
 console.log(`\n${errores} errores, ${avisos} avisos`);
 process.exit(errores ? 1 : 0);
