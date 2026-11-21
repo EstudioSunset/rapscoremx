@@ -48,6 +48,14 @@ window.RS_CLARITY_ID = 'yvosalsr5z';
   window.RS_AUTOMATED = !!navigator.webdriver || /HeadlessChrome|Lighthouse|PageSpeed|bot\b|crawler|spider|Prerender/i.test(navigator.userAgent || '');
   if (window.RS_LOCAL || window.RS_AUTOMATED) window.RS_INTERNAL = true; // GA4 lo marca como interno
 
+  // Navegador interno de apps (Facebook, Instagram, TikTok…). Ahí Google NO deja iniciar sesión
+  // (bloquea su login en navegadores integrados), y es de donde viene la mayoría de las visitas.
+  // Con la clase rs-inapp se esconde el botón de Google y se ofrece correo o abrir en el navegador.
+  var ua = navigator.userAgent || '';
+  window.RS_IN_APP = /FBAN|FBAV|FB_IAB|FBIOS|Instagram|musical_ly|BytedanceWebview|TikTok|\bLine\//i.test(ua);
+  window.RS_IN_APP_NAME = /Instagram/i.test(ua) ? 'Instagram' : /musical_ly|Bytedance|TikTok/i.test(ua) ? 'TikTok' : /FBAN|FBAV|FB_IAB|FBIOS/i.test(ua) ? 'Facebook' : 'esta app';
+  if (window.RS_IN_APP) document.documentElement.classList.add('rs-inapp');
+
   // Microsoft Clarity: solo graba visitas reales (tú, tus pruebas y los robots ya no entran).
   if (window.RS_CLARITY_ID && !window.RS_INTERNAL) {
     (function (c, l, a, r, i, t, y) {
@@ -1388,6 +1396,16 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 }
 .auth-google:hover { background: #f2f2f2; }
 .auth-google:disabled { opacity: .6; cursor: wait; }
+/* Dentro de la app de Facebook/Instagram/TikTok: sin botón de Google (no funciona ahí) */
+.auth-inapp { display: none; background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid #ffcc00; padding: 12px 14px; font-family: 'Barlow', sans-serif; font-size: 15px; line-height: 1.45; color: var(--text); }
+.auth-inapp p { margin: 0 0 10px; }
+.auth-inapp p:last-child { margin-bottom: 0; }
+.auth-inapp .auth-inapp-tip { font-size: 14px; color: var(--muted); }
+.auth-inapp .btn-sm { width: 100%; margin-bottom: 10px; }
+.rs-inapp .auth-inapp { display: block; }
+.rs-inapp .auth-google { display: none; }
+.auth-pending { display: none; font-family: 'Barlow', sans-serif; font-size: 15px; line-height: 1.4; color: #ffcc00; }
+.auth-pending.on { display: block; }
 .auth-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .auth-input {
@@ -2006,6 +2024,12 @@ body .pop-list li { font-size: 15px; }
         <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
         Continuar con Google
       </button>
+      <div class="auth-pending" id="authPending"></div>
+      <div class="auth-inapp" id="authInApp">
+        <p><strong>Estás dentro de <span id="authInAppName">Facebook</span>.</strong> Aquí Google no deja iniciar sesión: crea tu cuenta con tu correo (es rápido) o abre la página en tu navegador para entrar con Google.</p>
+        <button type="button" class="btn-sm" id="authOpenBrowser" onclick="openInBrowser()">Abrir en mi navegador ↗</button>
+        <p class="auth-inapp-tip" id="authInAppTip">Tu calificación se va contigo.</p>
+      </div>
       <div class="auth-divider">o con correo</div>
       <input class="auth-input" id="authEmail" type="email" placeholder="Correo electrónico">
       <input class="auth-input" id="authPassword" type="password" placeholder="Contraseña">
@@ -2786,6 +2810,86 @@ const RATE_DRAFT = (() => { try { return JSON.parse(sessionStorage.getItem('rs_r
 function saveRateDraft() { try { sessionStorage.setItem('rs_rate_draft', JSON.stringify(RATE_DRAFT)); } catch (e) {} }
 function clearRateDraft(slug) { delete RATE_DRAFT[slug]; saveRateDraft(); }
 window.clearRateDraft = clearRateDraft;
+
+// ── Voto pendiente en el link ─────────────────────────────────
+// Si alguien califica sin cuenta, el link de la página pasa a ser ?calificar=<slug>&voto=8-7-9-6-7-8
+// (en el orden de CATEGORIES). Así, si abre la página en Chrome/Safari desde la app de Facebook,
+// o llega desde el correo de confirmación, encuentra su calificación ya marcada.
+// Desde el link solo se rellena la caja: guardar lo decide la persona (un link compartido no vota por nadie).
+function voteToParam(scores10) { return CATEGORIES.map(c => scores10[c]).join('-'); }
+function parseVoteParam(v) {
+  const n = String(v || '').split('-').map(x => parseInt(x, 10));
+  if (n.length !== CATEGORIES.length || n.some(x => !(x >= 1 && x <= 10))) return null;
+  const o = {}; CATEGORIES.forEach((c, i) => { o[c] = n[i]; }); return o;
+}
+function putVoteInUrl(slug, scores10) {
+  try {
+    const u = new URL(location.href);
+    u.searchParams.set('calificar', slug);
+    u.searchParams.set('voto', voteToParam(scores10));
+    u.hash = '';
+    history.replaceState(null, '', u.pathname + u.search);
+  } catch (e) {}
+}
+function clearVoteFromUrl() {
+  try {
+    const u = new URL(location.href);
+    if (!u.searchParams.has('voto')) return;
+    u.searchParams.delete('voto');
+    history.replaceState(null, '', u.pathname + u.search + u.hash);
+  } catch (e) {}
+}
+window.putVoteInUrl = putVoteInUrl;
+window.clearVoteFromUrl = clearVoteFromUrl;
+window.voteToParam = voteToParam;
+
+// ── Abrir en el navegador del teléfono (desde la app de Facebook/Instagram/TikTok) ──
+function phoneOS() { const ua = navigator.userAgent || ''; return /Android/i.test(ua) ? 'android' : /iPhone|iPad|iPod/i.test(ua) ? 'ios' : 'other'; }
+function copyText(t) {
+  if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(() => true, () => copyFallback(t));
+  return Promise.resolve(copyFallback(t));
+}
+function copyFallback(t) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, t.length);
+    const ok = document.execCommand('copy'); ta.remove(); return ok;
+  } catch (e) { return false; }
+}
+function openInBrowser() {
+  const os = phoneOS();
+  rsTrack('inapp_open_browser', { os, app: window.RS_IN_APP_NAME || '' });
+  let u; try { u = new URL(location.href); } catch (e) { return; }
+  if (os === 'android') {
+    // Android: le pedimos al teléfono que abra el link en Chrome (si no está, se queda aquí).
+    location.href = 'intent://' + u.host + u.pathname + u.search +
+      '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(u.href) + ';end';
+    return;
+  }
+  // iPhone: ninguna app deja abrir Safari desde un botón; copiamos el link y explicamos el menú.
+  copyText(u.href).then(ok => showToast(ok
+    ? 'Link copiado ✓ Pégalo en Safari, o toca ••• arriba y elige "Abrir en navegador externo".'
+    : 'Toca ••• arriba a la derecha y elige "Abrir en navegador externo".', 6000));
+}
+window.openInBrowser = openInBrowser;
+(function setupInAppNote() {
+  if (!window.RS_IN_APP) return;
+  const ready = () => {
+    const name = document.getElementById('authInAppName');
+    if (name) name.textContent = window.RS_IN_APP_NAME || 'esta app';
+    const btn = document.getElementById('authOpenBrowser');
+    const tip = document.getElementById('authInAppTip');
+    if (phoneOS() === 'ios') {
+      if (btn) btn.textContent = 'Copiar link para Safari';
+      if (tip) tip.innerHTML = 'O toca <b>•••</b> arriba a la derecha → <b>Abrir en navegador externo</b>. Tu calificación se va contigo.';
+    } else if (phoneOS() === 'android') {
+      if (btn) btn.textContent = 'Abrir en Chrome ↗';
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
+})();
+
 function ratePick(btn, n) {
   const row = btn.closest('.rate-row');
   row.querySelectorAll('.rate-n').forEach(b => { const on = b === btn; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
@@ -5201,8 +5305,19 @@ function goTo(target) {
 window.addEventListener('load', () => {
   // Link directo para calificar a un artista: index.html?calificar=<slug> (lo usan las noticias).
   let qa = null;
-  try { qa = new URLSearchParams(location.search).get('calificar'); } catch (e) {}
-  if (qa && ARTISTS.some(a => a.slug === qa)) { rateFromHome(qa); return; }
+  let qv = null;
+  try { const sp = new URLSearchParams(location.search); qa = sp.get('calificar'); qv = parseVoteParam(sp.get('voto')); } catch (e) {}
+  if (qa && ARTISTS.some(a => a.slug === qa)) {
+    // Trae su calificación marcada (viene de la app de Facebook o del correo de confirmación)
+    if (qv) { RATE_DRAFT[qa] = qv; saveRateDraft(); }
+    rateFromHome(qa);
+    if (qv) setTimeout(() => {
+      const box = document.querySelector(`.rate-box[data-slug="${qa}"]`);
+      if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast(window.RS_USER ? 'Aquí está tu calificación: toca Guardar ✓' : 'Aquí está tu calificación. Entra y toca Guardar ✓', 5000);
+    }, 600);
+    return;
+  }
   const h = location.hash.replace('#','');
   if (['votar','admin','estados','emergentes','letras','freestyle'].includes(h)) goTo(h);
 });
@@ -5544,8 +5659,9 @@ function setAuthMode(mode) {
 
 function openAuthModal(mode = "login") {
   setAuthMode(mode);
+  showPendingNote();
   document.getElementById("authModal").classList.add("open");
-  rsTrack("signup_start", { mode });   // abrió la ventana de entrar/registrarse (embudo: signup_start → sign_up / login)
+  rsTrack("signup_start", { mode, in_app: window.RS_IN_APP ? "yes" : "no" });   // abrió la ventana de entrar/registrarse (embudo: signup_start → sign_up / login)
 }
 function closeAuthModal() {
   document.getElementById("authModal").classList.remove("open");
@@ -5582,9 +5698,11 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
       await setDoc(doc(db, "users", cred.user.uid), {
         email, role: "user", createdAt: serverTimestamp()
       });
-      try { await sendEmailVerification(cred.user); } catch (e) { console.warn(e); }
+      try { await sendVerify(cred.user); } catch (e) { console.warn(e); }
       rsTrack("sign_up", { method: "email" });
-      showToast("Cuenta creada ✓ Revisa tu correo para confirmarla y poder votar");
+      showToast(getPendingVote()
+        ? "Cuenta creada ✓ Confirma tu correo (revisa spam) y tu calificación se guarda sola."
+        : "Cuenta creada ✓ Revisa tu correo para confirmarla y poder votar", 6000);
     } else {
       await signInWithEmailAndPassword(auth, email, password);
       rsTrack("login", { method: "email" });
@@ -5718,6 +5836,10 @@ onAuthStateChanged(auth, async (user) => {
   if (window.refreshVotar) window.refreshVotar();
   if (window.renderVotarSide) window.renderVotarSide();
   if (window.freestyleRefresh) window.freestyleRefresh();
+  if (user) {
+    try { localStorage.setItem("rs_had_account", "1"); } catch (e) {}
+    flushPendingVote();   // si calificó antes de entrar, se guarda sola
+  }
 });
 
 // Vuelve a dibujar el formulario abierto (para mostrar "Tu calificación")
@@ -5757,12 +5879,59 @@ async function loadCommunity() {
 }
 loadCommunity();
 
+// ── VOTO PENDIENTE ────────────────────────────────────────────
+// Si alguien califica sin cuenta (o sin confirmar su correo), su calificación se guarda en el teléfono
+// (localStorage, 7 días) y se manda SOLA en cuanto entra con una cuenta confirmada: al iniciar sesión,
+// al volver a la pestaña después de confirmar el correo, o al regresar de Google.
+// Antes había que volver a tocar Guardar y casi nadie lo hacía (Clarity, nov 2026).
+const PENDING_KEY = "rs_pending_vote";
+function getPendingVote() {
+  try {
+    const p = JSON.parse(localStorage.getItem(PENDING_KEY) || "null");
+    if (p && p.slug && p.scores && Date.now() - (p.ts || 0) < 7 * 864e5) return p;
+    if (p) localStorage.removeItem(PENDING_KEY);
+  } catch (e) {}
+  return null;
+}
+function setPendingVote(slug, name, scores) {
+  try { localStorage.setItem(PENDING_KEY, JSON.stringify({ slug, name: String(name).slice(0, 80), scores, ts: Date.now() })); } catch (e) {}
+  const s10 = {}; CATS.forEach(c => { s10[c] = scores[c] / 10; });
+  if (window.putVoteInUrl) window.putVoteInUrl(slug, s10);
+}
+function clearPendingVote() {
+  try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+  if (window.clearVoteFromUrl) window.clearVoteFromUrl();
+}
+function showPendingNote() {
+  const el = document.getElementById("authPending");
+  if (!el) return;
+  const p = getPendingVote();
+  el.textContent = p ? `Tu calificación de ${p.name} está apartada: entra o crea tu cuenta y se guarda sola.` : "";
+  el.classList.toggle("on", !!p);
+}
+
+// Correo de confirmación: al confirmar, el botón "Continuar" regresa a la página con su calificación marcada.
+async function sendVerify(user) {
+  const p = getPendingVote();
+  let url = "https://www.rapscoremx.com/?verificado=1";
+  if (p && window.voteToParam) {
+    const s10 = {}; CATS.forEach(c => { s10[c] = p.scores[c] / 10; });
+    url += `&calificar=${encodeURIComponent(p.slug)}&voto=${window.voteToParam(s10)}`;
+  }
+  try { await sendEmailVerification(user, { url }); }
+  catch (e) {
+    if (e && e.code === "auth/too-many-requests") throw e;
+    await sendEmailVerification(user);   // si el dominio no está autorizado como regreso, sin link de regreso
+  }
+}
+
 // ── CUENTA VERIFICADA ─────────────────────────────────────────
+function hadAccount() { try { return localStorage.getItem("rs_had_account") === "1"; } catch (e) { return false; } }
 async function ensureVerified() {
   if (!currentUser) {
-    showToast("Tu calificación queda apartada aquí. Entra (con Google es un toque) y vuelve a tocar Guardar.", 5000);
-    rsTrack("vote_blocked_auth", { reason: "anon" });
-    openAuthModal("login");
+    // El aviso de "calificación apartada" va dentro de la ventana (#authPending), no en un toast que la tape
+    rsTrack("vote_blocked_auth", { reason: "anon", in_app: window.RS_IN_APP ? "yes" : "no" });
+    openAuthModal(hadAccount() ? "login" : "register");
     return false;
   }
   if (currentUser.emailVerified) return true;
@@ -5772,11 +5941,11 @@ async function ensureVerified() {
     return true;
   }
   let sent = true;
-  try { await sendEmailVerification(auth.currentUser); } catch (e) { sent = false; }
-  rsTrack("vote_blocked_auth", { reason: "unverified" });
+  try { await sendVerify(auth.currentUser); } catch (e) { sent = false; }
+  rsTrack("vote_blocked_auth", { reason: "unverified", in_app: window.RS_IN_APP ? "yes" : "no" });
   showToast(sent
-    ? "Confirma tu correo para votar: te mandamos el enlace (revisa spam). Tu calificación queda apartada; al confirmar, vuelve y toca Guardar."
-    : "Confirma tu correo con el enlace que te mandamos (revisa spam). Tu calificación queda apartada; al confirmar, vuelve y toca Guardar.", 7000);
+    ? "Confirma tu correo para votar: te mandamos el enlace (revisa spam). Tu calificación queda apartada y se guarda sola al confirmar."
+    : "Confirma tu correo con el enlace que te mandamos (revisa spam). Tu calificación queda apartada y se guarda sola al confirmar.", 7000);
   return false;
 }
 
@@ -5810,12 +5979,20 @@ window.submitRating = async function(btn) {
     showToast(missing.length === 1 ? 'Te falta 1 categoría por calificar' : `Te faltan ${missing.length} categorías por calificar`);
     return;
   }
+  // Sin cuenta o sin correo confirmado: queda apartada (teléfono + link) y se manda sola al entrar
+  if (!currentUser || !currentUser.emailVerified) setPendingVote(slug, name, scores);
   if (!(await ensureVerified())) return;
+  btn.disabled = true;
+  try { await saveRating(slug, name, scores); }
+  finally { btn.disabled = false; }
+};
+
+// Guarda una calificación (botón Guardar o voto pendiente). Devuelve true si se guardó.
+async function saveRating(slug, name, scores, fromPending = false) {
   const user = auth.currentUser, uid = user.uid;
   const rRef = doc(db, "ratings", `${uid}_${slug}`);
   const sRef = doc(db, "artistStats", slug);
   const cRef = doc(db, "contributors", uid);
-  btn.disabled = true;
   try {
     const res = await runTransaction(db, async (tx) => {
       const rSnap = await tx.get(rRef);
@@ -5839,6 +6016,7 @@ window.submitRating = async function(btn) {
       return { stats: { count, sum }, isNew: !old, contrib };
     });
     myRatings[slug] = scores;
+    clearPendingVote();
     if (window.clearRateDraft) window.clearRateDraft(slug);
     window._communityStats[slug] = res.stats;
     if (res.contrib) window.RS_ME = res.contrib;
@@ -5847,23 +6025,51 @@ window.submitRating = async function(btn) {
     rsTrack("rate_artist", {
       artist_slug: slug, artist_name: String(name).slice(0, 80),
       is_new: res.isNew ? "yes" : "no", is_proposal: slug.startsWith("prop-") ? "yes" : "no",
+      from_pending: fromPending ? "yes" : "no", in_app: window.RS_IN_APP ? "yes" : "no",
       score: Math.round(CATS.reduce((t, c) => t + scores[c], 0) / CATS.length) / 10
     });
-    showToast(res.isNew ? `Calificación guardada ✓  +${P_RATING} pts` : "Calificación actualizada ✓");
+    showToast(fromPending
+      ? `Listo: guardamos tu calificación de ${name} ✓${res.isNew ? `  +${P_RATING} pts` : ""}`
+      : res.isNew ? `Calificación guardada ✓  +${P_RATING} pts` : "Calificación actualizada ✓", fromPending ? 4500 : 2500);
     if (window.onRated) window.onRated(slug, res.isNew);
     if (window.afterVote) window.afterVote(slug, name, res.isNew);
     if (res.isNew) loadBoard();
+    return true;
   } catch (err) {
     console.error(err);
+    if (fromPending) clearPendingVote();   // no reintentar en bucle; su borrador sigue en la caja
     showToast(err.code === "permission-denied" && myRatings[slug]
       ? "Acabas de cambiar esta calificación. Espera 30 segundos y vuelve a guardar."
       : err.code === "permission-denied"
       ? "No pudimos guardar tu voto por este artista. Ya estamos enterados; intenta más tarde."
       : "Error al guardar la calificación");
-  } finally {
-    btn.disabled = false;
+    return false;
   }
-};
+}
+
+// Manda el voto pendiente si ya hay cuenta confirmada.
+let flushingVote = false;
+async function flushPendingVote() {
+  const p = getPendingVote();
+  const user = auth.currentUser;
+  if (!p || !user || flushingVote) return;
+  flushingVote = true;
+  try {
+    if (!user.emailVerified) {
+      try { await reload(user); } catch (e) {}
+      if (!auth.currentUser || !auth.currentUser.emailVerified) return;
+      await getIdToken(auth.currentUser, true);   // token nuevo para que las reglas vean el correo confirmado
+    }
+    const prev = myRatings[p.slug];
+    if (prev && CATS.every(c => prev[c] === p.scores[c])) { clearPendingVote(); return; }   // ya estaba igual
+    await saveRating(p.slug, p.name, p.scores, true);
+  } finally { flushingVote = false; }
+}
+// Al volver a la pestaña (por ejemplo, después de confirmar el correo en otra app)
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && auth.currentUser && getPendingVote()) flushPendingVote();
+});
+window.addEventListener("focus", () => { if (auth.currentUser && getPendingVote()) flushPendingVote(); });
 
 // ── GUARDAR PROPUESTA (queda en revisión) ─────────────────────
 // proposals/{id}: el id se arma con estado + nombre, así no se repiten.
