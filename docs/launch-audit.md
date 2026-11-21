@@ -48,7 +48,7 @@ _19 nov 2026. Revisión del repo (`main` @ 33941b3 + cambios de esta auditoría)
 | P2-2 | Las ventanas no cerraban con Esc. | Esc cierra registro, compartir, bienvenida, ajuste y la ficha por estado. | ✅ Hecho y probado |
 | P2-3 | `votar.html` con canonical a `/#votar` (un fragmento). | Canonical a `/`. | ✅ Hecho |
 | P2-4 | En celular, los textos de aviso quedaban pegados a la orilla. | Margen de 14 px. | ✅ Hecho |
-| P2-5 | En celular la etiqueta "LEYENDA" se encima con el score en la tabla (ya pasaba antes). | Mover la etiqueta abajo del nombre en pantallas angostas. | ⏳ Pendiente |
+| P2-5 | En celular la etiqueta "LEYENDA" se encima con el score en la tabla (ya pasaba antes). | Mover la etiqueta abajo del nombre en pantallas angostas. | ✅ Hecho (21 nov 2026) |
 | P2-6 | La fila del ranking solo se abre con la flechita "▾"; la flecha no tiene `aria-label`/`aria-expanded`. | Que toda la fila abra la ficha. | ⏳ Pendiente |
 | P2-7 | El botón Atrás saca del sitio (`goTo` usa `replaceState`). | Usar `pushState` + escuchar `popstate`. | ⏳ Pendiente (tocar navegación tiene riesgo; probar bien) |
 | P2-8 | No hay botón "Compartir" en la ficha del rapero, solo tras votar. | Botón con el mismo link directo. | ⏳ Pendiente |

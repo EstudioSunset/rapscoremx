@@ -1839,6 +1839,68 @@ body .nh-head-sub, body .nh-feature span, body .rule-item span, body .wait-note,
 body .sf-legal { font-size: 12px; line-height: 1.55; }
 body .pop-list li { font-size: 15px; }
 </style>
+<style>
+/* ═══ CELULAR (nov 2026): pulgar, legibilidad y sin zoom en iPhone ═══ */
+.rk-msearch { display: none; }
+@media (max-width: 600px) {
+  /* iPhone hace zoom al tocar un campo con letra menor a 16 px (pasaba en correo y contraseña al crear cuenta) */
+  .auth-input, .search-input, .vp-search, .alias-row .auth-input, html .form-input, .sug-grid .auth-input {
+    font-family: 'Barlow', system-ui, sans-serif; font-size: 16px; letter-spacing: 0;
+  }
+
+  /* Encabezado: "Entrar" y el menú de 44 px para el pulgar */
+  .btn-auth-mobile { min-height: 40px; padding: 0 14px; margin-right: 2px; }
+  .hamburger { width: 44px; height: 44px; align-items: center; justify-content: center; margin: 0 -10px 0 0; }
+  nav a { font-size: 15px; color: #cfc9bf; min-height: 52px; display: flex; align-items: center; }
+
+  /* Portada: los dos botones lado a lado, así se ve más del Top 5 sin bajar */
+  .nh-ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+  .nh-ctas .nh-btn { justify-content: center; padding: 0 8px; font-size: 20px; min-height: 52px; }
+  .nh-stat span { font-size: 10px; letter-spacing: 1px; }
+
+  /* Ranking: buscador propio, filtros y orden más fáciles de tocar */
+  .rk-msearch { display: block; position: relative; margin: 0 14px 6px; }
+  .rk-msearch .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  .rk-msearch .search-input { width: 100%; min-height: 44px; padding: 8px 12px 8px 34px; }
+  .filter-btn { font-size: 11px; min-height: 44px; }
+  .sort-btn { font-size: 10px; padding: 10px 12px; min-height: 36px; }
+
+  /* Fila del ranking: la etiqueta LEYENDA/EMERGENTE ya no se encima con la calificación */
+  .info-cell > div { min-width: 0; }
+  .artist-name { white-space: normal; display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; font-size: 14px; }
+  .artist-name .badge-legend, .artist-name .badge-emer { margin-left: 0; font-size: 9px; }
+  .artist-tag { font-size: 11px; letter-spacing: .5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .total-cell { width: 84px; text-align: right; }
+  .total-votes { font-size: 10px; letter-spacing: .5px; line-height: 1.3; white-space: normal; }
+  .expand-btn { min-width: 40px; min-height: 44px; padding: 0; }
+  .vote-btn { min-height: 44px; font-size: 11px; }
+
+  /* Votar: menos cajas dentro de cajas = botones del 1 al 10 más anchos */
+  .votar-wrap { padding: 22px 12px 64px; }
+  .votar-stage { padding: 14px 12px; }
+  .vs-top { margin: -14px -12px 14px; padding: 8px 12px; }
+  .vs-left { font-size: 11px; }
+  .vs-sub { font-size: 11px; letter-spacing: 1px; }
+  .vs-bio { font-size: 15px; line-height: 1.6; color: #b5b0a8; }
+  .rate-box { padding: 14px 0 0; border: none; border-top: 1px solid var(--border); background: none; }
+  .rate-scale { gap: 4px; }
+  .rate-n { min-height: 46px; font-size: 21px; }
+  .rate-cat { font-size: 11px; }
+  .rate-hint, .rate-note { font-size: 12px; }
+  /* Guardar = el botón más importante del sitio: ancho completo y grande */
+  .rate-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .rate-submit { width: 100%; min-height: 54px; font-size: 14px; }
+  .vp-chip { min-height: 40px; font-size: 11px; }
+  .vp-card { min-height: 56px; }
+  .vp-name { font-size: 15px; }
+  .vp-sub { font-size: 11px; letter-spacing: .5px; }
+  .vcard-text { font-size: 14px; }
+
+  /* Footer: links con espacio para el dedo */
+  .sf-links { gap: 0; }
+  .sf-links a { display: block; padding: 11px 0; font-size: 12px; }
+}
+</style>
 </head>
 <body>
 
@@ -1919,7 +1981,8 @@ body .pop-list li { font-size: 15px; }
 
 <!-- Google Sheets: carga automática silenciosa -->
 
-<!-- CONTROLS -->
+<!-- CONTROLS (envuelto con el ranking: así la barra de filtros solo se queda pegada arriba mientras ves el ranking) -->
+<div class="rk-block">
 <div class="controls">
   <div class="controls-inner">
     <button class="filter-btn active" onclick="filterTier('all', this)">Todos</button>
@@ -1942,6 +2005,12 @@ body .pop-list li { font-size: 15px; }
     <div class="section-count" id="countLabel">50 artistas</div>
   </div>
   <p class="wait-note rank-notice" id="rankNotice" style="display:none"></p>
+
+  <!-- Buscador para celular (el de la barra de filtros se oculta en pantallas angostas) -->
+  <div class="rk-msearch">
+    <span class="search-icon" aria-hidden="true">⌕</span>
+    <input type="search" class="search-input" id="searchInputM" name="rs-q-artista-m" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Buscar rapero o ciudad…" aria-label="Buscar en el ranking" readonly onfocus="this.removeAttribute('readonly')" data-lpignore="true" data-1p-ignore oninput="searchArtists(this.value)">
+  </div>
 
   <!-- SORT ROW -->
   <div class="sort-row">
@@ -1981,6 +2050,7 @@ body .pop-list li { font-size: 15px; }
   </div>
 </main>
 </div><!-- /section-rankings -->
+</div><!-- /rk-block -->
 
 <section class="nh-explore home-only" aria-labelledby="nhExploreTitle">
   <div class="nh-head">
@@ -2683,7 +2753,7 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
         </div>
         <div class="total-cell"><span class="total-score">${fmtScore(artist.total, artist.votes)}</span><span class="total-votes">${votesLabel(artist.votes)}</span></div>
         <div class="action-cell">
-          <button class="expand-btn" data-name="${artist.name}" onclick="toggleExpand(event,'${artist.name}')">▾</button>
+          <button class="expand-btn" data-name="${artist.name}" aria-label="Ver ficha de ${artist.name}" onclick="toggleExpand(event,'${artist.name}')">▾</button>
         </div>
       </div>
       <div class="expanded-panel" id="panel-${safeName(artist.name)}"></div>
@@ -2693,6 +2763,17 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
 }
 
 function safeName(n) { return n.replace(/[^a-zA-Z0-9]/g,'_'); }
+
+// Tocar cualquier parte de la fila abre la ficha (antes solo la flechita ▾ de 26 px, difícil en celular)
+['artistTable', 'waitTable'].forEach(id => {
+  const t = document.getElementById(id);
+  if (t) t.addEventListener('click', e => {
+    if (e.target.closest('button, a, input')) return;
+    const row = e.target.closest('.artist-row');
+    const btn = row && row.querySelector('.expand-btn');
+    if (btn) btn.click();
+  });
+});
 
 function toggleExpand(e, name) {
   e.stopPropagation();
@@ -3059,8 +3140,10 @@ function looksAutofill(input) {
   return false;
 }
 function searchArtists(q) {
-  const inp = document.getElementById('searchInput');
-  if (/@/.test(q)) { if (inp) inp.value = ''; q = ''; }
+  // Hay dos buscadores (barra de filtros en compu y #searchInputM en celular): se mantienen iguales
+  const inputs = ['searchInput', 'searchInputM'].map(id => document.getElementById(id)).filter(Boolean);
+  if (/@/.test(q)) q = '';
+  inputs.forEach(i => { if (i.value !== q) i.value = q; });
   currentSearch = q.trim();
   refreshTable();
   clearTimeout(_searchTimer);
