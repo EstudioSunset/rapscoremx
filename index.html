@@ -5999,6 +5999,9 @@ async function saveRating(slug, name, scores, fromPending = false) {
       const sSnap = await tx.get(sRef);
       const cSnap = await tx.get(cRef);
       const old = rSnap.exists() ? rSnap.data().scores : null;
+      // Voto pendiente que ya se guardó igual (p. ej. desde el link del correo en otro navegador): no se reescribe
+      // (si no, la regla de "máx. 1 cambio cada 30 s" lo rechaza y saldría un error falso)
+      if (fromPending && old && CATS.every(c => old[c] === scores[c])) return { same: true };
       const st = sSnap.exists() ? sSnap.data() : { count: 0, sum: {} };
       const sum = {};
       CATS.forEach(c => { sum[c] = (st.sum?.[c] || 0) + scores[c] - (old ? old[c] : 0); });
@@ -6018,6 +6021,7 @@ async function saveRating(slug, name, scores, fromPending = false) {
     myRatings[slug] = scores;
     clearPendingVote();
     if (window.clearRateDraft) window.clearRateDraft(slug);
+    if (res.same) { refreshOpenRateBoxes(); return true; }
     window._communityStats[slug] = res.stats;
     if (res.contrib) window.RS_ME = res.contrib;
     if (window.applyCommunityStats) window.applyCommunityStats();
