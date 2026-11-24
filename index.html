@@ -1045,6 +1045,11 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .total-rate { display:block; margin:4px auto 0; padding:4px 10px; background:transparent; border:1px solid #ffcc00; border-radius:2px; color:#ffcc00; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition: background .15s, color .15s; }
 .total-rate:hover, .total-rate:focus-visible { background:#ffcc00; color:#0a0a0a; }
 .expanded-panel .rate-box { scroll-margin-top: 130px; }
+/* Atajo arriba de la ficha: "Califica a X ↓" */
+.ficha-cta { display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; margin:6px 0 16px; }
+.ficha-rate { min-height:44px; padding:0 18px; background:#ffcc00; color:#0a0a0a; border:none; font-family:'Space Mono', monospace; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+.ficha-rate:hover, .ficha-rate:focus-visible { filter:brightness(1.08); }
+.ficha-cta-note { font-family:'Barlow', sans-serif; font-size:15px; color:var(--muted); }
 .total-votes { display:block; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-top:2px; }
 .score-split { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:4px 0 20px; }
 .ss-item { background:var(--surface); padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
@@ -1409,6 +1414,21 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rs-inapp .auth-google { display: none; }
 .auth-pending { display: none; font-family: 'Barlow', sans-serif; font-size: 15px; line-height: 1.4; color: #ffcc00; }
 .auth-pending.on { display: block; }
+/* Paso "Confirma tu correo" */
+.auth-verify { display: flex; flex-direction: column; gap: 12px; font-family: 'Barlow', sans-serif; font-size: 16px; line-height: 1.45; color: var(--text); }
+.auth-verify[hidden], .av-open[hidden] { display: none; }
+.auth-verify p { margin: 0; }
+.av-text b { color: #ffcc00; word-break: break-all; }
+.av-pending { color: #ffcc00; }
+.av-pending:empty { display: none; }
+.av-open { display: flex; align-items: center; justify-content: center; min-height: 46px; background: #ffcc00; color: #0a0a0a; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+.av-open:hover { filter: brightness(1.08); }
+.av-tip { font-size: 14px; color: var(--muted); }
+.av-tip button { background: none; border: none; padding: 0; color: var(--accent); text-decoration: underline; font: inherit; cursor: pointer; }
+.av-tip button:disabled { color: var(--muted); cursor: default; text-decoration: none; }
+.av-inapp { display: none; }
+.rs-inapp .av-inapp { display: block; }
+.auth-modal.verify-mode .auth-form { display: none; }
 .auth-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .auth-input {
@@ -2118,6 +2138,16 @@ body .pop-list li { font-size: 15px; }
         <button type="button" onclick="setAuthMode('register')">Crear cuenta</button>
       </p>
     </div>
+
+    <!-- Paso "Confirma tu correo": se queda en pantalla tras registrarse (antes era un aviso de 6 s que desaparecía) -->
+    <div class="auth-verify" id="authVerify" hidden>
+      <p class="av-text">Te mandamos un enlace a <b id="avEmail">tu correo</b>. Ábrelo y toca el enlace para confirmar tu cuenta.</p>
+      <p class="av-pending" id="avPending"></p>
+      <a class="av-open" id="avOpenMail" href="#" target="_blank" rel="noopener" hidden>Abrir mi correo ↗</a>
+      <button type="button" class="btn-compare auth-submit" id="avCheck">Ya lo confirmé</button>
+      <p class="av-tip">¿No llega en 1 minuto? Revisa <b>Spam</b> o <b>Promociones</b>. <button type="button" id="avResend">Reenviar correo</button></p>
+      <p class="av-tip av-inapp">Si el enlace se abre en otro navegador, regresa a esta pestaña después: tu calificación se guarda sola aquí.</p>
+    </div>
   </div>
 </div>
 <!-- BIENVENIDA -->
@@ -2796,6 +2826,16 @@ function rateFromRow(e) {
   });
 });
 
+// Botón de arriba de la ficha: baja directo a la caja de calificar (antes quedaba abajo de bio, puntajes y nota;
+// en escritorio 1024×768 empezaba justo en la orilla de la pantalla y en celular a ~1,5 pantallas).
+function jumpToRate(btn) {
+  const box = btn.closest('.expanded-panel')?.querySelector('.rate-box');
+  if (!box) return;
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const first = box.querySelector('.rate-row:not([data-val]) .rate-n, .rate-row[data-val=""] .rate-n') || box.querySelector('.rate-n');
+  if (first) setTimeout(() => first.focus({ preventScroll: true }), 400);
+}
+
 function toggleExpand(e, name) {
   e.stopPropagation();
   const panel = document.getElementById('panel-' + safeName(name));
@@ -2815,6 +2855,7 @@ function toggleExpand(e, name) {
   panel.classList.add('open');
   btn.classList.add('open');
   expandedRow = name;
+  if (typeof hideNudge === 'function') hideNudge();   // la barra tapaba la ficha y la caja de calificar
   rsTrack('view_artist', { artist_name: name, artist_slug: artist.slug });
   drawRadar('radar-' + safeName(name), artist.scores, '#ff3c00');
 }
@@ -3002,6 +3043,7 @@ function ratePick(btn, n) {
     if (!RATE_DRAFT[slug]) {
       RATE_DRAFT[slug] = {};
       rsTrack('vote_start', { artist_slug: slug });
+      if (typeof hideNudge === 'function') hideNudge();   // ya está votando: la barra de bienvenida sobra
     }
     RATE_DRAFT[slug][row.dataset.cat] = n;
     saveRateDraft();
@@ -3042,9 +3084,19 @@ function buildPanel(artist) {
     </div>
   `).join('');
   const comm = artist.community;
+  const mine = typeof window.getMyRating === 'function' ? window.getMyRating(artist.slug) : null;
+  const left = Math.max(0, MIN_VOTES_FIRM - artist.votes);
+  const ctaNote = mine ? 'Ya lo calificaste'
+    : !artist.votes ? 'Nadie lo ha calificado: tu voto es el primero'
+    : left ? `Le falta${left === 1 ? '' : 'n'} ${left} voto${left === 1 ? '' : 's'} para tener posición firme`
+    : `${artist.votes} votos de la comunidad`;
   return `
     <div class="expanded-left">
       <h3>${esc(artist.name)}</h3>
+      <div class="ficha-cta">
+        <button type="button" class="ficha-rate" data-track="ficha_calificar" onclick="jumpToRate(this)">${mine ? 'Cambiar mi calificación ↓' : 'Califica a ' + esc(artist.name) + ' ↓'}</button>
+        <span class="ficha-cta-note">${ctaNote}</span>
+      </div>
       ${ARTIST_PHOTOS[artist.slug] ? `<div class="expanded-photo">${artistAvatar(artist)}</div>${photoCredit(artist)}` : ''}
       <p class="expanded-bio">${esc(artist.bio)}</p>
       ${listenLinks(artist)}
@@ -3523,6 +3575,9 @@ function nudgeEligible() {
   if (window.RS_ME && window.RS_ME.ratings > 0) return false;                   // ya votó
   if (location.hash && location.hash !== '#') return false;                     // solo en la portada
   if (document.querySelector('.modal-overlay.open, .la-modal-overlay.open, #sugBox.open')) return false;
+  // Ya está viendo o calificando a un rapero: la barra le tapaba la caja de calificar y su "Votar →" lo sacaba de ahí
+  if (document.querySelector('.expanded-panel.open')) return false;
+  if (typeof RATE_DRAFT !== 'undefined' && Object.keys(RATE_DRAFT).length) return false;
   return true;
 }
 function showNudge() {
@@ -5750,6 +5805,10 @@ function setAuthMode(mode) {
   const submitBtn  = document.getElementById("authSubmitBtn");
   const switchText = document.getElementById("authSwitchText");
   if (!title) return;
+  // Al volver a entrar/registrarse se quita el paso "Confirma tu correo"
+  document.querySelector("#authModal .auth-modal")?.classList.remove("verify-mode");
+  const av = document.getElementById("authVerify"); if (av) av.hidden = true;
+  const sub = document.querySelector("#authModal .modal-sub"); if (sub) sub.textContent = "Vota, compara y propone artistas en RapScore MX";
   if (mode === "register") {
     title.textContent     = "Crear cuenta";
     submitBtn.textContent = "Registrarse";
@@ -5761,12 +5820,92 @@ function setAuthMode(mode) {
   }
 }
 
-function openAuthModal(mode = "login") {
+// trigger: "voto" = se abrió sola al intentar guardar una calificación; "verificado" = llegó del correo de confirmación;
+// "manual" = tocó Entrar/Registrarse. Así signup_start no se infla con las aperturas automáticas.
+function openAuthModal(mode = "login", trigger = "manual") {
   setAuthMode(mode);
   showPendingNote();
   document.getElementById("authModal").classList.add("open");
-  rsTrack("signup_start", { mode, in_app: window.RS_IN_APP ? "yes" : "no" });   // abrió la ventana de entrar/registrarse (embudo: signup_start → sign_up / login)
+  rsTrack("signup_start", { mode, trigger, in_app: window.RS_IN_APP ? "yes" : "no" });   // abrió la ventana de entrar/registrarse (embudo: signup_start → sign_up / login)
 }
+
+// ── PASO "CONFIRMA TU CORREO" ─────────────────────────────────
+// Antes, al registrarse con correo la ventana se cerraba y quedaba un aviso de 6 s. Quien no lo leía no sabía qué seguía
+// (Clarity, nov 2026: 6 de 7 que intentaron votar chocaron con la cuenta y solo 1 terminó). Ahora la ventana se queda
+// con el paso que falta, un botón para abrir su correo y "Ya lo confirmé", que guarda la calificación apartada.
+const WEBMAIL = [
+  [/^(gmail|googlemail)\.com$/, "https://mail.google.com/", "Gmail"],
+  [/^(hotmail|outlook|live|msn)\.(com|es|com\.mx)$/, "https://outlook.live.com/mail/", "Outlook"],
+  [/^yahoo\.(com|com\.mx|es)$/, "https://mail.yahoo.com/", "Yahoo"],
+  [/^(icloud|me|mac)\.com$/, "https://www.icloud.com/mail", "iCloud"],
+];
+function webmailFor(email) {
+  const dom = String(email || "").toLowerCase().split("@")[1] || "";
+  const m = WEBMAIL.find(([re]) => re.test(dom));
+  return m ? { url: m[1], name: m[2] } : null;
+}
+let verifyTrigger = "";
+function showVerifyPanel(trigger) {
+  const user = auth.currentUser;
+  if (!user) return;
+  verifyTrigger = trigger;
+  const modal = document.getElementById("authModal");
+  modal.querySelector(".auth-modal").classList.add("verify-mode");
+  document.getElementById("authTitle").textContent = "Confirma tu correo";
+  modal.querySelector(".modal-sub").textContent = "Último paso para que cuente tu voto";
+  document.getElementById("avEmail").textContent = user.email || "tu correo";
+  const p = getPendingVote();
+  document.getElementById("avPending").textContent = p ? `Tu calificación de ${p.name} está apartada: se guarda sola en cuanto confirmes.` : "";
+  const wm = webmailFor(user.email), open = document.getElementById("avOpenMail");
+  open.hidden = !wm;
+  if (wm) { open.href = wm.url; open.textContent = `Abrir ${wm.name} ↗`; open.dataset.provider = wm.name.toLowerCase(); }
+  document.getElementById("authVerify").hidden = false;
+  modal.classList.add("open");
+  rsTrack("verify_prompt_view", { trigger, provider: wm ? wm.name.toLowerCase() : "otro", has_pending: p ? "yes" : "no", in_app: window.RS_IN_APP ? "yes" : "no" });
+}
+function verifyPanelOpen() {
+  return document.getElementById("authModal")?.classList.contains("open") && !document.getElementById("authVerify")?.hidden;
+}
+// Se manda UNA vez por cuenta en este navegador: el paso de "correo confirmado" del embudo
+function markVerified(via) {
+  const uid = auth.currentUser && auth.currentUser.uid;
+  if (!uid) return;
+  try { if (localStorage.getItem("rs_verified_ev") === uid) return; localStorage.setItem("rs_verified_ev", uid); } catch (e) {}
+  rsTrack("email_verified", { via, in_app: window.RS_IN_APP ? "yes" : "no" });
+}
+// ¿Ya confirmó? (botón "Ya lo confirmé" o al volver a la pestaña)
+async function checkVerified(fromButton) {
+  const user = auth.currentUser;
+  if (!user) { setAuthMode("login"); return false; }
+  const btn = document.getElementById("avCheck");
+  if (fromButton && btn) { btn.disabled = true; btn.textContent = "Revisando…"; }
+  try { await reload(user); } catch (e) {}
+  const ok = !!(auth.currentUser && auth.currentUser.emailVerified);
+  if (fromButton && btn) { btn.disabled = false; btn.textContent = "Ya lo confirmé"; }
+  if (fromButton) rsTrack("verify_check", { result: ok ? "verified" : "not_yet" });
+  if (!ok) {
+    if (fromButton) showToast("Todavía no aparece confirmado. Abre el correo de RapScore MX, toca el enlace y regresa aquí.", 6000);
+    return false;
+  }
+  try { await getIdToken(auth.currentUser, true); } catch (e) {}   // token nuevo para que las reglas vean el correo confirmado
+  markVerified(fromButton ? "boton" : "regreso");
+  if (verifyPanelOpen()) closeAuthModal();
+  if (getPendingVote()) await flushPendingVote();
+  else showToast("Correo confirmado ✓ Ya puedes calificar.", 3500);
+  return true;
+}
+document.getElementById("avCheck").addEventListener("click", () => checkVerified(true));
+document.getElementById("avOpenMail").addEventListener("click", e => {
+  rsTrack("verify_open_mail", { provider: e.currentTarget.dataset.provider || "otro", in_app: window.RS_IN_APP ? "yes" : "no" });
+});
+document.getElementById("avResend").addEventListener("click", async e => {
+  const b = e.currentTarget;
+  if (!auth.currentUser) return;
+  b.disabled = true;
+  try { await sendVerify(auth.currentUser); showToast("Te lo mandamos otra vez ✓ Revisa también Spam.", 4000); rsTrack("verify_resend", { result: "ok" }); }
+  catch (err) { showToast("Espera un momento antes de pedir otro correo.", 4000); rsTrack("verify_resend", { result: "wait" }); }
+  setTimeout(() => { b.disabled = false; }, 30000);   // Firebase limita los reenvíos
+});
 function closeAuthModal() {
   document.getElementById("authModal").classList.remove("open");
 }
@@ -5804,12 +5943,18 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
       });
       try { await sendVerify(cred.user); } catch (e) { console.warn(e); }
       rsTrack("sign_up", { method: "email" });
-      showToast(getPendingVote()
-        ? "Cuenta creada ✓ Confirma tu correo (revisa spam) y tu calificación se guarda sola."
-        : "Cuenta creada ✓ Revisa tu correo para confirmarla y poder votar", 6000);
+      showToast("Cuenta creada ✓", 2500);
+      showVerifyPanel("registro");   // la ventana se queda con el paso que falta
+      return;
     } else {
-      await signInWithEmailAndPassword(auth, email, password);
+      const cred = await signInWithEmailAndPassword(auth, email, password);
       rsTrack("login", { method: "email" });
+      // Entró pero no ha confirmado y tiene un voto apartado: que vea el paso que falta en lugar de cerrar
+      if (!cred.user.emailVerified && getPendingVote()) {
+        try { await sendVerify(cred.user); } catch (e) {}
+        showVerifyPanel("login");
+        return;
+      }
       showToast("Sesión iniciada ✓");
     }
     closeAuthModal();
@@ -5944,7 +6089,26 @@ onAuthStateChanged(auth, async (user) => {
     try { localStorage.setItem("rs_had_account", "1"); } catch (e) {}
     flushPendingVote();   // si calificó antes de entrar, se guarda sola
   }
+  handleVerifiedLanding(user);
 });
+
+// Llegó con el link del correo de confirmación (?verificado=1). Si el link se abrió en otro navegador
+// (pasa mucho desde la app de Facebook o de Gmail), aquí no hay sesión: abrimos "Iniciar sesión" con el aviso,
+// en lugar de dejarlo buscando el botón Entrar. Solo la primera vez que Firebase dice quién es.
+let verifiedLandingDone = false;
+function handleVerifiedLanding(user) {
+  if (verifiedLandingDone) return;
+  verifiedLandingDone = true;
+  let sp; try { sp = new URLSearchParams(location.search); } catch (e) { return; }
+  if (sp.get("verificado") !== "1") return;
+  if (user) {
+    reload(user).then(() => { if (auth.currentUser && auth.currentUser.emailVerified) markVerified("link"); }).catch(() => {});
+    return;
+  }
+  openAuthModal("login", "verificado");
+  const el = document.getElementById("authPending");
+  if (el) { el.textContent = "Tu correo ya está confirmado ✓ Entra con tu correo y contraseña para guardar tu calificación."; el.classList.add("on"); }
+}
 
 // Vuelve a dibujar el formulario abierto (para mostrar "Tu calificación")
 function refreshOpenRateBoxes() {
@@ -6035,21 +6199,19 @@ async function ensureVerified() {
   if (!currentUser) {
     // El aviso de "calificación apartada" va dentro de la ventana (#authPending), no en un toast que la tape
     rsTrack("vote_blocked_auth", { reason: "anon", in_app: window.RS_IN_APP ? "yes" : "no" });
-    openAuthModal(hadAccount() ? "login" : "register");
+    openAuthModal(hadAccount() ? "login" : "register", "voto");
     return false;
   }
   if (currentUser.emailVerified) return true;
   try { await reload(currentUser); } catch (e) {}
   if (auth.currentUser && auth.currentUser.emailVerified) {
     await getIdToken(auth.currentUser, true); // refresca el token para las reglas
+    markVerified("regreso");
     return true;
   }
-  let sent = true;
-  try { await sendVerify(auth.currentUser); } catch (e) { sent = false; }
+  try { await sendVerify(auth.currentUser); } catch (e) {}
   rsTrack("vote_blocked_auth", { reason: "unverified", in_app: window.RS_IN_APP ? "yes" : "no" });
-  showToast(sent
-    ? "Confirma tu correo para votar: te mandamos el enlace (revisa spam). Tu calificación queda apartada y se guarda sola al confirmar."
-    : "Confirma tu correo con el enlace que te mandamos (revisa spam). Tu calificación queda apartada y se guarda sola al confirmar.", 7000);
+  showVerifyPanel("bloqueo");   // antes: un aviso de 7 s; ahora el paso se queda en pantalla
   return false;
 }
 
@@ -6167,6 +6329,8 @@ async function flushPendingVote() {
       try { await reload(user); } catch (e) {}
       if (!auth.currentUser || !auth.currentUser.emailVerified) return;
       await getIdToken(auth.currentUser, true);   // token nuevo para que las reglas vean el correo confirmado
+      markVerified("regreso");
+      if (verifyPanelOpen()) closeAuthModal();
     }
     const prev = myRatings[p.slug];
     if (prev && CATS.every(c => prev[c] === p.scores[c])) { clearPendingVote(); return; }   // ya estaba igual
@@ -6175,7 +6339,9 @@ async function flushPendingVote() {
 }
 // Al volver a la pestaña (por ejemplo, después de confirmar el correo en otra app)
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && auth.currentUser && getPendingVote()) flushPendingVote();
+  if (document.visibilityState !== "visible" || !auth.currentUser) return;
+  if (getPendingVote()) flushPendingVote();
+  else if (verifyPanelOpen()) checkVerified(false);   // sin voto apartado: igual cerramos el paso si ya confirmó
 });
 window.addEventListener("focus", () => { if (auth.currentUser && getPendingVote()) flushPendingVote(); });
 
