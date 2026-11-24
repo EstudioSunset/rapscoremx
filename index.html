@@ -6193,16 +6193,11 @@ window.saveProposal = async function(data, propId) {
     if (wait > 0) { showToast(`Espera ${wait} min para proponer otro rapero`); return null; }
   } catch (e) {}
   try {
-    const commitProp = async (withId) => {
-      const batch = writeBatch(db);
-      batch.set(doc(db, "proposals", propId), { ...data, status: "pending", createdBy: uid, createdAt: serverTimestamp() });
-      batch.set(lRef, withId ? { lastProposalAt: serverTimestamp(), lastProposalId: propId } : { lastProposalAt: serverTimestamp() });
-      await batch.commit();
-    };
-    // Reglas nuevas exigen lastProposalId; las viejas lo rechazan. Mientras no estén publicadas las nuevas,
-    // se reintenta sin él. QUITAR el reintento cuando firestore.rules (nov 2026) esté publicado en Firebase.
-    try { await commitProp(true); }
-    catch (e) { if (e.code !== "permission-denied") throw e; await commitProp(false); }
+    // firestore.rules exige que limits/{uid}.lastProposalId sea la propuesta que se crea en este mismo lote
+    const batch = writeBatch(db);
+    batch.set(doc(db, "proposals", propId), { ...data, status: "pending", createdBy: uid, createdAt: serverTimestamp() });
+    batch.set(lRef, { lastProposalAt: serverTimestamp(), lastProposalId: propId });
+    await batch.commit();
     window.RS_MYPROPS = [{ id: propId, name: data.name, estado: data.estado, status: "pending" }, ...(window.RS_MYPROPS || [])];
     rsTrack("propose_artist", { estado: String(data.estado || "") });
     if (window.renderMyProps) window.renderMyProps();
