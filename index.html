@@ -1042,6 +1042,9 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 }
 
 /* VOTACIÓN */
+.total-rate { display:block; margin:4px auto 0; padding:4px 10px; background:transparent; border:1px solid #ffcc00; border-radius:2px; color:#ffcc00; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition: background .15s, color .15s; }
+.total-rate:hover, .total-rate:focus-visible { background:#ffcc00; color:#0a0a0a; }
+.expanded-panel .rate-box { scroll-margin-top: 130px; }
 .total-votes { display:block; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-top:2px; }
 .score-split { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:4px 0 20px; }
 .ss-item { background:var(--surface); padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
@@ -1872,6 +1875,9 @@ body .pop-list li { font-size: 15px; }
   .artist-tag { font-size: 11px; letter-spacing: .5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .total-cell { width: 84px; text-align: right; }
   .total-votes { font-size: 10px; letter-spacing: .5px; line-height: 1.3; white-space: normal; }
+  .total-rate { margin: 2px 0 0 auto; min-height: 34px; padding: 0 12px; font-size: 11px; }
+  /* Portada: las 4 características se las saltaban (Clarity, nov 2026); el texto del hero ya lo explica */
+  .nh-features { display: none; }
   .expand-btn { min-width: 40px; min-height: 44px; padding: 0; }
   .vote-btn { min-height: 44px; font-size: 11px; }
 
@@ -2052,6 +2058,13 @@ body .pop-list li { font-size: 15px; }
 </div><!-- /section-rankings -->
 </div><!-- /rk-block -->
 
+<!-- Invitación a votar justo después del ranking (antes iba al final y casi nadie llegaba: Clarity, nov 2026) -->
+<section class="nh-cta home-only" aria-label="Califica">
+  <div class="nh-cta-text"><b>Tu voto suma</b><span>cuando conoces la escena.</span></div>
+  <p>Apoya a tus artistas, descubre nuevos talentos y sé parte del ranking más completo del rap mexicano.</p>
+  <button type="button" class="nh-btn" data-track="cta_calificar" onclick="goTo('votar')">Calificar artistas →</button>
+</section>
+
 <section class="nh-explore home-only" aria-labelledby="nhExploreTitle">
   <div class="nh-head">
     <h2 id="nhExploreTitle">Explora por estado y categoría</h2>
@@ -2065,12 +2078,6 @@ body .pop-list li { font-size: 15px; }
   <div class="nh-cards" id="nhExplore"></div>
 </section>
 
-
-<section class="nh-cta home-only" aria-label="Califica">
-  <div class="nh-cta-text"><b>Tu voto suma</b><span>cuando conoces la escena.</span></div>
-  <p>Apoya a tus artistas, descubre nuevos talentos y sé parte del ranking más completo del rap mexicano.</p>
-  <button type="button" class="nh-btn" data-track="cta_calificar" onclick="goTo('votar')">Calificar artistas →</button>
-</section>
 
 <!-- ═══ SECTION: POR ESTADO ═══ -->
 <div id="section-votar" style="display:none"></div>
@@ -2751,7 +2758,9 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
           <span class="score-val">${fmtScore(artist.scores.hooks, artist.votes)}</span>
           <div class="score-bar"><div class="score-fill" style="width:${artist.votes ? artist.scores.hooks : 0}%"></div></div>
         </div>
-        <div class="total-cell"><span class="total-score">${fmtScore(artist.total, artist.votes)}</span><span class="total-votes">${votesLabel(artist.votes)}</span></div>
+        <div class="total-cell"><span class="total-score">${fmtScore(artist.total, artist.votes)}</span>${artist.votes
+          ? `<span class="total-votes">${votesLabel(artist.votes)}</span>`
+          : `<button type="button" class="total-rate" data-track="fila_calificar" aria-label="Calificar a ${esc(artist.name)}" onclick="rateFromRow(event)">Califica</button>`}</div>
         <div class="action-cell">
           <button class="expand-btn" data-name="${artist.name}" aria-label="Ver ficha de ${artist.name}" onclick="toggleExpand(event,'${artist.name}')">▾</button>
         </div>
@@ -2763,6 +2772,18 @@ function renderTable(data, targetId = 'artistTable', offset = 0) {
 }
 
 function safeName(n) { return n.replace(/[^a-zA-Z0-9]/g,'_'); }
+
+// "Califica" en las filas sin votos: abre la ficha y lleva directo a la caja de calificar.
+// En Clarity (nov 2026) la gente tocaba el "—" del puntaje, pero la caja quedaba abajo de la bio y nadie llegaba.
+function rateFromRow(e) {
+  e.stopPropagation();
+  const row = e.currentTarget.closest('.artist-row');
+  const btn = row && row.querySelector('.expand-btn');
+  if (!btn) return;
+  if (!btn.classList.contains('open')) btn.click();
+  const box = row.nextElementSibling && row.nextElementSibling.querySelector('.rate-box');
+  if (box) setTimeout(() => box.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+}
 
 // Tocar cualquier parte de la fila abre la ficha (antes solo la flechita ▾ de 26 px, difícil en celular)
 ['artistTable', 'waitTable'].forEach(id => {
