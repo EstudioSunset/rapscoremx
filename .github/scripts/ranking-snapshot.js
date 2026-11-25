@@ -1,5 +1,5 @@
 // Copia del ranking para no leer Firestore en cada visita (nov 2026).
-// Lee los datos PÚBLICOS (artistStats y propuestas aprobadas) con la llave pública del sitio,
+// Lee los datos PÚBLICOS (artistStats, propuestas aprobadas y duelos del Versus) con la llave pública del sitio,
 // igual que cualquier navegador, y escribe datos/ranking.json. Lo corre GitHub Actions cada 30 min
 // (.github/workflows/ranking-snapshot.yml); también se puede correr a mano: node .github/scripts/ranking-snapshot.js
 //
@@ -70,14 +70,37 @@ async function readApprovedProposals() {
   }).sort((a, b) => a.id.localeCompare(b.id));
 }
 
+// Versus (duelos): abiertos y los que cerraron en los últimos 30 días. Mientras está abierto solo va el total
+// de participantes (el marcador se revela al cierre, igual que en la página del duelo).
+async function readVersus() {
+  const out = [];
+  let token = '';
+  do {
+    const d = await get(`${BASE}/versus?pageSize=300&key=${KEY}${token ? '&pageToken=' + encodeURIComponent(token) : ''}`);
+    for (const doc of d.documents || []) {
+      const f = val({ mapValue: { fields: doc.fields || {} } });
+      const closes = Date.parse(f.closes || '');
+      if (!f.a || !f.b || !closes || Date.now() - closes > 30 * 864e5) continue;
+      const va = Number(f.va) || 0, vb = Number(f.vb) || 0;
+      const x = { id: idOf(doc.name), a: f.a, b: f.b, q: f.q || '', closes: new Date(closes).toISOString(), total: va + vb };
+      if (closes <= Date.now()) { x.va = va; x.vb = vb; }
+      out.push(x);
+    }
+    token = d.nextPageToken || '';
+  } while (token);
+  return out.sort((a, b) => b.closes.localeCompare(a.closes) || a.id.localeCompare(b.id));
+}
+
 function sortKeys(o) { return Object.fromEntries(Object.keys(o).sort().map(k => [k, o[k]])); }
 
 (async () => {
-  const [stats, propuestas] = await Promise.all([readStats(), readApprovedProposals()]);
-  const data = { stats: sortKeys(stats), propuestas };
+  const [stats, propuestas, versus] = await Promise.all([readStats(), readApprovedProposals(),
+    // Si las reglas del Versus aún no están publicadas, leerlo da "sin permiso": eso no debe tumbar la copia del ranking
+    readVersus().catch(e => { console.warn('Versus sin leer:', e.message.slice(0, 80)); return []; })]);
+  const data = { stats: sortKeys(stats), propuestas, versus };
   let prev = null;
   try { prev = JSON.parse(fs.readFileSync(OUT, 'utf8')); } catch (e) {}
-  const same = prev && JSON.stringify({ stats: prev.stats, propuestas: prev.propuestas }) === JSON.stringify(data);
+  const same = prev && JSON.stringify({ stats: prev.stats, propuestas: prev.propuestas, versus: prev.versus || [] }) === JSON.stringify(data);
   const ageH = prev && prev.revisado ? (Date.now() - Date.parse(prev.revisado)) / 3600000 : Infinity;
   const votos = Object.values(stats).reduce((s, x) => s + x.count, 0);
   if (same && ageH < HEARTBEAT_H) {
@@ -87,5 +110,5 @@ function sortKeys(o) { return Object.fromEntries(Object.keys(o).sort().map(k => 
   const out = { revisado: new Date().toISOString(), ...data };
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(out) + '\n');
-  console.log(`${same ? 'Revisión periódica' : 'Votos nuevos'}: ${votos} calificaciones en ${Object.keys(stats).length} raperos, ${propuestas.length} propuestas aprobadas.`);
+  console.log(`${same ? 'Revisión periódica' : 'Votos nuevos'}: ${votos} calificaciones en ${Object.keys(stats).length} raperos, ${propuestas.length} propuestas aprobadas, ${versus.length} versus.`);
 })().catch(e => { console.error('No se pudo leer Firestore:', e.message); process.exit(1); });
