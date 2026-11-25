@@ -1539,6 +1539,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .nh-stat b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 30px; line-height: 1; color: var(--text); }
 .nh-stat span { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9a9a; }
 .nh-stat.live b { font-size: 18px; color: var(--accent2); margin-top: 6px; }
+.nh-retry { min-height: 40px; padding: 0 14px; background: none; border: 1px solid var(--accent); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
 .nh-features { max-width: 1400px; margin: 0 auto; padding: 22px 24px; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--border); }
 .nh-feature { display: flex; gap: 16px; align-items: flex-start; padding: 6px 22px; border-left: 1px solid var(--border); }
 .nh-feature:first-child { border-left: none; padding-left: 0; }
@@ -5446,7 +5447,7 @@ function showSection(id, btn) {
   const votSec = document.getElementById('section-votar');
   if (votSec) {
     votSec.style.display = id === 'votar' ? '' : 'none';
-    if (id === 'votar' && typeof renderVotar === 'function') { renderVotar(); renderMyProps(); }
+    if (id === 'votar' && typeof renderVotar === 'function') { renderVotar(); renderMyProps(); if (window.loadBoardOnce) window.loadBoardOnce(); }
   }
   const admSec = document.getElementById('section-admin');
   if (admSec) {
@@ -5909,7 +5910,10 @@ async function loadBoard() {
   } catch (err) { console.warn("RapScore contribuyentes:", err.code || err.message); window.RS_BOARD = []; }
   if (window.renderVotarSide) window.renderVotarSide();
 }
-loadBoard();
+// Ranking de contribuyentes: solo se lee cuando se abre Votar (antes, en cada visita: ~27 lecturas que casi nadie veía)
+let boardRequested = false;
+window.loadBoardOnce = () => { if (boardRequested) return; boardRequested = true; loadBoard(); };
+if (location.hash === "#votar") window.loadBoardOnce();
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
@@ -5964,7 +5968,32 @@ function refreshOpenRateBoxes() {
 window.getMyRating = (slug) => myRatings[slug] || null;
 
 // ── PROMEDIOS DE LA COMUNIDAD ─────────────────────────────────
-async function loadCommunity() {
+// Para cuidar la cuota gratis de Firebase (50 mil lecturas al día; cada visita leía ~110 documentos, así que
+// ~450 visitas al día dejaban el ranking vacío), el ranking se lee de una COPIA: datos/ranking.json, que
+// GitHub Actions actualiza cada 30 min (.github/workflows/ranking-snapshot.yml). 0 lecturas por visita.
+// Se lee EN VIVO si: la copia tiene más de 7 h (el robot se detuvo), no se pudo bajar, o este navegador acaba
+// de votar / es admin (rs_live_until), para que vea su voto al recargar. Si lo vivo falla (p. ej. cuota agotada),
+// se usa la copia aunque sea vieja; si tampoco hay copia, aviso con "Reintentar".
+const SNAPSHOT_MAX_AGE_MS = 7 * 60 * 60 * 1000;
+function liveWanted() { try { return Number(localStorage.getItem("rs_live_until") || 0) > Date.now(); } catch (e) { return false; } }
+function wantLiveFor(ms) {
+  try { if (Number(localStorage.getItem("rs_live_until") || 0) < Date.now() + ms) localStorage.setItem("rs_live_until", String(Date.now() + ms)); } catch (e) {}
+}
+async function loadSnapshot() {
+  try {
+    const r = await fetch("datos/ranking.json", { cache: "no-cache" });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d && d.stats && d.revisado ? d : null;
+  } catch (e) { return null; }
+}
+function applyStatsData(stats, props, source) {
+  window.RS_STATS_SOURCE = source;            // "vivo" | "copia" (lo muestra la portada)
+  window.RS_STATS_FAILED = false;
+  if (window.applyProposals) window.applyProposals(props || []);
+  if (window.applyCommunityStats) window.applyCommunityStats(stats);
+}
+async function loadLive() {
   try {
     const [statsSnap, propSnap] = await Promise.all([
       getDocs(collection(db, "artistStats")),
@@ -5972,15 +6001,30 @@ async function loadCommunity() {
     ]);
     const stats = {};
     statsSnap.forEach(d => { stats[d.id] = d.data(); });
-    window._communityStats = stats;
     const props = [];
     propSnap.forEach(d => { const p = d.data(); props.push({ id: d.id, name: p.name, estado: p.estado, genre: p.genre, link: p.link, bio: p.bio }); });
-    if (window.applyProposals) window.applyProposals(props);
-    if (window.applyCommunityStats) window.applyCommunityStats(stats);
+    applyStatsData(stats, props, "vivo");
+    return true;
   } catch (err) {
     console.warn("RapScore comunidad:", err.code || err.message);
+    rsTrack("stats_load_error", { code: String(err.code || "desconocido").slice(0, 40) });
+    return false;
   }
 }
+async function loadCommunity() {
+  const snap = liveWanted() ? null : await loadSnapshot();
+  if (snap && Date.now() - Date.parse(snap.revisado) < SNAPSHOT_MAX_AGE_MS) {
+    applyStatsData(snap.stats, snap.propuestas, "copia");
+    return;
+  }
+  if (await loadLive()) return;
+  const old = snap || await loadSnapshot();
+  if (old) { applyStatsData(old.stats, old.propuestas, "copia"); return; }
+  window.RS_STATS_FAILED = true;
+  if (window.renderNewHome) window.renderNewHome();
+  showToast("No pudimos cargar las calificaciones. Toca Reintentar arriba o recarga en un momento.", 6000);
+}
+window.rsRetryStats = () => { window.RS_STATS_FAILED = false; if (window.renderNewHome) window.renderNewHome(); loadCommunity(); };
 loadCommunity();
 
 // ── VOTO PENDIENTE ────────────────────────────────────────────
@@ -6123,6 +6167,7 @@ async function saveRating(slug, name, scores, fromPending = false) {
       return { stats: { count, sum }, isNew: !old, contrib };
     });
     myRatings[slug] = scores;
+    wantLiveFor(60 * 60 * 1000);   // la copia del ranking tarda hasta 30 min: este navegador lee en vivo 1 h para ver su voto al recargar
     clearPendingVote();
     if (window.clearRateDraft) window.clearRateDraft(slug);
     if (res.same) { refreshOpenRateBoxes(); return true; }
@@ -6226,6 +6271,7 @@ async function checkAdmin(user) {
     const a = await getDoc(doc(db, "admins", user.uid));
     window.RS_IS_ADMIN = a.exists() && user.emailVerified;
     if (window.RS_IS_ADMIN && window.rsMarkInternal) window.rsMarkInternal();
+    if (window.RS_IS_ADMIN) wantLiveFor(24 * 60 * 60 * 1000);   // el admin ve siempre los votos en vivo
   } catch (e) { window.RS_IS_ADMIN = false; }
   if (window.RS_IS_ADMIN) await window.adminLoad();
   else if (window.setAdminBadge) window.setAdminBadge(0);
@@ -6399,9 +6445,9 @@ function renderNewHome() {
     const states = new Set(ARTISTS.map(a => a.estado).filter(Boolean)).size;
     stats.innerHTML = `
       <div class="nh-stat"><b>${ARTISTS.length}</b><span>Artistas en el ranking</span></div>
-      <div class="nh-stat"><b>${window.RS_STATS_LOADED ? votes.toLocaleString('es-MX') : '…'}</b><span>Calificaciones de la comunidad</span></div>
+      <div class="nh-stat"><b>${window.RS_STATS_LOADED ? votes.toLocaleString('es-MX') : window.RS_STATS_FAILED ? '<button type="button" class="nh-retry" onclick="rsRetryStats()">Reintentar</button>' : '…'}</b><span>Calificaciones de la comunidad</span></div>
       <div class="nh-stat"><b>${states}</b><span>Estados representados</span></div>
-      <div class="nh-stat live"><span>Actualizado</span><b>En vivo</b></div>`;
+      <div class="nh-stat live"><span>Actualizado</span><b>${window.RS_STATS_SOURCE === 'copia' ? 'Cada 30 min' : 'En vivo'}</b></div>`;
   }
   const top = document.getElementById('nhTop');
   if (top) {

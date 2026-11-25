@@ -1,0 +1,43 @@
+# Copia del ranking (datos/ranking.json) para que cada visita no lea Firestore.
+# Cada 30 min revisa los votos públicos; solo hace commit si cambiaron (o cada 6 h para avisar que sigue al día).
+# Correr a mano: GitHub → Actions → "Copia del ranking" → Run workflow.
+name: Copia del ranking
+
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ranking-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Leer votos públicos y escribir datos/ranking.json
+        run: node .github/scripts/ranking-snapshot.js
+
+      - name: Guardar si cambió
+        run: |
+          if git diff --quiet -- datos/ranking.json && [ -z "$(git status --porcelain -- datos/ranking.json)" ]; then
+            echo "Nada que guardar."
+            exit 0
+          fi
+          git config user.name "rapscore-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datos/ranking.json
+          git commit -m "Ranking: copia de los votos ($(date -u +'%Y-%m-%d %H:%M') UTC)"
+          git pull --rebase --quiet
+          git push
