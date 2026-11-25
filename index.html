@@ -1050,6 +1050,7 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .ficha-rate { min-height:44px; padding:0 18px; background:#ffcc00; color:#0a0a0a; border:none; font-family:'Space Mono', monospace; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
 .ficha-rate:hover, .ficha-rate:focus-visible { filter:brightness(1.08); }
 .ficha-cta-note { font-family:'Barlow', sans-serif; font-size:15px; color:var(--muted); }
+.ficha-page { display:inline-block; margin:-6px 0 14px; font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1px; color:var(--accent); }
 .total-votes { display:block; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-top:2px; }
 .score-split { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:4px 0 20px; }
 .ss-item { background:var(--surface); padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
@@ -1123,6 +1124,15 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rate-submit:hover { filter:brightness(1.1); }
 .rate-submit:disabled { opacity:.5; cursor:wait; }
 .rate-note { font-size:10px; color:var(--muted); line-height:1.6; }
+.rate-req { font-family:'Barlow', sans-serif; font-size:15px; line-height:1.45; color:#cfc9bf; margin:0 0 12px; padding-left:10px; border-left:3px solid #ffcc00; }
+.rate-req:empty { display:none; }
+.pr-offer-txt { font-family:'Barlow', sans-serif; font-size:16px; color:var(--text); margin:0 0 12px; }
+.pr-offer-btn { min-height:44px; padding:0 18px; background:#ffcc00; color:#0a0a0a; border:none; font-family:'Space Mono', monospace; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+.pr-offer-note { font-family:'Barlow', sans-serif; font-size:14px; color:var(--muted); margin:10px 0 0; }
+.rate-progress { font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1px; color:var(--muted); }
+.rate-progress.full { color:#ffcc00; }
+.rate-badge.saved { color:#3ddc84; border-color:rgba(61,220,132,.4); }
+.rate-badge.pending { color:#ffcc00; border-color:rgba(255,204,0,.45); }
 @media (max-width: 768px) {
   .rate-grid { grid-template-columns:1fr; }
   .score-split .ss-val { font-size:24px; }
@@ -2669,7 +2679,7 @@ function refreshTable() {
   }
   updateRankNotice();
   const tb = document.getElementById('artistTable');
-  if (tb && !currentData.length) tb.innerHTML = `<div class="vp-empty" style="padding:24px 16px">No encontramos artistas con ese nombre o filtro.</div>`;
+  if (tb && !currentData.length) tb.innerHTML = `<div class="vp-empty" style="padding:24px 16px">${currentSearch ? proposeOfferHtml(currentSearch) : 'No encontramos artistas con ese filtro.'}</div>`;
 }
 
 // ─── TOP 50 + "EN LA FILA" ──────────────────────────────────
@@ -3034,6 +3044,35 @@ window.openInBrowser = openInBrowser;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
 })();
 
+// Antes de tocar el primer número: qué necesita para que su calificación cuente (no sorprenderlo al final).
+function rateReqText() {
+  const u = window.RS_USER;
+  if (u && u.emailVerified) return '';
+  if (u) return 'Elige tus 6 notas. Para sumarlas al ranking falta confirmar tu correo (te mandamos el enlace).';
+  return 'Elige tus 6 notas. Para sumarlas al ranking necesitas una cuenta con correo confirmado: es gratis y tu calificación se queda apartada mientras la creas.';
+}
+// Estado de la calificación de ESTE rapero: guardada (cuenta en el ranking) o pendiente (apartada, falta la cuenta).
+function rateStatusHtml(slug) {
+  const mine = typeof window.getMyRating === 'function' && window.getMyRating(slug);
+  if (mine) return '<span class="rate-badge saved">Calificación guardada ✓ · puedes actualizarla</span>';
+  const pend = typeof window.getPendingSlug === 'function' && window.getPendingSlug() === slug;
+  if (pend) return '<span class="rate-badge pending">Calificación pendiente · se guarda al confirmar tu cuenta</span>';
+  return '';
+}
+function rateProgress(box) {
+  const rows = box.querySelectorAll('.rate-row');
+  const done = [...rows].filter(r => r.dataset.val).length;
+  const el = box.querySelector('.rate-progress');
+  if (el) { el.textContent = `${done} de ${rows.length} categorías`; el.classList.toggle('full', done === rows.length); }
+}
+function refreshRateStatus() {
+  document.querySelectorAll('.rate-box').forEach(box => {
+    const st = box.querySelector('.rate-status'); if (st) st.innerHTML = rateStatusHtml(box.dataset.slug);
+    const rq = box.querySelector('.rate-req'); if (rq) rq.textContent = rateReqText();
+    rateProgress(box);
+  });
+}
+window.refreshRateStatus = refreshRateStatus;
 function ratePick(btn, n) {
   const row = btn.closest('.rate-row');
   row.querySelectorAll('.rate-n').forEach(b => { const on = b === btn; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
@@ -3043,12 +3082,14 @@ function ratePick(btn, n) {
   if (slug) {
     if (!RATE_DRAFT[slug]) {
       RATE_DRAFT[slug] = {};
-      rsTrack('vote_start', { artist_slug: slug });
+      // Una vez por intento: un borrador que se reabre (misma pestaña) no lo vuelve a contar; is_edit = ya tenía voto guardado
+      rsTrack('vote_start', { artist_slug: slug, is_edit: (typeof window.getMyRating === 'function' && window.getMyRating(slug)) ? 'yes' : 'no' });
       if (typeof hideNudge === 'function') hideNudge();   // ya está votando: la barra de bienvenida sobra
     }
     RATE_DRAFT[slug][row.dataset.cat] = n;
     saveRateDraft();
   }
+  const box = btn.closest('.rate-box'); if (box) rateProgress(box);
 }
 function buildRateBox(slug, name) {
   const mine = typeof window.getMyRating === 'function' ? window.getMyRating(slug) : null;
@@ -3061,16 +3102,19 @@ function buildRateBox(slug, name) {
       <div class="rate-scale" role="group" aria-label="${CAT_LABELS[c]}">${rateButtons(c, val)}</div>
     </div>`;
   }).join('');
+  const done = CATEGORIES.filter(c => draft[c] || mine).length;
   return `
     <div class="rate-box" data-slug="${esc(slug)}" data-name="${esc(name)}">
       <div class="rate-head">
         <span class="rate-title">${mine ? 'Tu calificación' : 'Califica a ' + esc(name)}</span>
-        ${mine ? '<span class="rate-badge">Ya votaste · puedes cambiarla</span>' : ''}
+        <span class="rate-status">${rateStatusHtml(slug)}</span>
       </div>
       <div class="rate-hint">Toca un número en cada categoría: 1 = flojo · 10 = élite.</div>
+      <p class="rate-req">${rateReqText()}</p>
       <div class="rate-grid">${sliders}</div>
       <div class="rate-actions">
         <button class="rate-submit" onclick="window.submitRating ? submitRating(this) : showToast('La votación no está disponible en este momento')">${mine ? 'Actualizar calificación' : 'Guardar calificación'}</button>
+        <span class="rate-progress" aria-live="polite">${done} de ${CATEGORIES.length} categorías</span>
         <span class="rate-note">Un voto por cuenta; puedes cambiarlo cuando quieras.</span>
       </div>
     </div>`;
@@ -3098,6 +3142,7 @@ function buildPanel(artist) {
         <button type="button" class="ficha-rate" data-track="ficha_calificar" onclick="jumpToRate(this)">${mine ? 'Cambiar mi calificación ↓' : 'Califica a ' + esc(artist.name) + ' ↓'}</button>
         <span class="ficha-cta-note">${ctaNote}</span>
       </div>
+      ${artist.slug && !artist.slug.startsWith('prop-') ? `<a class="ficha-page" href="artista/${artist.slug}/" data-track="ranking_ver_ficha">Su página para compartir →</a>` : ''}
       ${ARTIST_PHOTOS[artist.slug] ? `<div class="expanded-photo">${artistAvatar(artist)}</div>${photoCredit(artist)}` : ''}
       <p class="expanded-bio">${esc(artist.bio)}</p>
       ${listenLinks(artist)}
@@ -3654,13 +3699,14 @@ document.addEventListener('keydown', e => {
   else if (open('laModal')) closeLaModal();
 });
 async function shareTo(where) {
-  // Si compartes después de calificar a alguien, el link abre directo a ese rapero para calificarlo.
+  // Si compartes después de calificar a alguien, el link va a SU FICHA (/artista/<slug>/): en Facebook/WhatsApp la
+  // vista previa muestra su nombre (antes salía la portada) y la ficha tiene "Calificar a X" en la primera pantalla.
   // Los utm_* dejan ver en GA4 de qué red llegan las visitas compartidas.
   const sSlug = shareArtist ? slugify(shareArtist) : '';
   const utm = `utm_source=${encodeURIComponent(where)}&utm_medium=share&utm_campaign=${sSlug ? 'voto_artista' : 'sitio'}`;
   const text = shareMessage();
   const url = sSlug && ARTISTS.some(a => a.slug === sSlug)
-    ? `https://www.rapscoremx.com/?calificar=${encodeURIComponent(sSlug)}&${utm}`
+    ? `https://www.rapscoremx.com/artista/${encodeURIComponent(sSlug)}/?${utm}`
     : `${VOTE_URL}?${utm}`;
   rsTrack('share', { method: where, content_type: 'ranking', item_id: shareArtist ? slugify(shareArtist) : 'sitio' });
   const enc = encodeURIComponent;
@@ -3684,6 +3730,20 @@ window.afterVote = function(slug, name, isNew) {
 };
 
 // ─── AGREGAR RAPERO FALTANTE ────────────────────────────────
+// Búsqueda sin resultados → "¿Buscabas a Sapo Loko? Propón a Sapo Loko" (reutiliza el formulario y su revisión).
+function proposeOfferHtml(q) {
+  const name = String(q).replace(/\s+/g, ' ').trim().slice(0, 60);
+  return `<p class="pr-offer-txt">¿Buscabas a <b>${esc(name)}</b>? Todavía no está en el ranking.</p>
+    <button type="button" class="pr-offer-btn" data-track="busqueda_proponer" onclick="proposeFromSearch(this)" data-name="${esc(name)}">Propón a ${esc(name)} →</button>
+    <p class="pr-offer-note">Lo revisamos antes de publicarlo. Si se aprueba, la comunidad lo califica y tú ganas +${POINTS_PROPOSAL} pts.</p>`;
+}
+function proposeFromSearch(btn) {
+  const name = btn.dataset.name || '';
+  window.RS_PROPOSE_FROM = 'busqueda';
+  rsTrack('propose_start', { from: 'busqueda' });
+  openSuggest();
+  setTimeout(() => { const i = document.getElementById('sugName'); if (i) { i.value = name; } document.getElementById('sugEstado')?.focus({ preventScroll: true }); }, 220);
+}
 function openSuggest() {
   goTo('votar');
   setTimeout(() => {
@@ -3945,13 +4005,15 @@ function renderVotarList() {
   if (!el) return;
   const done = ARTISTS.filter(a => myRated(a.slug)).length;
   const prog = document.getElementById('votarProgress');
-  if (prog) prog.innerHTML = `Has calificado <strong>${done}</strong> de ${ARTISTS.length}<div class="vp-bar"><div style="width:${Math.round(done/ARTISTS.length*100)}%"></div></div>`;
+  // El avance de todo el catálogo solo para quien ya califica (sin cuenta, "0 de 117" desanima); en la caja va "N de 6 categorías"
+  if (prog) prog.innerHTML = window.RS_USER && done ? `Has calificado <strong>${done}</strong> de ${ARTISTS.length}<div class="vp-bar"><div style="width:${Math.round(done/ARTISTS.length*100)}%"></div></div>` : '';
   let list = votarCandidates();
   if (votarFilter === 'pending') list = list.filter(a => !myRated(a.slug));
   if (votarFilter === 'done') list = list.filter(a => myRated(a.slug));
   if (votarSearch) list = list.filter(a => a.name.toLowerCase().includes(votarSearch) || (a.tags||[]).some(t => t.toLowerCase().includes(votarSearch)));
   if (!list.length) {
-    el.innerHTML = `<div class="vp-empty">${votarFilter === 'pending' && !votarSearch ? '¡Ya calificaste a todos! Revisa "Calificados" si quieres ajustar alguno.' : 'No hay artistas con ese filtro.'}</div>`;
+    const q = (document.getElementById('votarSearch')?.value || '').trim();
+    el.innerHTML = `<div class="vp-empty">${votarFilter === 'pending' && !votarSearch ? '¡Ya calificaste a todos! Revisa "Calificados" si quieres ajustar alguno.' : q && !ARTISTS.some(a => a.name.toLowerCase().includes(votarSearch)) ? proposeOfferHtml(q) : 'No hay artistas con ese filtro.'}</div>`;
     return;
   }
   el.innerHTML = list.map(a => `
@@ -3983,7 +4045,7 @@ function renderVotarStage() {
   const left = ARTISTS.filter(x => !myRated(x.slug)).length;
   el.innerHTML = `
     <div class="vs-top">
-      <span class="vs-left">${left ? `Te faltan ${left} por calificar` : 'Ya calificaste a todos'}</span>
+      <span class="vs-left">${left ? '' : 'Ya calificaste a todos'}</span>
       <button class="btn-sm vs-skip" onclick="votarNext(true)">Saltar →</button>
     </div>
     <div class="vs-head">
@@ -6116,6 +6178,7 @@ function handleVerifiedLanding(user) {
 
 // Vuelve a dibujar el formulario abierto (para mostrar "Tu calificación")
 function refreshOpenRateBoxes() {
+  if (window.refreshRateStatus) window.refreshRateStatus();
   document.querySelectorAll(".rate-box").forEach(box => {
     const slug = box.dataset.slug, name = box.dataset.name;
     const mine = myRatings[slug];
@@ -6130,6 +6193,7 @@ function refreshOpenRateBoxes() {
   });
 }
 window.getMyRating = (slug) => myRatings[slug] || null;
+window.getPendingSlug = () => { const p = getPendingVote(); return p ? p.slug : null; };
 
 // ── PROMEDIOS DE LA COMUNIDAD ─────────────────────────────────
 // Para cuidar la cuota gratis de Firebase (50 mil lecturas al día; cada visita leía ~110 documentos, así que
@@ -6207,11 +6271,13 @@ function getPendingVote() {
 }
 function setPendingVote(slug, name, scores) {
   try { localStorage.setItem(PENDING_KEY, JSON.stringify({ slug, name: String(name).slice(0, 80), scores, ts: Date.now() })); } catch (e) {}
+  setTimeout(() => window.refreshRateStatus && window.refreshRateStatus(), 0);
   const s10 = {}; CATS.forEach(c => { s10[c] = scores[c] / 10; });
   if (window.putVoteInUrl) window.putVoteInUrl(slug, s10);
 }
 function clearPendingVote() {
   try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+  setTimeout(() => window.refreshRateStatus && window.refreshRateStatus(), 0);
   if (window.clearVoteFromUrl) window.clearVoteFromUrl();
 }
 function showPendingNote() {
@@ -6239,11 +6305,13 @@ async function sendVerify(user) {
 
 // ── CUENTA VERIFICADA ─────────────────────────────────────────
 function hadAccount() { try { return localStorage.getItem("rs_had_account") === "1"; } catch (e) { return false; } }
-async function ensureVerified() {
+// action: qué intentaba hacer ("rating" = guardar calificación, "proposal" = proponer rapero, "alias" = nombre en el ranking).
+// Va en vote_blocked_auth para no mezclar en el embudo las propuestas con las calificaciones.
+async function ensureVerified(action = "rating") {
   if (!currentUser) {
     // El aviso de "calificación apartada" va dentro de la ventana (#authPending), no en un toast que la tape
-    rsTrack("vote_blocked_auth", { reason: "anon", in_app: window.RS_IN_APP ? "yes" : "no" });
-    openAuthModal(hadAccount() ? "login" : "register", "voto");
+    rsTrack("vote_blocked_auth", { reason: "anon", action, in_app: window.RS_IN_APP ? "yes" : "no" });
+    openAuthModal(hadAccount() ? "login" : "register", action === "rating" ? "voto" : action);
     return false;
   }
   if (currentUser.emailVerified) return true;
@@ -6254,7 +6322,7 @@ async function ensureVerified() {
     return true;
   }
   try { await sendVerify(auth.currentUser); } catch (e) {}
-  rsTrack("vote_blocked_auth", { reason: "unverified", in_app: window.RS_IN_APP ? "yes" : "no" });
+  rsTrack("vote_blocked_auth", { reason: "unverified", action, in_app: window.RS_IN_APP ? "yes" : "no" });
   showVerifyPanel("bloqueo");   // antes: un aviso de 7 s; ahora el paso se queda en pantalla
   return false;
 }
@@ -6394,7 +6462,7 @@ window.addEventListener("focus", () => { if (auth.currentUser && getPendingVote(
 // proposals/{id}: el id se arma con estado + nombre, así no se repiten.
 // limits/{uid}: evita spam (1 propuesta cada 10 minutos por cuenta).
 window.saveProposal = async function(data, propId) {
-  if (!(await ensureVerified())) return null;
+  if (!(await ensureVerified("proposal"))) return null;
   const uid = auth.currentUser.uid;
   const lRef = doc(db, "limits", uid);
   try {
@@ -6410,7 +6478,8 @@ window.saveProposal = async function(data, propId) {
     batch.set(lRef, { lastProposalAt: serverTimestamp(), lastProposalId: propId });
     await batch.commit();
     window.RS_MYPROPS = [{ id: propId, name: data.name, estado: data.estado, status: "pending" }, ...(window.RS_MYPROPS || [])];
-    rsTrack("propose_artist", { estado: String(data.estado || "") });
+    rsTrack("propose_artist", { estado: String(data.estado || ""), from: window.RS_PROPOSE_FROM || "formulario" });
+    window.RS_PROPOSE_FROM = "";
     if (window.renderMyProps) window.renderMyProps();
     return propId;
   } catch (err) {
@@ -6577,7 +6646,7 @@ window.adminUnban = async function(uid) {
 
 // ── NOMBRE EN EL RANKING DE CONTRIBUYENTES ────────────────────
 window.saveAlias = async function(raw) {
-  if (!(await ensureVerified())) return;
+  if (!(await ensureVerified("alias"))) return;
   const name = String(raw || "").replace(/\s+/g, " ").trim();
   if (!/^[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ ._-]{3,24}$/.test(name)) {
     showToast("Usa de 3 a 24 letras, números, espacios, punto, guion o guion bajo");

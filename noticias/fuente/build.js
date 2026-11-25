@@ -8,7 +8,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { RAIZ, slugify, esc, leerRoster, leerEdiciones, fechaLarga, rangoSemana } = require('./comun');
+const { RAIZ, slugify, esc, leerRoster, leerEdiciones, fechaLarga, rangoSemana, medicion } = require('./comun');
 
 const SITIO = 'https://www.rapscoremx.com';
 const OG_IMG = `${SITIO}/images/og-rapscore.jpg`;   // 1200×630 (el logo solo se recortaba mal en Facebook)
@@ -30,66 +30,7 @@ const ediciones = leerEdiciones();
 const roster = leerRoster();
 
 // ── Piezas comunes ─────────────────────────────────────────────
-function medicion(seccion) {
-  // Igual que index.html y batalla: GA4 vía Firebase + Clarity solo para visitas reales.
-  return `<!-- ═══ MEDICIÓN: igual que index.html (GA4 G-D6QMGC5N67 vía Firebase + Microsoft Clarity) ═══ -->
-<script>
-window.RS_SITIO = true;
-window.RS_CLARITY_ID = 'yvosalsr5z';
-(function () {
-  try {
-    var m = location.search.match(/[?&]rs_internal=([01])/);
-    if (m) localStorage.setItem('rs_internal', m[1]);
-    window.RS_INTERNAL = localStorage.getItem('rs_internal') === '1';
-  } catch (e) { window.RS_INTERNAL = false; }
-  var host = location.hostname;
-  window.RS_LOCAL = location.protocol === 'file:' || host === 'localhost' || host === '[::1]' || /^127\\.|^0\\.0\\.0\\.0$|^192\\.168\\.|\\.local$/.test(host);
-  window.RS_AUTOMATED = !!navigator.webdriver || /HeadlessChrome|Lighthouse|PageSpeed|bot\\b|crawler|spider|Prerender/i.test(navigator.userAgent || '');
-  if (window.RS_LOCAL || window.RS_AUTOMATED) window.RS_INTERNAL = true;
-  if (window.RS_CLARITY_ID && !window.RS_INTERNAL) {
-    (function (c, l, a, r, i, t, y) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, 'clarity', 'script', window.RS_CLARITY_ID);
-    clarity('set', 'section', '${seccion}');
-  }
-  var queue = [];
-  window.rsTrack = function (name, params) {
-    params = params || {};
-    try { if (window.clarity) window.clarity('event', name); } catch (e) {}
-    if (window._rsLog) { try { window._rsLog(name, params); } catch (e) {} }
-    else queue.push([name, params]);
-  };
-  window._rsReady = function (fn) {
-    window._rsLog = fn;
-    queue.splice(0).forEach(function (e) { try { fn(e[0], e[1]); } catch (x) {} });
-  };
-  document.addEventListener('click', function (e) {
-    var el = e.target.closest && e.target.closest('[data-track]');
-    if (el) window.rsTrack('cta_click', { cta: el.getAttribute('data-track'), section: '${seccion}' });
-  }, true);
-})();
-</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getAnalytics, logEvent, setDefaultEventParameters } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
-try {
-  const app = initializeApp({
-    apiKey: "AIzaSyBhw4QNmzVnto-0nJ4Hm9C2dNy6l_IdtBI",
-    authDomain: "rapscoremx.firebaseapp.com",
-    projectId: "rapscoremx",
-    storageBucket: "rapscoremx.firebasestorage.app",
-    messagingSenderId: "971301585434",
-    appId: "1:971301585434:web:db4e6b2c2f651087ac87a3",
-    measurementId: "G-D6QMGC5N67"
-  });
-  const analytics = getAnalytics(app);
-  if (window.RS_INTERNAL) setDefaultEventParameters({ traffic_type: 'internal' });
-  window._rsReady((name, params) => logEvent(analytics, name, params));
-} catch (e) {}
-</script>`;
-}
+// medicion() vive en comun.js (la usan también las fichas de artista)
 
 const CSS = `
 :root { --bg:#0a0a0a; --surface:#111; --border:#2a2a2a; --accent:#ff3c00; --accent2:#ffcc00; --text:#f0ede6; --muted:#9a948a; --body:#d6d0c6; }
@@ -215,7 +156,7 @@ function paginaEdicion(ed, otras) {
   const toc = ed.notas.map((n, i) => `<li><a href="#n${i + 1}">${esc(n.titulo)}</a></li>`).join('');
   const notas = ed.notas.map((n, i) => {
     const enRanking = (n.artistas || []).map(a => ({ a, slug: slugify(a) })).filter(x => roster[x.slug]);
-    const botones = enRanking.map(x => `<a class="btn" href="${linkCalificar(raiz, x.slug)}" data-track="noticia_calificar_${x.slug}">★ Califica a ${esc(roster[x.slug])}</a>`).join('');
+    const botones = enRanking.map(x => `<a class="btn" href="${linkCalificar(raiz, x.slug)}" data-track="noticia_calificar_${x.slug}">★ Califica a ${esc(roster[x.slug])}</a><a class="btn" href="${raiz}artista/${x.slug}/" data-track="noticia_ficha_${x.slug}">Perfil de ${esc(roster[x.slug])}</a>`).join('');
     const fuentes = (n.fuentes || []).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.nombre)}</a>`).join(' · ');
     return `
   <article class="nota" id="n${i + 1}">
@@ -317,7 +258,10 @@ function sitemap() {
   const masNueva = ediciones[0] ? (ediciones[0].actualizado || ediciones[0].fecha) : null;
   const urls = PAGINAS_FIJAS.map(p => ({ loc: p.loc, lastmod: p.loc === '/noticias/' ? masNueva : p.lastmod }))
     .filter(p => p.loc !== '/noticias/' || ediciones.length)
-    .concat(ediciones.map(ed => ({ loc: `/noticias/${ed.slug}/`, lastmod: ed.actualizado || ed.fecha })));
+    .concat(ediciones.map(ed => ({ loc: `/noticias/${ed.slug}/`, lastmod: ed.actualizado || ed.fecha })))
+    // Fichas de artista (artista/fuente/build.js): una por rapero del roster + la lista
+    .concat(fs.existsSync(path.join(RAIZ, 'artista', 'index.html')) ? [{ loc: '/artista/', lastmod: null }] : [])
+    .concat(Object.keys(roster).filter(sl => fs.existsSync(path.join(RAIZ, 'artista', sl, 'index.html'))).sort().map(sl => ({ loc: `/artista/${sl}/`, lastmod: null })));
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${SITIO}${u.loc}</loc>${u.lastmod ? `<lastmod>${u.lastmod}</lastmod>` : ''}</url>`).join('\n')}

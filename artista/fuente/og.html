@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Imágenes para redes · fichas de artista</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@700&family=Barlow:wght@600&display=swap" rel="stylesheet">
+<style>body{background:#222;color:#eee;font:14px system-ui;padding:16px}canvas{max-width:600px;display:block;margin:10px 0}</style>
+</head>
+<body>
+<p id="estado">Cargando…</p>
+<canvas id="c" width="1200" height="630"></canvas>
+<script>
+// Dibuja la imagen para redes (1200×630) de cada rapero y la manda a og-servidor.py, que la guarda en artista/<slug>/og.jpg.
+// Sin fotos de raperos (las de Commons piden crédito y en una vista previa no se puede dar): nombre, lugar y la pregunta.
+const c = document.getElementById('c'), x = c.getContext('2d'), estado = document.getElementById('estado');
+const img = src => new Promise((ok, mal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = mal; i.src = src; });
+const LINEA = { legend: '#ffcc00', emerging: '#00e676', active: '#ff3c00' };
+const TIER = { legend: 'LEYENDA', emerging: 'EMERGENTE' };
+function dibujar(a, logo) {
+  x.fillStyle = '#0a0a0a'; x.fillRect(0, 0, 1200, 630);
+  // Sin foto de persona (una foto genérica haría creer que es el rapero): sus iniciales enormes, apenas visibles
+  const ini = a.name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  x.font = '560px "Bebas Neue"'; x.textBaseline = 'alphabetic';
+  x.fillStyle = 'rgba(255,255,255,0.045)';
+  x.fillText(ini, 1200 - x.measureText(ini).width + 30, 650);
+  x.strokeStyle = 'rgba(255,60,0,0.22)'; x.lineWidth = 3;
+  x.strokeText(ini, 1200 - x.measureText(ini).width + 30, 650);
+  x.fillStyle = '#ff3c00'; x.fillRect(0, 0, 1200, 8);
+  const lh = 64; x.drawImage(logo, 64, 52, logo.width * (lh / logo.height), lh);
+  // nombre: lo más grande que quepa en 2 renglones de ~1000 px
+  let size = 170, lines;
+  const words = a.name.toUpperCase().split(' ');
+  do {
+    x.font = `${size}px "Bebas Neue"`;
+    lines = []; let cur = '';
+    words.forEach(wd => { const t = cur ? cur + ' ' + wd : wd; if (x.measureText(t).width > 1040 && cur) { lines.push(cur); cur = wd; } else cur = t; });
+    lines.push(cur);
+    size -= 6;
+  } while ((lines.length > 2 || lines.some(l => x.measureText(l).width > 1060) || lines.length * size * .92 + 80 > 320) && size > 60);
+  size += 6;
+  const top = 150 + (lines.length === 1 ? 50 : 0);
+  x.fillStyle = '#f0ede6'; x.textBaseline = 'top';
+  lines.forEach((l, i) => x.fillText(l, 64, top + i * size * .92));
+  let y = top + lines.length * size * .92 + 6;
+  x.fillStyle = LINEA[a.tier] || LINEA.active; x.fillRect(64, y, 120, 6);
+  y += 26;
+  x.font = '600 34px Barlow'; x.fillStyle = '#b9b3a9';
+  const sub = [a.lugar, TIER[a.tier]].filter(Boolean).join(' · ');
+  if (sub) x.fillText(sub, 64, y);
+  // pregunta
+  x.font = '700 30px "Space Mono"';
+  const q = '¿CUÁNTO LE DAS DEL 1 AL 10?', qw = x.measureText(q).width + 56;
+  x.fillStyle = '#ffcc00'; x.fillRect(64, 630 - 64 - 70, qw, 70);
+  x.fillStyle = '#0a0a0a'; x.textBaseline = 'middle'; x.fillText(q, 92, 630 - 64 - 35);
+  x.textBaseline = 'top';
+  x.font = '700 22px "Space Mono"'; x.fillStyle = '#9a948a';
+  x.fillText('rapscoremx.com', 1200 - 64 - x.measureText('rapscoremx.com').width, 630 - 64 - 47);
+}
+(async () => {
+  await Promise.all(['170px "Bebas Neue"', '700 30px "Space Mono"', '600 34px Barlow'].map(f => document.fonts.load(f)));
+  const [lista, logo] = await Promise.all([
+    fetch('og-datos.json').then(r => r.json()),
+    img('../../images/rapscore-logo-transparente.png')
+  ]);
+  const solo = new URLSearchParams(location.search).get('solo');
+  const todos = solo ? lista.filter(a => a.slug === solo) : lista;
+  let n = 0;
+  for (const a of todos) {
+    dibujar(a, logo);
+    const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.86));
+    const r = await fetch('/guardar-og?slug=' + encodeURIComponent(a.slug), { method: 'POST', body: blob });
+    if (!r.ok) { estado.textContent = 'Error con ' + a.slug + ': ' + await r.text(); return; }
+    estado.textContent = `${++n} de ${todos.length}: ${a.name}`;
+  }
+  estado.textContent = `Listo: ${n} imágenes guardadas.`;
+  window.OG_LISTO = n;
+})().catch(e => { estado.textContent = 'Error: ' + e.message; });
+</script>
+</body>
+</html>
