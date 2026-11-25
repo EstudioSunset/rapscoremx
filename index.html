@@ -1045,6 +1045,12 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .total-rate { display:block; margin:4px auto 0; padding:4px 10px; background:transparent; border:1px solid #ffcc00; border-radius:2px; color:#ffcc00; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition: background .15s, color .15s; }
 .total-rate:hover, .total-rate:focus-visible { background:#ffcc00; color:#0a0a0a; }
 .expanded-panel .rate-box { scroll-margin-top: 130px; }
+/* Atajo arriba de la ficha: "Califica a X ↓" */
+.ficha-cta { display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; margin:6px 0 16px; }
+.ficha-rate { min-height:44px; padding:0 18px; background:#ffcc00; color:#0a0a0a; border:none; font-family:'Space Mono', monospace; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+.ficha-rate:hover, .ficha-rate:focus-visible { filter:brightness(1.08); }
+.ficha-cta-note { font-family:'Barlow', sans-serif; font-size:15px; color:var(--muted); }
+.ficha-page { display:inline-block; margin:-6px 0 14px; font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1px; color:var(--accent); }
 .total-votes { display:block; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-top:2px; }
 .score-split { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:4px 0 20px; }
 .ss-item { background:var(--surface); padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
@@ -1118,6 +1124,15 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rate-submit:hover { filter:brightness(1.1); }
 .rate-submit:disabled { opacity:.5; cursor:wait; }
 .rate-note { font-size:10px; color:var(--muted); line-height:1.6; }
+.rate-req { font-family:'Barlow', sans-serif; font-size:15px; line-height:1.45; color:#cfc9bf; margin:0 0 12px; padding-left:10px; border-left:3px solid #ffcc00; }
+.rate-req:empty { display:none; }
+.pr-offer-txt { font-family:'Barlow', sans-serif; font-size:16px; color:var(--text); margin:0 0 12px; }
+.pr-offer-btn { min-height:44px; padding:0 18px; background:#ffcc00; color:#0a0a0a; border:none; font-family:'Space Mono', monospace; font-weight:700; font-size:12px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; }
+.pr-offer-note { font-family:'Barlow', sans-serif; font-size:14px; color:var(--muted); margin:10px 0 0; }
+.rate-progress { font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1px; color:var(--muted); }
+.rate-progress.full { color:#ffcc00; }
+.rate-badge.saved { color:#3ddc84; border-color:rgba(61,220,132,.4); }
+.rate-badge.pending { color:#ffcc00; border-color:rgba(255,204,0,.45); }
 @media (max-width: 768px) {
   .rate-grid { grid-template-columns:1fr; }
   .score-split .ss-val { font-size:24px; }
@@ -1409,6 +1424,21 @@ nav a.nav-votar.active, nav a.nav-votar:hover { color: var(--accent2); border-bo
 .rs-inapp .auth-google { display: none; }
 .auth-pending { display: none; font-family: 'Barlow', sans-serif; font-size: 15px; line-height: 1.4; color: #ffcc00; }
 .auth-pending.on { display: block; }
+/* Paso "Confirma tu correo" */
+.auth-verify { display: flex; flex-direction: column; gap: 12px; font-family: 'Barlow', sans-serif; font-size: 16px; line-height: 1.45; color: var(--text); }
+.auth-verify[hidden], .av-open[hidden] { display: none; }
+.auth-verify p { margin: 0; }
+.av-text b { color: #ffcc00; word-break: break-all; }
+.av-pending { color: #ffcc00; }
+.av-pending:empty { display: none; }
+.av-open { display: flex; align-items: center; justify-content: center; min-height: 46px; background: #ffcc00; color: #0a0a0a; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+.av-open:hover { filter: brightness(1.08); }
+.av-tip { font-size: 14px; color: var(--muted); }
+.av-tip button { background: none; border: none; padding: 0; color: var(--accent); text-decoration: underline; font: inherit; cursor: pointer; }
+.av-tip button:disabled { color: var(--muted); cursor: default; text-decoration: none; }
+.av-inapp { display: none; }
+.rs-inapp .av-inapp { display: block; }
+.auth-modal.verify-mode .auth-form { display: none; }
 .auth-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .auth-input {
@@ -1539,6 +1569,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .nh-stat b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 30px; line-height: 1; color: var(--text); }
 .nh-stat span { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9a9a; }
 .nh-stat.live b { font-size: 18px; color: var(--accent2); margin-top: 6px; }
+.nh-retry { min-height: 40px; padding: 0 14px; background: none; border: 1px solid var(--accent); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
 .nh-features { max-width: 1400px; margin: 0 auto; padding: 22px 24px; display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--border); }
 .nh-feature { display: flex; gap: 16px; align-items: flex-start; padding: 6px 22px; border-left: 1px solid var(--border); }
 .nh-feature:first-child { border-left: none; padding-left: 0; }
@@ -1597,6 +1628,81 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 .nh-cta-text b, .nh-cta-text span { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 44px); line-height: .95; }
 .nh-cta-text b { color: var(--accent); }
 .nh-cta p { flex: 1 1 260px; font-size: 12px; line-height: 1.7; color: #cfc9bf; }
+/* ── VERSUS (versus-ui.js) ── */
+.vsx-home { max-width: 1400px; margin: 34px auto 0; padding: 22px 24px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  border: 1px solid var(--border); border-left: 4px solid var(--accent); background: linear-gradient(90deg, rgba(255,204,0,.07), transparent 70%); }
+.vsx-home[hidden] { display: none !important; }
+.vsx-h-txt { flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px; }
+.vsx-h-label { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #ffcc00; }
+.vsx-h-q { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(28px, 3vw, 40px); line-height: 1; }
+.vsx-h-sub { font-family: Barlow, sans-serif; font-size: 15px; color: #cfc9bf; }
+.vsx-h-duel { display: flex; align-items: center; gap: 10px; }
+.vsx-h-av { width: 56px; height: 56px; flex: 0 0 56px; overflow: hidden; border: 1px solid var(--border); background: #111; }
+.vsx-h-av img, .vsx-h-av svg, .vsx-av img, .vsx-av svg, .vsx-item-av img, .vsx-item-av svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vsx-h-n { font-family: 'Bebas Neue', sans-serif; font-size: 22px; line-height: 1; max-width: 9em; }
+.vsx-h-vs, .vsx-vs { font-family: 'Saira Stencil One', 'Bebas Neue', sans-serif; color: var(--accent); font-size: 26px; }
+.vsx { max-width: 860px; }
+.vsx-back { background: none; border: none; color: #9a948a; font-family: 'Space Mono', monospace; font-size: 12px; padding: 10px 0; cursor: pointer; }
+.vsx-back:hover { color: var(--text); }
+.vsx-q { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(36px, 5vw, 58px); line-height: .95; margin: 4px 0 10px; }
+.vsx-meta { font-family: Barlow, sans-serif; font-size: 15px; color: #cfc9bf; margin-bottom: 18px; }
+.vsx-live { color: #00e676; font-family: 'Space Mono', monospace; font-size: 12px; margin-right: 6px; }
+.vsx-winner { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: #ffcc00; margin: 0 0 14px; }
+.vsx-winner b { font-weight: 400; color: var(--text); }
+.vsx-duel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+.vsx-vs { align-self: center; }
+.vsx-side { display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; padding: 16px 12px; background: var(--surface); border: 1px solid var(--border); }
+.vsx-side.picked { border-color: #ffcc00; box-shadow: 0 0 0 1px #ffcc00 inset; }
+.vsx-side.other { opacity: .6; }
+.vsx-side.won { border-color: #ffcc00; }
+.vsx-av { position: relative; width: 100%; max-width: 220px; aspect-ratio: 1; overflow: hidden; background: #111; }
+.vsx-crown { position: absolute; left: 0; top: 0; background: #ffcc00; color: #000; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; padding: 4px 8px; text-transform: uppercase; }
+.vsx-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(24px, 3vw, 34px); line-height: 1; }
+.vsx-sub { font-family: Barlow, sans-serif; font-size: 14px; color: #9a948a; min-height: 1.2em; }
+.vsx-pick { width: 100%; min-height: 48px; background: #ffcc00; color: #000; border: none; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .5px; cursor: pointer; padding: 6px 8px; line-height: 1.05; }
+.vsx-pick:disabled { background: #2a2a2a; color: #cfc9bf; cursor: default; }
+.vsx-side.picked .vsx-pick:disabled { background: #ffcc00; color: #000; }
+.vsx-res { position: relative; width: 100%; padding: 8px 0 12px; }
+.vsx-res b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 44px; line-height: 1; }
+.vsx-res span { font-family: 'Space Mono', monospace; font-size: 12px; color: #9a948a; }
+.vsx-res i { position: absolute; left: 0; bottom: 0; height: 6px; background: var(--accent); }
+.vsx-side.won .vsx-res i { background: #ffcc00; }
+.vsx-ficha { font-family: 'Space Mono', monospace; font-size: 12px; color: #9a948a; }
+.vsx-status { margin: 16px 0 0; padding: 12px 14px; border: 1px solid var(--border); font-family: Barlow, sans-serif; font-size: 16px; line-height: 1.5; color: #cfc9bf; }
+.vsx-status.ok { border-color: #00e676; color: var(--text); }
+.vsx-status.pend { border-color: #ffcc00; color: var(--text); }
+.vsx-link { background: none; border: none; padding: 0; color: #ffcc00; text-decoration: underline; font: inherit; cursor: pointer; }
+.vsx-note { font-family: Barlow, sans-serif; font-size: 15px; color: #9a948a; margin: 12px 0 0; }
+.vsx-after, .vsx-rank { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--border); }
+.vsx-rates { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+.vsx-rates .rate-submit { flex: 1 1 220px; margin: 0; }
+.vsx-share { background: transparent; border: 1px solid var(--accent); color: var(--accent); min-height: 44px; padding: 0 16px; font-family: 'Space Mono', monospace; font-size: 12px; cursor: pointer; }
+.vsx-rank small { color: #9a948a; font-family: Barlow, sans-serif; font-size: 13px; }
+.vsx-rank-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #1d1d1d; font-family: Barlow, sans-serif; font-size: 15px; }
+.vsx-rank-row b { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 400; color: #cfc9bf; text-align: right; }
+.vsx-item { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 12px; margin: 8px 0; background: var(--surface); border: 1px solid var(--border); color: var(--text); font: inherit; cursor: pointer; }
+.vsx-item.open { border-left: 4px solid #ffcc00; }
+.vsx-item:hover { border-color: var(--accent); }
+.vsx-item-av { width: 44px; height: 44px; flex: 0 0 44px; overflow: hidden; background: #111; }
+.vsx-item-txt { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.vsx-item-txt b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 22px; line-height: 1; }
+.vsx-item-txt span { font-family: Barlow, sans-serif; font-size: 15px; color: #cfc9bf; }
+.vsx-item-txt small { font-family: 'Space Mono', monospace; font-size: 11px; color: #9a948a; }
+.vsx-item-go { font-family: 'Space Mono', monospace; font-size: 12px; color: #ffcc00; white-space: nowrap; }
+.vsx-adm-link { flex-wrap: wrap; }
+.vsx-adm-link select { width: auto; flex: 1 1 140px; margin: 0; }
+@media (max-width: 600px) {
+  .vsx-home { margin: 28px 0 0; padding: 20px 16px; gap: 14px; }
+  .vsx-home .nh-btn { width: 100%; justify-content: center; }
+  .vsx-h-duel { width: 100%; }
+  .vsx-h-n { font-size: 20px; flex: 1; }
+  .vsx-h-n:last-of-type { text-align: right; }
+  .vsx-duel { gap: 6px; }
+  .vsx-side { padding: 10px 6px; }
+  .vsx-pick { font-size: 18px; }
+  .vsx-vs { font-size: 20px; }
+  .vsx-item-go { display: none; }
+}
 @media (max-width: 1000px) {
   .nh-features { grid-template-columns: repeat(2, 1fr); gap: 14px 0; }
   .nh-feature:nth-child(3) { border-left: none; padding-left: 0; }
@@ -1626,6 +1732,7 @@ body.no-hero .ticker { transform: none; margin: 0; width: 100%; }
 }
 </style>
 <script src="letras.js?v=20261011" defer></script>
+<script src="versus-ui.js?v=20261124" defer></script>
 <script src="letras-share.js?v=20261017" defer></script>
 <script src="freestyle.js?v=20261011" defer></script>
 <script src="freestyle-ui.js?v=20261017b" defer></script>
@@ -2065,6 +2172,9 @@ body .pop-list li { font-size: 15px; }
   <button type="button" class="nh-btn" data-track="cta_calificar" onclick="goTo('votar')">Calificar artistas →</button>
 </section>
 
+<!-- Versus abierto (o resultado reciente): lo dibuja versus-ui.js con la copia datos/ranking.json. Oculto si no hay. -->
+<section class="vsx-home home-only" id="vsxHome" aria-label="Versus" hidden></section>
+
 <section class="nh-explore home-only" aria-labelledby="nhExploreTitle">
   <div class="nh-head">
     <h2 id="nhExploreTitle">Explora por estado y categoría</h2>
@@ -2084,6 +2194,7 @@ body .pop-list li { font-size: 15px; }
 <div id="section-admin" style="display:none"></div>
 <div id="section-letras" style="display:none"></div>
 <div id="section-freestyle" style="display:none"></div>
+<div id="section-versus" style="display:none"></div>
 
 <div id="section-estados" style="display:none">
 </div>
@@ -2117,6 +2228,16 @@ body .pop-list li { font-size: 15px; }
         ¿No tienes cuenta?
         <button type="button" onclick="setAuthMode('register')">Crear cuenta</button>
       </p>
+    </div>
+
+    <!-- Paso "Confirma tu correo": se queda en pantalla tras registrarse (antes era un aviso de 6 s que desaparecía) -->
+    <div class="auth-verify" id="authVerify" hidden>
+      <p class="av-text">Te mandamos un enlace a <b id="avEmail">tu correo</b>. Ábrelo y toca el enlace para confirmar tu cuenta.</p>
+      <p class="av-pending" id="avPending"></p>
+      <a class="av-open" id="avOpenMail" href="#" target="_blank" rel="noopener" hidden>Abrir mi correo ↗</a>
+      <button type="button" class="btn-compare auth-submit" id="avCheck">Ya lo confirmé</button>
+      <p class="av-tip">¿No llega en 1 minuto? Revisa <b>Spam</b> o <b>Promociones</b>. <button type="button" id="avResend">Reenviar correo</button></p>
+      <p class="av-tip av-inapp">Si el enlace se abre en otro navegador, regresa a esta pestaña después: tu calificación se guarda sola aquí.</p>
     </div>
   </div>
 </div>
@@ -2638,7 +2759,7 @@ function refreshTable() {
   }
   updateRankNotice();
   const tb = document.getElementById('artistTable');
-  if (tb && !currentData.length) tb.innerHTML = `<div class="vp-empty" style="padding:24px 16px">No encontramos artistas con ese nombre o filtro.</div>`;
+  if (tb && !currentData.length) tb.innerHTML = `<div class="vp-empty" style="padding:24px 16px">${currentSearch ? proposeOfferHtml(currentSearch) : 'No encontramos artistas con ese filtro.'}</div>`;
 }
 
 // ─── TOP 50 + "EN LA FILA" ──────────────────────────────────
@@ -2796,6 +2917,16 @@ function rateFromRow(e) {
   });
 });
 
+// Botón de arriba de la ficha: baja directo a la caja de calificar (antes quedaba abajo de bio, puntajes y nota;
+// en escritorio 1024×768 empezaba justo en la orilla de la pantalla y en celular a ~1,5 pantallas).
+function jumpToRate(btn) {
+  const box = btn.closest('.expanded-panel')?.querySelector('.rate-box');
+  if (!box) return;
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const first = box.querySelector('.rate-row:not([data-val]) .rate-n, .rate-row[data-val=""] .rate-n') || box.querySelector('.rate-n');
+  if (first) setTimeout(() => first.focus({ preventScroll: true }), 400);
+}
+
 function toggleExpand(e, name) {
   e.stopPropagation();
   const panel = document.getElementById('panel-' + safeName(name));
@@ -2815,6 +2946,7 @@ function toggleExpand(e, name) {
   panel.classList.add('open');
   btn.classList.add('open');
   expandedRow = name;
+  if (typeof hideNudge === 'function') hideNudge();   // la barra tapaba la ficha y la caja de calificar
   rsTrack('view_artist', { artist_name: name, artist_slug: artist.slug });
   drawRadar('radar-' + safeName(name), artist.scores, '#ff3c00');
 }
@@ -2992,6 +3124,35 @@ window.openInBrowser = openInBrowser;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
 })();
 
+// Antes de tocar el primer número: qué necesita para que su calificación cuente (no sorprenderlo al final).
+function rateReqText() {
+  const u = window.RS_USER;
+  if (u && u.emailVerified) return '';
+  if (u) return 'Elige tus 6 notas. Para sumarlas al ranking falta confirmar tu correo (te mandamos el enlace).';
+  return 'Elige tus 6 notas. Para sumarlas al ranking necesitas una cuenta con correo confirmado: es gratis y tu calificación se queda apartada mientras la creas.';
+}
+// Estado de la calificación de ESTE rapero: guardada (cuenta en el ranking) o pendiente (apartada, falta la cuenta).
+function rateStatusHtml(slug) {
+  const mine = typeof window.getMyRating === 'function' && window.getMyRating(slug);
+  if (mine) return '<span class="rate-badge saved">Calificación guardada ✓ · puedes actualizarla</span>';
+  const pend = typeof window.getPendingSlug === 'function' && window.getPendingSlug() === slug;
+  if (pend) return '<span class="rate-badge pending">Calificación pendiente · se guarda al confirmar tu cuenta</span>';
+  return '';
+}
+function rateProgress(box) {
+  const rows = box.querySelectorAll('.rate-row');
+  const done = [...rows].filter(r => r.dataset.val).length;
+  const el = box.querySelector('.rate-progress');
+  if (el) { el.textContent = `${done} de ${rows.length} categorías`; el.classList.toggle('full', done === rows.length); }
+}
+function refreshRateStatus() {
+  document.querySelectorAll('.rate-box').forEach(box => {
+    const st = box.querySelector('.rate-status'); if (st) st.innerHTML = rateStatusHtml(box.dataset.slug);
+    const rq = box.querySelector('.rate-req'); if (rq) rq.textContent = rateReqText();
+    rateProgress(box);
+  });
+}
+window.refreshRateStatus = refreshRateStatus;
 function ratePick(btn, n) {
   const row = btn.closest('.rate-row');
   row.querySelectorAll('.rate-n').forEach(b => { const on = b === btn; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
@@ -3001,11 +3162,14 @@ function ratePick(btn, n) {
   if (slug) {
     if (!RATE_DRAFT[slug]) {
       RATE_DRAFT[slug] = {};
-      rsTrack('vote_start', { artist_slug: slug });
+      // Una vez por intento: un borrador que se reabre (misma pestaña) no lo vuelve a contar; is_edit = ya tenía voto guardado
+      rsTrack('vote_start', { artist_slug: slug, is_edit: (typeof window.getMyRating === 'function' && window.getMyRating(slug)) ? 'yes' : 'no' });
+      if (typeof hideNudge === 'function') hideNudge();   // ya está votando: la barra de bienvenida sobra
     }
     RATE_DRAFT[slug][row.dataset.cat] = n;
     saveRateDraft();
   }
+  const box = btn.closest('.rate-box'); if (box) rateProgress(box);
 }
 function buildRateBox(slug, name) {
   const mine = typeof window.getMyRating === 'function' ? window.getMyRating(slug) : null;
@@ -3018,16 +3182,19 @@ function buildRateBox(slug, name) {
       <div class="rate-scale" role="group" aria-label="${CAT_LABELS[c]}">${rateButtons(c, val)}</div>
     </div>`;
   }).join('');
+  const done = CATEGORIES.filter(c => draft[c] || mine).length;
   return `
     <div class="rate-box" data-slug="${esc(slug)}" data-name="${esc(name)}">
       <div class="rate-head">
         <span class="rate-title">${mine ? 'Tu calificación' : 'Califica a ' + esc(name)}</span>
-        ${mine ? '<span class="rate-badge">Ya votaste · puedes cambiarla</span>' : ''}
+        <span class="rate-status">${rateStatusHtml(slug)}</span>
       </div>
       <div class="rate-hint">Toca un número en cada categoría: 1 = flojo · 10 = élite.</div>
+      <p class="rate-req">${rateReqText()}</p>
       <div class="rate-grid">${sliders}</div>
       <div class="rate-actions">
         <button class="rate-submit" onclick="window.submitRating ? submitRating(this) : showToast('La votación no está disponible en este momento')">${mine ? 'Actualizar calificación' : 'Guardar calificación'}</button>
+        <span class="rate-progress" aria-live="polite">${done} de ${CATEGORIES.length} categorías</span>
         <span class="rate-note">Un voto por cuenta; puedes cambiarlo cuando quieras.</span>
       </div>
     </div>`;
@@ -3042,9 +3209,20 @@ function buildPanel(artist) {
     </div>
   `).join('');
   const comm = artist.community;
+  const mine = typeof window.getMyRating === 'function' ? window.getMyRating(artist.slug) : null;
+  const left = Math.max(0, MIN_VOTES_FIRM - artist.votes);
+  const ctaNote = mine ? 'Ya lo calificaste'
+    : !artist.votes ? 'Nadie lo ha calificado: tu voto es el primero'
+    : left ? `Le falta${left === 1 ? '' : 'n'} ${left} voto${left === 1 ? '' : 's'} para tener posición firme`
+    : `${artist.votes} votos de la comunidad`;
   return `
     <div class="expanded-left">
       <h3>${esc(artist.name)}</h3>
+      <div class="ficha-cta">
+        <button type="button" class="ficha-rate" data-track="ficha_calificar" onclick="jumpToRate(this)">${mine ? 'Cambiar mi calificación ↓' : 'Califica a ' + esc(artist.name) + ' ↓'}</button>
+        <span class="ficha-cta-note">${ctaNote}</span>
+      </div>
+      ${artist.slug && !artist.slug.startsWith('prop-') ? `<a class="ficha-page" href="artista/${artist.slug}/" data-track="ranking_ver_ficha">Su página para compartir →</a>` : ''}
       ${ARTIST_PHOTOS[artist.slug] ? `<div class="expanded-photo">${artistAvatar(artist)}</div>${photoCredit(artist)}` : ''}
       <p class="expanded-bio">${esc(artist.bio)}</p>
       ${listenLinks(artist)}
@@ -3523,6 +3701,9 @@ function nudgeEligible() {
   if (window.RS_ME && window.RS_ME.ratings > 0) return false;                   // ya votó
   if (location.hash && location.hash !== '#') return false;                     // solo en la portada
   if (document.querySelector('.modal-overlay.open, .la-modal-overlay.open, #sugBox.open')) return false;
+  // Ya está viendo o calificando a un rapero: la barra le tapaba la caja de calificar y su "Votar →" lo sacaba de ahí
+  if (document.querySelector('.expanded-panel.open')) return false;
+  if (typeof RATE_DRAFT !== 'undefined' && Object.keys(RATE_DRAFT).length) return false;
   return true;
 }
 function showNudge() {
@@ -3598,13 +3779,14 @@ document.addEventListener('keydown', e => {
   else if (open('laModal')) closeLaModal();
 });
 async function shareTo(where) {
-  // Si compartes después de calificar a alguien, el link abre directo a ese rapero para calificarlo.
+  // Si compartes después de calificar a alguien, el link va a SU FICHA (/artista/<slug>/): en Facebook/WhatsApp la
+  // vista previa muestra su nombre (antes salía la portada) y la ficha tiene "Calificar a X" en la primera pantalla.
   // Los utm_* dejan ver en GA4 de qué red llegan las visitas compartidas.
   const sSlug = shareArtist ? slugify(shareArtist) : '';
   const utm = `utm_source=${encodeURIComponent(where)}&utm_medium=share&utm_campaign=${sSlug ? 'voto_artista' : 'sitio'}`;
   const text = shareMessage();
   const url = sSlug && ARTISTS.some(a => a.slug === sSlug)
-    ? `https://www.rapscoremx.com/?calificar=${encodeURIComponent(sSlug)}&${utm}`
+    ? `https://www.rapscoremx.com/artista/${encodeURIComponent(sSlug)}/?${utm}`
     : `${VOTE_URL}?${utm}`;
   rsTrack('share', { method: where, content_type: 'ranking', item_id: shareArtist ? slugify(shareArtist) : 'sitio' });
   const enc = encodeURIComponent;
@@ -3628,6 +3810,20 @@ window.afterVote = function(slug, name, isNew) {
 };
 
 // ─── AGREGAR RAPERO FALTANTE ────────────────────────────────
+// Búsqueda sin resultados → "¿Buscabas a Sapo Loko? Propón a Sapo Loko" (reutiliza el formulario y su revisión).
+function proposeOfferHtml(q) {
+  const name = String(q).replace(/\s+/g, ' ').trim().slice(0, 60);
+  return `<p class="pr-offer-txt">¿Buscabas a <b>${esc(name)}</b>? Todavía no está en el ranking.</p>
+    <button type="button" class="pr-offer-btn" data-track="busqueda_proponer" onclick="proposeFromSearch(this)" data-name="${esc(name)}">Propón a ${esc(name)} →</button>
+    <p class="pr-offer-note">Lo revisamos antes de publicarlo. Si se aprueba, la comunidad lo califica y tú ganas +${POINTS_PROPOSAL} pts.</p>`;
+}
+function proposeFromSearch(btn) {
+  const name = btn.dataset.name || '';
+  window.RS_PROPOSE_FROM = 'busqueda';
+  rsTrack('propose_start', { from: 'busqueda' });
+  openSuggest();
+  setTimeout(() => { const i = document.getElementById('sugName'); if (i) { i.value = name; } document.getElementById('sugEstado')?.focus({ preventScroll: true }); }, 220);
+}
 function openSuggest() {
   goTo('votar');
   setTimeout(() => {
@@ -3671,6 +3867,7 @@ function adminSwitch() {
   return `<div class="vp-chips adm-switch">
     <button class="vp-chip ${adminView === 'props' ? 'active' : ''}" onclick="adminView='props';renderAdmin()">Propuestas</button>
     <button class="vp-chip ${adminView === 'votes' ? 'active' : ''}" onclick="adminView='votes';renderAdmin()">Votos sospechosos</button>
+    <button class="vp-chip ${adminView === 'versus' ? 'active' : ''}" onclick="adminView='versus';renderAdmin()">Versus</button>
   </div>`;
 }
 // Señales de votos inflados. No anula nada sola: el admin revisa y decide.
@@ -3735,6 +3932,7 @@ function renderAdmin() {
     return;
   }
   if (adminView === 'votes') { renderAdminVotes(sec); return; }
+  if (adminView === 'versus' && window.renderAdminVersus) { renderAdminVersus(sec, adminSwitch()); return; }
   const all = window.RS_ADMIN_PROPS;
   if (!all) { sec.innerHTML = `<div class="votar-wrap"><p class="vcard-text">Cargando propuestas…</p></div>`; window.adminLoad && window.adminLoad(); return; }
   const count = (st) => all.filter(p => p.status === st).length;
@@ -3889,13 +4087,15 @@ function renderVotarList() {
   if (!el) return;
   const done = ARTISTS.filter(a => myRated(a.slug)).length;
   const prog = document.getElementById('votarProgress');
-  if (prog) prog.innerHTML = `Has calificado <strong>${done}</strong> de ${ARTISTS.length}<div class="vp-bar"><div style="width:${Math.round(done/ARTISTS.length*100)}%"></div></div>`;
+  // El avance de todo el catálogo solo para quien ya califica (sin cuenta, "0 de 117" desanima); en la caja va "N de 6 categorías"
+  if (prog) prog.innerHTML = window.RS_USER && done ? `Has calificado <strong>${done}</strong> de ${ARTISTS.length}<div class="vp-bar"><div style="width:${Math.round(done/ARTISTS.length*100)}%"></div></div>` : '';
   let list = votarCandidates();
   if (votarFilter === 'pending') list = list.filter(a => !myRated(a.slug));
   if (votarFilter === 'done') list = list.filter(a => myRated(a.slug));
   if (votarSearch) list = list.filter(a => a.name.toLowerCase().includes(votarSearch) || (a.tags||[]).some(t => t.toLowerCase().includes(votarSearch)));
   if (!list.length) {
-    el.innerHTML = `<div class="vp-empty">${votarFilter === 'pending' && !votarSearch ? '¡Ya calificaste a todos! Revisa "Calificados" si quieres ajustar alguno.' : 'No hay artistas con ese filtro.'}</div>`;
+    const q = (document.getElementById('votarSearch')?.value || '').trim();
+    el.innerHTML = `<div class="vp-empty">${votarFilter === 'pending' && !votarSearch ? '¡Ya calificaste a todos! Revisa "Calificados" si quieres ajustar alguno.' : q && !ARTISTS.some(a => a.name.toLowerCase().includes(votarSearch)) ? proposeOfferHtml(q) : 'No hay artistas con ese filtro.'}</div>`;
     return;
   }
   el.innerHTML = list.map(a => `
@@ -3927,7 +4127,7 @@ function renderVotarStage() {
   const left = ARTISTS.filter(x => !myRated(x.slug)).length;
   el.innerHTML = `
     <div class="vs-top">
-      <span class="vs-left">${left ? `Te faltan ${left} por calificar` : 'Ya calificaste a todos'}</span>
+      <span class="vs-left">${left ? '' : 'Ya calificaste a todos'}</span>
       <button class="btn-sm vs-skip" onclick="votarNext(true)">Saltar →</button>
     </div>
     <div class="vs-head">
@@ -5389,6 +5589,7 @@ document.addEventListener('click', function(e) {
 // ─── RUTAS (#votar, #estados, #emergentes, #letras, #freestyle, #admin) ──
 function goTo(target) {
   rsTrack('section_view', { section: target });
+  if (target !== 'versus') dropVersusParam();   // si no, al recargar volvería a abrir el duelo
   if (target !== 'rankings' && typeof hideNudge === 'function') hideNudge();   // la barra de bienvenida es solo para la portada
   const navR = document.getElementById('nav-rankings');
   if (target === 'estados') { showSection('estados', document.getElementById('nav-estados')); history.replaceState(null,'','#estados'); return; }
@@ -5396,6 +5597,8 @@ function goTo(target) {
   if (target === 'freestyle') { showSection('freestyle', document.getElementById('nav-freestyle')); history.replaceState(null,'','#freestyle'); window.scrollTo({ top: 0 }); return; }
   if (target === 'letras') { showSection('letras', document.getElementById('nav-letras')); history.replaceState(null,'','#letras'); window.scrollTo({ top: 0 }); return; }
   if (target === 'admin') { showSection('admin', document.getElementById('nav-admin')); history.replaceState(null,'','#admin'); window.scrollTo({ top: 0 }); return; }
+  // Versus (versus-ui.js): openVersus(id) pone ?versus=<id>#versus en el link y llega aquí
+  if (target === 'versus') { showSection('versus', document.getElementById('nav-votar')); if (!location.hash) history.replaceState(null,'','#versus'); window.scrollTo({ top: 0 }); return; }
   showSection('rankings', navR);
   if (target === 'emergentes') {
     filterTier('emerging');
@@ -5405,6 +5608,14 @@ function goTo(target) {
     history.replaceState(null,'',location.pathname);
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function dropVersusParam() {
+  try {
+    const u = new URL(location.href);
+    if (!u.searchParams.has('versus')) return;
+    u.searchParams.delete('versus');
+    history.replaceState(null, '', u.pathname + u.search + u.hash);
+  } catch (e) {}
 }
 window.addEventListener('load', () => {
   // Link directo para calificar a un artista: index.html?calificar=<slug> (lo usan las noticias).
@@ -5422,13 +5633,17 @@ window.addEventListener('load', () => {
     }, 600);
     return;
   }
+  // Link de un Versus: index.html?versus=<id> (el mismo link sirve para elegir y, al cierre, para ver el resultado)
+  let qvs = null;
+  try { qvs = new URLSearchParams(location.search).get('versus'); } catch (e) {}
+  if (qvs) { goTo('versus'); return; }
   const h = location.hash.replace('#','');
-  if (['votar','admin','estados','emergentes','letras','freestyle'].includes(h)) goTo(h);
+  if (['votar','admin','estados','emergentes','letras','freestyle','versus'].includes(h)) goTo(h);
 });
 
 function showSection(id, btn) {
   document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
   document.getElementById('section-rankings').style.display = id==='rankings' ? '' : 'none';
   const estSec = document.getElementById('section-estados');
   if (id === 'estados') {
@@ -5446,7 +5661,7 @@ function showSection(id, btn) {
   const votSec = document.getElementById('section-votar');
   if (votSec) {
     votSec.style.display = id === 'votar' ? '' : 'none';
-    if (id === 'votar' && typeof renderVotar === 'function') { renderVotar(); renderMyProps(); }
+    if (id === 'votar' && typeof renderVotar === 'function') { renderVotar(); renderMyProps(); if (window.loadBoardOnce) window.loadBoardOnce(); }
   }
   const admSec = document.getElementById('section-admin');
   if (admSec) {
@@ -5458,6 +5673,12 @@ function showSection(id, btn) {
     flSec.style.display = id === 'freestyle' ? '' : 'none';
     if (id === 'freestyle') { if (window.renderFreestyle) renderFreestyle(); }
     else if (window.freestylePause) freestylePause();      // si sales, se pausa el beat
+  }
+  const vsxSec = document.getElementById('section-versus');
+  if (vsxSec) {
+    vsxSec.style.display = id === 'versus' ? '' : 'none';
+    if (id === 'versus') { if (window.renderVersus) renderVersus(); }
+    else if (window.versusStop) versusStop();
   }
   const letSec = document.getElementById('section-letras');
   if (letSec) {
@@ -5690,7 +5911,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, addDoc, serverTimestamp,
-  collection, getDocs, query, where, runTransaction, orderBy, limit, writeBatch, deleteDoc
+  collection, getDocs, query, where, runTransaction, orderBy, limit, writeBatch, deleteDoc, updateDoc, increment
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 // ── INIT ─────────────────────────────────────────────────────
@@ -5750,6 +5971,10 @@ function setAuthMode(mode) {
   const submitBtn  = document.getElementById("authSubmitBtn");
   const switchText = document.getElementById("authSwitchText");
   if (!title) return;
+  // Al volver a entrar/registrarse se quita el paso "Confirma tu correo"
+  document.querySelector("#authModal .auth-modal")?.classList.remove("verify-mode");
+  const av = document.getElementById("authVerify"); if (av) av.hidden = true;
+  const sub = document.querySelector("#authModal .modal-sub"); if (sub) sub.textContent = "Vota, compara y propone artistas en RapScore MX";
   if (mode === "register") {
     title.textContent     = "Crear cuenta";
     submitBtn.textContent = "Registrarse";
@@ -5761,12 +5986,93 @@ function setAuthMode(mode) {
   }
 }
 
-function openAuthModal(mode = "login") {
+// trigger: "voto" = se abrió sola al intentar guardar una calificación; "verificado" = llegó del correo de confirmación;
+// "manual" = tocó Entrar/Registrarse. Así signup_start no se infla con las aperturas automáticas.
+function openAuthModal(mode = "login", trigger = "manual") {
   setAuthMode(mode);
   showPendingNote();
   document.getElementById("authModal").classList.add("open");
-  rsTrack("signup_start", { mode, in_app: window.RS_IN_APP ? "yes" : "no" });   // abrió la ventana de entrar/registrarse (embudo: signup_start → sign_up / login)
+  rsTrack("signup_start", { mode, trigger, in_app: window.RS_IN_APP ? "yes" : "no" });   // abrió la ventana de entrar/registrarse (embudo: signup_start → sign_up / login)
 }
+
+// ── PASO "CONFIRMA TU CORREO" ─────────────────────────────────
+// Antes, al registrarse con correo la ventana se cerraba y quedaba un aviso de 6 s. Quien no lo leía no sabía qué seguía
+// (Clarity, nov 2026: 6 de 7 que intentaron votar chocaron con la cuenta y solo 1 terminó). Ahora la ventana se queda
+// con el paso que falta, un botón para abrir su correo y "Ya lo confirmé", que guarda la calificación apartada.
+const WEBMAIL = [
+  [/^(gmail|googlemail)\.com$/, "https://mail.google.com/", "Gmail"],
+  [/^(hotmail|outlook|live|msn)\.(com|es|com\.mx)$/, "https://outlook.live.com/mail/", "Outlook"],
+  [/^yahoo\.(com|com\.mx|es)$/, "https://mail.yahoo.com/", "Yahoo"],
+  [/^(icloud|me|mac)\.com$/, "https://www.icloud.com/mail", "iCloud"],
+];
+function webmailFor(email) {
+  const dom = String(email || "").toLowerCase().split("@")[1] || "";
+  const m = WEBMAIL.find(([re]) => re.test(dom));
+  return m ? { url: m[1], name: m[2] } : null;
+}
+let verifyTrigger = "";
+function showVerifyPanel(trigger) {
+  const user = auth.currentUser;
+  if (!user) return;
+  verifyTrigger = trigger;
+  const modal = document.getElementById("authModal");
+  modal.querySelector(".auth-modal").classList.add("verify-mode");
+  document.getElementById("authTitle").textContent = "Confirma tu correo";
+  modal.querySelector(".modal-sub").textContent = "Último paso para que cuente tu voto";
+  document.getElementById("avEmail").textContent = user.email || "tu correo";
+  const p = getPendingVote(), pv = getPendingVersus();
+  document.getElementById("avPending").textContent = p ? `Tu calificación de ${p.name} está apartada: se guarda sola en cuanto confirmes.`
+    : pv ? `Tu elección en el Versus (${pv.name}) está apartada: se guarda sola en cuanto confirmes.` : "";
+  const wm = webmailFor(user.email), open = document.getElementById("avOpenMail");
+  open.hidden = !wm;
+  if (wm) { open.href = wm.url; open.textContent = `Abrir ${wm.name} ↗`; open.dataset.provider = wm.name.toLowerCase(); }
+  document.getElementById("authVerify").hidden = false;
+  modal.classList.add("open");
+  rsTrack("verify_prompt_view", { trigger, provider: wm ? wm.name.toLowerCase() : "otro", has_pending: p ? "yes" : "no", in_app: window.RS_IN_APP ? "yes" : "no" });
+}
+function verifyPanelOpen() {
+  return document.getElementById("authModal")?.classList.contains("open") && !document.getElementById("authVerify")?.hidden;
+}
+// Se manda UNA vez por cuenta en este navegador: el paso de "correo confirmado" del embudo
+function markVerified(via) {
+  const uid = auth.currentUser && auth.currentUser.uid;
+  if (!uid) return;
+  try { if (localStorage.getItem("rs_verified_ev") === uid) return; localStorage.setItem("rs_verified_ev", uid); } catch (e) {}
+  rsTrack("email_verified", { via, in_app: window.RS_IN_APP ? "yes" : "no" });
+}
+// ¿Ya confirmó? (botón "Ya lo confirmé" o al volver a la pestaña)
+async function checkVerified(fromButton) {
+  const user = auth.currentUser;
+  if (!user) { setAuthMode("login"); return false; }
+  const btn = document.getElementById("avCheck");
+  if (fromButton && btn) { btn.disabled = true; btn.textContent = "Revisando…"; }
+  try { await reload(user); } catch (e) {}
+  const ok = !!(auth.currentUser && auth.currentUser.emailVerified);
+  if (fromButton && btn) { btn.disabled = false; btn.textContent = "Ya lo confirmé"; }
+  if (fromButton) rsTrack("verify_check", { result: ok ? "verified" : "not_yet" });
+  if (!ok) {
+    if (fromButton) showToast("Todavía no aparece confirmado. Abre el correo de RapScore MX, toca el enlace y regresa aquí.", 6000);
+    return false;
+  }
+  try { await getIdToken(auth.currentUser, true); } catch (e) {}   // token nuevo para que las reglas vean el correo confirmado
+  markVerified(fromButton ? "boton" : "regreso");
+  if (verifyPanelOpen()) closeAuthModal();
+  if (getPendingVote() || getPendingVersus()) await flushAllPending();
+  else showToast("Correo confirmado ✓ Ya puedes calificar.", 3500);
+  return true;
+}
+document.getElementById("avCheck").addEventListener("click", () => checkVerified(true));
+document.getElementById("avOpenMail").addEventListener("click", e => {
+  rsTrack("verify_open_mail", { provider: e.currentTarget.dataset.provider || "otro", in_app: window.RS_IN_APP ? "yes" : "no" });
+});
+document.getElementById("avResend").addEventListener("click", async e => {
+  const b = e.currentTarget;
+  if (!auth.currentUser) return;
+  b.disabled = true;
+  try { await sendVerify(auth.currentUser); showToast("Te lo mandamos otra vez ✓ Revisa también Spam.", 4000); rsTrack("verify_resend", { result: "ok" }); }
+  catch (err) { showToast("Espera un momento antes de pedir otro correo.", 4000); rsTrack("verify_resend", { result: "wait" }); }
+  setTimeout(() => { b.disabled = false; }, 30000);   // Firebase limita los reenvíos
+});
 function closeAuthModal() {
   document.getElementById("authModal").classList.remove("open");
 }
@@ -5804,12 +6110,18 @@ document.getElementById("authSubmitBtn").addEventListener("click", async () => {
       });
       try { await sendVerify(cred.user); } catch (e) { console.warn(e); }
       rsTrack("sign_up", { method: "email" });
-      showToast(getPendingVote()
-        ? "Cuenta creada ✓ Confirma tu correo (revisa spam) y tu calificación se guarda sola."
-        : "Cuenta creada ✓ Revisa tu correo para confirmarla y poder votar", 6000);
+      showToast("Cuenta creada ✓", 2500);
+      showVerifyPanel("registro");   // la ventana se queda con el paso que falta
+      return;
     } else {
-      await signInWithEmailAndPassword(auth, email, password);
+      const cred = await signInWithEmailAndPassword(auth, email, password);
       rsTrack("login", { method: "email" });
+      // Entró pero no ha confirmado y tiene un voto apartado: que vea el paso que falta en lugar de cerrar
+      if (!cred.user.emailVerified && getPendingVote()) {
+        try { await sendVerify(cred.user); } catch (e) {}
+        showVerifyPanel("login");
+        return;
+      }
       showToast("Sesión iniciada ✓");
     }
     closeAuthModal();
@@ -5909,7 +6221,10 @@ async function loadBoard() {
   } catch (err) { console.warn("RapScore contribuyentes:", err.code || err.message); window.RS_BOARD = []; }
   if (window.renderVotarSide) window.renderVotarSide();
 }
-loadBoard();
+// Ranking de contribuyentes: solo se lee cuando se abre Votar (antes, en cada visita: ~27 lecturas que casi nadie veía)
+let boardRequested = false;
+window.loadBoardOnce = () => { if (boardRequested) return; boardRequested = true; loadBoard(); };
+if (location.hash === "#votar") window.loadBoardOnce();
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
@@ -5942,12 +6257,32 @@ onAuthStateChanged(auth, async (user) => {
   if (window.freestyleRefresh) window.freestyleRefresh();
   if (user) {
     try { localStorage.setItem("rs_had_account", "1"); } catch (e) {}
-    flushPendingVote();   // si calificó antes de entrar, se guarda sola
+    flushAllPending();   // si calificó (o eligió en un Versus) antes de entrar, se guarda solo
   }
+  handleVerifiedLanding(user);
 });
+
+// Llegó con el link del correo de confirmación (?verificado=1). Si el link se abrió en otro navegador
+// (pasa mucho desde la app de Facebook o de Gmail), aquí no hay sesión: abrimos "Iniciar sesión" con el aviso,
+// en lugar de dejarlo buscando el botón Entrar. Solo la primera vez que Firebase dice quién es.
+let verifiedLandingDone = false;
+function handleVerifiedLanding(user) {
+  if (verifiedLandingDone) return;
+  verifiedLandingDone = true;
+  let sp; try { sp = new URLSearchParams(location.search); } catch (e) { return; }
+  if (sp.get("verificado") !== "1") return;
+  if (user) {
+    reload(user).then(() => { if (auth.currentUser && auth.currentUser.emailVerified) markVerified("link"); }).catch(() => {});
+    return;
+  }
+  openAuthModal("login", "verificado");
+  const el = document.getElementById("authPending");
+  if (el) { el.textContent = "Tu correo ya está confirmado ✓ Entra con tu correo y contraseña para guardar tu calificación."; el.classList.add("on"); }
+}
 
 // Vuelve a dibujar el formulario abierto (para mostrar "Tu calificación")
 function refreshOpenRateBoxes() {
+  if (window.refreshRateStatus) window.refreshRateStatus();
   document.querySelectorAll(".rate-box").forEach(box => {
     const slug = box.dataset.slug, name = box.dataset.name;
     const mine = myRatings[slug];
@@ -5962,9 +6297,35 @@ function refreshOpenRateBoxes() {
   });
 }
 window.getMyRating = (slug) => myRatings[slug] || null;
+window.getPendingSlug = () => { const p = getPendingVote(); return p ? p.slug : null; };
 
 // ── PROMEDIOS DE LA COMUNIDAD ─────────────────────────────────
-async function loadCommunity() {
+// Para cuidar la cuota gratis de Firebase (50 mil lecturas al día; cada visita leía ~110 documentos, así que
+// ~450 visitas al día dejaban el ranking vacío), el ranking se lee de una COPIA: datos/ranking.json, que
+// GitHub Actions actualiza cada 30 min (.github/workflows/ranking-snapshot.yml). 0 lecturas por visita.
+// Se lee EN VIVO si: la copia tiene más de 7 h (el robot se detuvo), no se pudo bajar, o este navegador acaba
+// de votar / es admin (rs_live_until), para que vea su voto al recargar. Si lo vivo falla (p. ej. cuota agotada),
+// se usa la copia aunque sea vieja; si tampoco hay copia, aviso con "Reintentar".
+const SNAPSHOT_MAX_AGE_MS = 7 * 60 * 60 * 1000;
+function liveWanted() { try { return Number(localStorage.getItem("rs_live_until") || 0) > Date.now(); } catch (e) { return false; } }
+function wantLiveFor(ms) {
+  try { if (Number(localStorage.getItem("rs_live_until") || 0) < Date.now() + ms) localStorage.setItem("rs_live_until", String(Date.now() + ms)); } catch (e) {}
+}
+async function loadSnapshot() {
+  try {
+    const r = await fetch("datos/ranking.json", { cache: "no-cache" });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d && d.stats && d.revisado ? d : null;
+  } catch (e) { return null; }
+}
+function applyStatsData(stats, props, source) {
+  window.RS_STATS_SOURCE = source;            // "vivo" | "copia" (lo muestra la portada)
+  window.RS_STATS_FAILED = false;
+  if (window.applyProposals) window.applyProposals(props || []);
+  if (window.applyCommunityStats) window.applyCommunityStats(stats);
+}
+async function loadLive() {
   try {
     const [statsSnap, propSnap] = await Promise.all([
       getDocs(collection(db, "artistStats")),
@@ -5972,15 +6333,31 @@ async function loadCommunity() {
     ]);
     const stats = {};
     statsSnap.forEach(d => { stats[d.id] = d.data(); });
-    window._communityStats = stats;
     const props = [];
     propSnap.forEach(d => { const p = d.data(); props.push({ id: d.id, name: p.name, estado: p.estado, genre: p.genre, link: p.link, bio: p.bio }); });
-    if (window.applyProposals) window.applyProposals(props);
-    if (window.applyCommunityStats) window.applyCommunityStats(stats);
+    applyStatsData(stats, props, "vivo");
+    return true;
   } catch (err) {
     console.warn("RapScore comunidad:", err.code || err.message);
+    rsTrack("stats_load_error", { code: String(err.code || "desconocido").slice(0, 40) });
+    return false;
   }
 }
+async function loadCommunity() {
+  const snap = await loadSnapshot();   // aunque se lea en vivo, la copia trae los Versus de la portada (0 lecturas)
+  if (snap) { window.RS_VERSUS_LIST = Array.isArray(snap.versus) ? snap.versus : []; if (window.renderVersusHome) window.renderVersusHome(); }
+  if (!liveWanted() && snap && Date.now() - Date.parse(snap.revisado) < SNAPSHOT_MAX_AGE_MS) {
+    applyStatsData(snap.stats, snap.propuestas, "copia");
+    return;
+  }
+  if (await loadLive()) return;
+  const old = snap || await loadSnapshot();
+  if (old) { applyStatsData(old.stats, old.propuestas, "copia"); return; }
+  window.RS_STATS_FAILED = true;
+  if (window.renderNewHome) window.renderNewHome();
+  showToast("No pudimos cargar las calificaciones. Toca Reintentar arriba o recarga en un momento.", 6000);
+}
+window.rsRetryStats = () => { window.RS_STATS_FAILED = false; if (window.renderNewHome) window.renderNewHome(); loadCommunity(); };
 loadCommunity();
 
 // ── VOTO PENDIENTE ────────────────────────────────────────────
@@ -5999,19 +6376,22 @@ function getPendingVote() {
 }
 function setPendingVote(slug, name, scores) {
   try { localStorage.setItem(PENDING_KEY, JSON.stringify({ slug, name: String(name).slice(0, 80), scores, ts: Date.now() })); } catch (e) {}
+  setTimeout(() => window.refreshRateStatus && window.refreshRateStatus(), 0);
   const s10 = {}; CATS.forEach(c => { s10[c] = scores[c] / 10; });
   if (window.putVoteInUrl) window.putVoteInUrl(slug, s10);
 }
 function clearPendingVote() {
   try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+  setTimeout(() => window.refreshRateStatus && window.refreshRateStatus(), 0);
   if (window.clearVoteFromUrl) window.clearVoteFromUrl();
 }
 function showPendingNote() {
   const el = document.getElementById("authPending");
   if (!el) return;
-  const p = getPendingVote();
-  el.textContent = p ? `Tu calificación de ${p.name} está apartada: entra o crea tu cuenta y se guarda sola.` : "";
-  el.classList.toggle("on", !!p);
+  const p = getPendingVote(), v = getPendingVersus();
+  el.textContent = p ? `Tu calificación de ${p.name} está apartada: entra o crea tu cuenta y se guarda sola.`
+    : v ? `Tu elección en el Versus (${v.name}) está apartada: entra o crea tu cuenta y se guarda sola.` : "";
+  el.classList.toggle("on", !!(p || v));
 }
 
 // Correo de confirmación: al confirmar, el botón "Continuar" regresa a la página con su calificación marcada.
@@ -6021,6 +6401,8 @@ async function sendVerify(user) {
   if (p && window.voteToParam) {
     const s10 = {}; CATS.forEach(c => { s10[c] = p.scores[c] / 10; });
     url += `&calificar=${encodeURIComponent(p.slug)}&voto=${window.voteToParam(s10)}`;
+  } else if (getPendingVersus()) {
+    url += `&versus=${encodeURIComponent(getPendingVersus().id)}`;   // regresa a la página del duelo
   }
   try { await sendEmailVerification(user, { url }); }
   catch (e) {
@@ -6031,25 +6413,25 @@ async function sendVerify(user) {
 
 // ── CUENTA VERIFICADA ─────────────────────────────────────────
 function hadAccount() { try { return localStorage.getItem("rs_had_account") === "1"; } catch (e) { return false; } }
-async function ensureVerified() {
+// action: qué intentaba hacer ("rating" = guardar calificación, "proposal" = proponer rapero, "alias" = nombre en el ranking).
+// Va en vote_blocked_auth para no mezclar en el embudo las propuestas con las calificaciones.
+async function ensureVerified(action = "rating") {
   if (!currentUser) {
     // El aviso de "calificación apartada" va dentro de la ventana (#authPending), no en un toast que la tape
-    rsTrack("vote_blocked_auth", { reason: "anon", in_app: window.RS_IN_APP ? "yes" : "no" });
-    openAuthModal(hadAccount() ? "login" : "register");
+    rsTrack("vote_blocked_auth", { reason: "anon", action, in_app: window.RS_IN_APP ? "yes" : "no" });
+    openAuthModal(hadAccount() ? "login" : "register", action === "rating" ? "voto" : action);
     return false;
   }
   if (currentUser.emailVerified) return true;
   try { await reload(currentUser); } catch (e) {}
   if (auth.currentUser && auth.currentUser.emailVerified) {
     await getIdToken(auth.currentUser, true); // refresca el token para las reglas
+    markVerified("regreso");
     return true;
   }
-  let sent = true;
-  try { await sendVerify(auth.currentUser); } catch (e) { sent = false; }
-  rsTrack("vote_blocked_auth", { reason: "unverified", in_app: window.RS_IN_APP ? "yes" : "no" });
-  showToast(sent
-    ? "Confirma tu correo para votar: te mandamos el enlace (revisa spam). Tu calificación queda apartada y se guarda sola al confirmar."
-    : "Confirma tu correo con el enlace que te mandamos (revisa spam). Tu calificación queda apartada y se guarda sola al confirmar.", 7000);
+  try { await sendVerify(auth.currentUser); } catch (e) {}
+  rsTrack("vote_blocked_auth", { reason: "unverified", action, in_app: window.RS_IN_APP ? "yes" : "no" });
+  showVerifyPanel("bloqueo");   // antes: un aviso de 7 s; ahora el paso se queda en pantalla
   return false;
 }
 
@@ -6123,6 +6505,7 @@ async function saveRating(slug, name, scores, fromPending = false) {
       return { stats: { count, sum }, isNew: !old, contrib };
     });
     myRatings[slug] = scores;
+    wantLiveFor(60 * 60 * 1000);   // la copia del ranking tarda hasta 30 min: este navegador lee en vivo 1 h para ver su voto al recargar
     clearPendingVote();
     if (window.clearRateDraft) window.clearRateDraft(slug);
     if (res.same) { refreshOpenRateBoxes(); return true; }
@@ -6134,6 +6517,7 @@ async function saveRating(slug, name, scores, fromPending = false) {
       artist_slug: slug, artist_name: String(name).slice(0, 80),
       is_new: res.isNew ? "yes" : "no", is_proposal: slug.startsWith("prop-") ? "yes" : "no",
       from_pending: fromPending ? "yes" : "no", in_app: window.RS_IN_APP ? "yes" : "no",
+      from_versus: fromVersus(slug),
       score: Math.round(CATS.reduce((t, c) => t + scores[c], 0) / CATS.length) / 10
     });
     showToast(fromPending
@@ -6167,6 +6551,8 @@ async function flushPendingVote() {
       try { await reload(user); } catch (e) {}
       if (!auth.currentUser || !auth.currentUser.emailVerified) return;
       await getIdToken(auth.currentUser, true);   // token nuevo para que las reglas vean el correo confirmado
+      markVerified("regreso");
+      if (verifyPanelOpen()) closeAuthModal();
     }
     const prev = myRatings[p.slug];
     if (prev && CATS.every(c => prev[c] === p.scores[c])) { clearPendingVote(); return; }   // ya estaba igual
@@ -6175,15 +6561,125 @@ async function flushPendingVote() {
 }
 // Al volver a la pestaña (por ejemplo, después de confirmar el correo en otra app)
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && auth.currentUser && getPendingVote()) flushPendingVote();
+  if (document.visibilityState !== "visible" || !auth.currentUser) return;
+  if (getPendingVote() || getPendingVersus()) flushAllPending();
+  else if (verifyPanelOpen()) checkVerified(false);   // sin voto apartado: igual cerramos el paso si ya confirmó
 });
-window.addEventListener("focus", () => { if (auth.currentUser && getPendingVote()) flushPendingVote(); });
+window.addEventListener("focus", () => { if (auth.currentUser && (getPendingVote() || getPendingVersus())) flushAllPending(); });
+
+// ── VERSUS (nov 2026) ─────────────────────────────────────────
+// versus/{id}: duelo de 2 raperos que crea el admin (a, b, q = pregunta, closes = cierre, va / vb = elecciones).
+// versusVotes/{id}_{uid}: la elección de cada cuenta (una por duelo, no se cambia). El marcador va APARTE del
+// ranking: no toca artistStats ni da puntos. La interfaz está en versus-ui.js.
+// Igual que con las calificaciones: si elige sin cuenta confirmada, la elección queda apartada en el teléfono
+// (rs_pending_versus, 7 días) y se manda sola al entrar.
+const VS_PENDING_KEY = "rs_pending_versus";
+function getPendingVersus() {
+  try {
+    const p = JSON.parse(localStorage.getItem(VS_PENDING_KEY) || "null");
+    if (p && p.id && (p.side === "a" || p.side === "b") && Date.now() - (p.ts || 0) < 7 * 864e5) return p;
+    if (p) localStorage.removeItem(VS_PENDING_KEY);
+  } catch (e) {}
+  return null;
+}
+function setPendingVersus(id, side, name) {
+  try { localStorage.setItem(VS_PENDING_KEY, JSON.stringify({ id, side, name: String(name || "").slice(0, 80), ts: Date.now() })); } catch (e) {}
+}
+function clearPendingVersus() { try { localStorage.removeItem(VS_PENDING_KEY); } catch (e) {} }
+// rate_artist lleva from_versus = id del duelo si la calificación salió del botón "Califica a X" de un Versus
+function fromVersus(slug) {
+  try { const v = JSON.parse(sessionStorage.getItem("rs_from_versus") || "null"); return v && (v.a === slug || v.b === slug) ? v.id : "no"; }
+  catch (e) { return "no"; }
+}
+function vsFromDoc(d) {
+  const x = d.data();
+  return { id: d.id, a: x.a, b: x.b, q: x.q || "", closes: x.closes?.toMillis ? x.closes.toMillis() : 0, va: x.va || 0, vb: x.vb || 0 };
+}
+async function saveVersusPick(id, side, fromPending) {
+  const uid = auth.currentUser.uid;
+  const vRef = doc(db, "versus", id), pRef = doc(db, "versusVotes", `${id}_${uid}`);
+  try {
+    const prev = await getDoc(pRef);
+    if (prev.exists()) { clearPendingVersus(); return { status: "dup", pick: prev.data().pick }; }
+    const d = await getDoc(vRef);
+    if (!d.exists()) { clearPendingVersus(); return { status: "gone" }; }
+    const v = vsFromDoc(d);
+    if (v.closes <= Date.now()) { clearPendingVersus(); return { status: "closed" }; }
+    // firestore.rules: la elección y el +1 a su lado van en el mismo lote
+    const batch = writeBatch(db);
+    batch.set(pRef, { uid, duel: id, pick: side, at: serverTimestamp() });
+    batch.update(vRef, { [side === "a" ? "va" : "vb"]: increment(1) });
+    await batch.commit();
+    clearPendingVersus();
+    rsTrack("versus_pick", { duel: id, side, artist_slug: side === "a" ? v.a : v.b,
+      from_pending: fromPending ? "yes" : "no", in_app: window.RS_IN_APP ? "yes" : "no" });
+    return { status: "ok", pick: side };
+  } catch (err) {
+    console.error(err);
+    if (fromPending) clearPendingVersus();   // no reintentar en bucle
+    return { status: "error", code: err.code || "" };
+  }
+}
+let flushingVersus = false;
+async function flushPendingVersus() {
+  const p = getPendingVersus();
+  const user = auth.currentUser;
+  if (!p || !user || flushingVersus) return;
+  flushingVersus = true;
+  try {
+    if (!user.emailVerified) {
+      try { await reload(user); } catch (e) {}
+      if (!auth.currentUser || !auth.currentUser.emailVerified) return;
+      await getIdToken(auth.currentUser, true);
+      markVerified("regreso");
+      if (verifyPanelOpen()) closeAuthModal();
+    }
+    const r = await saveVersusPick(p.id, p.side, true);
+    if (r.status === "ok") showToast(`Listo: tu elección en el Versus (${p.name}) quedó guardada ✓`, 4500);
+    else if (r.status === "closed") showToast("Ese Versus ya cerró: tu elección no alcanzó a contar.", 4500);
+    if (window.versusRefresh) window.versusRefresh();
+  } finally { flushingVersus = false; }
+}
+async function flushAllPending() {
+  await flushPendingVote();
+  await flushPendingVersus();
+}
+window.getPendingVersus = getPendingVersus;
+window.RSV = {
+  async get(id) { const s = await getDoc(doc(db, "versus", id)); return s.exists() ? vsFromDoc(s) : null; },
+  async list(n = 12) {
+    const s = await getDocs(query(collection(db, "versus"), orderBy("closes", "desc"), limit(n)));
+    return s.docs.map(vsFromDoc);
+  },
+  async myPick(id) {
+    if (!auth.currentUser) return null;
+    try { const s = await getDoc(doc(db, "versusVotes", `${id}_${auth.currentUser.uid}`)); return s.exists() ? s.data().pick : null; }
+    catch (e) { return null; }
+  },
+  // Devuelve { status: "ok" | "pending" | "dup" | "closed" | "gone" | "error", pick }
+  async pick(id, side, name) {
+    if (!currentUser || !currentUser.emailVerified) setPendingVersus(id, side, name);
+    if (!(await ensureVerified("versus"))) return { status: "pending", pick: side };
+    return saveVersusPick(id, side, false);
+  },
+  // Admin (las reglas solo dejan a un admin crear, mover el cierre o borrar)
+  async create(a, b, q, closesMs) {
+    const day = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const base = `${a}-vs-${b}`.slice(0, 66);
+    let id = `${base}-${day}`, n = 2;
+    while ((await getDoc(doc(db, "versus", id))).exists()) id = `${base}-${day}-${n++}`;
+    await setDoc(doc(db, "versus", id), { a, b, q, closes: new Date(closesMs), createdAt: serverTimestamp(), createdBy: auth.currentUser.uid, va: 0, vb: 0 });
+    return id;
+  },
+  async setCloses(id, ms) { await updateDoc(doc(db, "versus", id), { closes: new Date(ms) }); },
+  async remove(id) { await deleteDoc(doc(db, "versus", id)); }
+};
 
 // ── GUARDAR PROPUESTA (queda en revisión) ─────────────────────
 // proposals/{id}: el id se arma con estado + nombre, así no se repiten.
 // limits/{uid}: evita spam (1 propuesta cada 10 minutos por cuenta).
 window.saveProposal = async function(data, propId) {
-  if (!(await ensureVerified())) return null;
+  if (!(await ensureVerified("proposal"))) return null;
   const uid = auth.currentUser.uid;
   const lRef = doc(db, "limits", uid);
   try {
@@ -6199,7 +6695,8 @@ window.saveProposal = async function(data, propId) {
     batch.set(lRef, { lastProposalAt: serverTimestamp(), lastProposalId: propId });
     await batch.commit();
     window.RS_MYPROPS = [{ id: propId, name: data.name, estado: data.estado, status: "pending" }, ...(window.RS_MYPROPS || [])];
-    rsTrack("propose_artist", { estado: String(data.estado || "") });
+    rsTrack("propose_artist", { estado: String(data.estado || ""), from: window.RS_PROPOSE_FROM || "formulario" });
+    window.RS_PROPOSE_FROM = "";
     if (window.renderMyProps) window.renderMyProps();
     return propId;
   } catch (err) {
@@ -6226,6 +6723,7 @@ async function checkAdmin(user) {
     const a = await getDoc(doc(db, "admins", user.uid));
     window.RS_IS_ADMIN = a.exists() && user.emailVerified;
     if (window.RS_IS_ADMIN && window.rsMarkInternal) window.rsMarkInternal();
+    if (window.RS_IS_ADMIN) wantLiveFor(24 * 60 * 60 * 1000);   // el admin ve siempre los votos en vivo
   } catch (e) { window.RS_IS_ADMIN = false; }
   if (window.RS_IS_ADMIN) await window.adminLoad();
   else if (window.setAdminBadge) window.setAdminBadge(0);
@@ -6365,7 +6863,7 @@ window.adminUnban = async function(uid) {
 
 // ── NOMBRE EN EL RANKING DE CONTRIBUYENTES ────────────────────
 window.saveAlias = async function(raw) {
-  if (!(await ensureVerified())) return;
+  if (!(await ensureVerified("alias"))) return;
   const name = String(raw || "").replace(/\s+/g, " ").trim();
   if (!/^[A-Za-z0-9ÁÉÍÓÚÜÑáéíóúüñ ._-]{3,24}$/.test(name)) {
     showToast("Usa de 3 a 24 letras, números, espacios, punto, guion o guion bajo");
@@ -6399,9 +6897,9 @@ function renderNewHome() {
     const states = new Set(ARTISTS.map(a => a.estado).filter(Boolean)).size;
     stats.innerHTML = `
       <div class="nh-stat"><b>${ARTISTS.length}</b><span>Artistas en el ranking</span></div>
-      <div class="nh-stat"><b>${window.RS_STATS_LOADED ? votes.toLocaleString('es-MX') : '…'}</b><span>Calificaciones de la comunidad</span></div>
+      <div class="nh-stat"><b>${window.RS_STATS_LOADED ? votes.toLocaleString('es-MX') : window.RS_STATS_FAILED ? '<button type="button" class="nh-retry" onclick="rsRetryStats()">Reintentar</button>' : '…'}</b><span>Calificaciones de la comunidad</span></div>
       <div class="nh-stat"><b>${states}</b><span>Estados representados</span></div>
-      <div class="nh-stat live"><span>Actualizado</span><b>En vivo</b></div>`;
+      <div class="nh-stat live"><span>Actualizado</span><b>${window.RS_STATS_SOURCE === 'copia' ? 'Cada 30 min' : 'En vivo'}</b></div>`;
   }
   const top = document.getElementById('nhTop');
   if (top) {

@@ -12,6 +12,8 @@ rules_version = '2';
 //   limits/{uid}                control anti-spam de propuestas (1 cada 10 min)
 //   admins/{uid}                administradores (se crean a mano en la consola; nadie puede escribirlos desde el sitio)
 //   banned/{uid}                cuentas bloqueadas por el admin (ya no pueden votar ni proponer; lectura pública para ocultarlas del ranking de contribuyentes)
+//   versus/{id}                 duelos de 2 raperos (los crea el admin; lectura pública; marcador aparte del ranking)
+//   versusVotes/{id}_{uid}      elección de cada cuenta en un duelo (una por duelo)
 //
 // Las propuestas quedan en "pending" y solo se publican cuando un admin las aprueba.
 //
@@ -261,6 +263,60 @@ service cloud.firestore {
       allow update: if verified() && (request.auth.uid == uid || isAdmin())
         && contribOk(uid, resource.data, request.resource.data);
       allow delete: if false;
+    }
+
+    // ── VERSUS (nov 2026): duelo de 2 raperos con hora de cierre. Su marcador va APARTE del ranking. ──
+    //   versus/{id}             el duelo (lo crea el admin): a, b (slugs), q (pregunta), closes, va / vb (elecciones)
+    //   versusVotes/{id}_{uid}  la elección de cada cuenta: una por duelo y no se cambia
+    function versusDoc(id) { return /databases/$(database)/documents/versus/$(id); }
+    function versusVoteDoc(id, uid) { return /databases/$(database)/documents/versusVotes/$(id + '_' + uid); }
+    function validQ(q) { return q is string && q.size() >= 3 && q.size() <= 90; }
+
+    match /versus/{id} {
+      allow read: if true;
+      allow create: if isAdmin() && validSlug(id)
+        && request.resource.data.keys().hasOnly(['a', 'b', 'q', 'closes', 'createdAt', 'createdBy', 'va', 'vb'])
+        && validSlug(request.resource.data.a) && validSlug(request.resource.data.b)
+        && request.resource.data.a != request.resource.data.b
+        && knownSlug(request.resource.data.a) && knownSlug(request.resource.data.b)
+        && validQ(request.resource.data.q)
+        && request.resource.data.closes is timestamp
+        && request.resource.data.closes > request.time
+        && request.resource.data.closes < request.time + duration.value(31, 'd')
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.va == 0 && request.resource.data.vb == 0;
+      // El admin corrige la pregunta o mueve el cierre ("Cerrar ya")
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['q', 'closes'])
+        && validQ(request.resource.data.q) && request.resource.data.closes is timestamp;
+      // Una elección suma exactamente 1 a su lado, en el mismo lote que crea versusVotes/{id}_{uid}
+      allow update: if verified()
+        && request.time < resource.data.closes
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['va', 'vb'])
+        && !exists(versusVoteDoc(id, request.auth.uid))
+        && getAfter(versusVoteDoc(id, request.auth.uid)).data.at == request.time
+        && (getAfter(versusVoteDoc(id, request.auth.uid)).data.pick == 'a'
+              ? (request.resource.data.va == resource.data.va + 1 && request.resource.data.vb == resource.data.vb)
+              : (request.resource.data.vb == resource.data.vb + 1 && request.resource.data.va == resource.data.va));
+      allow delete: if isAdmin();
+    }
+
+    match /versusVotes/{vid} {
+      allow get: if signedIn() && vid.matches('.+_' + request.auth.uid);
+      allow get, list: if isAdmin();
+      allow create: if verified()
+        && request.resource.data.keys().hasOnly(['uid', 'duel', 'pick', 'at'])
+        && request.resource.data.uid == request.auth.uid
+        && validSlug(request.resource.data.duel)
+        && vid == request.resource.data.duel + '_' + request.auth.uid
+        && request.resource.data.pick in ['a', 'b']
+        && request.resource.data.at == request.time
+        && exists(versusDoc(request.resource.data.duel))
+        && request.time < get(versusDoc(request.resource.data.duel)).data.closes
+        && getAfter(versusDoc(request.resource.data.duel)).data[request.resource.data.pick == 'a' ? 'va' : 'vb']
+             == get(versusDoc(request.resource.data.duel)).data[request.resource.data.pick == 'a' ? 'va' : 'vb'] + 1;
+      allow update, delete: if false;
     }
 
     // El sistema anterior (votos "sobrevalorado/justo/infravalorado") queda cerrado.
