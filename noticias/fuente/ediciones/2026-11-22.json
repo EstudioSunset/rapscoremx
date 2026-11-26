@@ -1,0 +1,88 @@
+{
+  "fecha": "2026-11-22",
+  "slug": "rap-mexicano-semana-16-22-noviembre-2026",
+  "semana": {
+    "desde": "2026-11-16",
+    "hasta": "2026-11-22"
+  },
+  "titulo": "Rap mexicano esta semana: Fat Tony, Cartel de Santa y Santa Fe Klan",
+  "descripcion": "Fat Tony es bicampeón de Red Bull Batalla México, Cartel de Santa cerró Volumen 8 y Santa Fe Klan estrenó KO y llega al cine.",
+  "intro": "Semana cargada. Fat Tony repitió como campeón nacional de Red Bull Batalla y ya tiene boleto a Lima. Cartel de Santa soltó la última parte de Volumen 8 y se adueñó de las tendencias de YouTube. Y Santa Fe Klan sacó sencillo nuevo y apareció en el tráiler de una película.",
+  "notas": [
+    {
+      "titulo": "Fat Tony es bicampeón de Red Bull Batalla México",
+      "fecha": "2026-11-21",
+      "tipo": "batalla",
+      "texto": "El sábado 21 de noviembre, en La Maravilla Studios de la CDMX, Fat Tony ganó la Final Nacional de Red Bull Batalla México y repitió el título de 2025. En el camino venció a Jocra, Once y Rapder, y en la final le ganó a Cabrera, que debutaba en una nacional. Los jueces fueron Lobo Estepario, Skiper y Yoiker; Aczino estuvo como caster. Con el título, Fat Tony va a la Final Internacional del 20 de marzo de 2027 en la Plaza de Acho, en Lima, Perú.",
+      "artistas": [
+        "Rapder",
+        "Aczino"
+      ],
+      "fuentes": [
+        {
+          "nombre": "Mundo Freestyle",
+          "url": "https://mundofreestyle.com/fat-tony-se-corona-bicampeon-resultados-de-la-final-nacional-de-red-bull-batalla-mexico-2026/"
+        },
+        {
+          "nombre": "Urban Street",
+          "url": "https://urbanstreet.com.pe/red-bull-batalla/resultados-red-bull-batalla-mexico-2026/"
+        }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Cartel de Santa cerró Volumen 8 con su tercera parte",
+      "fecha": "2026-11-19",
+      "tipo": "lanzamiento",
+      "texto": "El jueves 19 de noviembre, Cartel de Santa estrenó la tercera y última parte de Volumen 8 con videos en YouTube, bajo Babilonia Music. Entre los temas están Viernesito, con JijoE7, y Kalashnikov, con Richard Ahumada, Pablito Calavera y Chato. El disco se presentó como el último de Babo y salió en tres partes desde agosto. Dos días después, Kalashnikov era #1 en tendencias musicales de YouTube México y el grupo tenía tres canciones en el top 4. La gira todavía no tiene fechas.",
+      "artistas": [
+        "Cartel de Santa",
+        "Babo"
+      ],
+      "fuentes": [
+        {
+          "nombre": "Urban Street",
+          "url": "https://urbanstreet.com.pe/rap/cartel-de-santa-hoy-volumen-8/"
+        },
+        {
+          "nombre": "Urban Street",
+          "url": "https://urbanstreet.com.pe/rap/cartel-de-santa-kalashnikov-top-1-youtube-mexico/"
+        }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Santa Fe Klan estrena KO, dedicada a la boxeadora Camila Zamorano",
+      "fecha": "2026-11-19",
+      "tipo": "lanzamiento",
+      "texto": "Santa Fe Klan lanzó KO, sencillo con video dedicado a la boxeadora mexicana Camila Zamorano. La canción habla de resiliencia, ambición y lealtad. El video se grabó en un estudio, en un ring y en calles de Sonora, y en él el rapero sostiene el cinturón de campeona mundial interina de peso átomo del CMB de Zamorano. El tema llega después de Me Regalo Contigo y ya está en plataformas.",
+      "artistas": [
+        "Santa Fe Klan"
+      ],
+      "fuentes": [
+        {
+          "nombre": "Edomex Al Día",
+          "url": "https://edomexaldia.com/el-nuevo-sencillo-de-santa-fe-klan-ko-celebra-la-resiliencia-la-ambicion-y-el-poder-de-la-lealtad/"
+        }
+      ],
+      "delicado": false
+    },
+    {
+      "titulo": "Santa Fe Klan sale en el tráiler de la película Este no era el plan",
+      "fecha": "2026-11-17",
+      "tipo": "otro",
+      "texto": "Santa Fe Klan aparece interpretándose a sí mismo al final del tráiler oficial de Este no era el plan, comedia romántica protagonizada por Juanpa Zurita y Macarena Achaga. En la escena, un personaje lo llama \"Señor Santa Klan\" y lo corrigen. La dirige Ihtzi Hurtado y en el reparto también están Miguel Rodarte y Edgar Villa (Villita). Llega a cines el 1 de enero de 2027.",
+      "artistas": [
+        "Santa Fe Klan"
+      ],
+      "fuentes": [
+        {
+          "nombre": "Periódico AM",
+          "url": "https://www.am.com.mx/espectaculos/2026/11/17/santa-fe-klan-debuta-en-cine-este-no-era-el-plan-1867690.html"
+        }
+      ],
+      "delicado": false
+    }
+  ],
+  "cierre": "¿Cómo va Santa Fe Klan, Cartel de Santa o Rapder en tu lista? Califícalos en RapScore."
+}
